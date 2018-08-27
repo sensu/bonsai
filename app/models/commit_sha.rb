@@ -1,0 +1,2 @@
+class CommitSha < ApplicationRecord
+end

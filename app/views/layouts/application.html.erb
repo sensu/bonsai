@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+  <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+  <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+  <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+  <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui">
+    <title><%= [content_for(:title), "Bonsai Asset Index"].compact.join(' - ').html_safe %></title>
+    <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Supermarket" %>">
+    <% if ROLLOUT.active?(:no_crawl) %>
+      <meta name="robots" content="noindex, nofollow">
+    <% end %>
+    <link rel="shortcut icon" href="<%= image_url('favicon.ico') %>" type="image/x-icon">
+    <link rel="icon" href="<%= image_url('favicon.ico') %>" type="image/x-icon">
+    <link rel="apple-touch-icon" href="<%= image_url('apple-touch-icon.png') %>"/>
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%# render 'google_analytics' %>
+  </head>
+  <body class="<%= controller.controller_name %>">
+    <div class="inner-wrap">
+      <header class="globalheader">
+        <div class="inner_wrap">
+          <div class="logo_and_nav_toggle">
+            <h2 class="logomanageiq"><%= link_to root_path do %><span>ManageIQ Depot</span><% end %></h2>
+          </div>
+          <%= render partial: 'appheader' %>
+        </div>
+      </header>
+
+      <% if ROLLOUT.active?(:announcement) %>
+        <%= render partial: 'announcement_banner' %>
+      <% end %>
+
+      <%= render partial: 'flash' %>
+      <%= render partial: 'search' %>
+
+      <% if content_for(:cta) %>
+        <div class="cta-banner">
+          <%= content_for(:cta) %>
+        </div>
+      <% end %>
+
+      <div class="container">
+        <%= yield %>
+      </div>
+
+      <footer id="subfooter">
+        <section class="subfooter-communication">
+          <div class="row">
+            <section class="left-side">
+              <div class="follow" id="follow">
+                <a class="ext-gh" data-toggle="tooltip" href="https://github.com/ManageIQ/" title="GitHub">
+                  <i class="fa fa-github"></i>
+                  <span class="label">GitHub</span>
+                </a>
+                <a class="ext-yt" data-toggle="tooltip" href="https://www.youtube.com/user/ManageIQVideo" title="YouTube">
+                  <i class="fa fa-youtube"></i>
+                  <span class="label">YouTube</span>
+                </a>
+                <%= link_to "ManageIQ.org", "http://manageiq.org/" %>
+                <%= link_to "Extensions", extensions_path %>
+                <%= link_to "User List", contributors_path %>
+              </div>
+            </section>
+            <section class="right-side">
+              <div class="contact-us">
+                <a href="mailto:contact@manageiq.org">
+                  <i class="fa fa-envelope"></i>
+                  <span class="text-label">email</span>
+                </a>
+                <a href="http://manageiq.org/community/irc/">
+                  <i class="fa fa-slack"></i>
+                  <span class="text-label">IRC</span>
+                </a>
+                <a href="http://talk.manageiq.org/">
+                  <i class="fa fa-comments fa-flip-horizontal"></i>
+                  <span class="text-label">forum</span>
+                </a>
+              </div>
+            </section>
+          </div>
+        </section>
+      </footer>
+      <footer id="footer">
+        <section class="footer-area">
+          <div class="row text-center">
+            <div class="copyright">
+              © 2018 Sensa, Inc. &nbsp; <a href="http://manageiq.org/logo/" class="logo-link">Logo</a>
+              <a class="legal" href="http://manageiq.org/legal/">Legal &amp; Privacy</a>
+            </div>
+          </div>
+          <div class="row text-center">
+            <a href="https://www.openshift.com/" target="_blank" title="Powered by OpenShift">
+              <%= image_tag "powered-by-openshift.png", alt: "Powered by OpenShift" %>
+            </a>
+          </div>
+        </section>
+      </footer>
+    </div>
+
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-558071333389cb6a" async="async"></script>
+  </body>
+</html>
+

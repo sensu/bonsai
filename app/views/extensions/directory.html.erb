@@ -1,0 +1,35 @@
+<%= provide(:title, "Extensions Directory") %>
+<%= provide(:description, "Browse and search ManageIQ extensions. Learn how to use and create extensions for configuring your infrastructure.") %>
+<%= provide(:cta) do %>
+  <p>Extend ManageIQ using add-ons and <%= link_to "share your own", new_extension_path %> with the community</p>
+<% end %>
+
+<div class="page nobg">
+  <div class="row extensions-features bottom-space standard-typography">
+    <div class="medium-5 columns">
+      <header>New &amp; updated</header>
+      <%= render "featured", extensions: @recently_updated_extensions %>
+    </div>
+    <div class="medium-5 columns">
+      <header>Noteworthy</header>
+      <%= render "featured", extensions: @most_downloaded_extensions %>
+    </div>
+    <div class="medium-2 columns">
+      <header>Categories</header>
+      <ul>
+        <% @top_tags.each do |t| %>
+          <li><%= link_to t.name, extensions_path(q: t.name) %></li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+
+  <div class="row share-cta standard-typography">
+    <div class="medium-8 medium-offset-2 columns">
+      <header>Share your creations!</header>
+      <p class="bottom-space">Have a modification you've made to your own instance of ManageIQ? Package it up and share it with everyone!</p>
+      <p><%= link_to "Read the documentation", "http://manageiq.org/documentation/" %></p>
+      <p><%= link_to "Upload your extension", new_extension_path %></p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,106 @@
+<div class="main" data-equalizer-watch>
+  <% if extension.deprecated? %>
+    <div class="deprecation-notice">
+      <h2 class="deprecation-copy">
+        <% if extension.replacement.present? %>
+          <i class="fa fa-exclamation-triangle"></i> <%= extension.name %> has been deprecated in favor of <%= link_to extension.replacement.name, extension.replacement %>
+        <% else %>
+          <i class="fa fa-exclamation-triangle"></i> <%= extension.name %> has been deprecated
+        <% end %>
+      </h2>
+    </div>
+  <% end %>
+
+  <small class="rss">
+    <%= link_to extension_path(extension, username: extension.owner_name, format: 'atom'), class: 'rss_feed_link' do %>
+      <i class="fa fa-rss"></i> RSS
+    <% end %>
+  </small>
+  <h1 class="heading">
+    <span itemprop="name"><%= extension.name %></span>
+    <% if extension_versions.count > 0 %>
+      <small class="version_dropdown">
+        <%= link_to '#', 'data-dropdown' => 'versions', class: 'button radius tiny dropdown secondary', rel: 'extension_versions' do %>
+          <span class="versions_count">
+            <%= pluralize "(#{extension_versions.count})", 'Version' %>
+          </span>
+          <%= version.try(:version) %>
+        <% end %>
+        <ul id="versions" data-dropdown-content class="f-dropdown">
+          <li>
+            <ul>
+              <% extension_versions.each do |extension_version| %>
+                <li>
+                  <%= link_to extension_version_path(extension, extension_version, username: extension.owner.username), rel: 'extension_version' do %>
+                    <%= extension_version.version %>
+                    <% if extension_version == version %><i class="fa fa-check right"></i><% end %>
+                  <% end %>
+                </li>
+              <% end %>
+            </ul>
+          </li>
+        </ul>
+      </small>
+    <% end %>
+
+    <%= render 'extensions/follow_button_show', extension: @extension %>
+  </h1>
+
+  <div class="addthis_sharing_toolbox"></div>
+
+  <p class="description" itemprop="description"><%= extension.description %></p>
+
+  <div class="row">
+    <div class="small-6 columns">
+      <h4>Downloads in last month</h4>
+      <div class="sparkline"><%= @downloads.join(",") %></div>
+    </div>
+    <div class="small-6 columns">
+      <h4>Commits in last year</h4>
+      <div class="sparkline"><%= @commits.join(",") %></div>
+    </div>
+  </div>
+
+  <%= render_document(version.try(:readme) || "", version.try(:readme_extension) || "", version.try(:extension).github_repo, version.try(:version)) %>
+
+  <%# <% item_types = version.extension_version_content_items.select("distinct item_type").map(&:item_type).sort %1> %>
+
+  <%# <p><%= pluralize(number_with_delimiter(version.commit_count), "commit") %1> total for this version.</p> %>
+  <%# <p> %>
+  <%#   Last commit on <%= version.last_commit_at %1>:<br> %>
+  <%#   <%= link_to(version.last_commit_string, version.last_commit_url, target: "_blank") %1> %>
+  <%# </p> %>
+  <%# <p><%= item_types.map { |type| pluralize(version.extension_version_content_items.where(item_type: type).count, type) }.join(", ") %1></p> %>
+  <%# <p><%= pluralize(version.yml_line_count, "line") %1> of YAML, <%= pluralize(version.rb_line_count, "line") %1> of Ruby</p> %>
+
+  <%# <dl class="accordion" data-accordion> %>
+  <%#   <% item_types.each do |type| %1> %>
+  <%#     <dd class="accordion-navigation"> %>
+  <%#       <a href="#<%= type.downcase %1>-items"><%= type.pluralize %1></a> %>
+  <%#       <div id="<%= type.downcase %1>-items" class="content"> %>
+  <%#         <ul> %>
+  <%#           <% version.extension_version_content_items.where(item_type: type).each do |ci| %1> %>
+  <%#             <li><%= link_to ci.name, ci.github_url, target: "_blank" %1></li> %>
+  <%#           <% end %1> %>
+  <%#         </ul> %>
+  <%#       </div> %>
+  <%#     </dd> %>
+  <%#   <% end %1> %>
+  <%# </dl> %>
+</div>
+
+<div class="reveal-modal" id="report-extension" data-reveal>
+  <h1>Are you sure you want to report this extension?</h1>
+  <p>Please describe the reason for reporting this extension. Our moderators will be notified and will disable the extension if it is found to be inappropriate.</p>
+  <a class="close-reveal-modal close-reveal-modal-x">&#215;</a>
+  <%= form_for :report, url: report_extension_path(extension, username: extension.owner_name), method: :put do |f| %>
+    <div>
+      <%= f.label :description, "Describe the issue:" %>
+      <%= f.text_area :description %>
+    </div>
+
+    <div class="text-right">
+      <%= f.submit "Report", class: "button primary button_to" %>
+    </div>
+  <% end %>
+</div>

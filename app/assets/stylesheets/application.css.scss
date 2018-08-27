@@ -1,0 +1,31 @@
+/**
+* Use sprockets for stylesheets
+*
+* Third-party Libraries
+*
+*= require normalize
+*= require foundation
+*= require select2
+*
+* Supermarket Styles
+*
+*= require typography
+*= require appheader
+*= require announcement_banner
+*= require_tree ./extensions
+*= require_tree ./profile
+*= require_tree ./tools
+*= require tabs
+*= require dashboard
+*= require contribute
+*= require welcome
+*= require alerts
+*= require listing
+*= require simple_listing
+*= require resource
+*= require structure
+*= require vendor/bootstrap-tokenfield
+*= require vendor/tokenfield-typeahead
+*= require tokenfield
+*= require multiple_select
+*/

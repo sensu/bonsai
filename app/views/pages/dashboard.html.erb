@@ -1,0 +1,73 @@
+<%= provide :title, 'Dashboard' %>
+
+<div class="page dashboard" data-equalizer>
+  <div class="main" data-equalizer-watch>
+    <div class="heading-with-buttons">
+      <h3 class="title">
+        Followed Extensions Activity
+        <small><%= link_to '<i class="fa fa-rss"></i> rss'.html_safe, followed_extension_activity_user_path(current_user, format: 'atom'), class: 'rss_feed_link show-for-medium-up' %></small>
+      </h3>
+      <div class="buttons">
+        <% if @followed_extension_activity.any? %>
+          <%= link_to "You're Following #{pluralize(current_user.followed_extensions.count, 'Extension')}", user_path(current_user, tab: 'follows') %>
+        <% end %>
+      </div>
+    </div>
+    <% if @followed_extension_activity.any? %>
+      <ul class="activity_list">
+        <% @followed_extension_activity.each do |extension_version| %>
+          <li>
+            <div>
+              <%= link_to gravatar_for(extension_version.owner), extension_version.owner %>
+              <%= t('extension.activity',
+                    maintainer: link_to(extension_version.extension.maintainer, extension_version.owner),
+                    version: extension_version.version,
+                    extension: link_to(extension_version.name, extension_version.extension)
+                   ).html_safe %>
+            </div>
+            <small class="date"><%= extension_version.created_at.to_s(:longish) %></small>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <div class="explore_extensions">
+        <h2>Looks like you're not following any extensions yet!</h2>
+        <p>Search for extensions and follow them to get notified when new versions are released.</p>
+        <%= link_to 'Explore Extensions', extensions_path, class: 'button radius' %>
+      </div>
+    <% end %>
+  </div>
+  <div class="sidebar" data-equalizer-watch>
+    <h3>Your Extensions</h3>
+    <% if @extensions.any? %>
+      <ul class="simple_listing hide_owner">
+        <%= render partial: 'extensions/simple_extension', collection: @extensions, as: 'extension' %>
+      </ul>
+      <%= link_to 'View All of Your Extensions', current_user, class: 'button radius small expand' %>
+    <% else %>
+      <%= link_to "Share an Extension", new_extension_path, class: 'button secondary radius expand' %>
+    <% end %>
+
+    <h3>Extensions You Collaborate On</h3>
+    <% if @collaborated_extensions.any? %>
+      <ul class="simple_listing">
+        <%= render partial: 'extensions/simple_extension', collection: @collaborated_extensions, as: 'extension' %>
+      </ul>
+      <%= link_to 'View All Collaborated Extensions', user_path(current_user, tab: 'collaborates'), class: 'button radius small expand' %>
+    <% else %>
+      <p>
+        Extension owners can specify other users as collaborators, allowing them to manage and upload new versions of an extension.
+      </p>
+    <% end %>
+
+    <h4>Resources</h4>
+    <ul class="pretty">
+      <li><%= link_to 'Learn Chef', learn_chef_url, target: 'blank' %></li>
+      <li><%= link_to 'Join IRC', 'irc://irc.freenode.net/chef' %></li>
+      <li><%= link_to 'View botbot IRC Logs', 'https://botbot.me/freenode/chef', target: 'blank' %></li>
+      <li><%= link_to 'Join the Mailing List', 'https://groups.google.com/forum/#!forum/chef-supermarket', target: 'blank' %></li>
+      <li><%= link_to 'Read the Docs', chef_docs_url, target: 'blank' %></li>
+      <li><%= link_to 'Contribute to Supermarket', 'https://github.com/chef/supermarket', target: 'blank' %></li>
+    </ul>
+  </div>
+</div>

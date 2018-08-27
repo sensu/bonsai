@@ -1,0 +1,56 @@
+<li itemscope itemtype="http://schema.org/Code">
+  <div class="header">
+    <div class="header-content">
+      <h2 class="title">
+        <%= link_to owner_scoped_extension_url(extension), rel: 'extension', itemprop: 'name' do %><%= extension.name %><% end %>
+        <% if !extension.enabled? %>
+          <i class="fa fa-times"></i>
+          <small>Disabled</small>
+        <% end %>
+        <i class="fa fa-file"></i>
+        <small><%= extension.latest_extension_version.try(:version) %></small>
+      </h2>
+      <span class="meta">
+        <i class="fa fa-clock-o"></i> Updated <span itemprop="dateModified"><%= extension.updated_at.to_s(:longish) %></span><br />
+      </span>
+
+      <% if extension.deprecated? %>
+        <span class="meta">
+          <% if extension.replacement.present? %>
+            <i class="fa fa-exclamation-triangle"></i> Deprecated in favor of <%= link_to extension.replacement.name, extension.replacement %>
+          <% else %>
+            <i class="fa fa-exclamation-triangle"></i> Deprecated
+          <% end %>
+        </span>
+      <% end %>
+
+      <div class="owner">
+        <%= link_to extension.owner do %>
+          <span class="meta">
+            <%= gravatar_for extension.owner, size: 128 %>
+            <%= extension.maintainer %>
+          </span>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class="body">
+    <div class="body-content">
+      <p itemprop="description">
+        <%= extension.description %>
+      </p>
+    </div>
+  </div>
+  <div class="bottom">
+    <div class="bottom-content">
+      <ul class="extension_stats">
+        <li>
+          <i class="fa fa-inbox"></i>
+          <span itemprop="interactionCount"><%= number_with_delimiter(extension.download_count) %></span>
+          <h5>Total Downloads</h5>
+        </li>
+        <%= render 'extensions/follow_button_list', extension: extension %>
+      </ul>
+    </div>
+  </div>
+</li>

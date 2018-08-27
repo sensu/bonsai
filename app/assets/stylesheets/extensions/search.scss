@@ -1,0 +1,252 @@
+@import "common";
+@import "foundation/components/grid";
+// @import "compass/css3/border-radius";
+// @import "compass/css3/box-shadow";
+// @import "compass/css3/inline-block";
+
+// Styles for the Extensions search interface
+
+.search_bar {
+  background-color: #c8d4e4;
+  border: none;
+  padding: rem-calc(50 55);
+}
+
+@media #{$mobile-only} {
+  .search_bar {
+    padding: rem-calc(20);
+  }
+}
+
+@media #{$small-only} {
+  .search_bar {
+    padding: rem-calc(20);
+  }
+}
+
+@media #{$xlarge-up} {
+  .search_bar {
+    padding: rem-calc(40 0);
+  }
+}
+
+.search_form {
+  @include grid-row();
+  position: relative;
+  max-width: $max-width;
+}
+
+.search_toggle {
+  @include grid-column($columns: 2, $collapse: true);
+
+  .divider {
+    float: left;
+    height: rem-calc(56);
+    border-left: 2px solid #e7e7e7;
+    margin-top: rem-calc(4);
+  }
+
+  .button {
+    color: #797979;
+    font-size: rem-calc(18);
+    height: rem-calc(64);
+    line-height: rem-calc(64);
+    overflow: hidden;
+    padding: 0;
+    background-color: white;
+
+    i {
+      padding-left: rem-calc(5);
+    }
+  }
+}
+
+@media #{$small-only} {
+  .search_toggle {
+    @include grid-column($columns: 2, $collapse: true);
+  }
+}
+
+@media #{$mobile-only} {
+  .search_toggle {
+    @include grid-column($columns: 2, $collapse: true);
+    span {
+      display: none;
+    }
+
+    #search-types {
+      li, li a {
+        padding-top: 0;
+        padding-bottom: 0;
+        height: 50px;
+        line-height: 50px;
+        font-size: 24px;
+      }
+    }
+  }
+}
+
+
+.search_field {
+  @include grid-column($columns: 8, $collapse: true);
+  position: relative;
+
+  .fa {
+    color: lighten($primary_gray, 5%);
+    font: {
+      family: "fontawesome" !important;
+      size: rem-calc(24);
+    }
+    left: rem-calc(25);
+    position: absolute;
+    top: rem-calc(20);
+    z-index: 2;
+  }
+}
+
+@media #{$small-only} {
+  .search_field {
+    @include grid-column($columns: 7, $collapse: true);
+  }
+}
+
+@media #{$mobile-only} {
+  .search_field {
+    @include grid-column($columns: 7, $collapse: true);
+
+    .tt-input::-webkit-input-placeholder {
+      color: white !important;
+    }
+    .tt-input:-moz-placeholder {
+      color: white !important;
+    }
+    .tt-input::-moz-placeholder {
+      color: white !important;
+    }
+    .tt-input:-ms-input-placeholder {
+      color: white !important;
+    }
+  }
+}
+
+.search_button {
+  @include grid-column($columns: 2, $collapse: true);
+}
+
+@media #{$small-only} {
+  .search_button {
+    @include grid-column($columns: 2, $collapse: true);
+  }
+}
+
+@media #{$mobile-only} {
+  .search_button {
+    @include grid-column($columns: 3, $collapse: true);
+  }
+}
+
+input[type="search"].extension_search_textfield {
+  background-color: white;
+  border: none;
+  // @include border-left-radius(rem-calc(3));
+  // @include box-shadow(none);
+  color: #797979;
+  font: rem-calc(24) $accent_font;
+  height: rem-calc(64);
+  line-height: rem-calc(44);
+  margin: 0;
+  padding: rem-calc(0 0 0 60);
+
+  &:focus {
+    background-color: darken($primary_blue, 7%);
+    color: #797979;
+  }
+
+  &::-webkit-input-placeholder {
+    color: #cccccc;
+  }
+
+  &:-moz-placeholder { /* Firefox 18- */
+    color: #cccccc;
+  }
+
+  &::-moz-placeholder {  /* Firefox 19+ */
+    color: #cccccc;
+  }
+
+  &:-ms-input-placeholder {
+    color: #cccccc;
+  }
+}
+
+@media #{$mobile-only} {
+  input[type="search"].extension_search_textfield {
+    padding-left: 8px;
+  }
+}
+
+.no-results {
+  @include grid-column($columns: 12, $collapse: true);
+  background-color: white;
+  border: 1px solid $extension_border;
+  padding: rem-calc(30 30);
+
+  p {
+    margin: 0;
+  }
+
+  h3 {
+    margin-top: rem-calc(24);
+  }
+
+  ul {
+    margin-bottom: 0;
+  }
+}
+
+@media #{$mobile-only} {
+  input[type="search"].extension_search_textfield {
+    font-size: rem-calc(24);
+    margin: 0;
+  }
+}
+
+.extension_search_button {
+  background-color: #789fcd;
+  // @include border-right-radius(rem-calc(3));
+  color: white;
+  font-size: rem-calc(24);
+  height: rem-calc(64);
+  line-height: rem-calc(44);
+  padding: rem-calc(0 20);
+  @include single-transition($speed: 100ms);
+  text-align: center;
+  width: 100%;
+  font-weight: 400;
+
+  &:hover, &:active, &:focus {
+    background-color: lighten(#789fcd, 5%);
+    color: white;
+  }
+}
+
+@media #{$mobile-only} {
+  .extension_search_button {
+    font-size: rem-calc(16);
+  }
+}
+
+#advanced-search {
+  .supported-platform {
+    float: left;
+    width: 50%;
+  }
+
+  h4, label {
+    color: $trinary_gray;
+  }
+
+  h4 {
+    margin-top: 0;
+  }
+}

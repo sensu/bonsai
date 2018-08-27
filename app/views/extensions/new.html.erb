@@ -1,0 +1,53 @@
+<%= provide(:title, "Add an Extension") %>
+
+<div class="page resource extension_show" data-equalizer>
+  <div class="main" data-equalizer-watch>
+    <h1 class="heading">Add an Extension</h1>
+
+    <%= form_for @extension, html: { "data-abide" => true } do |f| %>
+      <%= render "application/form_errors", record: @extension %>
+
+      <fieldset id="" class="">
+        <div id="extensions-selector" class="name-field">
+          <% if @repo_names %>
+            <%= f.select :github_url_short, @repo_names.map { |r| r[:full_name] }, { include_blank: "Select a Repository" }, required: true, id: "extension-url-short-field", data: { repos: @repo_names } %>
+          <% else %>
+            <p id="loading-extensions"><%= image_tag "spinner.gif" %> Loading your extensions...</p>
+          <% end %>
+          <%= f.hidden_field :github_url, id: "extension-url-field" %>
+        </div>
+        <div class="description-field">
+          <%= f.text_field :name, placeholder: "Name", title: "Name", required: true, id: "extension-name-field" %>
+          <small class="error">Name is required.</small>
+          <p class="help-block">Please use title case.</p>
+        </div>
+        <div class="description-field">
+          <%= f.text_field :description, placeholder: "Description", title: "Description", required: true, id: "extension-desc-field" %>
+          <small class="error">Description is required.</small>
+        </div>
+        <div class="tag_tokens-field">
+          <%= f.text_field :tag_tokens, placeholder: "Tags", title: "Tags", class: "tokenfield", data: { autofill: Tag::DEFAULT_TAGS } %>
+        </div>
+
+        <h2>Compatible ManageIQ Versions</h2>
+        <div class="compatible_platforms-field">
+          <% SupportedPlatform.pluck(:name, :id).each do |name, id| %>
+            <div>
+              <label><%= f.check_box :compatible_platforms, { multiple: true }, id.to_s, nil %> <%= name %></label>
+            </div>
+          <% end %>
+        </div>
+      </fieldset>
+
+      <%= f.submit "Add Extension", class: "button primary radius" %>
+    <% end %>
+  </div>
+
+  <div class="sidebar" data-equalizer-watch>
+    <h3>Adding an Extension</h3>
+    <p class="no-left-margin">To add an extension, the extensions source files must be hosted in a public <a target="_blank" href="http://www.github.com">GitHub</a> repository on which you have access rights. The Extensions Depot will access that repository, and pull relevant information about your extension.</p>
+    <p class="no-left-margin">The Extensions Depot will use the README file in the root of your GitHub repository as the description of your extension. For best results, please make sure this file is formatted using <a href="https://help.github.com/articles/github-flavored-markdown/" target="_blank">GitHub Flavored Markdown</a>, and that it contains a description of the contents of the repository, and any installation instructions.</p>
+    <p class="no-left-margin">Github Releases tagged on your repository will be added as new versions of the extension in the Extensions Depot. We will use the Github release number for the version number of the extension.</p>
+    <p class="no-left-margin">The Extensions depot will do it's best to stay in sync with your Github repository. When new commits are pushed to your master branch, the Extensions depot will be updated with those new commits. When new releases are added through Github, a new version of the extension will be created.</p>
+  </div>
+</div>
