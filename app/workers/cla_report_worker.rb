@@ -4,9 +4,9 @@ if ROLLOUT.active?(:cla) && ROLLOUT.active?(:github)
   #
   class ClaReportWorker
     include Sidekiq::Worker
-    #include Sidetiq::Schedulable
+    # include Sidetiq::Schedulable
 
-    recurrence { monthly }
+    # recurrence { monthly }
 
     #
     # Generates a new CLA report if any new ICLA or CCLA signatures have been

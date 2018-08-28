@@ -1,8 +1,8 @@
 class PollExtensionReposWorker
   include Sidekiq::Worker
-  #include Sidetiq::Schedulable
+  # include Sidetiq::Schedulable
 
-  recurrence { daily }
+  # recurrence { daily }
 
   def perform
     Extension.where("updated_at < ?", Time.now - 24.hours).pluck(:id).each do |eid|
