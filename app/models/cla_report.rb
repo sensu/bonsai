@@ -5,6 +5,8 @@ class ClaReport < ApplicationRecord
   # --------------------
   # has_attached_file :csv
 
+  has_one_attached :csv 
+
   # Validations
   # --------------------
   # validates_attachment_content_type :csv, content_type: /csv/
