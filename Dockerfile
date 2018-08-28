@@ -9,12 +9,6 @@ RUN apt-get install -y curl
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
 RUN apt-get update && apt-get install -y nodejs apt-transport-https
 
-# Get Yarn dist
-# RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - 
-# RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-# RUN apt-get update
-# RUN apt-get install yarn
-
 RUN apt-get install -y xvfb nano build-essential libpq-dev wget postgresql-9.6 postgresql-client postgresql-contrib
 
 RUN rm -rf /var/lib/apt/lists/*
@@ -43,14 +37,6 @@ RUN bundle install
 
 # Copy the Rails application into place
 ADD . .
-
-# Install npm packages
-# COPY package.json yarn.lock ./
-# RUN yarn install --production
-# RUN yarn add caniuse-lite@^1.0.30000697
-# RUN yarn upgrade css-loader -p
-# RUN yarn upgrade webpack@^2.2.0 || ^3.0.0
-# RUN yarn add babel-loader
 
 # Expose a port
 EXPOSE 80
