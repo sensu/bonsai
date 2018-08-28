@@ -5,6 +5,7 @@ require "safe_yaml/load"
 
 # Do not use dotenv on openshift
 if ( File.exists?( File.expand_path('../../.env', __FILE__) ) ) && !( Rails.env.production? || Rails.env.staging? )
+  require 'dotenv'
   Dotenv.overload('.env', ".env.#{Rails.env}").tap do |env|
     if env.empty?
       fail 'Cannot run Bonsai Asset Index without a .env file.'
