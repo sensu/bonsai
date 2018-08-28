@@ -1,7 +1,6 @@
 require_relative 'boot'
 
 require 'rails/all'
-require 'dotenv'
 require "safe_yaml/load"
 
 # Do not use dotenv on openshift
