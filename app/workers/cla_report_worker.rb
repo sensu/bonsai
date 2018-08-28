@@ -4,7 +4,7 @@ if ROLLOUT.active?(:cla) && ROLLOUT.active?(:github)
   #
   class ClaReportWorker
     include Sidekiq::Worker
-    include Sidetiq::Schedulable
+    #include Sidetiq::Schedulable
 
     recurrence { monthly }
 
