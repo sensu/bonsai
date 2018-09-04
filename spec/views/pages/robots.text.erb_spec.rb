@@ -5,7 +5,7 @@ describe 'pages/robots.text.erb' do
 
   it 'uses the full host' do
     ENV['HOST'] = 'example.com'
-    ENV['PORT'] = '80'
+    ENV['APP_PORT'] = '80'
     ENV['PROTOCOL'] = 'http'
 
     render

@@ -32,7 +32,7 @@ Rails.application.config.middleware.use(OmniAuth::Builder) do
     ENV['GITHUB_CLIENT_ID'],
     ENV['GITHUB_CLIENT_SECRET'],
     client_options: client_options,
-    scope: BonsaiAssetIndex::Authentication::AUTH_SCOPE
+    scope: BonsaiAssetIndex::Authentication::AUTH_SCOPE,
   ).inspect
 
   provider(

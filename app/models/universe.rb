@@ -123,7 +123,7 @@ module Universe
   # @return [String] protocol://host:port
   def protocol_host_port(opts = {})
     host = opts.fetch(:host, ENV['HOST'])
-    port = opts.fetch(:port, ENV['PORT'])
+    port = opts.fetch(:port, ENV['APP_PORT'])
     # port may be nil or empty, and if so we don't want to have a port
     # string, but if not, then we want to prepend a colon for the URI
     # we return.
