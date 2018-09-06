@@ -26,7 +26,7 @@ class ApplicationController < ActionController::Base
   protected
 
   def owner_scoped_extension_url(extension)
-    extension_url(id: extension.id, username: extension.owner_name)
+    extension_url(extension, username: extension.owner_name)
   end
 
   def not_found!(error = nil)
@@ -68,4 +68,5 @@ class ApplicationController < ActionController::Base
   def ssl_configured?
     !(Rails.env.development? or Rails.env.test?)
   end
+  
 end

@@ -10,6 +10,7 @@ gem 'rails', '~> 5.2.1'
 gem 'pg', '>= 0.18', '< 2.0'
 gem 'pg_search'
 
+# gem 'redis-rails' # not necessary in rails 5.2+
 gem 'sidekiq'
 
 # Use Puma as the app server

@@ -35,7 +35,7 @@ services:
       - redis
       - web
     volumes:
-      - .:/app
+      - .:/bonsai-asset-index
     env_file:
       - .env
 volumes:

@@ -2,8 +2,8 @@ def Object.const_missing(const)
   if const == :ROLLOUT
     require 'redis'
 
-    redis_connect = {}.tap { |h| h[:host] = ENV["REDIS_HOST"] if ENV["REDIS_HOST"] }
-    redis = Redis.new(redis_connect)
+    #redis_connect = {}.tap { |h| h[:host] = ENV["REDIS_HOST"] if ENV["REDIS_HOST"] }
+    redis = Redis.new(:url => "redis://#{ENV['REDIS_HOST']}/1")
 
     Object.const_set('ROLLOUT', Rollout.new(redis))
 

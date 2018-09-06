@@ -1,0 +1,1 @@
+Redis.current = Redis.new(url: "redis://#{ENV['REDIS_HOST']}/1", network_timeout: 5)

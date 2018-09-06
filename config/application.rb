@@ -37,6 +37,8 @@ module BonsaiAssetIndex
     # true.
     config.i18n.enforce_available_locales = false
 
+    config.active_job.queue_adapter = :sidekiq
+
     # Use a custom exception handling application
     config.exceptions_app = proc do |env|
       ExceptionsController.action(:show).call(env)

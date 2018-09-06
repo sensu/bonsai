@@ -59,10 +59,11 @@ class ExtensionsController < ApplicationController
   # Show a form for creating a new extension.
   #
   def new
-    if @repo_names = Rails.configuration.redis.get("user-repos-#{current_user.id}")
+    if @repo_names = Redis.current.get("user-repos-#{current_user.id}")
       @repo_names = Marshal.load(@repo_names)
     else
       FetchAccessibleReposWorker.perform_async(current_user.id)
+      puts '******* FetchAccessibleReposWorker *********'
     end
 
     @extension = Extension.new

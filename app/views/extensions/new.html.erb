@@ -13,6 +13,7 @@
             <%= f.select :github_url_short, @repo_names.map { |r| r[:full_name] }, { include_blank: "Select a Repository" }, required: true, id: "extension-url-short-field", data: { repos: @repo_names } %>
           <% else %>
             <p id="loading-extensions"><%= image_tag "spinner.gif" %> Loading your extensions...</p>
+            <p id="loading-extensions-failed" style="display: none;">Loading your extensions failed...</p>
           <% end %>
           <%= f.hidden_field :github_url, id: "extension-url-field" %>
         </div>
@@ -29,14 +30,16 @@
           <%= f.text_field :tag_tokens, placeholder: "Tags", title: "Tags", class: "tokenfield", data: { autofill: Tag::DEFAULT_TAGS } %>
         </div>
 
-        <h2>Compatible ManageIQ Versions</h2>
-        <div class="compatible_platforms-field">
-          <% SupportedPlatform.pluck(:name, :id).each do |name, id| %>
-            <div>
-              <label><%= f.check_box :compatible_platforms, { multiple: true }, id.to_s, nil %> <%= name %></label>
-            </div>
-          <% end %>
-        </div>
+        <% if false # remove for Sensu %>
+          <h2>Compatible ManageIQ Versions</h2>
+          <div class="compatible_platforms-field">
+            <% SupportedPlatform.pluck(:name, :id).each do |name, id| %>
+              <div>
+                <label><%= f.check_box :compatible_platforms, { multiple: true }, id.to_s, nil %> <%= name %></label>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
       </fieldset>
 
       <%= f.submit "Add Extension", class: "button primary radius" %>

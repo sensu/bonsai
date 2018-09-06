@@ -1,4 +1,5 @@
 jQuery(function() {
+  var attempts = 0;
   var updateNameAndDescription = function() {
     var urlField = $("#extension-url-short-field");
     var repos = urlField.data("repos");
@@ -21,6 +22,7 @@ jQuery(function() {
   }
 
   var attemptExtensionsLoad = function() {
+    attempts += 1
     $.get("/users/accessible_repos", function(resp) {
       if (resp.repo_names) {
         $("#loading-extensions").remove();
@@ -47,7 +49,13 @@ jQuery(function() {
           updateNameAndDescription();
         });
       } else {
-        setTimeout(attemptExtensionsLoad, 1000);
+        if (attempts <= 5) {
+          setTimeout(attemptExtensionsLoad, 3000);
+        } else {
+          $("#loading-extensions").remove();
+          $("#loading-extensions-failed").show();
+          clearTimeout(attemptExtensionsLoad);
+        }
       }
 
     })
@@ -60,6 +68,6 @@ jQuery(function() {
 
     updateNameAndDescription();
   } else if ($("#loading-extensions").size() > 0) {
-    setTimeout(attemptExtensionsLoad, 1000);
+    setTimeout(attemptExtensionsLoad, 3000);
   }
 });

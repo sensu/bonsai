@@ -24,7 +24,7 @@ class UsersController < ApplicationController
   end
 
   def accessible_repos
-    if @repo_names = Rails.configuration.redis.get("user-repos-#{current_user.id}")
+    if @repo_names = Redis.current.get("user-repos-#{current_user.id}")
       @repo_names = Marshal.load(@repo_names)
       render json: { repo_names: @repo_names }
     else
