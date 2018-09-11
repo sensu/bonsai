@@ -43,8 +43,6 @@ gem 'jbuilder', '~> 2.5'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
 
-gem 'sendgrid-ruby'
-
 gem 'omniauth'
 gem 'omniauth-chef-oauth2'
 gem 'omniauth-github'
@@ -89,6 +87,8 @@ group :development, :test do
 end
 
 group :development do
+  # Only in development as SendGrid is provisioned by Heroku
+  gem 'sendgrid-ruby'
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
   # gem 'web-console', '>= 3.3.0'
   gem 'listen', '>= 3.0.5', '< 3.2'
