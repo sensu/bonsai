@@ -2,8 +2,7 @@
 # Lets those who follow and/or collaborate on an extension know when the extension
 # has been deprecated.
 #
-class ExtensionDeprecatedNotifier
-  include Sidekiq::Worker
+class ExtensionDeprecatedNotifier < ApplicationWorker
 
   #
   # Queues an email to each follower and/or collaborator of the extension

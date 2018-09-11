@@ -1,5 +1,4 @@
-class CollectExtensionMetadataWorker
-  include Sidekiq::Worker
+class CollectExtensionMetadataWorker < ApplicationWorker
 
   def perform(extension_id, compatible_platforms = [])
     ExtractExtensionBasicMetadataWorker.new.perform(extension_id)

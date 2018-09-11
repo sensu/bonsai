@@ -1,5 +1,4 @@
-class OauthTokenRefreshWorker
-  include Sidekiq::Worker
+class OauthTokenRefreshWorker < ApplicationWorker
 
   #
   # Refresh the OAuth token of the given account

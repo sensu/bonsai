@@ -1,8 +1,7 @@
 require 'net/http'
 require 'uri'
 
-class FieriNotifyWorker
-  include Sidekiq::Worker
+class FieriNotifyWorker < ApplicationWorker
   include Rails.application.routes.url_helpers
 
   #

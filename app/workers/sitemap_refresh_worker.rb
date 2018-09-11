@@ -4,8 +4,8 @@ require 'sitemap_generator'
 # Worker that refreshes Supermarket's sitemap once a day at midnight. Uses
 # Sidetiq to schedule the job.
 #
-class SitemapRefreshWorker
-  include Sidekiq::Worker
+class SitemapRefreshWorker < ApplicationWorker
+
  # include Sidetiq::Schedulable
 
   # recurrence { daily }

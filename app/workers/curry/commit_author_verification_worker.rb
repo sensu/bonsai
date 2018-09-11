@@ -1,5 +1,4 @@
-class Curry::CommitAuthorVerificationWorker
-  include Sidekiq::Worker
+class Curry::CommitAuthorVerificationWorker < ApplicationWorker
 
   def perform(user_id)
     user = User.find(user_id)

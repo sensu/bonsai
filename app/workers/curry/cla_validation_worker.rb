@@ -1,7 +1,6 @@
 require 'octokit'
 
-class Curry::ClaValidationWorker
-  include Sidekiq::Worker
+class Curry::ClaValidationWorker < ApplicationWorker
 
   #
   # Annotate the Pull Request specified with a +Curry::PullRequestAnnotator+.

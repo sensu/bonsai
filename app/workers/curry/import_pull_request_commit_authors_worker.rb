@@ -4,8 +4,7 @@
 # authored commits with a non GitHub-verified email. Once the import is
 # complete. This worker runs the job to annotate the given Pull Request.
 #
-class Curry::ImportPullRequestCommitAuthorsWorker
-  include Sidekiq::Worker
+class Curry::ImportPullRequestCommitAuthorsWorker < ApplicationWorker
 
   #
   # Performs the action of the worker

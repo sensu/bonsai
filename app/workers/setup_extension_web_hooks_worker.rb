@@ -1,5 +1,4 @@
-class SetupExtensionWebHooksWorker
-  include Sidekiq::Worker
+class SetupExtensionWebHooksWorker < ApplicationWorker
 
   def perform(extension_id)
     @extension = Extension.find(extension_id)

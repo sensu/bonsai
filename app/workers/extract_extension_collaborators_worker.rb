@@ -1,6 +1,5 @@
-class ExtractExtensionCollaboratorsWorker
-  include Sidekiq::Worker
-
+class ExtractExtensionCollaboratorsWorker < ApplicationWorker
+  
   def perform(extension_id, page = 1, from_api = :contributors)
     @extension = Extension.find(extension_id)
 

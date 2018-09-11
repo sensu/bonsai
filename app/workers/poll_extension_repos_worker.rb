@@ -1,5 +1,5 @@
-class PollExtensionReposWorker
-  include Sidekiq::Worker
+class PollExtensionReposWorker < ApplicationWorker
+
   # include Sidetiq::Schedulable
 
   # recurrence { daily }

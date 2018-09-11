@@ -50,5 +50,17 @@ module BonsaiAssetIndex
       'BonsaiAssetIndex::Authorization::NotAuthorizedError' => :unauthorized
     )
 
+    config.action_controller.default_url_options = {
+      host: ENV['HOST'],
+      port: ENV['APP_PORT'],
+      protocol: ENV['PROTOCOL']
+    }
+
+    config.action_mailer.default_url_options = {
+      host: ENV['HOST'],
+      port: ENV['APP_PORT'],
+      protocol: ENV['PROTOCOL']
+    }
+
   end
 end

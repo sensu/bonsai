@@ -1,5 +1,4 @@
-class SyncExtensionRepoWorker
-  include Sidekiq::Worker
+class SyncExtensionRepoWorker < ApplicationWorker
 
   def perform(extension_id, compatible_platforms = [])
     @extension = Extension.find(extension_id)

@@ -2,8 +2,8 @@ if ROLLOUT.active?(:cla) && ROLLOUT.active?(:github)
   #
   # Worker that generates and emails a CLA report if new signatures were created since the last run.
   #
-  class ClaReportWorker
-    include Sidekiq::Worker
+  class ClaReportWorker < ApplicationWorker
+
     # include Sidetiq::Schedulable
 
     # recurrence { monthly }

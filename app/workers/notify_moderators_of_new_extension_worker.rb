@@ -1,5 +1,4 @@
-class NotifyModeratorsOfNewExtensionWorker
-  include Sidekiq::Worker
+class NotifyModeratorsOfNewExtensionWorker < ApplicationWorker
 
   def perform(extension_id)
     User.moderator.all.each do |u|

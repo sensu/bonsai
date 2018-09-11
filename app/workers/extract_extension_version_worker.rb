@@ -1,5 +1,4 @@
-class ExtractExtensionVersionWorker
-  include Sidekiq::Worker
+class ExtractExtensionVersionWorker < ApplicationWorker
 
   def perform(extension_id, tag, compatible_platforms)
     return if not semver?(tag)

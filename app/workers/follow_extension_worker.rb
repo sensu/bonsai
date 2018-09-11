@@ -1,5 +1,4 @@
-class FollowExtensionWorker
-  include Sidekiq::Worker
+class FollowExtensionWorker < ApplicationWorker
 
   def perform(extension_id, user_id)
     extension = Extension.find(extension_id)

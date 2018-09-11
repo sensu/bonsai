@@ -1,7 +1,6 @@
 require 'octokit'
 
-class Curry::RepositorySubscriptionWorker
-  include Sidekiq::Worker
+class Curry::RepositorySubscriptionWorker < ApplicationWorker
 
   def initialize(config_options = {})
     @config_options = {

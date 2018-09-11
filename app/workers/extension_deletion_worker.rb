@@ -1,5 +1,4 @@
-class ExtensionDeletionWorker
-  include Sidekiq::Worker
+class ExtensionDeletionWorker < ApplicationWorker
 
   #
   # Notify anyone that was a follower or a collaborator on this extension that

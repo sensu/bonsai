@@ -1,5 +1,4 @@
-class ExtractExtensionLicenseWorker
-  include Sidekiq::Worker
+class ExtractExtensionLicenseWorker < ApplicationWorker
 
   def perform(extension_id)
     @extension = Extension.find(extension_id)

@@ -1,5 +1,4 @@
-class ExtractExtensionCollaboratorWorker
-  include Sidekiq::Worker
+class ExtractExtensionCollaboratorWorker < ApplicationWorker
 
   def perform(extension_id, github_login)
     @extension = Extension.find(extension_id)

@@ -1,5 +1,5 @@
-class OauthTokenRefreshScheduleWorker
-  include Sidekiq::Worker
+class OauthTokenRefreshScheduleWorker < ApplicationWorker
+
   # include Sidetiq::Schedulable
 
   # recurrence backfill: true do

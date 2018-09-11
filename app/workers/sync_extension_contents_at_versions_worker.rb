@@ -1,5 +1,4 @@
-class SyncExtensionContentsAtVersionsWorker
-  include Sidekiq::Worker
+class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
 
   def logger
     @logger ||= Logger.new("log/scan.log")
@@ -70,6 +69,7 @@ class SyncExtensionContentsAtVersionsWorker
     if filename = filename.first
       ext = extract_readme_file_extension(filename)
       body = @run.cmd("cat '#{filename}'")
+      body = body.encode(Encoding.find('UTF-8'), {invalid: :replace, undef: :replace, replace: ''})
       return body, ext
     else
       return "There is no README file for this extension.", "txt"

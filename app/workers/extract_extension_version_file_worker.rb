@@ -1,5 +1,4 @@
-class ExtractExtensionVersionFileWorker
-  include Sidekiq::Worker
+class ExtractExtensionVersionFileWorker < ApplicationWorker
 
   def perform(version_id, path)
     @version = ExtensionVersion.find(version_id)

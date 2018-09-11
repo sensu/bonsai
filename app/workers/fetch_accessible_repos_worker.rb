@@ -1,5 +1,4 @@
-class FetchAccessibleReposWorker
-  include Sidekiq::Worker
+class FetchAccessibleReposWorker < ApplicationWorker
 
   def perform(user_id)
     user = User.find(user_id)

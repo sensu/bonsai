@@ -1,5 +1,4 @@
-class Curry::PullRequestAppraiserWorker
-  include Sidekiq::Worker
+class Curry::PullRequestAppraiserWorker < ApplicationWorker
 
   #
   # Check if there are any Curry::CommitAuthors with the same GitHub login

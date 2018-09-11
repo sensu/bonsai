@@ -1,5 +1,4 @@
-class ExtractExtensionBasicMetadataWorker
-  include Sidekiq::Worker
+class ExtractExtensionBasicMetadataWorker < ApplicationWorker
 
   def perform(extension_id)
     @extension = Extension.find(extension_id)
