@@ -43,6 +43,8 @@ gem 'jbuilder', '~> 2.5'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
 
+gem 'sendgrid-ruby'
+
 gem 'omniauth'
 gem 'omniauth-chef-oauth2'
 gem 'omniauth-github'
