@@ -14,9 +14,11 @@
     <link rel="shortcut icon" href="<%= image_url('favicon.ico') %>" type="image/x-icon">
     <link rel="icon" href="<%= image_url('favicon.ico') %>" type="image/x-icon">
     <link rel="apple-touch-icon" href="<%= image_url('apple-touch-icon.png') %>"/>
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css" rel="stylesheet">
     <link href="//fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-558071333389cb6a" async="async"></script>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%# render 'google_analytics' %>
@@ -102,9 +104,6 @@
         </section>
       </footer>
     </div>
-
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-558071333389cb6a" async="async"></script>
   </body>
 </html>
 
