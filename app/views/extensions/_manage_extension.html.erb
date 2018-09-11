@@ -1,7 +1,7 @@
 <a href="#" data-dropdown="manage" class="button radius secondary small dropdown">Manage Extension</a>
 
 <ul class="manage_extension f-dropdown" id="manage" data-dropdown-content>
-  <% if policy(extension).transfer_ownership? %>
+  <% if false # policy(extension).transfer_ownership? %>
     <li>
       <%= link_to '#', rel: 'transfer_ownership', 'data-reveal-id' => 'transfer' do %>
         <i class="fa fa-random"></i>

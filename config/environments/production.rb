@@ -89,6 +89,13 @@ Rails.application.configure do
     config.logger    = ActiveSupport::TaggedLogging.new(logger)
   end
 
+  # cache store in production.
+  config.cache_store = :redis_cache_store, {
+    url: "redis://#{ENV['REDIS_HOST']}/0", 
+    network_timeout: 1,
+    namespace: "cache",
+  }
+
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
