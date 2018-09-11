@@ -235,6 +235,7 @@ GEM
     multi_json (1.13.1)
     multi_xml (0.6.0)
     multipart-post (2.0.0)
+    mustermann (1.0.3)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-sftp (2.1.2)
@@ -388,6 +389,7 @@ GEM
       rubocop (>= 0.58.0)
     ruby-progressbar (1.10.0)
     ruby_dep (1.5.0)
+    ruby_http_client (3.3.0)
     rubyzip (1.2.2)
     safe_yaml (1.0.4)
     sass (3.5.7)
@@ -408,6 +410,9 @@ GEM
       childprocess (~> 0.5)
       rubyzip (~> 1.2)
     semverse (2.0.0)
+    sendgrid-ruby (5.2.0)
+      ruby_http_client (~> 3.2)
+      sinatra (>= 1.4.7, < 3)
     serverspec (2.41.3)
       multi_json
       rspec (~> 3.0)
@@ -420,6 +425,11 @@ GEM
       connection_pool (~> 2.2, >= 2.2.2)
       rack-protection (>= 1.5.0)
       redis (>= 3.3.5, < 5)
+    sinatra (2.0.3)
+      mustermann (~> 1.0)
+      rack (~> 2.0)
+      rack-protection (= 2.0.3)
+      tilt (~> 2.0)
     sitemap_generator (6.0.1)
       builder (~> 3.0)
     specinfra (2.76.1)
@@ -524,6 +534,7 @@ DEPENDENCIES
   sass-rails (~> 5.0)
   selenium-webdriver
   semverse
+  sendgrid-ruby
   shoulda-matchers
   sidekiq
   sitemap_generator
