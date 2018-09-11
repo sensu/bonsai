@@ -6,7 +6,7 @@
     <h1 class="title">
       <%= pluralize(@number_of_extensions, 'Extension') %>
       <small>
-        <%= link_to '<i class="fa fa-rss"></i> RSS'.html_safe, params.merge(format: 'atom'), :class => 'rss_feed_link show-for-medium-up' %>
+        <%= link_to '<i class="fa fa-rss"></i> RSS'.html_safe, params.to_unsafe_h.merge(format: 'atom'), :class => 'rss_feed_link show-for-medium-up' %>
       </small>
     </h1>
 
