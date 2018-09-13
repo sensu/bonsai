@@ -17,7 +17,7 @@
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css" rel="stylesheet">
     <link href="//fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application' %>
     <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-558071333389cb6a" async="async"></script>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -104,6 +104,9 @@
         </section>
       </footer>
     </div>
+
+    <%= yield :script %>
+    
   </body>
 </html>
 

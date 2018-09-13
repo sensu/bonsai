@@ -10,11 +10,9 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
+//= require jquery
 //= require rails-ujs
 //= require activestorage
-//= require turbolinks
-//= require jquery
-//= require rails
 //= require jquery.cookie
 //= require placeholder
 //= require fastclick
@@ -30,7 +28,6 @@
 //= require flash
 //= require select2.min
 //= require collaborators
-//= require extensionNew
 //= require extensionDeprecate
 //= require extensionInstallTabs
 //= require organizations
@@ -39,6 +36,8 @@
 //= require vendor/bootstrap-tokenfield
 //= require vendor/twitter-typeahead
 //= require vendor/twitter-bloodhound
+//= require turbolinks
+
 
 // Hack to resolve bug with Foundation. Resolved in master
 // here: https://github.com/zurb/foundation/issues/4684 so

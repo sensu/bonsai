@@ -1,0 +1,2 @@
+
+<%= select_tag "extension[github_url_short]", options_for_select( @repo_names.map{ |r| r[:full_name] } ), include_blank: "Select a Repository", id: "extension-url-short-field", required: true, data: {repos: @repo_names.to_json} %>

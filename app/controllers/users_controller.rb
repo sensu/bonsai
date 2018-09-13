@@ -1,6 +1,9 @@
 class UsersController < ApplicationController
   before_action :assign_user, except: [:accessible_repos, :enable]
 
+  self.responder = ApplicationResponder
+  respond_to :html, :js, :json
+
   #
   # GET /users/:id
   #
@@ -24,11 +27,21 @@ class UsersController < ApplicationController
   end
 
   def accessible_repos
+    @repo_names = Redis.current.get("user-repos-#{current_user.id}")
+    if !@repo_names.nil?
+      @repo_names = Marshal.load(@repo_names)
+    else
+      @repo_names = Extension.where('0=1')
+    end 
+    respond_with @repo_names
+
+    if false 
     if @repo_names = Redis.current.get("user-repos-#{current_user.id}")
       @repo_names = Marshal.load(@repo_names)
       render json: { repo_names: @repo_names }
     else
       render json: { waiting: true }
+    end
     end
   end
 

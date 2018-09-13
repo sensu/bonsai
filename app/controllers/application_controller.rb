@@ -1,4 +1,7 @@
+require "application_responder"
+
 class ApplicationController < ActionController::Base
+
   force_ssl if: :ssl_configured?
   protect_from_forgery with: :exception
   before_action :define_search

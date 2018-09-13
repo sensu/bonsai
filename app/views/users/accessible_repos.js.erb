@@ -1,0 +1,7 @@
+<% if @repo_names.empty? %>
+  retryGetExtension();
+<% else %> 
+  $("#extensions-selector").html(
+   "<%= raw escape_javascript( render 'users/extension_selector' ) %>"
+  );
+<% end %>

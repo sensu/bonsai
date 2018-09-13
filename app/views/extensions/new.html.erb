@@ -8,15 +8,24 @@
       <%= render "application/form_errors", record: @extension %>
 
       <fieldset id="" class="">
+        
         <div id="extensions-selector" class="name-field">
+          <p id="loading-extensions"><%= image_tag "spinner.gif" %> Loading your extensions...</p>
+          <p id="loading-extensions-failed" style="display: none;">Loading your extensions failed...</p>
+
+          <% if false %>
           <% if @repo_names %>
             <%= f.select :github_url_short, @repo_names.map { |r| r[:full_name] }, { include_blank: "Select a Repository" }, required: true, id: "extension-url-short-field", data: { repos: @repo_names } %>
           <% else %>
             <p id="loading-extensions"><%= image_tag "spinner.gif" %> Loading your extensions...</p>
             <p id="loading-extensions-failed" style="display: none;">Loading your extensions failed...</p>
           <% end %>
+          
           <%= f.hidden_field :github_url, id: "extension-url-field" %>
+          <% end %>
+        
         </div>
+
         <div class="description-field">
           <%= f.text_field :name, placeholder: "Name", title: "Name", required: true, id: "extension-name-field" %>
           <small class="error">Name is required.</small>
@@ -54,3 +63,62 @@
     <p class="no-left-margin">The Extensions depot will do it's best to stay in sync with your Github repository. When new commits are pushed to your master branch, the Extensions depot will be updated with those new commits. When new releases are added through Github, a new version of the extension will be created.</p>
   </div>
 </div>
+
+<% content_for :script do %>
+
+  <script>
+
+    var retries = 0;
+    var repos = [];
+
+    var getExtensionsForUser = () => {
+      $.ajax({
+        url: '<%= accessible_repos_users_path %>',
+        method: 'GET',
+        dataType: 'script'
+      });
+    }
+
+    var retryGetExtension = () => {
+      if (retries < 5) {
+        setTimeout(getExtensionsForUser, 3000);
+      } else {
+        $("#loading-extensions").remove();
+        $("#loading-extensions-failed").show();
+        clearTimeout(getExtensionsForUser);
+      }
+      retries += 1
+    }
+
+    var updateNameAndDescription = () => {
+      var urlField = $("#extension-url-short-field");
+      var repos = urlField.data("repos");
+      var current = urlField.val();
+
+      var repo = null;
+
+      for (var i = 0; i < repos.length; i++) {
+        if (repos[i].full_name == current) {
+          repo = repos[i];
+          break;
+        }
+      }
+
+      if (repo) {
+        $("#extension-url-field").val(repo.full_name);
+        $("#extension-name-field").val(repo.name);
+        $("#extension-desc-field").val(repo.description);
+      }
+    }
+
+    $(document).ajaxComplete( () => {
+      $("#extension-url-short-field").change( () => {
+        updateNameAndDescription();
+      });
+    });
+
+    getExtensionsForUser();
+  
+  </script>
+
+<% end %>
