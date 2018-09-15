@@ -10,7 +10,7 @@
 // Header wrapping element and row
 .globalheader {
   background-color: white;
-  height: rem-calc(100);
+  height: rem-calc(113);
   padding: rem-calc(0 55);
 
   .inner_wrap {
@@ -47,6 +47,7 @@
 // Global chef elements
 .logo_and_nav_toggle {
   @include grid-column(4, $collapse: true);
+  padding-top: 20px;
 }
 
 @media #{$mobile-only} {
@@ -65,26 +66,12 @@
   background-color: #222;
 }
 
-.logomanageiq {
-  background: url(image-path('logo-manageiq.png')) no-repeat center;
-  background-size: 100%;
-  float: left;
-  width: 100%;
-  height: 70px;
-  margin: 0;
-  padding: 0;
-  margin-top: 26px;
-  position: relative;
-  top: -10px;
-  max-width: 350px;
+.logoWordmark {
+  margin-top: 20px;
+} 
 
-  a {
-    display: block;
-    height: 100%;
-    width: 100%;
-
-    span { display: none; }
-  }
+.logoText {
+  display: none;
 }
 
 @media #{$mobile-only} {

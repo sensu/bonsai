@@ -61,6 +61,7 @@
       <small>Created on <span itemprop="dateModified"><%= extension.created_at.to_s(:longish) %></span></small>
     </h4>
 
+    <% if false %>
     <h4>
       <i class="fa fa-desktop"></i> Compatible ManageIQ Versions
       <% if policy(extension).manage? %>
@@ -68,6 +69,7 @@
         <a href="#" class="toggle-platforms-edit toggle-platforms-hidden">cancel</a>
       <% end %>
     </h4>
+
 
     <% if supported_platforms.present? %>
       <ul class="extension_platforms toggle-platforms-edit">
@@ -98,6 +100,7 @@
 
         <%= submit_tag "Save", class: "button primary small" %>
       </ul>
+    <% end %>
     <% end %>
 
     <h4><i class="fa fa-key"></i> License</h4>
