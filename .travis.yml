@@ -1,0 +1,17 @@
+cache: bundler
+
+services:
+  - docker
+
+language: ruby
+
+before_install:
+  - mv .env.example .env
+  - docker-compose build 
+
+env: 
+  - RAILS_ENV=test
+
+script:
+  - docker-compose run web rails db:test:prepare
+  - docker-compose run web rspec

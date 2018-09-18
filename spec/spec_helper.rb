@@ -53,7 +53,7 @@ RSpec.configure do |config|
     spec.syntax = :expect
   end
 
-  config.fail_fast = true
+  config.fail_fast = false
 
   # Allow tests to isolate a specific test using +focus: true+. If nothing
   # is focused, then all tests are executed.
