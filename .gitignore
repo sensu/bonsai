@@ -40,3 +40,6 @@ doc/
 
 # Ignore Redis dumps
 *.rdb
+
+# RubyMine IDE files
+.idea/
