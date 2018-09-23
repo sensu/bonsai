@@ -1,5 +1,8 @@
+require File.join(Rails.root, "app/lib/bonsai_asset_index/host")
+
 # Set the host name for URL creation
-SitemapGenerator::Sitemap.default_host = "http://www.example.com"
+SitemapGenerator::Sitemap.default_host = BonsaiAssetIndex::Host.full_url
+SitemapGenerator.verbose = false
 
 SitemapGenerator::Sitemap.create do
   # Put links creation logic here.
