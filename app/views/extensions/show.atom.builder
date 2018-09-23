@@ -3,7 +3,13 @@ atom_feed language: 'en-US' do |feed|
   feed.updated @extension_versions.max_by(&:updated_at).try(:updated_at)
 
   @extension_versions.each do |v|
-    feed.entry(v, url: extension_version_url(@extension, v)) do |entry|
+    feed.entry(
+      v,
+      url: extension_version_url(
+             @extension,
+             v,
+             username:     @extension.owner_name)
+    ) do |entry|
       entry.title "#{v.extension.name} - v#{v.version}"
       entry.content extension_atom_content(v), type: 'html'
       entry.author do |author|
