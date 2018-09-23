@@ -218,7 +218,7 @@ class ExtensionsController < ApplicationController
       ExtensionDeprecatedNotifier.perform_async(@extension.id)
 
       redirect_to(
-        @extension,
+        owner_scoped_extension_url(@extension),
         notice: t(
           'extension.deprecated',
           extension: @extension.name,
@@ -241,7 +241,7 @@ class ExtensionsController < ApplicationController
     @extension.update_attributes(deprecated: false, replacement: nil)
 
     redirect_to(
-      @extension,
+      owner_scoped_extension_url(@extension),
       notice: t(
         'extension.undeprecated',
         extension: @extension.name
@@ -259,7 +259,7 @@ class ExtensionsController < ApplicationController
     AdoptionMailer.delay.interest_email(@extension, current_user)
 
     redirect_to(
-      @extension,
+      owner_scoped_extension_url(@extension),
       notice: t(
         'adoption.email_sent',
         extension_or_tool: @extension.name
@@ -279,7 +279,7 @@ class ExtensionsController < ApplicationController
     @extension.update_attribute(:featured, !@extension.featured)
 
     redirect_to(
-      @extension,
+      owner_scoped_extension_url(@extension),
       notice: t(
         'extension.featured',
         extension: @extension.name,
