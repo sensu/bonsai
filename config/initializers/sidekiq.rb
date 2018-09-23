@@ -12,3 +12,5 @@ end
 Sidekiq.configure_client do |config|
   config.redis = redis_queue
 end
+
+Sidekiq::Extensions.enable_delay!
