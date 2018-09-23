@@ -48,6 +48,8 @@ RSpec.configure do |config|
   config.include(Shoulda::Matchers::ActiveRecord, type: :model)
   config.include(Shoulda::Matchers::ActionController, { type: :model, file_path: /spec\/controllers/})
 
+  config.include RedirectBack
+
   # Prohibit using the should syntax
   config.expect_with :rspec do |spec|
     spec.syntax = :expect
@@ -91,6 +93,10 @@ RSpec.configure do |config|
 
   config.before(:each) do
     Rails.cache.clear
+  end
+
+  config.before(:each) do
+    @request&.host = "#{BonsaiAssetIndex::Host.host}:#{BonsaiAssetIndex::Host.port}"
   end
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
