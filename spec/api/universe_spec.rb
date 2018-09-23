@@ -58,12 +58,14 @@ describe 'GET /universe' do
     pending
     expect(Rails.cache).to receive(:fetch).with('https-universe')
 
-    get '/universe', params: { format: :json, 'HTTPS' => 'on'}
+    https!
+    get '/universe', params: { format: :json}
   end
 
   it "returns https URLs when ENV['PROTOCOL']=https" do
     pending
-    get '/universe', params: { format: :json, 'HTTPS' => 'on'}
+    https!
+    get '/universe', params: { format: :json}
 
     expect(response).to be_successful
     expect(json_body['redis']['1.2.0']['location_path']).to match(%r{https://.*/api/v1})
