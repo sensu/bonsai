@@ -142,7 +142,7 @@ class ExtensionsController < ApplicationController
   # Redirects to the download location for the latest version of this extension.
   #
   def download
-    extension = Extension.with_username_and_name(params[:username], params[:id])
+    extension = Extension.with_owner_and_lowercase_name(owner_name: params[:username], lowercase_name: params[:id])
     latest_version = extension.latest_extension_version
     BonsaiAssetIndex::Metrics.increment('extension.downloads.web')
     DailyMetric.increment(latest_version.download_daily_metric_key)
@@ -212,7 +212,7 @@ class ExtensionsController < ApplicationController
   def deprecate
     authorize! @extension
 
-    replacement_extension = Extension.with_username_and_name(params[:username], extension_deprecation_params[:replacement])
+    replacement_extension = Extension.with_owner_and_lowercase_name(owner_name: params[:username], lowercase_name: extension_deprecation_params[:replacement])
 
     if @extension.deprecate(replacement_extension)
       ExtensionDeprecatedNotifier.perform_async(@extension.id)
@@ -353,7 +353,7 @@ class ExtensionsController < ApplicationController
 
   def assign_extension
     @extension ||= begin
-      Extension.with_username_and_name(params[:username], params[:id])
+      Extension.with_owner_and_lowercase_name(owner_name: params[:username], lowercase_name: params[:id])
     rescue ActiveRecord::RecordNotFound
       if extension = Extension.unscoped.with_name(params[:id]).first
         if current_user == extension.owner or (current_user and current_user.roles_mask > 0)

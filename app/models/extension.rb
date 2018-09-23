@@ -112,8 +112,8 @@ class Extension < ApplicationRecord
   }
   validates :replacement, presence: true, if: :deprecated?
 
-  def self.with_username_and_name(username, name)
-    Extension.where(owner_name: username, lowercase_name: name).first!
+  def self.with_owner_and_lowercase_name(owner_name:, lowercase_name:)
+    Extension.find_by!(owner_name: owner_name, lowercase_name: lowercase_name)
   end
 
   #
