@@ -3,7 +3,12 @@ atom_feed language: 'en-US' do |feed|
   feed.updated safe_updated_at(@followed_extension_activity)
 
   @followed_extension_activity.each do |extension_version|
-    feed.entry extension_version, url: extension_version_url(extension_version.extension, extension_version.version) do |entry|
+    feed.entry extension_version,
+               url: extension_version_url(
+                      extension_version.extension,
+                      extension_version,
+                      username:     extension_version.extension.owner_name
+                    ) do |entry|
       entry.title t('extension.activity',
                     maintainer: extension_version.extension.maintainer,
                     version: extension_version.version,

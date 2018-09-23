@@ -44,7 +44,7 @@ class ExtensionVersionsController < ApplicationController
       @version.save
     end
 
-    redirect_to({ action: :show }.merge(params.slice(:extension_id, :version)))
+    redirect_to({ action: :show }.merge(params.slice(:username, :extension_id, :version)))
   end
 
   private
