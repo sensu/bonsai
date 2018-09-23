@@ -48,7 +48,7 @@ class CollaboratorsController < ApplicationController
         CollaboratorMailer.delay.added_email(collaborator)
       end
 
-      redirect_to resource, notice: t('collaborator.added')
+      redirect_to helpers.collaboration_url(resource), notice: t('collaborator.added')
     else
       not_found!
     end
