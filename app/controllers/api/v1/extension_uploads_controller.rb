@@ -87,8 +87,9 @@ class Api::V1::ExtensionUploadsController < Api::V1Controller
       error({}, 403)
     else
       @latest_extension_version_url = api_v1_extension_version_url(
-        @extension, @extension.latest_extension_version
-      )
+        @extension,
+        @extension.latest_extension_version,
+        username:     @extension.owner_name)
 
       @extension.destroy
 
