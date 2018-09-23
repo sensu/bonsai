@@ -68,8 +68,8 @@ class OrganizationInvitationsController < ApplicationController
     @invitation = Invitation.with_token!(params[:id])
     InvitationMailer.delay.invitation_email(@invitation)
 
-    redirect_to(
-      :back,
+    redirect_back(
+      fallback_location: root_path,
       notice: t('organization_invitations.resend', email: @invitation.email)
     )
   end
@@ -83,8 +83,8 @@ class OrganizationInvitationsController < ApplicationController
     @invitation = Invitation.with_token!(params[:id])
     @invitation.destroy
 
-    redirect_to(
-      :back,
+    redirect_back(
+      fallback_location: root_path,
       notice: t('organization_invitations.revoke', email: @invitation.email)
     )
   end
