@@ -8,7 +8,7 @@ class TransferOwnershipController < ApplicationController
   # back to the extension.
   #
   def transfer
-    @extension = Extension.with_username_and_name(params[:username], params[:id])
+    @extension = Extension.with_owner_and_lowercase_name(owner_name: params[:username], lowercase_name: params[:id])
     authorize! @extension, :transfer_ownership?
     recipient = @extension.transferrable_to_users.find(transfer_ownership_params[:user_id])
     msg = @extension.transfer_ownership(recipient)
