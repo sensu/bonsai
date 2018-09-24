@@ -24,11 +24,12 @@ class Account < ApplicationRecord
   #
   def unique_username_and_provider
     if Account.exists?(provider: provider, username: username)
-      errors[:base] << I18n.t(
-        'account.already_connected',
-        provider: provider.titleize,
-        username: username
-      )
+      errors.add(:base,
+                 I18n.t(
+                   'account.already_connected',
+                   provider: provider.titleize,
+                   username: username
+                 ))
     end
   end
 end
