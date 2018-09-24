@@ -45,7 +45,7 @@ class CreateExtension
       result = false
     end
 
-    if !result then extension.errors[:github_url] = I18n.t("extension.github_url_format_error") end
+    if !result then extension.errors.add(:github_url, I18n.t("extension.github_url_format_error")) end
 
     result
   end
