@@ -17,7 +17,7 @@ describe ApplicationController do
       def show
         respond_to do |format|
           format.html do
-            render text: ''
+            render plain: ''
           end
         end
       end
@@ -58,7 +58,7 @@ describe ApplicationController do
       def index
         respond_to do |format|
           format.html do
-            render text: 'haha'
+            render plain: 'haha'
           end
         end
       end

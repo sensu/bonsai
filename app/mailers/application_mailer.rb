@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  # default from: 'from@example.com'
+  default from: 'bonsai-app@sensu.io'
   layout 'mailer'
 end

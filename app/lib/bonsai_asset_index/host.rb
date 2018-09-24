@@ -7,5 +7,13 @@ module BonsaiAssetIndex
         "#{ENV['PROTOCOL']}://#{ENV['HOST']}"
       end
     end
+
+    def self.host
+      ENV['HOST']
+    end
+
+    def self.port
+      ENV['APP_PORT']
+    end
   end
 end

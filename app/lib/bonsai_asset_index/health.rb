@@ -67,7 +67,7 @@ module BonsaiAssetIndex
     def waiting_on_lock
       postgres_health_metric do
         ActiveRecord::Base.connection.query(
-          "select count(*) from pg_stat_activity where waiting='t'"
+          "select count(*) from pg_stat_activity where wait_event_type='Lock'"
         ).flatten.first.to_i.tap do |waiting_on_lock|
           @postgresql[:waiting_on_lock] = waiting_on_lock
         end

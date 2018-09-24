@@ -15,6 +15,9 @@ Capybara.register_driver :quiet_ghost do |app|
 end
 
 Capybara.javascript_driver = :quiet_ghost
+Capybara.app_host    = BonsaiAssetIndex::Host.full_url
+Capybara.server_host = BonsaiAssetIndex::Host.host
+Capybara.server_port = BonsaiAssetIndex::Host.port
 
 # Use JS driver for all features
 RSpec.configure do |config|

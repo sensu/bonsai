@@ -28,6 +28,6 @@ module SupportedPlatformsHelper
       'suse' => 'L',
       'ubuntu' => 'M',
       'windows' => 'N'
-    }.fetch(platform.name.parameterize('_'), 'P')
+    }.fetch(platform.name.parameterize(separator: '_'), 'P')
   end
 end
