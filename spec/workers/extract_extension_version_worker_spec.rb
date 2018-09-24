@@ -32,7 +32,6 @@ describe ExtractExtensionVersionWorker do
   end
 
   it "creates a README based on the one returned from GitHub" do
-    pending
     allow(octokit).to receive(:readme).with("cvincent/test", ref: "1.0") do
       { name: "README.md", content: Base64.encode64("Hello world!") }
     end
@@ -47,7 +46,6 @@ describe ExtractExtensionVersionWorker do
   end
 
   it "creates a default README if one is missing" do
-    pending
     allow(octokit).to receive(:readme).with("cvincent/test", ref: "1.0").and_raise(Octokit::NotFound)
 
     expect(versions).to receive(:first_or_create).with(version: "1.0")
@@ -60,14 +58,12 @@ describe ExtractExtensionVersionWorker do
   end
 
   it "links the version to its supported platforms" do
-    pending
     expect(evp_assoc).to receive(:first_or_create).with(supported_platform_id: 1)
     expect(evp_assoc).to receive(:first_or_create).with(supported_platform_id: 2)
     subject.perform(extension_id, tag, compatible_platforms)
   end
 
   it "fails silently if the tag is not a well-formatted SemVer" do
-    pending
     expect {
       subject.perform(extension_id, "v1.0", compatible_platforms)
     }.not_to raise_error

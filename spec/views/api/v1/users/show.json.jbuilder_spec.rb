@@ -45,7 +45,6 @@ describe 'api/v1/users/show' do
   end
 
   it "displays the user's github accounts" do
-    pending
     github = json_body['github']
     expect(github).to eql(['fanny'])
   end

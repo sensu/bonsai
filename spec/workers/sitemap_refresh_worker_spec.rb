@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe SitemapRefreshWorker do
   it 'refreshes the sitemap' do
-    pending
     sitemap_file_path = './public/sitemap.xml.gz'
     #sitemap_file_path = SitemapGenerator::Sitemap.public_path.to_s + SitemapGenerator::Sitemap.namer.to_s
 
@@ -11,7 +10,7 @@ describe SitemapRefreshWorker do
       File.delete(sitemap_file_path)
     end
 
-    #SitemapRefreshWorker.new.perform
+    SitemapRefreshWorker.new.perform
     expect(File.exist?(sitemap_file_path)).to be true
 
     # clean up

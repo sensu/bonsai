@@ -32,12 +32,12 @@ describe TransferOwnershipController do
 
     context 'the current user is an admin' do
       let(:user) { create(:admin) }
-      #it_behaves_like 'admin_or_owner'
+      it_behaves_like 'admin_or_owner'
     end
 
     context 'the current user is the extension owner' do
       let(:user) { extension.owner }
-      #it_behaves_like 'admin_or_owner'
+      it_behaves_like 'admin_or_owner'
     end
 
   end
@@ -47,21 +47,18 @@ describe TransferOwnershipController do
 
     shared_examples 'a transfer request' do
       it 'redirects back to the extension' do
-        pending
         post :accept, params: {token: transfer_request}
         extension = assigns[:transfer_request].extension
         expect(response).to redirect_to [extension, username: extension.owner_name]
       end
 
       it 'finds transfer requests based on token' do
-        pending
         post :accept, params: {token: transfer_request}
         expect(assigns[:transfer_request]).to eql(transfer_request)
       end
 
       it 'returns a 404 if the transfer request given has already been updated' do
         transfer_request.update_attribute(:accepted, true)
-        pending
         post :accept, params: {token: transfer_request}
         expect(response.status.to_i).to eql(404)
       end
@@ -72,11 +69,10 @@ describe TransferOwnershipController do
         allow(OwnershipTransferRequest).to receive(:find_by!) { transfer_request }
         expect(transfer_request.accepted).to be_nil
         expect(transfer_request).to receive(:accept!)
-        pending
         get :accept, params: {token: transfer_request}
       end
 
-      #it_behaves_like 'a transfer request'
+      it_behaves_like 'a transfer request'
     end
 
     describe 'GET #decline' do
@@ -84,11 +80,10 @@ describe TransferOwnershipController do
         allow(OwnershipTransferRequest).to receive(:find_by!) { transfer_request }
         expect(transfer_request.accepted).to be_nil
         expect(transfer_request).to receive(:decline!)
-        pending
         get :decline, params: {token: transfer_request}
       end
 
-      #it_behaves_like 'a transfer request'
+      it_behaves_like 'a transfer request'
     end
   end
 end

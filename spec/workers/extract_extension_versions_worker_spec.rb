@@ -16,7 +16,6 @@ describe ExtractExtensionVersionsWorker do
   end
 
   it "kicks off a worker for each extension version found" do
-    pending
     allow(octokit).to receive(:tags).with("cvincent/test") do
       [
         { name: "1.0" },

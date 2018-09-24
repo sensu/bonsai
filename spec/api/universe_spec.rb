@@ -55,7 +55,6 @@ describe 'GET /universe' do
   end
 
   it 'has an https specific cache key' do
-    pending
     expect(Rails.cache).to receive(:fetch).with('https-universe')
 
     https!
@@ -63,7 +62,6 @@ describe 'GET /universe' do
   end
 
   it "returns https URLs when ENV['PROTOCOL']=https" do
-    pending
     https!
     get '/universe', params: { format: :json}
 

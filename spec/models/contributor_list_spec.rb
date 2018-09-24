@@ -3,9 +3,6 @@ require 'spec_helper'
 describe ContributorList do
   context '#each' do
     it "yields a user, and that user's github accounts" do
-      
-      pending 
-
       user = create(:user, create_chef_account: false)
       github_account = create(:account, provider: 'github', user: user)
 
@@ -18,22 +15,19 @@ describe ContributorList do
     end
 
     it 'eager loads the accounts' do
-      pending
-      raise
-
       Account.delete_all
       User.delete_all
 
-      #user = create(:user)
-      #create(:account, provider: 'github', user: user)
+      user = create(:user)
+      create(:account, provider: 'github', user: user)
 
-      #github_account = user.github_account
+      github_account = user.github_account
 
-      #contributor_list = ContributorList.new(User.where(id: user.id))
+      contributor_list = ContributorList.new(User.where(id: user.id))
      
-      #expect do |b|
-      #  contributor_list.each(&b)
-      #end.to yield_with_args(user, github_account)
+      expect do |b|
+       contributor_list.each(&b)
+      end.to yield_with_args(user, github_account)
     end
   end
 end

@@ -76,19 +76,14 @@ describe OrganizationAuthorizer do
   end
 
   context 'as someone who already requested to join' do
+    let(:user) { create(:user) }
 
-    pending do
-
-      let(:user) { create(:user) }
-
-      before do
-        create(:contributor_request, user: user, organization: record )
-      end
-
-      subject { described_class.new(user, record) }
-
-      it { should_not permit_authorization(:request_to_join) }
-
+    before do
+      create(:contributor_request, user: user, organization: record )
     end
+
+    subject { described_class.new(user, record) }
+
+    it { should_not permit_authorization(:request_to_join) }
   end
 end
