@@ -95,11 +95,13 @@ class ExtensionsController < ApplicationController
   def directory
     @recently_updated_extensions = Extension.
       includes(:extension_versions).
+      where.not(owner: nil).
       where("extension_versions.version != 'master'").
       order("extension_versions.created_at DESC").
       limit(5)
     @most_downloaded_extensions = Extension.
       includes(:extension_versions).
+      where.not(owner: nil).
       ordered_by('most_downloaded').
       limit(5)
 
