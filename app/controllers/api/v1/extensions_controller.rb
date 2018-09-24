@@ -40,7 +40,10 @@ class Api::V1::ExtensionsController < Api::V1Controller
   #
   def show
     @extension_versions_urls = @extension.sorted_extension_versions.map do |version|
-      api_v1_extension_version_url(@extension, version)
+      api_v1_extension_version_url(
+        @extension,
+        version,
+        username: @extension.owner_name)
     end
   end
 

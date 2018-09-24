@@ -8,8 +8,9 @@ module ExtensionsHelper
   #
   def latest_extension_version_url(extension)
     api_v1_extension_version_url(
-      extension, extension.latest_extension_version
-    )
+      extension,
+      extension.latest_extension_version,
+      username: extension.owner_name)
   end
 
   #

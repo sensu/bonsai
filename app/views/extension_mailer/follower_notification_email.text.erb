@@ -6,7 +6,10 @@ New version of <%= @extension_version.name %> released.
 
 A new version of <%= @extension_version.name %> has been released [<%= @extension_version.version %>].
 
-<%= extension_version_url(@extension_version.extension, @extension_version) %>
+<%= extension_version_url(
+        @extension_version.extension,
+        @extension_version,
+        username: @extension_version.extension.owner_name) %>
 
 <% if @extension_version.changelog.present? %>
 Changelog
@@ -14,7 +17,11 @@ _________________________________________________________
 
 <%= truncate @extension_version.changelog, length: 100 %>
 
-<%= extension_version_url(@extension_version.extension, @extension_version, anchor: 'changelog') %>
+<%= extension_version_url(
+        @extension_version.extension,
+        @extension_version,
+        username: @extension_version.extension.owner_name,
+        anchor: 'changelog') %>
 <% end %>
 
 Unsubscribe from this email: <%= unsubscribe_url(@email_preference) %>

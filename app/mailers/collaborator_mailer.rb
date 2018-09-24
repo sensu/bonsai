@@ -1,4 +1,5 @@
 class CollaboratorMailer < ApplicationMailer
+  helper CollaboratorsHelper
 
   #
   # Creates an email to send to people when they have been added as

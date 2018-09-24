@@ -22,7 +22,7 @@ class TransferOwnershipController < ApplicationController
   #
   def accept
     @transfer_request.accept!
-    redirect_to @transfer_request.extension,
+    redirect_to owner_scoped_extension_url(@transfer_request.extension),
                 notice: t(
                   'extension.ownership_transfer.invite_accepted',
                   extension: @transfer_request.extension.name
@@ -36,7 +36,7 @@ class TransferOwnershipController < ApplicationController
   #
   def decline
     @transfer_request.decline!
-    redirect_to @transfer_request.extension,
+    redirect_to owner_scoped_extension_url(@transfer_request.extension),
                 notice: t(
                   'extension.ownership_transfer.invite_declined',
                   extension: @transfer_request.extension.name
