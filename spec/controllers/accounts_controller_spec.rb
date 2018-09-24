@@ -10,7 +10,6 @@ describe AccountsController do
     end
 
     it 'creates a new account for a user' do
-      pending
       expect do
         post :create, params: {provider: 'github'}
       end.to change(user.accounts, :count).by(1)
@@ -18,7 +17,6 @@ describe AccountsController do
 
     it 'redirects to the user profile on success by default' do
       post :create, params: {provider: 'github'}
-      pending
       expect(response).to redirect_to(edit_profile_path)
     end
 
@@ -26,7 +24,6 @@ describe AccountsController do
       controller.store_location!("http://www.google.com")
 
       post :create, params: {provider: 'github'}
-      pending
       expect(response).to redirect_to("http://www.google.com")
     end
   end
@@ -36,7 +33,6 @@ describe AccountsController do
 
     it 'destroys an account for a user' do
       request.env['HTTP_REFERER'] = 'http://example.com/back'
-      pending
       expect { delete :destroy, params: { id: account.id, user_id: user.id } }
       .to change(user.accounts, :count).by(-1)
     end

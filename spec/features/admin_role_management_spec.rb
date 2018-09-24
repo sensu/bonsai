@@ -5,7 +5,7 @@ feature 'admin role management' do
   let(:admin) { create(:admin) }
 
   scenario 'admin user grants another user admin role' do
-    sign_in(admin)
+    feature_sign_in(admin)
     visit user_path(user)
     follow_relation 'make_admin'
 
@@ -14,7 +14,7 @@ feature 'admin role management' do
   end
 
   scenario 'admin revokes another admin user admin role' do
-    sign_in(admin)
+    feature_sign_in(admin)
     visit user_path(user)
     follow_relation 'make_admin'
     follow_relation 'revoke_admin'

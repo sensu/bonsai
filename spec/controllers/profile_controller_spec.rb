@@ -8,7 +8,6 @@ describe ProfileController do
       before { sign_in user }
 
       it 'updates the user' do
-        pending
         patch :update, params: {
           user: {
             first_name: 'Bob',
@@ -21,14 +20,12 @@ describe ProfileController do
       end
 
       it 'redirects to the user profile' do
-        pending
         patch :update, params: {user: { first_name: 'Blob' }}
 
         expect(response).to redirect_to(user)
       end
 
       it 'uses strong parameters' do
-        pending
         fake_user = double(User)
         attrs = {
           'email' => 'bob@example.com',
@@ -56,6 +53,7 @@ describe ProfileController do
 
         expect(fake_user).to receive(:update_attributes).with(attrs)
         allow(controller).to receive(:current_user) { fake_user }
+        allow(fake_user).to receive(:auth_scope) { BonsaiAssetIndex::Authentication::AUTH_SCOPE }
 
         patch :update, params: {user: attributes_for(:user, attrs)}
       end
@@ -68,14 +66,12 @@ describe ProfileController do
       before { sign_in user }
 
       it 'shows the edit form' do
-        pending
         get :edit
 
         expect(response).to render_template('edit')
       end
 
       it 'assigns pending requests' do
-        pending
         get :edit
 
         expect(assigns[:pending_requests]).to_not be_nil

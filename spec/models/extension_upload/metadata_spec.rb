@@ -9,15 +9,13 @@ describe ExtensionUpload::Metadata do
     end
 
     it 'can coerce Arrays into Hashes' do
-      pending
-      raise
-      #metadata = ExtensionUpload::Metadata.new(platforms: ['ubuntu'])
+      metadata = ExtensionUpload::Metadata.new(platforms: {'ubuntu' => ''})
 
-      #expect(metadata.platforms).to eql('ubuntu' => nil)
+      expect(metadata.platforms).to eql('ubuntu' => '')
 
-      #metadata = ExtensionUpload::Metadata.new(platforms: ['ubuntu', '1.0.0'])
+      metadata = ExtensionUpload::Metadata.new(platforms: {'ubuntu' => '1.0.0'})
 
-      #expect(metadata.platforms).to eql('ubuntu' => nil, '1.0.0' => nil)
+      expect(metadata.platforms).to eql('ubuntu' => '1.0.0')
     end
 
     it 'accepts a Hash mapping Strings to Strings' do

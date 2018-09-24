@@ -16,7 +16,6 @@ describe ExtractExtensionVersionsWorker do
   end
 
   it "kicks off a worker for each extension version found" do
-    pending
     allow(octokit).to receive(:tags).with("cvincent/test") do
       [
         { name: "1.0" },
@@ -26,6 +25,7 @@ describe ExtractExtensionVersionsWorker do
 
     expect(ExtractExtensionVersionWorker).to receive(:perform_async).with(123, "1.0", compatible_platforms)
     expect(ExtractExtensionVersionWorker).to receive(:perform_async).with(123, "1.2", compatible_platforms)
+    expect(ExtractExtensionVersionWorker).to receive(:perform_async).with(123, "master", compatible_platforms)
 
     subject.perform(extension_id, compatible_platforms)
   end
