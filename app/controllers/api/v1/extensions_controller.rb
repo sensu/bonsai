@@ -67,6 +67,6 @@ class Api::V1::ExtensionsController < Api::V1Controller
   private
 
   def assign_extension
-    @extension = Extension.with_username_and_name(params[:username], params[:extension])
+    @extension = Extension.with_owner_and_lowercase_name(owner_name: params[:username], lowercase_name: params[:extension])
   end
 end
