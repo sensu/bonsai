@@ -96,7 +96,7 @@ RSpec.configure do |config|
   end
 
   config.before(:each) do
-    @request&.host = "#{BonsaiAssetIndex::Host.host}:#{BonsaiAssetIndex::Host.port}"
+    @request&.host = [BonsaiAssetIndex::Host.host, BonsaiAssetIndex::Host.port].find_all(&:present?).join(':')
   end
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
