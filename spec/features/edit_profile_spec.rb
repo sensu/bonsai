@@ -2,7 +2,7 @@ require 'spec_feature_helper'
 
 describe 'editing the current user profile' do
   it 'updates the users profile' do
-    sign_in(create(:user))
+    feature_sign_in(create(:user))
     manage_profile
 
     within '.edit_user' do
