@@ -69,7 +69,6 @@ describe ApplicationController do
     end
 
     it 'skips the require_linked_github_account! filter if github integration is disabled' do
-      pending
       get :index
 
       expect(response).to be_successful

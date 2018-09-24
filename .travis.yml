@@ -7,6 +7,7 @@ language: ruby
 
 before_install:
   - mv .env.example .env
+  - mv .rspec.example .rspec
   - docker-compose build 
 
 env: 

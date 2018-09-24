@@ -38,7 +38,6 @@ describe ExtensionUpload::Parameters do
     end
 
     it 'is extracted from the top-level metadata.json' do
-      pending
       tarball = Tempfile.new('multiple-metadata', 'tmp').tap do |file|
         io = AndFeathers.build('multiple-metadata') do |base|
           base.file('metadata.json') do
@@ -47,7 +46,7 @@ describe ExtensionUpload::Parameters do
           base.file('PaxHeader/metadata.json') do
             JSON.dump(name: 'PaxHeader-multiple')
           end
-        end.to_io(AndFeathers::GzippedTarball, :reverse_each)
+        end.to_io
 
         file.write(io.read)
         file.rewind
@@ -100,7 +99,6 @@ describe ExtensionUpload::Parameters do
     end
 
     it 'is extracted from the top-level README' do
-      pending
       tarball = Tempfile.new('multiple-readme', 'tmp').tap do |file|
         io = AndFeathers.build('multiple-readme') do |base|
           base.file('metadata.json') { JSON.dump(name: 'multiple-readme') }
@@ -109,7 +107,7 @@ describe ExtensionUpload::Parameters do
             JSON.dump(name: 'multiple-readme')
           end
           base.file('PaxHeader/README') { 'impostor readme' }
-        end.to_io(AndFeathers::GzippedTarball, :reverse_each)
+        end.to_io
 
         file.write(io.read)
         file.rewind
@@ -143,7 +141,6 @@ describe ExtensionUpload::Parameters do
     end
 
     it 'can have a file extension' do
-      pending
       tarball = build_extension_tarball do |base|
         base.file('README.markdown') { '# README' }
       end
@@ -159,7 +156,6 @@ describe ExtensionUpload::Parameters do
     end
 
     it 'has a blank file extension if the README has none' do
-      pending
       tarball = build_extension_tarball do |base|
         base.file('README') { 'README' }
       end
@@ -177,7 +173,6 @@ describe ExtensionUpload::Parameters do
 
   describe '#changelog' do
     it 'is extracted from the tarball' do
-      pending
       tarball = build_extension_tarball do |base|
         base.file('CHANGELOG.md') { 'ch-ch-changes' }
       end
@@ -189,7 +184,6 @@ describe ExtensionUpload::Parameters do
     end
 
     it 'is extracted from the top-level CHANGELOG' do
-      pending
       tarball = build_extension_tarball do |base|
         base.file('CHANGELOG.md') { 'ch-ch-changes' }
         base.file('PaxHeader/CHANGELOG.md') { 'not these changes' }
@@ -215,7 +209,6 @@ describe ExtensionUpload::Parameters do
     end
 
     it 'is blank if the tarball parameter has no CHANGELOG entry' do
-      pending
       tarball = build_extension_tarball do |base|
         base.file('README.md') { '# README' }
       end
@@ -226,7 +219,6 @@ describe ExtensionUpload::Parameters do
     end
 
     it 'can have an file extension' do
-      pending
       tarball = build_extension_tarball do |base|
         base.file('CHANGELOG.markdown') { '# Markdown' }
       end
@@ -242,7 +234,6 @@ describe ExtensionUpload::Parameters do
     end
 
     it 'has a blank file extension if the CHANGELOG has none' do
-      pending
       tarball = build_extension_tarball do |base|
         base.file('CHANGELOG') { 'Plain text' }
       end

@@ -43,3 +43,6 @@ doc/
 
 # RubyMine IDE files
 .idea/
+
+# Allow developers to have their own .rspec file
+/.rspec

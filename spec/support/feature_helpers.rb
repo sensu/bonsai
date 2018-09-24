@@ -3,7 +3,7 @@ module FeatureHelpers
   # If +user+ is not passed it, the mock_auth defaults to the one specified in
   # the spec_helper
   #
-  def sign_in(user)
+  def feature_sign_in(user)
     OmniAuthControl.stub_chef!(user)
     OmniAuthControl.stub_github!(user)
 
@@ -14,7 +14,7 @@ module FeatureHelpers
     end
   end
 
-  def sign_out
+  def feature_sign_out
     in_user_menu do
       follow_relation 'sign_out'
     end

@@ -26,14 +26,12 @@ describe InvitationsController do
     end
 
     it 'creates a new Contributor' do
-      pending
       create(:account, user: user)
       expect { get :accept, params: {id: invitation.token} }
       .to change(Contributor, :count).by(1)
     end
 
     it 'accepts the invitation' do
-      pending
       create(:account, user: user)
       get :accept, params: {id: invitation.token}
       invitation.reload
@@ -42,7 +40,6 @@ describe InvitationsController do
     end
 
     it 'redirects to the current users profile if they have a connected GitHub account' do
-      pending
       create(:account, user: user)
       get :accept, params: {id: invitation.token}
 
@@ -56,7 +53,6 @@ describe InvitationsController do
     # end
 
     it 'creates admins if the invitation specifies as such' do
-      pending
       create(:account, user: user)
       invitation = create(:invitation, admin: true)
 
@@ -64,7 +60,6 @@ describe InvitationsController do
     end
 
     it "it doesn't create a new Contributor if the same user already belongs to the CCLA (organization)" do
-      pending
       create(:account, user: user)
       organization = create(:organization)
       invitation_1 = create(:invitation, organization: organization)
@@ -77,7 +72,6 @@ describe InvitationsController do
     end
 
     it "changes the user's commit author records to have signed a CLA" do
-      pending
       create(:account, user: user, provider: 'github')
 
       expect(Curry::CommitAuthorVerificationWorker).
@@ -90,7 +84,6 @@ describe InvitationsController do
 
   describe 'GET #decline' do
     it 'declines the invitation' do
-      pending
       get :decline, params: {id: invitation.token}
       invitation.reload
 
@@ -98,7 +91,6 @@ describe InvitationsController do
     end
 
     it 'redirects to the current users profile' do
-      pending
       get :decline, params: {id: invitation.token}
 
       expect(response).to redirect_to(user)
