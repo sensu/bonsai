@@ -74,7 +74,10 @@ module ApiSpecHelpers
   # @param user [User] the user that's unsharing the extension version
   #
   def unshare_extension_version(extension_name, version, user)
-    extension_version_path = "/api/v1/extensions/#{extension_name}/versions/#{version}"
+    extension_version_path = api_v1_extension_version_path(
+      username:  user.username,
+      extension: extension_name,
+      version:   version)
 
     header = Mixlib::Authentication::SignedHeaderAuth.signing_object(
       http_method: 'delete',

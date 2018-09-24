@@ -37,6 +37,7 @@ module ExtensionVersionsHelper
         extension_version_url(
           extension_version.extension,
           extension_version,
+          username: extension_version.extension.owner_name,
           anchor: 'changelog'
         )
       )

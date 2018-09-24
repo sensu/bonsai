@@ -87,7 +87,14 @@
       </ul>
     <% end %>
 
-    <%= form_tag({ controller: "extension_versions", action: "update_platforms", extension_id: extension.lowercase_name, version: version.try(:version) }, method: :put, class: "toggle-platforms-edit toggle-platforms-hidden") do %>
+    <%= form_tag({controller:   "extension_versions",
+                  action:       "update_platforms",
+                  username:     extension.owner_name,
+                  extension_id: extension.lowercase_name,
+                  version:      version.try(:version)
+                 },
+                 method: :put,
+                 class:  "toggle-platforms-edit toggle-platforms-hidden") do %>
       <ul class="extension_platforms">
         <% SupportedPlatform.all.each do |sp| %>
           <li title="<%= sp.name %>">
@@ -110,7 +117,11 @@
       <i class="fa fa-download"></i> <span itemprop="interactionCount"><%= number_with_delimiter(version.try(:download_count) || 0) %></span> Downloads of Version <%= version.try(:version) %>
       <small><%= number_with_delimiter(extension.download_count) %> Total Downloads</small>
     </h4>
-    <%= link_to "Download Extension", { action: 'download' }, class: 'button primary radius expand button_download_extension' %>
+    <%= link_to "Download Extension",
+                download_extension_path(
+                    extension,
+                    username: extension.owner_name),
+                class: 'button primary radius expand button_download_extension' %>
   </div>
 
   <h4>
