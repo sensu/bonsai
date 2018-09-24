@@ -92,7 +92,7 @@ class UsersController < ApplicationController
     authorize! @user
     @user.enabled = true
     @user.save
-    redirect_to :back, notice: t("user.enabled", name: @user.username)
+    redirect_back fallback_location: root_path, notice: t("user.enabled", name: @user.username)
   end
 
   #
