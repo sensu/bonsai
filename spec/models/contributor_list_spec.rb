@@ -6,8 +6,7 @@ describe ContributorList do
       
       pending 
 
-      user = create(:user)
-      # chef_account = user.accounts.for('github').first!
+      user = create(:user, create_chef_account: false)
       github_account = create(:account, provider: 'github', user: user)
 
       contributor_list = ContributorList.new(User.where(id: user.id))

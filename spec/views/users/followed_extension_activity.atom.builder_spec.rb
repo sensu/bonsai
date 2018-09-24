@@ -68,7 +68,9 @@ describe 'users/followed_extension_activity.atom.builder' do
       expect(activity['author']['name']).to eql(test_extension.maintainer)
       expect(activity['author']['uri']).to eql(user_url(test_extension.owner))
       expect(activity['link']['href']).
-        to eql(extension_version_url(test_extension, test_extension.extension_versions.first.version))
+        to eql(extension_version_url(test_extension,
+                                     test_extension.extension_versions.first,
+                                     username: test_extension.owner_name))
     end
   end
 

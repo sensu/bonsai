@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe CollaboratorsController do
+  before do
+    User.destroy_all
+  end
+
   #let!(:fanny) { create(:user, first_name: 'Fanny') }
   #let!(:hank) { create(:user, first_name: 'Hank') }
   #let!(:hanky) { create(:user, first_name: 'Hanky') }

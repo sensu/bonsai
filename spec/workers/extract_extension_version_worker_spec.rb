@@ -8,7 +8,7 @@ describe ExtractExtensionVersionWorker do
   let(:extension) { double(:extension, id: extension_id, github_repo: "cvincent/test", extension_versions: versions, octokit: octokit) }
   let(:versions) { double(:versions) }
   let(:octokit) { double(:octokit, readme: { name: "README.md", content: "hi" }) }
-  let(:version) { double(:version, extension_version_platforms: evp_assoc) }
+  let(:version) { double(:version, extension_version_platforms: evp_assoc, id: 456) }
   let(:evp_assoc) { double(:evp_assoc) }
 
   let(:supported_platforms) do
@@ -25,7 +25,10 @@ describe ExtractExtensionVersionWorker do
     allow(Extension).to receive(:find).with(extension_id) { extension }
     allow(SupportedPlatform).to receive(:find).with(compatible_platforms) { supported_platforms }
     allow(versions).to receive(:create!) { version }
+    allow(versions).to receive(:first_or_create) { version }
+    allow(version).to receive(:update_attributes)
     allow(evp_assoc).to receive(:create)
+    allow(evp_assoc).to receive(:first_or_create)
   end
 
   it "creates a README based on the one returned from GitHub" do
@@ -34,7 +37,11 @@ describe ExtractExtensionVersionWorker do
       { name: "README.md", content: Base64.encode64("Hello world!") }
     end
 
-    expect(versions).to receive(:create!).with(version: "1.0", readme: "Hello world!", readme_extension: "md")
+    expect(versions).to receive(:first_or_create).with(version: "1.0")
+    expect(version).to receive(:update_attributes).with(readme:           "Hello world!",
+                                                        readme_extension: "md",
+                                                        yml_line_count:   0,
+                                                        rb_line_count:    0)
 
     subject.perform(extension_id, tag, compatible_platforms)
   end
@@ -43,15 +50,19 @@ describe ExtractExtensionVersionWorker do
     pending
     allow(octokit).to receive(:readme).with("cvincent/test", ref: "1.0").and_raise(Octokit::NotFound)
 
-    expect(versions).to receive(:create!).with(version: "1.0", readme: "No readme found!", readme_extension: "txt")
+    expect(versions).to receive(:first_or_create).with(version: "1.0")
+    expect(version).to receive(:update_attributes).with(readme:           "There is no README file for this extension.",
+                                                        readme_extension: "txt",
+                                                        yml_line_count:   0,
+                                                        rb_line_count:    0)
 
     subject.perform(extension_id, tag, compatible_platforms)
   end
 
   it "links the version to its supported platforms" do
     pending
-    expect(evp_assoc).to receive(:create).with(supported_platform_id: 1)
-    expect(evp_assoc).to receive(:create).with(supported_platform_id: 2)
+    expect(evp_assoc).to receive(:first_or_create).with(supported_platform_id: 1)
+    expect(evp_assoc).to receive(:first_or_create).with(supported_platform_id: 2)
     subject.perform(extension_id, tag, compatible_platforms)
   end
 

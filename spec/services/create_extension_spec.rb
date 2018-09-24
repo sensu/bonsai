@@ -12,6 +12,7 @@ describe CreateExtension do
       valid?: true,
       save: true,
       github_repo: "cvincent/test",
+      github_url: "https://github.com/cvincent/test",
       errors: errors
     )
   end
@@ -22,11 +23,15 @@ describe CreateExtension do
   subject { CreateExtension.new(params, user) }
 
   before do
+    allow(user).to receive(:username) { github_account.username }
     allow(Extension).to receive(:new) { extension }
+    allow(extension).to receive(:owner) { user }
+    allow(extension).to receive(:owner_name=).with(github_account.username)
     allow(extension).to receive(:owner=).with(user)
     allow(extension).to receive(:taggings) { taggings }
-    allow(taggings).to receive(:add)
+    # allow(taggings).to receive(:add)
     allow(github).to receive(:collaborator?).with("cvincent/test", "some_user") { true }
+    allow(github).to receive(:repo).with("cvincent/test") { {} }
     stub_const("CollectExtensionMetadataWorker", Class.new)
     allow(CollectExtensionMetadataWorker).to receive(:perform_async)
     allow(SetupExtensionWebHooksWorker).to receive(:perform_async)
@@ -40,10 +45,9 @@ describe CreateExtension do
   end
 
   it "adds tags" do
-    expect(taggings).to receive(:add).with("tag1")
-    expect(taggings).to receive(:add).with("tag2")
     pending
-    expect(subject.process!).to be(extension)
+    expect(extension).to receive(:update_tags)
+    subject.process!.update_tags
   end
 
   it "kicks off a worker to gather metadata about the valid extension" do

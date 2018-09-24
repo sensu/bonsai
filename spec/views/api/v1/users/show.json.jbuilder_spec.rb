@@ -14,6 +14,8 @@ describe 'api/v1/users/show' do
   end
 
   before do
+    Account.delete_all
+
     create(
       :account,
       provider: 'github',

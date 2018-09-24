@@ -13,5 +13,10 @@ describe SitemapRefreshWorker do
 
     #SitemapRefreshWorker.new.perform
     expect(File.exist?(sitemap_file_path)).to be true
+
+    # clean up
+    if File.exist?(sitemap_file_path)
+      File.delete(sitemap_file_path)
+    end
   end
 end
