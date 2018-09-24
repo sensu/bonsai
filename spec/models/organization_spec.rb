@@ -5,7 +5,6 @@ describe Organization do
     #it { should have_many(:contributors) }
     #it { should have_many(:users) }
     #it { should have_many(:invitations) }
-    #it { should have_many(:ccla_signatures) }
   end
 
   describe '#admins' do
@@ -28,14 +27,10 @@ describe Organization do
   end
 
   describe '#combine!' do
-
-    #let!(:ccla) { create(:ccla) }
     #let!(:org1) { create(:organization) }
     #let!(:org2) { create(:organization) }
     #let!(:sally) { create(:user) }
     #let!(:hank) { create(:user) }
-    #let!(:ccla_signature1) { create(:ccla_signature, ccla: ccla, user: sally, organization: org1) }
-    #let!(:ccla_signature2) { create(:ccla_signature, ccla: ccla, user: hank, organization: org2) }
     #let!(:contributor1) { create(:contributor, organization: org1, user: sally) }
     #let!(:contributor2) { create(:contributor, organization: org2, user: hank) }
     #let!(:invitation1) { create(:invitation, organization: org1) }
@@ -46,14 +41,6 @@ describe Organization do
       #expect do
       #  Organization.find org2.id
       #end.to raise_exception(ActiveRecord::RecordNotFound)
-    end
-
-    it 'should transfer CCLA signatures to the new organization' do
-      pending
-      expect(org1.ccla_signatures).to include(ccla_signature1)
-      org1.combine!(org2)
-      org1.reload
-      expect(org1.ccla_signatures).to include(ccla_signature1, ccla_signature2)
     end
 
     it 'should transfer contributors to the new organization' do
