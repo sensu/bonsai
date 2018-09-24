@@ -47,7 +47,7 @@ describe ExtensionUpload::Parameters do
           base.file('PaxHeader/metadata.json') do
             JSON.dump(name: 'PaxHeader-multiple')
           end
-        end.to_io(AndFeathers::GzippedTarball, :reverse_each)
+        end.to_io
 
         file.write(io.read)
         file.rewind
@@ -109,7 +109,7 @@ describe ExtensionUpload::Parameters do
             JSON.dump(name: 'multiple-readme')
           end
           base.file('PaxHeader/README') { 'impostor readme' }
-        end.to_io(AndFeathers::GzippedTarball, :reverse_each)
+        end.to_io
 
         file.write(io.read)
         file.rewind

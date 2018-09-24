@@ -25,7 +25,7 @@ module TarballHelpers
         end
 
         block.call(base)
-      end.to_io(AndFeathers::GzippedTarball)
+      end.to_io
 
       file.write(io.read)
       file.rewind
