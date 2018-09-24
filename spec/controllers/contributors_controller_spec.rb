@@ -62,7 +62,6 @@ describe ContributorsController do
       end
 
       it 'redirects the user back' do
-        pending
         from dashboard_path
         delete :destroy, params: {id: contributor.id, organization_id: organization.id}
         should redirect_to dashboard_url

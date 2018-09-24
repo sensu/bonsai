@@ -8,28 +8,24 @@ describe PagesController do
       before { sign_in user }
 
       it 'assigns extensions' do
-        pending
         get :dashboard
 
         expect(assigns[:extensions]).to_not be_nil
       end
 
       it 'assigns collaborated extensions' do
-        pending
         get :dashboard
 
         expect(assigns[:collaborated_extensions]).to_not be_nil
       end
 
       it 'assigns tools' do
-        pending
         get :dashboard
 
         expect(assigns[:tools]).to_not be_nil
       end
 
       it '404s when requested with JSON' do
-        pending
         # NOTE: this is a specific test for a more general scenario:
         # Supermarket fields a request to some action which only has an HTML
         # template. We define the correct behavior to be 404 Not Found.

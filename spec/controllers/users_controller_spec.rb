@@ -56,18 +56,14 @@ describe UsersController do
       before { sign_in(create(:admin)) }
 
       it 'adds the admin role to a user' do
-        pending
-        raise
-        #put :make_admin, params: {id: user}
-        #user.reload
-        #expect(user.roles).to include('admin')
+        put :make_admin, params: {id: user}
+        user.reload
+        expect(user.roles).to include('admin')
       end
 
       it 'redirects back to a user' do
-        pending
-        raise
-        #put :make_admin, params: {id: user}
-        #expect(response).to redirect_to(assigns[:user])
+        put :make_admin, params: {id: user}
+        expect(response).to redirect_to(assigns[:user])
       end
     end
 
@@ -88,18 +84,14 @@ describe UsersController do
       before { sign_in(create(:admin)) }
 
       it 'removes the admin role to a user' do
-        pending
-        raise
-        #delete :revoke_admin, params: {id: user}
-        #user.reload
-        #expect(user.roles).to_not include('admin')
+        delete :revoke_admin, params: {id: user}
+        user.reload
+        expect(user.roles).to_not include('admin')
       end
 
       it 'redirects back to a user' do
-        pending
-        raise
-        #delete :revoke_admin, params: {id: user}
-        #expect(response).to redirect_to(assigns[:user])
+        delete :revoke_admin, params: {id: user}
+        expect(response).to redirect_to(assigns[:user])
       end
     end
 
@@ -107,10 +99,8 @@ describe UsersController do
       before { sign_in(create(:user)) }
 
       it 'renders 404' do
-        pending
-        raise
-        #delete :revoke_admin, params: {id: user}
-        #expect(response.status.to_i).to eql(404)
+        delete :revoke_admin, params: {id: user}
+        expect(response.status.to_i).to eql(404)
       end
     end
   end

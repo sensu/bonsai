@@ -40,26 +40,22 @@ describe 'users/followed_extension_activity.atom.builder' do
         [test_extension.extension_versions.first, test_extension2.extension_versions.first]
       )
 
-      #render
+      render
     end
 
     it 'displays the feed title' do
-      pending
       expect(xml_body['feed']['title']).to eql("johndoe's Followed Extension Activity")
     end
 
     it 'displays when the feed was updated' do
-      pending
       expect(Date.parse(xml_body['feed']['updated'])).to_not be_nil
     end
 
     it 'displays followed extension activity entries' do
-      pending
       expect(xml_body['feed']['entry'].count).to eql(2)
     end
 
     it 'displays information about extension activity' do
-      pending
       activity = xml_body['feed']['entry'].first
 
       expect(activity['title']).to match(/#{test_extension.name}/)
@@ -77,11 +73,10 @@ describe 'users/followed_extension_activity.atom.builder' do
   describe 'no activity' do
     before do
       assign(:followed_extension_activity, [])
-      #render
+      render
     end
 
     it 'still works if @followed_extension_activity is empty' do
-      pending
       expect do
         expect(Date.parse(xml_body['feed']['updated'])).to_not be_nil
       end.to_not raise_error

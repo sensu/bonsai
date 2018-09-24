@@ -13,7 +13,6 @@ describe OrganizationInvitationsController do
       end
 
       it 'tells the view the organization' do
-        pending
         expect(assigns[:organization]).to eql(organization)
       end
 
@@ -37,14 +36,12 @@ describe OrganizationInvitationsController do
         end
 
         it "tells the view the organization's pending invitations" do
-          pending
           expect(assigns[:pending_invitations]).to include(pending_invitation)
           expect(assigns[:pending_invitations]).to_not include(accepted_invitation)
           expect(assigns[:pending_invitations]).to_not include(declined_invitation)
         end
 
         it "tells the view the organization's declined invitations" do
-          pending
           expect(assigns[:declined_invitations]).to include(declined_invitation)
           expect(assigns[:declined_invitations]).to_not include(pending_invitation)
           expect(assigns[:declined_invitations]).to_not include(accepted_invitation)
@@ -52,7 +49,6 @@ describe OrganizationInvitationsController do
       end
 
       it "tells the view the organization's contributors" do
-        pending
         expect(assigns[:contributors]).to include(user.contributors.first)
       end
     end
@@ -63,7 +59,6 @@ describe OrganizationInvitationsController do
       before { auto_authorize!(Organization, 'manage_contributors') }
 
       it 'creates the invitation' do
-        pending
         expect do
           post :create, params: {
                organization_id: organization.id,
@@ -73,7 +68,6 @@ describe OrganizationInvitationsController do
       end
 
       it 'creates multiple invitations' do
-        pending
         expect do
           post :create, params: {
                organization_id: organization.id,
@@ -83,7 +77,6 @@ describe OrganizationInvitationsController do
       end
 
       it 'sends the invitations' do
-        pending
         Sidekiq::Testing.inline! do
           expect do
             post :create, params: {
@@ -99,7 +92,6 @@ describe OrganizationInvitationsController do
       before { auto_authorize!(Organization, 'manage_contributors') }
 
       it 'creates invitations for the valid email addresses' do
-        pending
         expect do
           post :create, params: {
                organization_id: organization.id,
@@ -109,7 +101,6 @@ describe OrganizationInvitationsController do
       end
 
       it 'sends invitations to the valid email addresses' do
-        pending
         Sidekiq::Testing.inline! do
           expect do
             post :create, params: {
@@ -121,7 +112,6 @@ describe OrganizationInvitationsController do
       end
 
       it 'adds the invalid addresses to a warning flash message' do
-        pending
         post :create, params: {
              organization_id: organization.id,
              invitations: { emails: 'chef@example.com, joe, jim, chef_2@example.com' }
@@ -132,7 +122,6 @@ describe OrganizationInvitationsController do
     end
 
     context 'user is not authorized to create an Invitation' do
-      pending
       it "doesn't create the invitation" do
         expect do
           post :create, params: {
@@ -143,7 +132,6 @@ describe OrganizationInvitationsController do
       end
 
       it 'responds with 404' do
-        pending
         post :create, params: {
              organization_id: organization.id,
              invitations: { emails: 'chef@example.com' }
@@ -161,7 +149,6 @@ describe OrganizationInvitationsController do
       before { auto_authorize!(Organization, 'manage_contributors') }
 
       it 'updates an invitation' do
-        pending
         patch :update, params: {
               organization_id: organization.id,
               id: invitation.token,
@@ -188,7 +175,6 @@ describe OrganizationInvitationsController do
       end
 
       it 'responds wtih 404' do
-        pending
         patch :update, params: {
               organization_id: organization.id,
               id: invitation.token,
@@ -208,7 +194,6 @@ describe OrganizationInvitationsController do
       before { auto_authorize!(Organization, 'manage_contributors') }
 
       it 'resends the invitation' do
-        pending
         Sidekiq::Testing.inline! do
           expect { patch :resend, params: {organization_id: organization.id, id: invitation.token} }
           .to change(ActionMailer::Base.deliveries, :size).by(1)
@@ -225,7 +210,6 @@ describe OrganizationInvitationsController do
       end
 
       it 'responds with 404' do
-        pending
         patch :resend, params: {organization_id: organization.id, id: invitation.token}
 
         should respond_with(404)
@@ -241,7 +225,6 @@ describe OrganizationInvitationsController do
       before { auto_authorize!(Organization, 'manage_contributors') }
 
       it 'destroys the invitation' do
-        pending
         expect { delete :revoke, params: {organization_id: organization.id, id: invitation.token} }
         .to change(Invitation, :count).by(-1)
       end
@@ -254,7 +237,6 @@ describe OrganizationInvitationsController do
       end
 
       it 'responds with 404' do
-        pending
         delete :revoke, params: {organization_id: organization.id, id: invitation.token}
 
         should respond_with(404)

@@ -30,7 +30,6 @@ describe BonsaiAssetIndex::Authorization do
 
   describe '#authorize!' do
     it 'raises an error if the user is not authorized' do
-      pending
       allow(subject).to receive(:params).and_return(action: 'edit')
 
       expect { subject.send(:authorize!, read_only_object, :edit?) }
@@ -38,7 +37,6 @@ describe BonsaiAssetIndex::Authorization do
     end
 
     it 'does nothing with the user is authorized' do
-      pending
       allow(subject).to receive(:params).and_return(action: 'show')
       expect { subject.send(:authorize!, read_only_object, :show?) }.to_not raise_error
     end
