@@ -1,8 +1,9 @@
 require 'spec_helper'
 
 describe TransferOwnershipController do
+  let(:extension) { create(:extension, owner_name: 'FooBar') }
+
   describe 'PUT #transfer' do
-    let(:extension) { create(:extension) }
     let(:new_owner) { create(:user) }
 
     before do
@@ -11,19 +12,21 @@ describe TransferOwnershipController do
     end
 
     shared_examples 'admin_or_owner' do
-      before { sign_in(user) }
+      before do
+        sign_in(user)
+        extension.collaborator_users << new_owner
+      end
 
       it 'attempts to change the extensions owner' do
-        expect(extension).to receive(:transfer_ownership).with(
-          user,
+        expect_any_instance_of(Extension).to receive(:transfer_ownership).with(
           new_owner
         ) { 'extension.ownership_transfer.done' }
-        put :transfer, params: { id: extension.id, extension: { user_id: new_owner.id } }
+        put :transfer, params: { id: extension.lowercase_name, username: extension.owner_name, extension: { user_id: new_owner.id } }
       end
 
       it 'redirects back to the extension' do
-        put :transfer, params: { id: extension.id, extension: { user_id: new_owner.id } }
-        expect(response).to redirect_to(assigns[:extension])
+        put :transfer, params: { id: extension.lowercase_name, username: extension.owner_name, extension: { user_id: new_owner.id } }
+        expect(response).to redirect_to [assigns[:extension], username: extension.owner_name]
       end
     end
 
@@ -40,13 +43,14 @@ describe TransferOwnershipController do
   end
 
   context 'transfer requests' do
-    let(:transfer_request) { create(:ownership_transfer_request) }
+    let(:transfer_request) { create(:ownership_transfer_request, extension: extension) }
 
     shared_examples 'a transfer request' do
       it 'redirects back to the extension' do
         pending
         post :accept, params: {token: transfer_request}
-        expect(response).to redirect_to(assigns[:transfer_request].extension)
+        extension = assigns[:transfer_request].extension
+        expect(response).to redirect_to [extension, username: extension.owner_name]
       end
 
       it 'finds transfer requests based on token' do

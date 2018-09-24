@@ -37,7 +37,7 @@ describe ExtractExtensionCollaboratorsWorker do
 
   it "calls itself for the next page if there were any collaborators returned" do
     pending
-    expect(ExtractExtensionCollaboratorsWorker).to receive(:perform_async).with(extension_id, 2)
+    expect(ExtractExtensionCollaboratorsWorker).to receive(:perform_async).with(extension_id, 2, :contributors)
     subject.perform(extension_id)
   end
 

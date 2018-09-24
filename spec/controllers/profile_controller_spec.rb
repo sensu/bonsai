@@ -56,6 +56,7 @@ describe ProfileController do
 
         expect(fake_user).to receive(:update_attributes).with(attrs)
         allow(controller).to receive(:current_user) { fake_user }
+        allow(fake_user).to receive(:auth_scope) { BonsaiAssetIndex::Authentication::AUTH_SCOPE }
 
         patch :update, params: {user: attributes_for(:user, attrs)}
       end
