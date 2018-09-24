@@ -73,14 +73,14 @@ describe CreateExtension do
   it "does not save and adds an error if the user is not a collaborator in the repo" do
     allow(github).to receive(:collaborator?).with("cvincent/test", "some_user") { false }
     expect(extension).not_to receive(:save)
-    expect(errors).to receive(:[]=).with(:github_url, I18n.t("extension.github_url_format_error"))
+    expect(errors).to receive(:add).with(:github_url, I18n.t("extension.github_url_format_error"))
     expect(subject.process!).to be(extension)
   end
 
   it "does not save and adds an error if the repo is invalid" do
     allow(github).to receive(:collaborator?).with("cvincent/test", "some_user").and_raise(ArgumentError)
     expect(extension).not_to receive(:save)
-    expect(errors).to receive(:[]=).with(:github_url, I18n.t("extension.github_url_format_error"))
+    expect(errors).to receive(:add).with(:github_url, I18n.t("extension.github_url_format_error"))
     expect(subject.process!).to be(extension)
   end
 end
