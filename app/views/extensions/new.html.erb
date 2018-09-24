@@ -20,11 +20,11 @@
             <p id="loading-extensions"><%= image_tag "spinner.gif" %> Loading your extensions...</p>
             <p id="loading-extensions-failed" style="display: none;">Loading your extensions failed...</p>
           <% end %>
-          
-          <%= f.hidden_field :github_url, id: "extension-url-field" %>
           <% end %>
-        
+
         </div>
+
+        <%= f.hidden_field :github_url, id: "extension-url-field" %>
 
         <div class="description-field">
           <%= f.text_field :name, placeholder: "Name", title: "Name", required: true, id: "extension-name-field" %>
