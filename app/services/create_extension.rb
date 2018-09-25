@@ -35,18 +35,20 @@ class CreateExtension
 
   def postprocess_github_extension(extension, github, compatible_platforms)
     repo_info = github.repo(extension.github_repo)
+    org       = repo_info[:organization]
 
-    if org = repo_info[:organization]
-      extension.github_organization = GithubOrganization.where(github_id: org[:id]).first_or_create!(
-        name:       org[:login],
-        avatar_url: org[:avatar_url]
-      )
-      extension.owner_name = org[:login]
-    else
-      extension.owner_name = extension.owner.username
-    end
+    github_organization = if org
+                            GithubOrganization.where(github_id: org[:id]).first_or_create!(
+                              name:       org[:login],
+                              avatar_url: org[:avatar_url]
+                            )
+                          end
+    owner_name = org ? org[:login] : extension.owner.username
 
-    extension.save
+    extension.update_attributes(
+      github_organization: github_organization,
+      owner_name:          owner_name
+    )
 
     CollectExtensionMetadataWorker.perform_async(extension.id, compatible_platforms.select { |p| !p.strip.blank? })
     SetupExtensionWebHooksWorker.perform_async(extension.id)
