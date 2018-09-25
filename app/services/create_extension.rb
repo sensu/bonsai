@@ -8,39 +8,60 @@ class CreateExtension
   end
 
   def process!
-    Extension.new(@params).tap do |extension|
+    candidate = Extension.new(@params) do |extension|
       extension.owner = @user
+    end
 
-      if extension.valid? and repo_valid?(extension)
-        repo_info = @github.repo(extension.github_repo)
-
-        if org = repo_info[:organization]
-          extension.github_organization = GithubOrganization.where(github_id: org[:id]).first_or_create!(
-            name: org[:login],
-            avatar_url: org[:avatar_url]
-          )
-          extension.owner_name = org[:login]
-        else
-          extension.owner_name = extension.owner.username
-        end
-
-        extension.save
-
-        CollectExtensionMetadataWorker.perform_async(extension.id, @compatible_platforms.select { |p| !p.strip.blank? })
-        SetupExtensionWebHooksWorker.perform_async(extension.id)
-        NotifyModeratorsOfNewExtensionWorker.perform_async(extension.id)
-      elsif existing = Extension.unscoped.where(enabled: false, github_url: extension.github_url).first
+    if validate(candidate, @github, @user)
+      candidate.save
+      postprocess(candidate, @github, @compatible_platforms)
+    else
+      existing = Extension.unscoped.where(enabled: false, github_url: candidate.github_url).first
+      if existing
+        # A disabled extension is available for re-use, but it must first be re-enabled.
         existing.update_attribute(:enabled, true)
         return existing
       end
     end
+
+    return candidate
   end
 
   private
 
-  def repo_valid?(extension)
+  def postprocess(extension, github, compatible_platforms)
+    postprocess_github_extension(extension, github, compatible_platforms)
+  end
+
+  def postprocess_github_extension(extension, github, compatible_platforms)
+    repo_info = github.repo(extension.github_repo)
+
+    if org = repo_info[:organization]
+      extension.github_organization = GithubOrganization.where(github_id: org[:id]).first_or_create!(
+        name:       org[:login],
+        avatar_url: org[:avatar_url]
+      )
+      extension.owner_name = org[:login]
+    else
+      extension.owner_name = extension.owner.username
+    end
+
+    extension.save
+
+    CollectExtensionMetadataWorker.perform_async(extension.id, compatible_platforms.select { |p| !p.strip.blank? })
+    SetupExtensionWebHooksWorker.perform_async(extension.id)
+    NotifyModeratorsOfNewExtensionWorker.perform_async(extension.id)
+  end
+
+  def validate(extension, github, user)
+    return false if !extension.valid?
+
+    repo_valid?(extension, github, user)
+  end
+
+  def repo_valid?(extension, github, user)
     begin
-      result = @github.collaborator?(extension.github_repo, @user.github_account.username)
+      result = github.collaborator?(extension.github_repo, user.github_account.username)
     rescue ArgumentError, Octokit::Unauthorized, Octokit::Forbidden
       result = false
     end
