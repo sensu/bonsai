@@ -11,18 +11,11 @@
         <legend>Use one of your GitHub repositories</legend>
 
         <div id="extensions-selector" class="name-field">
+          <%# The contents of this +extensions-selector+ element get replaced almost immediately by
+              the UJS code returned by the AJAX call made by the +getExtensionsForUser+ JS method. %>
+
           <p id="loading-extensions"><%= image_tag "spinner.gif" %> Loading your repositories...</p>
           <p id="loading-extensions-failed" style="display: none;">Loading your repositories failed...</p>
-
-          <% if false %>
-          <% if @repo_names %>
-            <%= f.select :github_url_short, @repo_names.map { |r| r[:full_name] }, { include_blank: "Select a Repository" }, required: true, id: "extension-url-short-field", data: { repos: @repo_names } %>
-          <% else %>
-            <p id="loading-extensions"><%= image_tag "spinner.gif" %> Loading your repositories...</p>
-            <p id="loading-extensions-failed" style="display: none;">Loading your repositories failed...</p>
-          <% end %>
-          <% end %>
-
         </div>
 
         <%= f.hidden_field :github_url, id: "extension-url-field" %>
