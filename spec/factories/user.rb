@@ -8,11 +8,12 @@ FactoryBot.define do
 
     transient do
       create_chef_account { true }
+      sequence(:username) { |n| "github_account#{n}" }
     end
 
     after(:create) do |user, evaluator|
       if evaluator.create_chef_account
-        create(:account, provider: 'github', user: user)
+        create(:account, provider: 'github', user: user, username: evaluator.username)
       end
     end
 
