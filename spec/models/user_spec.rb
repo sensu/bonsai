@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe User do
+  before do
+    Account.destroy_all
+  end
+
   context 'associations' do
     it { should have_many(:accounts) }
     it { should have_many(:icla_signatures) }
