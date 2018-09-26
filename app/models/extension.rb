@@ -415,7 +415,7 @@ class Extension < ApplicationRecord
   # @return [String]
   #
   def github_repo
-    self.github_url.gsub("https://github.com/", "")
+    self.github_url&.gsub("https://github.com/", "")
   end
 
   #
