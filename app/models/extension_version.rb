@@ -9,6 +9,8 @@ class ExtensionVersion < ApplicationRecord
   has_many :extension_version_content_items, dependent: :destroy
   belongs_to :extension, required: false
 
+  has_one_attached :source_file
+
   # Validations
   # --------------------
   validates :version, presence: true, uniqueness: { scope: :extension }
