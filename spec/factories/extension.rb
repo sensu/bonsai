@@ -14,6 +14,10 @@ FactoryBot.define do
       extension_versions_count { 2 }
     end
 
+    trait :hosted do
+      github_url { nil }
+    end
+
     before(:create) do |extension, evaluator|
       extension.extension_versions << create_list(:extension_version, evaluator.extension_versions_count, extension: nil)
     end

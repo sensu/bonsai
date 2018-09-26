@@ -444,6 +444,10 @@ class Extension < ApplicationRecord
     @commit_daily_metric_key ||= "commits.extension-#{id}"
   end
 
+  def hosted?
+    github_repo.blank?
+  end
+
   private
 
   #
