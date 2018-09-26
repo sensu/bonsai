@@ -13,7 +13,7 @@ class ExtensionVersionsController < ApplicationController
     BonsaiAssetIndex::Metrics.increment('extension.downloads.web')
     DailyMetric.increment(@version.download_daily_metric_key)
 
-    redirect_to @version.download_url
+    redirect_to helpers.download_url_for(@version)
   end
 
   #

@@ -17,6 +17,7 @@ class ExtensionVersion < ApplicationRecord
   # Delegations
   # --------------------
   delegate :name, :owner, to: :extension
+  delegate :github_repo,  to: :extension
 
   #
   # Returns the verison of the +ExtensionVersion+
@@ -29,10 +30,6 @@ class ExtensionVersion < ApplicationRecord
   #
   def to_param
     version
-  end
-
-  def download_url
-    "https://github.com/#{extension.github_repo}/archive/#{version}.zip"
   end
 
   #

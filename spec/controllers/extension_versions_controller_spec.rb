@@ -14,7 +14,7 @@ describe ExtensionVersionsController do
     it 'succeeds' do
       get :download, params: {username: extension.owner_name, extension_id: extension.lowercase_name, version: extension_version.version}
 
-      expect(response).to redirect_to extension_version.download_url
+      expect(response).to redirect_to download_url_for(extension_version)
     end
   end
 end
