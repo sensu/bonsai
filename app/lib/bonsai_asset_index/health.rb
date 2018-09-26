@@ -9,7 +9,7 @@ module BonsaiAssetIndex
     REACHABLE = 'reachable'.freeze
     UNKNOWN = 'unknown'.freeze
     UNREACHABLE = 'unreachable'.freeze
-    ALL_FEATURES = %w(cla join_ccla tools fieri announcement github no_crawl)
+    ALL_FEATURES = %w(cla join_ccla tools fieri announcement github no_crawl hosted_extensions)
 
     attr_reader :status, :supermarket, :postgresql, :sidekiq, :redis, :features
 
