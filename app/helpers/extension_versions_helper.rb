@@ -71,6 +71,10 @@ module ExtensionVersionsHelper
   end
 
   def download_url_for(extension_version)
-    "https://github.com/#{extension_version.github_repo}/archive/#{extension_version.version}.zip"
+    if extension_version.source_file.attached?
+      rails_blob_url(extension_version.source_file)
+    else
+      "https://github.com/#{extension_version.github_repo}/archive/#{extension_version.version}.zip"
+    end
   end
 end
