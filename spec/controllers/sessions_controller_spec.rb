@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe SessionsController do
+  before do
+    User.destroy_all
+  end
+
   describe 'POST #create' do
     let(:auth_hash) { OmniAuth.config.mock_auth[:github] }
 
