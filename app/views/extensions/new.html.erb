@@ -8,20 +8,14 @@
       <%= render "application/form_errors", record: @extension %>
 
       <fieldset id="" class="">
-        
+        <legend>Use one of your GitHub repositories</legend>
+
         <div id="extensions-selector" class="name-field">
-          <p id="loading-extensions"><%= image_tag "spinner.gif" %> Loading your extensions...</p>
-          <p id="loading-extensions-failed" style="display: none;">Loading your extensions failed...</p>
+          <%# The contents of this +extensions-selector+ element get replaced almost immediately by
+              the UJS code returned by the AJAX call made by the +getExtensionsForUser+ JS method. %>
 
-          <% if false %>
-          <% if @repo_names %>
-            <%= f.select :github_url_short, @repo_names.map { |r| r[:full_name] }, { include_blank: "Select a Repository" }, required: true, id: "extension-url-short-field", data: { repos: @repo_names } %>
-          <% else %>
-            <p id="loading-extensions"><%= image_tag "spinner.gif" %> Loading your extensions...</p>
-            <p id="loading-extensions-failed" style="display: none;">Loading your extensions failed...</p>
-          <% end %>
-          <% end %>
-
+          <p id="loading-extensions"><%= image_tag "spinner.gif" %> Loading your repositories...</p>
+          <p id="loading-extensions-failed" style="display: none;">Loading your repositories failed...</p>
         </div>
 
         <%= f.hidden_field :github_url, id: "extension-url-field" %>
@@ -29,7 +23,7 @@
         <div class="description-field">
           <%= f.text_field :name, placeholder: "Name", title: "Name", required: true, id: "extension-name-field" %>
           <small class="error">Name is required.</small>
-          <p class="help-block">Please use title case.</p>
+          <p class="hint-block">Please use title case for the name, e.g. My Gift to the Community.</p>
         </div>
         <div class="description-field">
           <%= f.text_field :description, placeholder: "Description", title: "Description", required: true, id: "extension-desc-field" %>
