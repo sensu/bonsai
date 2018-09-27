@@ -20,15 +20,7 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
 
     perform_next and return unless semver?
 
-    checkout_correct_tag
-    readme_body, readme_ext = fetch_readme
-    logger.info "GOT README: #{readme_body}"
-    version = ensure_updated_version(readme_body, readme_ext)
-    set_compatible_platforms(version)
-    set_last_commit(version)
-    set_commit_count(version)
-    scan_files(version)
-    version.save
+    sync_extension_version
 
     tally_commits if @tag == "master"
 
@@ -38,6 +30,18 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
   end
 
   private
+
+  def sync_extension_version
+    checkout_correct_tag
+    readme_body, readme_ext = fetch_readme
+    logger.info "GOT README: #{readme_body}"
+    version = ensure_updated_version(readme_body, readme_ext)
+    set_compatible_platforms(version)
+    set_last_commit(version)
+    set_commit_count(version)
+    scan_files(version)
+    version.save
+  end
 
   def perform_next
     if @tags.any?
