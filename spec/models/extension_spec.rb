@@ -15,4 +15,9 @@ describe Extension do
       expect(@e.github_repo).to eq("cvincent/test")
     end
   end
+
+  describe '#hosted?' do
+    it {expect(create(:extension, :hosted).hosted?).to be_truthy}
+    it {expect(create(:extension         ).hosted?).to be_falsey}
+  end
 end

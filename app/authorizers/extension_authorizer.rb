@@ -96,6 +96,10 @@ class ExtensionAuthorizer < Authorizer::Base
     admin?
   end
 
+  def make_hosted_extension?
+    ROLLOUT.active?(:hosted_extensions) && admin?
+  end
+
   private
 
   def admin?
