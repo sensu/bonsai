@@ -47,6 +47,10 @@ module ExtensionsHelper
     end
   end
 
+  def is_followable?(extension)
+    extension.github_repo.present?
+  end
+
   #
   # Return the correct state for an extension follow/unfollow button. If given a
   # block, the result of the block will become the button's text.
