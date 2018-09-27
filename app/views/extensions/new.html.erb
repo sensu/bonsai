@@ -19,7 +19,25 @@
         </div>
 
         <%= f.hidden_field :github_url, id: "extension-url-field" %>
+      </fieldset>
 
+      <%- if policy(@extension).make_hosted_extension? %>
+        <h3><em><strong>-OR-</strong></em></h3>
+
+        <fieldset>
+          <legend>Upload a ZIP file</legend>
+          <div class="file-field">
+            <%- if f.object.tmp_source_file.attached? %>
+              <%= f.hidden_field :tmp_source_file, value: f.object.tmp_source_file.signed_id  %>
+              <p>File: <%= f.object.tmp_source_file.filename %></p>
+            <%- else %>
+              <%= f.file_field :tmp_source_file, direct_upload: true %>
+            <%- end %>
+          </div>
+        </fieldset>
+      <% end %>
+
+      <fieldset>
         <div class="description-field">
           <%= f.text_field :name, placeholder: "Name", title: "Name", required: true, id: "extension-name-field" %>
           <small class="error">Name is required.</small>
