@@ -1,3 +1,5 @@
-<small class="followbutton">
-  <%= follow_button_for(extension) %>
-</small>
+<%- if is_followable?(extension) %>
+  <small class="followbutton">
+    <%= follow_button_for(extension) %>
+  </small>
+<% end %>
