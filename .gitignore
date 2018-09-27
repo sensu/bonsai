@@ -46,3 +46,10 @@ doc/
 
 # Allow developers to have their own .rspec file
 /.rspec
+
+# SimpleCov artifacts
+/coverage
+
+# In case anyone ever develops on a Mac
+.DS_Store
+._.DS_Store
