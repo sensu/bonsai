@@ -55,10 +55,12 @@
       <h4>Downloads in last month</h4>
       <div class="sparkline"><%= @downloads.join(",") %></div>
     </div>
-    <div class="small-6 columns">
-      <h4>Commits in last year</h4>
-      <div class="sparkline"><%= @commits.join(",") %></div>
-    </div>
+    <%- if is_commitable?(@extension) %>
+      <div class="small-6 columns">
+        <h4>Commits in last year</h4>
+        <div class="sparkline"><%= @commits.join(",") %></div>
+      </div>
+    <% end %>
   </div>
 
   <%= render_document(version.try(:readme) || "", version.try(:readme_extension) || "", version.try(:extension).github_repo, version.try(:version)) %>
