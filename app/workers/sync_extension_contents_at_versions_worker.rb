@@ -18,11 +18,10 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
     @compatible_platforms = compatible_platforms
     @run = CmdAtPath.new(@extension.repo_path)
 
-    perform_next and return unless semver?
-
-    sync_extension_version
-
-    tally_commits if @tag == "master"
+    if semver?
+      sync_extension_version
+      tally_commits if @tag == "master"
+    end
 
     perform_next
   ensure
