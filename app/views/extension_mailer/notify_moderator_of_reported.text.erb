@@ -6,5 +6,5 @@ Reason given: <%= @description %>
 You may disable or edit this extension if necessary. To view the extension and
 make changes, click here:
 
-<%= owner_scoped_extension_url(@extension) %>
+<%= extension_url(@extension, username: @extension.owner_name) %>
 
