@@ -36,7 +36,6 @@
 //= require vendor/bootstrap-tokenfield
 //= require vendor/twitter-typeahead
 //= require vendor/twitter-bloodhound
-//= require turbolinks
 
 
 // Hack to resolve bug with Foundation. Resolved in master
