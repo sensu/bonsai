@@ -30,7 +30,27 @@ class CreateExtension
   private
 
   def postprocess(extension, github, compatible_platforms)
-    postprocess_github_extension(extension, github, compatible_platforms)
+    if extension.hosted?
+      postprocess_hosted_extension(extension, compatible_platforms)
+    else
+      postprocess_github_extension(extension, github, compatible_platforms)
+    end
+  end
+
+  def postprocess_hosted_extension(extension, compatible_platforms)
+    owner_name = extension.owner.username
+
+    extension.update_attributes(
+      owner_name: owner_name
+    )
+
+    extension_version = extension.extension_versions.create!(version: 'master')
+
+    if extension.tmp_source_file.attached?
+      # Transfer the temporarily-staged attachment to the extension_version.
+      extension_version.source_file.attach(extension.tmp_source_file.blob)
+      extension.tmp_source_file.detach
+    end
   end
 
   def postprocess_github_extension(extension, github, compatible_platforms)
@@ -58,7 +78,7 @@ class CreateExtension
   def validate(extension, github, user)
     return false if !extension.valid?
 
-    repo_valid?(extension, github, user)
+    (extension.hosted? && extension.tmp_source_file.attached?) || repo_valid?(extension, github, user)
   end
 
   def repo_valid?(extension, github, user)

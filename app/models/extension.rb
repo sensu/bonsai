@@ -92,6 +92,14 @@ class Extension < ApplicationRecord
 
   has_many :all_supported_platforms, through: :extension_versions, class_name: 'SupportedPlatform', source: :supported_platforms
 
+  # HACK: +Extension+ objects don't really have a source_file attachment.
+  # Instead, the children extension_versions each has their own individual +source_file+ attachment.
+  # We only use this attachment on the +Extension+ as a temporary until we can transfer the blob to
+  # the associated +ExtensionVersion+ child.
+  # To remove this hack, we should either use a form object to hold the temporary, or
+  # establish an +accepts_nested_attributes+ relationship with the associated extension_versions.
+  has_one_attached :tmp_source_file
+
   # Delegations
   # --------------------
   delegate :foodcritic_failure, to: :latest_extension_version, allow_nil: true
