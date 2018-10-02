@@ -18,8 +18,19 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
     @compatible_platforms = compatible_platforms
     @run = CmdAtPath.new(@extension.repo_path)
 
-    perform_next and return unless semver?
+    if semver?
+      sync_extension_version
+      tally_commits if @tag == "master"
+    end
 
+    perform_next
+  ensure
+    @extension.update_attribute(:syncing, false) if @extension
+  end
+
+  private
+
+  def sync_extension_version
     checkout_correct_tag
     readme_body, readme_ext = fetch_readme
     logger.info "GOT README: #{readme_body}"
@@ -29,15 +40,7 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
     set_commit_count(version)
     scan_files(version)
     version.save
-
-    tally_commits if @tag == "master"
-
-    perform_next
-  ensure
-    @extension.update_attribute(:syncing, false) if @extension
   end
-
-  private
 
   def perform_next
     if @tags.any?
