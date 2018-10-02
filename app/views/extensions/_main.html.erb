@@ -2,8 +2,9 @@
   <% if extension.deprecated? %>
     <div class="deprecation-notice">
       <h2 class="deprecation-copy">
-        <% if extension.replacement.present? %>
-          <i class="fa fa-exclamation-triangle"></i> <%= extension.name %> has been deprecated in favor of <%= link_to extension.replacement.name, extension.replacement %>
+        <%- replacement_extension = extension.replacement %>
+        <% if replacement_extension.present? %>
+          <i class="fa fa-exclamation-triangle"></i> <%= extension.name %> has been deprecated in favor of <%= link_to replacement_extension.name, owner_scoped_extension_url(replacement_extension) %>
         <% else %>
           <i class="fa fa-exclamation-triangle"></i> <%= extension.name %> has been deprecated
         <% end %>
