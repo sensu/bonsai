@@ -31,13 +31,13 @@ class CreateExtension
 
   def postprocess(extension, github, compatible_platforms)
     if extension.hosted?
-      postprocess_hosted_extension(extension, compatible_platforms)
+      postprocess_hosted_extension(extension)
     else
       postprocess_github_extension(extension, github, compatible_platforms)
     end
   end
 
-  def postprocess_hosted_extension(extension, compatible_platforms)
+  def postprocess_hosted_extension(extension)
     owner_name = extension.owner.username
 
     extension.update_attributes(
