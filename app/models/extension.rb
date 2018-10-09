@@ -92,13 +92,14 @@ class Extension < ApplicationRecord
 
   has_many :all_supported_platforms, through: :extension_versions, class_name: 'SupportedPlatform', source: :supported_platforms
 
-  # HACK: +Extension+ objects don't really have a source_file attachment.
-  # Instead, the children extension_versions each has their own individual +source_file+ attachment.
-  # We only use this attachment on the +Extension+ as a temporary until we can transfer the blob to
-  # the associated +ExtensionVersion+ child.
-  # To remove this hack, we should either use a form object to hold the temporary, or
+  # HACK: +Extension+ objects don't really have a source_file attachment or version attribute.
+  # Instead, the children extension_versions each has their own individual +source_file+ attachment and version attribute.
+  # We only use this attachment on the +Extension+ and the +version+ attribute as temporaries until we
+  # can transfer the blob and version to the associated +ExtensionVersion+ child.
+  # To remove this hack, we should either use a form object to hold the temporaries, or
   # establish an +accepts_nested_attributes+ relationship with the associated extension_versions.
   has_one_attached :tmp_source_file
+  attr_accessor :version
 
   # Delegations
   # --------------------
