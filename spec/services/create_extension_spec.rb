@@ -3,6 +3,7 @@ require "spec_helper"
 describe CreateExtension do
   let(:github_url)  { "cvincent/test" }
   let(:signed_id)   { nil }
+  let(:version)     { nil }
   let(:params) { {
     name:                 "asdf",
     description:          "desc",
@@ -10,6 +11,7 @@ describe CreateExtension do
     tag_tokens:           "tag1, tag2",
     compatible_platforms: ["", "p1", "p2"],
     tmp_source_file:      signed_id,
+    version:              version,
   } }
   let(:github)         { double(:github) }
   let(:user)           { create(:user, username: 'some_user') }
@@ -91,6 +93,7 @@ describe CreateExtension do
 
   context 'a hosted extension' do
     let(:github_url)  { nil }
+    let(:version)     { 'v1.2.3' }
     let(:blob)        { ActiveStorage::Blob.create_after_upload!(io: StringIO.new(""), filename: 'not-really-a-file') }
     let(:signed_id)   { blob.signed_id}
     let(:extension)   { build :extension, :hosted, owner: user }
@@ -99,6 +102,7 @@ describe CreateExtension do
       expect {
         new_extension = subject.process!
         expect(new_extension.extension_versions.count).to eq(1)
+        expect(new_extension.latest_extension_version.version).to eq version
       }.to change{ExtensionVersion.count}.by(1)
     end
 
@@ -121,6 +125,15 @@ describe CreateExtension do
     it "does not kick off a worker to notify operators" do
       expect(NotifyModeratorsOfNewExtensionWorker).to_not receive(:perform_async)
       expect(subject.process!).to be_persisted
+    end
+
+    context 'no version given' do
+      let(:version) { nil }
+
+      it 'defaults the version to v0.0.1' do
+        new_extension = subject.process!
+        expect(new_extension.latest_extension_version.version).to eq 'v0.0.1'
+      end
     end
   end
 
