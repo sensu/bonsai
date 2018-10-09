@@ -1,0 +1,20 @@
+<fieldset>
+  <legend>Upload a ZIP file</legend>
+  <div class="file-field">
+    <%- if f.object.send(file_method).attached? %>
+      <%= f.hidden_field file_method, value: f.object.send(file_method).signed_id %>
+      <p>File: <%= f.object.send(file_method).filename %></p>
+    <%- else %>
+      <%= f.file_field file_method, direct_upload: true %>
+    <%- end %>
+  </div>
+
+  <div class="description-field">
+    <%= f.text_field :version, placeholder: "Version", title: "Version" %>
+    <p class="hint-block">
+      Please use a proper
+      <%= link_to "SemVer", 'https://semver.org/', target: :_blank %>
+      version name, e.g. v0.0.1 or 1.2.
+    </p>
+  </div>
+</fieldset>
