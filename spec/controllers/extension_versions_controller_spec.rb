@@ -47,6 +47,11 @@ describe ExtensionVersionsController do
           expect(response).to redirect_to [extension, username: extension.owner_name]
         }.to change{ExtensionVersion.count}.by(1)
       end
+
+      it "sends notification emails" do
+        expect(ExtensionNotifyWorker).to receive(:perform_async)
+        post :create, params: params
+      end
     end
 
     context "with invalid params" do

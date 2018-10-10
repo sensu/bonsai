@@ -45,6 +45,7 @@ class ExtensionVersionsController < ApplicationController
     @extension_version = extension.extension_versions.build(extension_version_params)
 
     if @extension_version.save
+      ExtensionNotifyWorker.perform_async(@extension_version.id)
       redirect_to owner_scoped_extension_url(@extension_version.extension),
                   notice: "Successfully created version #{@extension_version.version} of the #{extension.name} extension."
     else
