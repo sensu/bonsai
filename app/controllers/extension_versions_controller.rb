@@ -53,6 +53,13 @@ class ExtensionVersionsController < ApplicationController
     end
   end
 
+  def destroy
+    authorize! @extension, :delete_hosted_extension_version?
+    @version.destroy
+    redirect_to owner_scoped_extension_url(@extension),
+                notice: "#{@extension.name} version #{@version.version} deleted."
+  end
+
   #
   # PUT /extension/:extension_id/versions/:version
   #
