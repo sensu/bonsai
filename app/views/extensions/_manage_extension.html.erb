@@ -10,6 +10,18 @@
     </li>
   <%- end %>
 
+  <%- if extension.hosted? && policy(extension).delete_hosted_extension_version? && extension.extension_versions.many? %>
+    <li>
+      <%= link_to delete_extension_version_path(extension, username: extension.owner_name, version: version),
+                  method: :delete,
+                  rel: 'delete-version',
+                  data: {confirm: "Are you sure you want to delete version #{version.version}?"} do %>
+        <i class="fa fa-trash-o"></i>
+        <span>Delete version <%= version.version %></span>
+      <% end %>
+    </li>
+  <%- end %>
+
   <% if policy(extension).transfer_ownership? %>
     <% if false %>
     <li>
