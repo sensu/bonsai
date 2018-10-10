@@ -11,7 +11,7 @@ describe ExtensionsHelper do
     context "a hosted extension" do
       let(:extension) { build_stubbed :extension, :hosted }
 
-      it {expect(helper.is_followable?(extension)).to be_falsey}
+      it {expect(helper.is_followable?(extension)).to be_truthy}
     end
   end
 
