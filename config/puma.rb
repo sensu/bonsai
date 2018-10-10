@@ -38,3 +38,7 @@ environment ENV.fetch("RAILS_ENV") { "development" }
 
 # Allow puma to be restarted by `rails restart` command.
 plugin :tmp_restart
+
+# In development sandboxes, it can be useful to have more than the default 60 seconds to
+# debug an issue in byebug.
+# worker_timeout 60 * 60 * 24
