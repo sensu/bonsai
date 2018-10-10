@@ -104,6 +104,10 @@ class ExtensionAuthorizer < Authorizer::Base
     make_hosted_extension?
   end
 
+  def delete_hosted_extension_version?
+    add_hosted_extension_version?
+  end
+
   private
 
   def admin?

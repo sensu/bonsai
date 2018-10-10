@@ -63,4 +63,27 @@ describe ExtensionVersionsController do
       end
     end
   end
+
+
+  describe "destroy" do
+    let!(:extension_version) { create :extension_version }
+    let(:extension)          { extension_version.extension }
+
+    let(:params) { {
+      extension_id: extension.lowercase_name,
+      username:     extension.owner_name,
+      version:      extension_version.version,
+    } }
+
+    it "destroys the requested extension version" do
+      expect {
+        delete :destroy, params: params
+      }.to change{ExtensionVersion.count}.by(-1)
+    end
+
+    it "redirects to the extension page" do
+      delete :destroy, params: params
+      expect(response).to redirect_to [extension, username: extension.owner_name]
+    end
+  end
 end
