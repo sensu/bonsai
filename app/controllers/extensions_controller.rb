@@ -386,6 +386,7 @@ class ExtensionsController < ApplicationController
     partial_template = params[:list].present? ? 'follow_button_list' : 'follow_button_show'
 
     respond_to do |format|
+      format.js   { render partial: partial_template, locals: { extension: @extension } }
       format.html { render partial: partial_template, locals: { extension: @extension } }
     end
   end
