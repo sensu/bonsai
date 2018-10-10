@@ -383,10 +383,7 @@ class ExtensionsController < ApplicationController
     # reloaded before rendering.
     @extension.reload
 
-    if params[:list].present?
-      render partial: 'follow_button_list', locals: { extension: @extension }
-    else
-      render partial: 'follow_button_show', locals: { extension: @extension }
-    end
+    partial_template = params[:list].present? ? 'follow_button_list' : 'follow_button_show'
+    render partial: partial_template, locals: { extension: @extension }
   end
 end
