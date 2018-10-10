@@ -30,6 +30,14 @@
         <ul id="versions" data-dropdown-content class="f-dropdown">
           <li>
             <ul>
+              <%- if extension.hosted? && policy(extension).add_hosted_extension_version? %>
+                <li>
+                  <%= link_to new_extension_version_path(extension, username: extension.owner_name), rel: 'add-version' do %>
+                    <i class="fa fa-cloud-upload"></i>
+                    <span>Add a version</span>
+                  <% end %>
+                </li>
+              <%- end %>
               <% extension_versions.each do |extension_version| %>
                 <li>
                   <%= link_to extension_version_path(extension, extension_version, username: extension.owner.username), rel: 'extension_version' do %>
