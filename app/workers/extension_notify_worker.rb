@@ -13,7 +13,7 @@ class ExtensionNotifyWorker
     extension_version = ExtensionVersion.find(extension_version_id)
 
     active_user_ids = User.joins(:accounts).
-      where('provider = ? AND oauth_token != ?', 'chef_oauth2', 'imported').
+      where('provider = ? AND oauth_token != ?', 'github', 'imported').
       pluck(:id)
 
     subscribed_user_ids = SystemEmail.find_by!(name: 'New extension version').
