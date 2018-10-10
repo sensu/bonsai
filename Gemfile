@@ -68,6 +68,7 @@ gem 'utf8-cleaner'
 gem 'rinku', :require => 'rails_rinku'
 gem 'html_truncator'
 gem 'rollout'
+gem 'rubyzip'
 
 gem 'kaminari'
 
