@@ -67,6 +67,7 @@ gem 'yajl-ruby', require: 'yajl'
 gem 'utf8-cleaner'
 gem 'rinku', :require => 'rails_rinku'
 gem 'html_truncator'
+gem 'ranked-model'                      # for managing extension tiers
 gem 'rollout'
 gem 'rubyzip'
 
