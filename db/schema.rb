@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_27_215403) do
+ActiveRecord::Schema.define(version: 2018_10_15_213740) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -433,6 +433,15 @@ ActiveRecord::Schema.define(version: 2018_08_27_215403) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["name"], name: "index_tags_on_name", unique: true
+  end
+
+  create_table "tiers", force: :cascade do |t|
+    t.string "name"
+    t.integer "rank"
+    t.string "icon_name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["rank"], name: "index_tiers_on_rank"
   end
 
   create_table "tools", id: :serial, force: :cascade do |t|
