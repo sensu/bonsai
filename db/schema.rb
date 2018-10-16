@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_15_213740) do
+ActiveRecord::Schema.define(version: 2018_10_16_031302) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -323,11 +323,13 @@ ActiveRecord::Schema.define(version: 2018_10_15_213740) do
     t.boolean "syncing", default: false
     t.integer "github_organization_id"
     t.string "owner_name"
+    t.bigint "tier_id"
     t.index ["enabled"], name: "index_extensions_on_enabled"
     t.index ["github_organization_id"], name: "index_extensions_on_github_organization_id"
     t.index ["lowercase_name"], name: "index_extensions_on_lowercase_name", unique: true
     t.index ["name"], name: "index_extensions_on_name"
     t.index ["owner_name"], name: "index_extensions_on_owner_name"
+    t.index ["tier_id"], name: "index_extensions_on_tier_id"
     t.index ["user_id"], name: "index_extensions_on_user_id"
   end
 
@@ -481,4 +483,5 @@ ActiveRecord::Schema.define(version: 2018_10_15_213740) do
     t.index ["roles_mask"], name: "index_users_on_roles_mask"
   end
 
+  add_foreign_key "extensions", "tiers"
 end
