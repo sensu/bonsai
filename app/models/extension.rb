@@ -7,6 +7,7 @@ class Extension < ApplicationRecord
   belongs_to :owner, class_name: 'User', foreign_key: :user_id, required: false
   belongs_to :github_organization, required: false
   belongs_to :replacement, class_name: 'Extension', foreign_key: :replacement_id, required: false
+  belongs_to :raw_tier, class_name: "Tier", foreign_key: "tier_id", required: false
   has_one :github_account, through: :owner
   has_one :newest_extension_version, -> { order("created_at DESC") }, class_name: "ExtensionVersion"
   has_many :all_supported_platforms, through: :extension_versions, class_name: 'SupportedPlatform', source: :supported_platforms
@@ -453,6 +454,12 @@ class Extension < ApplicationRecord
 
   def hosted?
     github_repo.blank?
+  end
+
+  # We allow the referenced +Tier+ to be nil,
+  # in which case we assume this extension has the default tier.
+  def tier
+    raw_tier || Tier.default
   end
 
   private
