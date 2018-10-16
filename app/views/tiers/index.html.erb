@@ -1,0 +1,48 @@
+<%= provide(:title, "Tiers") %>
+
+<div class="page nobg">
+  <div class="heading-with-buttons">
+
+    <h1>Tiers</h1>
+
+    <table>
+      <thead>
+      <tr>
+        <th>Name</th>
+        <th>Rank</th>
+        <th>Icon</th>
+        <th>Icon name</th>
+        <th>Extensions</th>
+        <th colspan="3"></th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <% @tiers.each do |tier| %>
+        <%- extensions_count = tier.extensions.count %>
+
+        <tr>
+          <td><%= link_to tier.name, tier %></td>
+          <td><%= tier.rank %></td>
+          <td>
+            <i class="fa fa-<%= tier.icon_name %>"></i>
+          </td>
+          <td><%= tier.icon_name %></td>
+          <td><%= extensions_count %></td>
+          <%- if extensions_count == 0 %>
+            <td><%= link_to 'Destroy',
+                            tier,
+                            method: :delete,
+                            data: {confirm: "Are you sure you want to delete the #{tier.name} tier?"} %>
+            </td>
+          <% end %>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+
+    <br>
+
+    <%= link_to 'New Tier', new_tier_path %>
+  </div>
+</div>

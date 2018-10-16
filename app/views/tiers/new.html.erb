@@ -1,0 +1,13 @@
+<%= provide(:title, "Add a Tier") %>
+
+<div class="page resource tier_show" data-equalizer>
+  <div class="main" data-equalizer-watch>
+    <h1 class="heading">Add a Tier</h1>
+
+    <%= form_with(model: @tier, local: true) do |f| %>
+      <%= render 'form', f: f %>
+
+      <%= f.submit "Add Tier", class: "button primary radius" %>
+    <% end %>
+  </div>
+</div>
