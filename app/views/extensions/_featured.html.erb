@@ -7,6 +7,11 @@
       <header>
         <%= link_to e.name, owner_scoped_extension_url(e) %>
         <span><%= e.latest_extension_version.try(:version) %></span>
+        <div class="tier-declaration">
+          <i class="fa fa-<%= e.tier_icon_name %>"></i>
+          <%= e.tier_name %>
+          tier
+        </div>
       </header>
       <p><%= e.description %></p>
       <p class="tags">

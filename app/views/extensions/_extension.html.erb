@@ -10,6 +10,11 @@
         <i class="fa fa-file"></i>
         <small><%= extension.latest_extension_version.try(:version) %></small>
       </h2>
+      <span class="meta tier-declaraion">
+        <i class="fa fa-<%= extension.tier_icon_name %>"></i>
+        <%= extension.tier_name %>
+        tier
+      </span>
       <span class="meta">
         <i class="fa fa-clock-o"></i> Updated <span itemprop="dateModified"><%= extension.updated_at.to_s(:longish) %></span><br />
       </span>
