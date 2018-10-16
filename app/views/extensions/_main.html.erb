@@ -49,6 +49,34 @@
             </ul>
           </li>
         </ul>
+
+        <%- if policy(extension).change_tier? %>
+          <%= link_to '#', 'data-dropdown' => 'tiers', class: 'button radius tiny dropdown secondary', rel: 'extension_tiers' do %>
+            <i class="fa fa-<%= extension.try(:tier_icon_name) %>"></i>
+            <%= extension.try(:tier_name) %>
+            Tier
+          <% end %>
+          <ul id="tiers" data-dropdown-content class="f-dropdown">
+            <li>
+              <ul style="list-style-type: none">
+                <% Tier.rank(:rank).each do |tier| %>
+                  <li>
+                    <%= link_to extension_tier_path(extension, tier, username: extension.owner.username), method: :put, rel: 'extension_tier' do %>
+                      <i class="fa fa-<%= tier.icon_name %>"></i>
+                      &nbsp;
+                      <%= tier.name %>
+                    <% end %>
+                  </li>
+                <% end %>
+              </ul>
+            </li>
+          </ul>
+        <% else %>
+          &nbsp;
+          <i class="fa fa-<%= extension.try(:tier_icon_name) %>"></i>
+          <%= extension.try(:tier_name) %>
+          Tier
+        <% end %>
       </small>
     <% end %>
 
