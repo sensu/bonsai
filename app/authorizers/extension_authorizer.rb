@@ -108,6 +108,10 @@ class ExtensionAuthorizer < Authorizer::Base
     add_hosted_extension_version?
   end
 
+  def change_tier?
+    admin?
+  end
+
   private
 
   def admin?

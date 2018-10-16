@@ -38,6 +38,8 @@ Rails.application.routes.draw do
 
   resources :extensions, path: "", only: [:new] do
     scope "/extensions/:username" do
+      resources :tiers, only: [:update], controller: :extension_tiers
+
       member do
         get :show
         patch :update
