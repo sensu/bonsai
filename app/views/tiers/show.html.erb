@@ -1,0 +1,14 @@
+<%= provide(:title, "#{@tier.name} Tier") %>
+
+<div class="page resource tier_show" data-equalizer>
+  <div class="main" data-equalizer-watch>
+    <h1><%= @tier.name %> Tier</h1>
+
+    <%= form_with(model: @tier, local: true) do |f| %>
+      <%= render 'form', f: f %>
+
+      <%= f.submit "Update Tier", class: "button primary radius" %>
+      <%= link_to "Cancel", :back %>
+    <% end %>
+  </div>
+</div>
