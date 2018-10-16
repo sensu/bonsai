@@ -32,6 +32,13 @@ class ExtensionsController < ApplicationController
       @extensions = @extensions.featured
     end
 
+    if params[:tier].present?
+      tier = Tier.find_by(name: params[:tier])
+      if tier
+        @extensions = @extensions.merge(tier.extensions)
+      end
+    end
+
     if params[:order].present?
       @extensions = @extensions.ordered_by(params[:order])
     end
