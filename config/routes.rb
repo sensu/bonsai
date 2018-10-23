@@ -68,6 +68,7 @@ Rails.application.routes.draw do
 
   get '/extensions/:username/:extension_id/versions/:version/download' => 'extension_versions#download', as: :extension_version_download, constraints: { version: VERSION_PATTERN }
   get '/extensions/:username/:extension_id/versions/:version' => 'extension_versions#show', as: :extension_version, constraints: { version: VERSION_PATTERN }
+  delete '/extensions/:username/:extension_id/versions/:version' => 'extension_versions#destroy', as: :delete_extension_version, constraints: { version: VERSION_PATTERN }
   put "/extensions/:username/:extension_id/versions/:version/update_platforms" => "extension_versions#update_platforms", as: :extension_update_platforms, constraints: { version: VERSION_PATTERN }
 
   resources :collaborators, only: [:index, :new, :create, :destroy] do
