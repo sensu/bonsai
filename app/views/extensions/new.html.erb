@@ -34,6 +34,15 @@
               <%= f.file_field :tmp_source_file, direct_upload: true %>
             <%- end %>
           </div>
+
+          <div class="description-field">
+            <%= f.text_field :version, placeholder: "Version", title: "Version" %>
+            <p class="hint-block">
+              Please use a proper
+              <%= link_to "SemVer", 'https://semver.org/', target: :_blank %>
+              version name, e.g. v0.0.1 or 1.2.
+            </p>
+          </div>
         </fieldset>
       <% end %>
 
