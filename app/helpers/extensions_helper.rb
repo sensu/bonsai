@@ -48,7 +48,7 @@ module ExtensionsHelper
   end
 
   def is_followable?(extension)
-    extension.github_repo.present?
+    true
   end
 
   def is_commitable?(extension)
