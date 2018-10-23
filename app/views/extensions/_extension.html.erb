@@ -50,7 +50,9 @@
           <span itemprop="interactionCount"><%= number_with_delimiter(extension.download_count) %></span>
           <h5>Total Downloads</h5>
         </li>
-        <%= render 'extensions/follow_button_list', extension: extension %>
+        <span id="<%= extension.name %>-follow-button-list">
+          <%= render 'extensions/follow_button_list', extension: extension %>
+        </span>
       </ul>
     </div>
   </div>
