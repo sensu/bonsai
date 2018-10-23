@@ -534,6 +534,7 @@ DEPENDENCIES
   rspec-rails
   rubocop
   rubocop-rspec
+  rubyzip
   safe_yaml
   sass-rails (~> 5.0)
   selenium-webdriver
