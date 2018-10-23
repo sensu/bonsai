@@ -1,0 +1,24 @@
+<%= provide(:title, "Add an Extension Version") %>
+
+<div class="page resource extension_version_show" data-equalizer>
+  <div class="main" data-equalizer-watch>
+    <h1 class="heading">Add an Extension Version</h1>
+
+    <h3>
+      Upload a new version of the
+      <%= @extension_version.name %>
+      extension.
+    </h3>
+
+    <%- extension = @extension_version.extension %>
+    <%= form_with model: @extension_version,
+                  url:   extension_versions_path(extension, username: extension.owner_name),
+                  local: true do |f| %>
+      <%= render "application/form_errors", record: @extension_version %>
+
+      <%= render 'extensions/file_upload', {f: f, file_method: :source_file} %>
+
+      <%= f.submit "Add Version", class: "button primary radius" %>
+    <% end %>
+  </div>
+</div>

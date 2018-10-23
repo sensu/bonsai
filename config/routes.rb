@@ -30,6 +30,12 @@ Rails.application.routes.draw do
 
   resources :extensions, only: [:index]
 
+  scope '/extensions/:username' do
+    resources :extensions, path: "", constraints: proc { ROLLOUT.active?(:hosted_extensions) }, only: [] do
+      resources :extension_versions, as: :versions, path: 'versions', only: [:new, :create]
+    end
+  end
+
   resources :extensions, path: "", only: [:new] do
     scope "/extensions/:username" do
       member do

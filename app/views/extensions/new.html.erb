@@ -23,27 +23,7 @@
 
       <%- if policy(@extension).make_hosted_extension? %>
         <h3><em><strong>-OR-</strong></em></h3>
-
-        <fieldset>
-          <legend>Upload a ZIP file</legend>
-          <div class="file-field">
-            <%- if f.object.tmp_source_file.attached? %>
-              <%= f.hidden_field :tmp_source_file, value: f.object.tmp_source_file.signed_id  %>
-              <p>File: <%= f.object.tmp_source_file.filename %></p>
-            <%- else %>
-              <%= f.file_field :tmp_source_file, direct_upload: true %>
-            <%- end %>
-          </div>
-
-          <div class="description-field">
-            <%= f.text_field :version, placeholder: "Version", title: "Version" %>
-            <p class="hint-block">
-              Please use a proper
-              <%= link_to "SemVer", 'https://semver.org/', target: :_blank %>
-              version name, e.g. v0.0.1 or 1.2.
-            </p>
-          </div>
-        </fieldset>
+        <%= render 'extensions/file_upload', {f: f, file_method: :tmp_source_file} %>
       <% end %>
 
       <fieldset>
