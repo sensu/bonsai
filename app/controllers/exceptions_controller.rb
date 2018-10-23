@@ -37,7 +37,7 @@ class ExceptionsController < ApplicationController
   # @return [~Exception]
   #
   def exception
-    env['action_dispatch.exception']
+    request.env['action_dispatch.exception']
   end
 
   #
@@ -57,6 +57,6 @@ class ExceptionsController < ApplicationController
   # @return [ActionDispatch::ExceptionWrapper]
   #
   def wrapper
-    @wrapper ||= ActionDispatch::ExceptionWrapper.new(env, exception)
+    @wrapper ||= ActionDispatch::ExceptionWrapper.new(request.env, exception)
   end
 end
