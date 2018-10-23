@@ -86,8 +86,12 @@
   <% if policy(extension).disable? %>
     <% if extension.enabled? %>
       <li>
-        <%= link_to disable_extension_path(extension, username: extension.owner_name), method: 'put', rel: 'disable' do %>
-          <i class="fa fa-times"></i> Disable
+        <%= link_to disable_extension_path(extension, username: extension.owner_name),
+                    method: 'put',
+                    rel: 'delete',
+                    data: {confirm: "Are you sure you want to delete the #{extension.name} extension?"} do %>
+          <i class="fa fa-times"></i>
+          Delete extension
         <% end %>
       </li>
     <% else %>
