@@ -3,7 +3,7 @@
   <%= render 'resources/collaborators', collaborators: collaborators, resource: extension %>
 
   <% if policy(extension).manage? %>
-    <%= render "extensions/manage_extension", extension: extension %>
+    <%= render "extensions/manage_extension", extension: extension, version: version %>
   <% end %>
 
   <% if extension.up_for_adoption? %>
