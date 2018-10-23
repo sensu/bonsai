@@ -1,5 +1,5 @@
 class ExtensionVersionsController < ApplicationController
-  before_action :set_extension_and_version
+  before_action :set_extension_and_version, except: [:new, :create]
   before_action :authenticate_user!, only: [:update_platforms]
 
   #
@@ -31,6 +31,28 @@ class ExtensionVersionsController < ApplicationController
     @commits = DailyMetric.counts_since(@extension.commit_daily_metric_key, Date.today - 1.year)
   end
 
+  def new
+    extension = Extension.with_owner_and_lowercase_name(owner_name: params[:username], lowercase_name: params[:extension_id])
+    authorize! extension, :add_hosted_extension_version?
+
+    @extension_version = extension.extension_versions.build
+  end
+
+  def create
+    extension = Extension.with_owner_and_lowercase_name(owner_name: params[:username], lowercase_name: params[:extension_id])
+    authorize! extension, :add_hosted_extension_version?
+
+    @extension_version = extension.extension_versions.build(extension_version_params)
+
+    if @extension_version.save
+      ExtensionNotifyWorker.perform_async(@extension_version.id)
+      redirect_to owner_scoped_extension_url(@extension_version.extension),
+                  notice: "Successfully created version #{@extension_version.version} of the #{extension.name} extension."
+    else
+      render 'new'
+    end
+  end
+
   #
   # PUT /extension/:extension_id/versions/:version
   #
@@ -48,6 +70,12 @@ class ExtensionVersionsController < ApplicationController
   end
 
   private
+
+  def extension_version_params
+    params
+      .require(:extension_version)
+      .permit(:source_file, :version)
+  end
 
   def set_extension_and_version
     @extension = Extension.with_owner_and_lowercase_name(owner_name: params[:username], lowercase_name: params[:extension_id])
