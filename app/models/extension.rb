@@ -143,7 +143,7 @@ class Extension < ApplicationRecord
   def sorted_extension_versions
     @sorted_extension_versions ||= extension_versions.
       reject { |v| v.version == "master" }.
-      sort_by { |v| Semverse::Version.new(v.version.gsub(/\Av/, "")) }.
+      sort_by { |v| Semverse::Version.new(SemverNormalizer.call(v.version)) }.
       reverse.
       concat(extension_versions.select { |v| v.version == "master" })
   end
@@ -361,7 +361,7 @@ class Extension < ApplicationRecord
       .sort_by do |cd|
         [
           cd.extension_version.extension.name,
-          Semverse::Version.new(cd.extension_version.version.gsub(/\Av/, ""))
+          Semverse::Version.new(SemverNormalizer.call(cd.extension_version.version))
         ]
       end
   end
