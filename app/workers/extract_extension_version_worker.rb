@@ -32,7 +32,7 @@ class ExtractExtensionVersionWorker < ApplicationWorker
     return true if tag == "master"
 
     begin
-      Semverse::Version.new(tag.gsub(/\Av/, ""))
+      Semverse::Version.new(SemverNormalizer.call(tag))
       return true
     rescue Semverse::InvalidVersionFormat
       return false
