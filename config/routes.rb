@@ -128,6 +128,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :tiers
+
   get 'become-a-contributor' => 'contributors#become_a_contributor', constraints: proc { ROLLOUT.active?(:cla) && ROLLOUT.active?(:github) }
   get 'contributors' => 'contributors#index'
 

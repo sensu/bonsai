@@ -1,6 +1,33 @@
 class Extension < ApplicationRecord
   include PgSearch
 
+  # Associations
+  # --------------------
+  belongs_to :category, required: false
+  belongs_to :owner, class_name: 'User', foreign_key: :user_id, required: false
+  belongs_to :github_organization, required: false
+  belongs_to :replacement, class_name: 'Extension', foreign_key: :replacement_id, required: false
+  belongs_to :raw_tier, class_name: "Tier", foreign_key: "tier_id", required: false
+  has_one :github_account, through: :owner
+  has_one :newest_extension_version, -> { order("created_at DESC") }, class_name: "ExtensionVersion"
+  has_many :all_supported_platforms, through: :extension_versions, class_name: 'SupportedPlatform', source: :supported_platforms
+  has_many :collaborators, as: :resourceable, dependent: :destroy
+  has_many :collaborator_users, through: :collaborators, source: :user
+  has_many :extension_versions, dependent: :destroy
+  has_many :extension_followers
+  has_many :followers, through: :extension_followers, source: :user
+  has_many :taggings, as: :taggable
+  has_many :tags, through: :taggings
+
+  # HACK: +Extension+ objects don't really have a source_file attachment or version attribute.
+  # Instead, the children extension_versions each has their own individual +source_file+ attachment and version attribute.
+  # We only use this attachment on the +Extension+ and the +version+ attribute as temporaries until we
+  # can transfer the blob and version to the associated +ExtensionVersion+ child.
+  # To remove this hack, we should either use a form object to hold the temporaries, or
+  # establish an +accepts_nested_attributes+ relationship with the associated extension_versions.
+  has_one_attached :tmp_source_file
+  attr_accessor :version
+
   default_scope { where(enabled: true) }
 
   #
@@ -72,34 +99,6 @@ class Extension < ApplicationRecord
   before_validation :copy_name_to_lowercase_name, on: :create
   before_validation :normalize_github_url
   before_save :update_tags
-
-  # Associations
-  # --------------------
-  has_many :extension_versions, dependent: :destroy
-  has_one :newest_extension_version, -> { order("created_at DESC") }, class_name: "ExtensionVersion"
-  has_many :extension_followers
-  has_many :followers, through: :extension_followers, source: :user
-  belongs_to :category, required: false
-  belongs_to :owner, class_name: 'User', foreign_key: :user_id, required: false
-  belongs_to :github_organization, required: false
-  has_one :github_account, through: :owner
-  belongs_to :replacement, class_name: 'Extension', foreign_key: :replacement_id, required: false
-  has_many :collaborators, as: :resourceable, dependent: :destroy
-  has_many :collaborator_users, through: :collaborators, source: :user
-
-  has_many :taggings, as: :taggable
-  has_many :tags, through: :taggings
-
-  has_many :all_supported_platforms, through: :extension_versions, class_name: 'SupportedPlatform', source: :supported_platforms
-
-  # HACK: +Extension+ objects don't really have a source_file attachment or version attribute.
-  # Instead, the children extension_versions each has their own individual +source_file+ attachment and version attribute.
-  # We only use this attachment on the +Extension+ and the +version+ attribute as temporaries until we
-  # can transfer the blob and version to the associated +ExtensionVersion+ child.
-  # To remove this hack, we should either use a form object to hold the temporaries, or
-  # establish an +accepts_nested_attributes+ relationship with the associated extension_versions.
-  has_one_attached :tmp_source_file
-  attr_accessor :version
 
   # Delegations
   # --------------------
@@ -455,6 +454,12 @@ class Extension < ApplicationRecord
 
   def hosted?
     github_repo.blank?
+  end
+
+  # We allow the referenced +Tier+ to be nil,
+  # in which case we assume this extension has the default tier.
+  def tier
+    raw_tier || Tier.default
   end
 
   private
