@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe SyncExtensionContentsAtVersionsWorker do
+  before do
+    Account.destroy_all
+  end
+
   let!(:extension) { create :extension }
 
   describe 'tag checking' do
@@ -20,7 +24,7 @@ describe SyncExtensionContentsAtVersionsWorker do
     end
 
     it 'ignores non-semver tags' do
-      tags = ["v0.1-20180919"]  # is not semver-conformant
+      tags = ["v0.1A20180919"]  # is not semver-conformant
 
       expect {
         subject.perform(extension.id, tags)

@@ -40,6 +40,10 @@ module BonsaiAssetIndex
     # true.
     config.i18n.enforce_available_locales = false
 
+    config.autoload_paths += %W[
+      lib
+    ].map { |path| Rails.root.join(path) }
+
     config.active_job.queue_adapter = :sidekiq
 
     # Use a custom exception handling application
