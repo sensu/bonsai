@@ -40,9 +40,11 @@ module BonsaiAssetIndex
     # true.
     config.i18n.enforce_available_locales = false
 
-    config.autoload_paths += %W[
+    %W[
       lib
-    ].map { |path| Rails.root.join(path) }
+    ].each do |path|
+      config.eager_load_paths << Rails.root.join(path)
+    end
 
     config.active_job.queue_adapter = :sidekiq
 
