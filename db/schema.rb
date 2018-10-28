@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_27_215403) do
+ActiveRecord::Schema.define(version: 2018_10_16_031302) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -323,11 +323,13 @@ ActiveRecord::Schema.define(version: 2018_08_27_215403) do
     t.boolean "syncing", default: false
     t.integer "github_organization_id"
     t.string "owner_name"
+    t.bigint "tier_id"
     t.index ["enabled"], name: "index_extensions_on_enabled"
     t.index ["github_organization_id"], name: "index_extensions_on_github_organization_id"
     t.index ["lowercase_name"], name: "index_extensions_on_lowercase_name", unique: true
     t.index ["name"], name: "index_extensions_on_name"
     t.index ["owner_name"], name: "index_extensions_on_owner_name"
+    t.index ["tier_id"], name: "index_extensions_on_tier_id"
     t.index ["user_id"], name: "index_extensions_on_user_id"
   end
 
@@ -435,6 +437,15 @@ ActiveRecord::Schema.define(version: 2018_08_27_215403) do
     t.index ["name"], name: "index_tags_on_name", unique: true
   end
 
+  create_table "tiers", force: :cascade do |t|
+    t.string "name"
+    t.integer "rank"
+    t.string "icon_name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["rank"], name: "index_tiers_on_rank"
+  end
+
   create_table "tools", id: :serial, force: :cascade do |t|
     t.integer "user_id"
     t.string "name"
@@ -472,4 +483,5 @@ ActiveRecord::Schema.define(version: 2018_08_27_215403) do
     t.index ["roles_mask"], name: "index_users_on_roles_mask"
   end
 
+  add_foreign_key "extensions", "tiers"
 end

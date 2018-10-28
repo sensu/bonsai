@@ -1,0 +1,21 @@
+<%= render "application/form_errors", record: f.object %>
+
+<fieldset>
+  <div class="description-field">
+    <%= f.text_field :name, placeholder: "Name", title: "Name", required: true, id: "tier-name-field" %>
+  </div>
+
+  <div class="number-field">
+    <%= f.number_field :rank, placeholder: "Rank", title: "Rank", required: true, id: "tier-rank-field" %>
+    <p class="hint-block">The higher the rank, the better the extension status</p>
+  </div>
+
+  <div class="description-field">
+    <%= f.text_field :icon_name, placeholder: "Icon name", title: "Icon Name", id: "tier-icon-name-field" %>
+    <p class="hint-block">
+      The name of a
+      <%= link_to "FontAwesome", "https://fontawesome.com/icons?d=gallery&m=free", target: :_blank %>
+      icon, e.g. <strong>birthday-cake</strong>
+    </p>
+  </div>
+</fieldset>
