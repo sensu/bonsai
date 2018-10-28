@@ -67,7 +67,7 @@ class ExtensionVersion < ApplicationRecord
     return true if version == "master"
 
     begin
-      Semverse::Version.new(version.gsub(/\Av/, ""))
+      Semverse::Version.new(SemverNormalizer.call(version))
     rescue Semverse::InvalidVersionFormat
       errors.add(:version, 'is formatted incorrectly')
     end
