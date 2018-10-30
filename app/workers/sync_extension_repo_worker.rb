@@ -8,7 +8,8 @@ class SyncExtensionRepoWorker < ApplicationWorker
     @tags = extract_tags_from_releases(releases)
     destroy_unreleased_versions
 
-    SyncExtensionContentsAtVersionsWorker.perform_async(extension_id, @tags, compatible_platforms)
+    release_infos_by_tag = releases.group_by {|release| release[:tag_name]}.transform_values(&:first)
+    SyncExtensionContentsAtVersionsWorker.perform_async(extension_id, @tags, compatible_platforms, release_infos_by_tag)
   end
 
   private
