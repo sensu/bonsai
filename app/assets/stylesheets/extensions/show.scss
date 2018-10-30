@@ -209,6 +209,10 @@
         margin-right: rem-calc(5);
       }
 
+      i {
+        display: inline;
+      }
+
       .extension_follow_count {
         // @include inline-block;
         @include single-transition($speed: 100ms);

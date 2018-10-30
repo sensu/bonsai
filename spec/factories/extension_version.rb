@@ -8,5 +8,11 @@ FactoryBot.define do
     readme { '# redis extension' }
     readme_extension { 'md' }
     foodcritic_failure { false }
+
+    trait :with_source_file do
+      after :create do |version, evaluator|
+        version.source_file.attach(io: StringIO.new(""), filename: 'io')
+      end
+    end
   end
 end
