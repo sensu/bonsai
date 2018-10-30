@@ -18,7 +18,7 @@ describe ContributorList do
       Account.delete_all
       User.delete_all
 
-      user = create(:user)
+      user = create(:user, create_chef_account: false)
       create(:account, provider: 'github', user: user)
 
       github_account = user.github_account
