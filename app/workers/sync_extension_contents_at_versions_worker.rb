@@ -19,7 +19,7 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
     @run = CmdAtPath.new(@extension.repo_path)
 
     if semver?
-      release_info = release_infos_by_tag[@tag]
+      release_info = release_infos_by_tag[@tag].to_h
       sync_extension_version(release_info)
       tally_commits if @tag == "master"
     end
