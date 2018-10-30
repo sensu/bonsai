@@ -4,7 +4,7 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
     @logger ||= Logger.new("log/scan.log")
   end
 
-  def perform(extension_id, tags, compatible_platforms = [])
+  def perform(extension_id, tags, compatible_platforms = [], release_infos_by_tag = {})
     logger.info("PERFORMING: #{extension_id}, #{tags.inspect}, #{compatible_platforms.inspect}")
 
     Extension.transaction do
@@ -19,7 +19,8 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
     @run = CmdAtPath.new(@extension.repo_path)
 
     if semver?
-      sync_extension_version
+      release_info = release_infos_by_tag[@tag]
+      sync_extension_version(release_info)
       tally_commits if @tag == "master"
     end
 
@@ -30,7 +31,7 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
 
   private
 
-  def sync_extension_version
+  def sync_extension_version(release_info)
     checkout_correct_tag
     readme_body, readme_ext = fetch_readme
     logger.info "GOT README: #{readme_body}"
@@ -39,6 +40,7 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
     set_last_commit(version)
     set_commit_count(version)
     scan_files(version)
+    sync_release_info(version, release_info)
     version.save
   end
 
@@ -140,6 +142,12 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
     logger.info("SCANNING FILES")
     scan_yml_files(version)
     scan_class_dirs(version)
+  end
+
+  def sync_release_info(version, release_info)
+    return unless release_info.is_a?(Hash)
+
+    version.description = release_info[:body]
   end
 
   def scan_yml_files(version)
