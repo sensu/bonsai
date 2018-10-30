@@ -6,15 +6,14 @@ describe SyncExtensionContentsAtVersionsWorker do
   end
 
   let!(:extension) { create :extension }
+  subject          { SyncExtensionContentsAtVersionsWorker.new }
+
+  before do
+    FileUtils.mkdir_p extension.repo_path
+    allow_any_instance_of(CmdAtPath).to receive(:cmd) { "" }
+  end
 
   describe 'tag checking' do
-    subject { SyncExtensionContentsAtVersionsWorker.new }
-
-    before do
-      FileUtils.mkdir_p extension.repo_path
-      allow_any_instance_of(CmdAtPath).to receive(:cmd) { "" }
-    end
-
     it 'honors semver tags' do
       tags = ["0.01"]   # is semver-conformant
 
