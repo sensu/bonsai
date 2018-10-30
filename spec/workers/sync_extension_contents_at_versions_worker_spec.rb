@@ -36,9 +36,9 @@ describe SyncExtensionContentsAtVersionsWorker do
     let(:release_infos_by_tag)  { {"0.33" => {"body" => body}} }
     let(:tags)                  { release_infos_by_tag.keys }
 
-    it 'puts the release notes into the description field' do
+    it 'puts the release notes into the release notes field' do
       subject.perform(extension.id, tags, [], release_infos_by_tag)
-      expect(extension.reload.extension_versions.last.description).to eq body
+      expect(extension.reload.extension_versions.last.release_notes).to eq body
     end
   end
 end
