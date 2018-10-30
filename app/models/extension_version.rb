@@ -57,6 +57,10 @@ class ExtensionVersion < ApplicationRecord
     @download_daily_metric_key ||= "downloads.extension-#{extension_id}.version-#{id}"
   end
 
+  def metadata
+    (source_file.attached? ? source_file.metadata : nil).to_h
+  end
+
   private
 
   #
