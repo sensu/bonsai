@@ -106,12 +106,17 @@
     <dd class="<%= 'active' unless params[:tab] %>">
       <%= link_to 'README', extension_version_path(extension, version, username: extension.owner.username) %>
     </dd>
+    <dd class="<%= 'active' if params[:tab] == 'release-notes' %>">
+      <%= link_to 'Release Notes', extension_version_path(extension, version, username: extension.owner.username, tab: 'release-notes') %>
+    </dd>
   </dl>
 
   <div class="tabs-content">
     <div class="content active">
       <%=
         case params[:tab]
+        when 'release-notes'
+          render 'extensions/release_notes', version: version
         else
           render 'extensions/readme', extension: extension, version: version
         end
