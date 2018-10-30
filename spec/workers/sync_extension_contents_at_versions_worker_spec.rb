@@ -30,4 +30,15 @@ describe SyncExtensionContentsAtVersionsWorker do
       }.not_to change{ExtensionVersion.count}
     end
   end
+
+  describe 'release note extraction' do
+    let(:body)                  { "this is my body" }
+    let(:release_infos_by_tag)  { {"0.33" => {body: body}} }
+    let(:tags)                  { release_infos_by_tag.keys }
+
+    it 'puts the release notes into the description field' do
+      subject.perform(extension.id, tags, [], release_infos_by_tag)
+      expect(extension.reload.extension_versions.last.description).to eq body
+    end
+  end
 end
