@@ -102,7 +102,22 @@
     <% end %>
   </div>
 
-  render 'extensions/readme', extension: extension, version: version
+  <dl class="tabs">
+    <dd class="<%= 'active' unless params[:tab] %>">
+      <%= link_to 'README', extension_version_path(extension, version, username: extension.owner.username) %>
+    </dd>
+  </dl>
+
+  <div class="tabs-content">
+    <div class="content active">
+      <%=
+        case params[:tab]
+        else
+          render 'extensions/readme', extension: extension, version: version
+        end
+      %>
+    </div>
+  </div>
 
   <%# <% item_types = version.extension_version_content_items.select("distinct item_type").map(&:item_type).sort %1> %>
 
