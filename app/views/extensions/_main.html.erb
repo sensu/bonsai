@@ -102,11 +102,27 @@
     <% end %>
   </div>
 
-  <%- if extension.hosted? %>
-    <%= render_document(version.metadata.fetch(:readme, ""), version.metadata.fetch(:readme_extension, "")) %>
-  <% else %>
-    <%= render_document(version.try(:readme) || "", version.try(:readme_extension) || "", version.try(:extension).github_repo, version.try(:version)) %>
-  <% end %>
+  <dl class="tabs">
+    <dd class="<%= 'active' unless params[:tab] %>">
+      <%= link_to 'README', extension_version_path(extension, version, username: extension.owner.username) %>
+    </dd>
+    <dd class="<%= 'active' if params[:tab] == 'release-notes' %>">
+      <%= link_to 'Release Notes', extension_version_path(extension, version, username: extension.owner.username, tab: 'release-notes') %>
+    </dd>
+  </dl>
+
+  <div class="tabs-content">
+    <div class="content active">
+      <%=
+        case params[:tab]
+        when 'release-notes'
+          render 'extensions/release_notes', version: version
+        else
+          render 'extensions/readme', extension: extension, version: version
+        end
+      %>
+    </div>
+  </div>
 
   <%# <% item_types = version.extension_version_content_items.select("distinct item_type").map(&:item_type).sort %1> %>
 

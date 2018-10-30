@@ -6,15 +6,14 @@ describe SyncExtensionContentsAtVersionsWorker do
   end
 
   let!(:extension) { create :extension }
+  subject          { SyncExtensionContentsAtVersionsWorker.new }
+
+  before do
+    FileUtils.mkdir_p extension.repo_path
+    allow_any_instance_of(CmdAtPath).to receive(:cmd) { "" }
+  end
 
   describe 'tag checking' do
-    subject { SyncExtensionContentsAtVersionsWorker.new }
-
-    before do
-      FileUtils.mkdir_p extension.repo_path
-      allow_any_instance_of(CmdAtPath).to receive(:cmd) { "" }
-    end
-
     it 'honors semver tags' do
       tags = ["0.01"]   # is semver-conformant
 
@@ -29,6 +28,17 @@ describe SyncExtensionContentsAtVersionsWorker do
       expect {
         subject.perform(extension.id, tags)
       }.not_to change{ExtensionVersion.count}
+    end
+  end
+
+  describe 'release note extraction' do
+    let(:body)                  { "this is my body" }
+    let(:release_infos_by_tag)  { {"0.33" => {body: body}} }
+    let(:tags)                  { release_infos_by_tag.keys }
+
+    it 'puts the release notes into the description field' do
+      subject.perform(extension.id, tags, [], release_infos_by_tag)
+      expect(extension.reload.extension_versions.last.description).to eq body
     end
   end
 end

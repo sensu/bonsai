@@ -2,12 +2,14 @@ class SyncExtensionRepoWorker < ApplicationWorker
 
   def perform(extension_id, compatible_platforms = [])
     @extension = Extension.find(extension_id)
+    releases = @extension.octokit.releases(@extension.github_repo)
 
     clone_repo
-    @tags = extract_tags_from_releases
+    @tags = extract_tags_from_releases(releases)
     destroy_unreleased_versions
 
-    SyncExtensionContentsAtVersionsWorker.perform_async(extension_id, @tags, compatible_platforms)
+    release_infos_by_tag = releases.group_by {|release| release[:tag_name]}.transform_values(&:first)
+    SyncExtensionContentsAtVersionsWorker.perform_async(extension_id, @tags, compatible_platforms, release_infos_by_tag)
   end
 
   private
@@ -16,8 +18,8 @@ class SyncExtensionRepoWorker < ApplicationWorker
     `git clone #{@extension.github_url} #{@extension.repo_path}`
   end
 
-  def extract_tags_from_releases
-    tags = @extension.octokit.releases(@extension.github_repo).map { |r| r[:tag_name] }
+  def extract_tags_from_releases(releases)
+    tags = releases.map { |r| r[:tag_name] }
     ["master", *tags]
   end
 
