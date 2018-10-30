@@ -16,6 +16,7 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
     @tags = tags
     @tag = @tags.shift
     @compatible_platforms = compatible_platforms
+    @release_infos_by_tag = release_infos_by_tag
     @run = CmdAtPath.new(@extension.repo_path)
 
     if semver?
@@ -47,7 +48,7 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
   def perform_next
     if @tags.any?
       @extension.update_attribute(:syncing, false)
-      self.class.perform_async(@extension.id, @tags, @compatible_platforms)
+      self.class.perform_async(@extension.id, @tags, @compatible_platforms, @release_infos_by_tag)
     end
   end
 
@@ -145,9 +146,7 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
   end
 
   def sync_release_info(version, release_info)
-    return unless release_info.is_a?(Hash)
-
-    version.description = release_info[:body]
+    version.description = release_info['body']
   end
 
   def scan_yml_files(version)
