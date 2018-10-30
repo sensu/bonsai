@@ -103,7 +103,7 @@
   </div>
 
   <%- if extension.hosted? %>
-    <%= render_document(version.source_file.metadata[:readme] || "", version.source_file.metadata[:readme_extension] || "") %>
+    <%= render_document(version.metadata.fetch(:readme, ""), version.metadata.fetch(:readme_extension, "")) %>
   <% else %>
     <%= render_document(version.try(:readme) || "", version.try(:readme_extension) || "", version.try(:extension).github_repo, version.try(:version)) %>
   <% end %>
