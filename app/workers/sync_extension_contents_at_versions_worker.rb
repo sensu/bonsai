@@ -146,7 +146,7 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
   end
 
   def sync_release_info(version, release_info)
-    version.description = release_info['body']
+    version.release_notes = release_info['body']
   end
 
   def scan_yml_files(version)
