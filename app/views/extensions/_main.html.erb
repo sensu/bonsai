@@ -102,11 +102,7 @@
     <% end %>
   </div>
 
-  <%- if extension.hosted? %>
-    <%= render_document(version.metadata.fetch(:readme, ""), version.metadata.fetch(:readme_extension, "")) %>
-  <% else %>
-    <%= render_document(version.try(:readme) || "", version.try(:readme_extension) || "", version.try(:extension).github_repo, version.try(:version)) %>
-  <% end %>
+  render 'extensions/readme', extension: extension, version: version
 
   <%# <% item_types = version.extension_version_content_items.select("distinct item_type").map(&:item_type).sort %1> %>
 
