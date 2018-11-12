@@ -2,8 +2,6 @@ require 'cgi'
 require 'vcr'
 
 VCR.configure do |c|
-  include CustomUrlHelper
-
   c.cassette_library_dir = 'spec/vcr_cassettes'
   c.hook_into :webmock
   c.allow_http_connections_when_no_cassette = true
