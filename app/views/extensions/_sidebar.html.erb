@@ -13,7 +13,7 @@
   <% end %>
 
   <% if extension.github_url.present? %>
-    <div class="small-bottom-space"><%= link_to 'View Source', extension.github_url, itemprop: 'codeRepository', target: "_blank" %></div>
+    <div class="small-bottom-space"><%= link_to 'View Source', extension.github_url, itemprop: 'codeRepository', target: "_blank", class: 'button radius small' %></div>
   <% end %>
 
   <h4 rel="edit-extension-urls">
