@@ -45,8 +45,7 @@ class Curry::UnauthorizedCommitAuthorComment
         contribute to Bonsai projects or are using a non-GitHub
         verified email address. To become authorized to contribute, you will
         need to sign the Contributor License Agreement (CLA) as an individual or
-        on behalf of your company. [You can read more on Chef's
-        blog.](#{chef_blog_url('2014/06/23/changes-to-the-contributor-license-agreement-process')})
+        on behalf of your company.
       ).squish
 
       if @unauthorized_commit_authors.any?(&:email)
