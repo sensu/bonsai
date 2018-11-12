@@ -6,7 +6,7 @@ class PagesController < ApplicationController
   # GET /
   #
   # The first page a non-authenticated user sees. The welcome page gives the
-  # user a taste of what Supermarket is all about.
+  # user a taste of what this application is all about.
   #
   def welcome
     redirect_to dashboard_path if current_user.present?

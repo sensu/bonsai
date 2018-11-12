@@ -9,11 +9,11 @@
     <h3>Your Agreements</h3>
 
     <% unless current_user.contributor? %>
-      <p>You are not a member of any company that has signed the Corporate Contributor License Agreement (CCLA). If you want to contribute to Chef's open source projects on behalf of your company, your company must sign the CCLA and add you as a member. If your company has already signed the CCLA, <%= link_to "ask an admin of your company to invite you", ccla_signatures_path %>. If your company has not yet signed the CCLA, have an authorized individual <%= link_to "sign the CCLA", new_ccla_signature_path %>.</p>
+      <p>You are not a member of any company that has signed the Corporate Contributor License Agreement (CCLA). If you want to contribute to Bonsai's open source projects on behalf of your company, your company must sign the CCLA and add you as a member. If your company has already signed the CCLA, <%= link_to "ask an admin of your company to invite you", ccla_signatures_path %>. If your company has not yet signed the CCLA, have an authorized individual <%= link_to "sign the CCLA", new_ccla_signature_path %>.</p>
     <% end %>
 
     <% unless current_user.signed_icla? %>
-      <p>You have not signed the Individual Contributor License Agreement (ICLA) yet. If you are interested in contributing to Chef's open source projects as an individual, <%= link_to "you must sign the ICLA", new_icla_signature_path %>.</p>
+      <p>You have not signed the Individual Contributor License Agreement (ICLA) yet. If you are interested in contributing to Bonsai's open source projects as an individual, <%= link_to "you must sign the ICLA", new_icla_signature_path %>.</p>
     <% end %>
 
     <ul class="pretty">

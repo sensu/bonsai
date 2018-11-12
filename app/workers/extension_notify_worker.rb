@@ -5,7 +5,7 @@ class ExtensionNotifyWorker
   # Notify all followers that a new version of the specified +Extension+ has been updated.
   # This will only email the follower if the user has email notifications turned on.
   # This will not email users with an OCID oauth token of 'imported' to prevent migrated users
-  # from being sent emails until they have logged into Supermarket.
+  # from being sent emails until they have logged into this application.
   #
   # @param [Integer] extension_version_id the id of ExtensionVersion that was updated
   #

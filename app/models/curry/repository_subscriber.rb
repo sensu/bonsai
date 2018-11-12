@@ -44,9 +44,9 @@ module Curry
     end
 
     #
-    # Unsubscribes Supermarket from the repository.
+    # Unsubscribes this application from the repository.
     #
-    # @return [Curry::Repository] if Supermarket has unsubscribed
+    # @return [Curry::Repository] if this application has unsubscribed
     #
     # @raise [Octokit::Error] if unsubscribing from the hub fails
     #

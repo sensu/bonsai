@@ -15,7 +15,6 @@ class ContributorList
     @users = users
     accounts = Account.where(user_id: @users.map(&:id)).to_a.group_by(&:provider)
     @github_accounts = Array(accounts['github'])
-    # @chef_accounts = Array(accounts['chef_oauth2'])
   end
 
   #

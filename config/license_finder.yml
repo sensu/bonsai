@@ -8,4 +8,4 @@ ignore_groups:
 - development
 - devDependencies
 dependencies_file_dir: './doc/'
-project_name: Supermarket
+project_name: Bonsai

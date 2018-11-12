@@ -7,7 +7,7 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui">
     <title><%= [content_for(:title), "Bonsai Asset Index"].compact.join(' - ').html_safe %></title>
-    <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Supermarket" %>">
+    <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Bonsai" %>">
     <% if ROLLOUT.active?(:no_crawl) %>
       <meta name="robots" content="noindex, nofollow">
     <% end %>
@@ -60,7 +60,7 @@
           <div class="row">
             <section class="left-side">
               <div class="follow" id="follow">
-                <a class="ext-gh" data-toggle="tooltip" href="https://github.com/ManageIQ/" title="GitHub">
+                <a class="ext-gh" data-toggle="tooltip" href="https://github.com/sensu/" title="GitHub">
                   <i class="fa fa-github"></i>
                   <span class="label">GitHub</span>
                 </a>

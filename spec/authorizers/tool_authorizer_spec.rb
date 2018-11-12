@@ -32,7 +32,7 @@ describe ToolAuthorizer do
     it { should_not permit_authorization(:manage_adoption) }
   end
 
-  context 'as a supermarket admin' do
+  context 'as an application admin' do
     let(:user) { build(:admin) }
     let(:record) { build(:tool) }
 

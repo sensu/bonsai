@@ -22,7 +22,7 @@ class IrcLogsController < ApplicationController
   #
   # @example
   #
-  #   GET /chat/chef/2014-09-24
+  #   GET /chat/sensu/2014-09-24
   #
   def show
     botbot_base_url = 'https://botbot.me/freenode/'
