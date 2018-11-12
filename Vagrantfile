@@ -39,13 +39,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     chef.json = {
       postgres: {
         user: 'vagrant',
-        database: 'supermarket_development',
+        database: 'bonsai_dev',
         auth_method: 'trust'
       }
     }
 
     chef.run_list = [
-      'recipe[supermarket::vagrant]'
+      'recipe[bonsai::vagrant]'
     ]
   end
 end
