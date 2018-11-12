@@ -1,5 +1,5 @@
 shared_examples 'community stats' do
-  it 'displays extensions and chefs as singular if there is only 1' do
+  it 'displays extensions and devs as singular if there is only 1' do
     assign(:extension_count, 1)
     assign(:user_count, 1)
     render
@@ -7,7 +7,7 @@ shared_examples 'community stats' do
     expect(rendered).to match(/1 BonsaiAssetIndex User<\/span>/)
   end
 
-  it 'displays extensions and chefs as plural if there is more than 1' do
+  it 'displays extensions and devs as plural if there is more than 1' do
     assign(:extension_count, 2)
     assign(:user_count, 2)
     render

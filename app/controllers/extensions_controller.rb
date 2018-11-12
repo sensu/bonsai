@@ -277,7 +277,7 @@ class ExtensionsController < ApplicationController
   #
   # PUT /extensions/:extension/toggle_featured
   #
-  # Allows a Supermarket admin to set an extension as featured or
+  # Allows an application admin to set an extension as featured or
   # unfeatured (if it is already featured).
   #
   def toggle_featured

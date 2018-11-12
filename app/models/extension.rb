@@ -127,7 +127,7 @@ class Extension < ApplicationRecord
   end
 
   #
-  # The total number of times an extension has been downloaded from Supermarket
+  # The total number of times an extension has been downloaded from this application
   #
   # @return [Fixnum]
   #

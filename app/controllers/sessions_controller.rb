@@ -11,7 +11,7 @@ class SessionsController < ApplicationController
   end
 
   #
-  # POST /auth/chef_oauth2/callback
+  # POST /auth/github/callback
   #
   # Creates a new session for the user from the OmniAuth Auth hash.
   #

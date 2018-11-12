@@ -27,7 +27,7 @@ describe PagesController do
 
       it '404s when requested with JSON' do
         # NOTE: this is a specific test for a more general scenario:
-        # Supermarket fields a request to some action which only has an HTML
+        # This application fields a request to some action which only has an HTML
         # template. We define the correct behavior to be 404 Not Found.
         get :dashboard, params: {format: :json}
 
