@@ -203,7 +203,7 @@
     }
 
     .button {
-      padding: rem-calc(12 20 10);
+      padding: rem-calc(5 20 5 10);
 
       i:before {
         margin-right: rem-calc(5);
@@ -225,7 +225,7 @@
         }
         line-height: rem-calc(10);
         margin: rem-calc(-2 -10 0 10);
-        padding: rem-calc(5 5 3);
+        padding: rem-calc(2);
       }
 
       &:hover {
