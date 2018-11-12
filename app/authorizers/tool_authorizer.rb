@@ -1,6 +1,6 @@
 class ToolAuthorizer < Authorizer::Base
   #
-  # Owners of a tool and Supermarket admins can edit it.
+  # Owners of a tool and application admins can edit it.
   #
   # @return [Boolean]
   #
@@ -9,7 +9,7 @@ class ToolAuthorizer < Authorizer::Base
   end
 
   #
-  # Owners of a tool and Supermarket admins can update it.
+  # Owners of a tool and application admins can update it.
   #
   # @return [Boolean]
   #
@@ -18,7 +18,7 @@ class ToolAuthorizer < Authorizer::Base
   end
 
   #
-  # Owners of a tool and Supermarket admins can delete it.
+  # Owners of a tool and application admins can delete it.
   #
   # @return [Boolean]
   #
@@ -27,7 +27,7 @@ class ToolAuthorizer < Authorizer::Base
   end
 
   #
-  # Owners of an extension, collaborators of an extension and Supermarket admins can
+  # Owners of an extension, collaborators of an extension and application admins can
   # manage an extension.
   #
   def manage?
@@ -35,14 +35,14 @@ class ToolAuthorizer < Authorizer::Base
   end
 
   #
-  # Owners of a tool and Supermarket admins can add collaborators.
+  # Owners of a tool and application admins can add collaborators.
   #
   def create_collaborator?
     owner?
   end
 
   #
-  # Owners of a tool and Supermarket admins can put an extension up for
+  # Owners of a tool and application admins can put an extension up for
   # adoption.
   #
   # @return [Boolean]

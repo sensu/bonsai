@@ -13,12 +13,12 @@ describe OauthTokenRefreshWorker do
     # So the general workflow, should you need to re-record the cassettes for
     # this spec, is:
     #
-    # 1. Login to Supermarket through some valid oc-id server, somewhere.
-    # 2. Open a Rails console on your Supermarket server and grab the
+    # 1. Login to this application through some valid oc-id server, somewhere.
+    # 2. Open a Rails console on your application server and grab the
     #    oauth_token and oauth_refresh_token from the Account of the user that
     #    you just logged in as.
     # 3. Make a note of the CHEF_OAUTH2_APP_ID and CHEF_OAUTH2_SECRET ENV vars
-    #    for the Supermarket server you used to login in step 1.
+    #    for the application server you used to login in step 1.
     # 3. Comment out the 2 ENV vars below and in their place, add 4 new ones
     #    that look like this:
     #

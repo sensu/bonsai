@@ -130,7 +130,7 @@ class Curry::ImportPullRequestCommitAuthors
 
   #
   # Determine if the +User+ for a given GitHub login is authorized to contribute to
-  # repositories that Supermarket is subscribed to. A +User+ is authorized to
+  # repositories to which this application is subscribed. A +User+ is authorized to
   # contribute if they have an +IclaSignature+, +CclaSignature+ or are a
   # +Contributor+ on behalf of an +Organization+.
   #

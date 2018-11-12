@@ -1,7 +1,7 @@
 require 'sitemap_generator'
 
 #
-# Worker that refreshes Supermarket's sitemap once a day at midnight. Uses
+# Worker that refreshes this application's sitemap once a day at midnight. Uses
 # Sidetiq to schedule the job.
 #
 class SitemapRefreshWorker < ApplicationWorker
