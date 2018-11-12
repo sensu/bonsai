@@ -23,10 +23,6 @@ Rails.application.config.middleware.use(OmniAuth::Builder) do
     }
   }
 
-  if ENV['CHEF_OAUTH2_URL'].present?
-    client_options[:site] = ENV['CHEF_OAUTH2_URL']
-  end
-
   provider(
     :github,
     ENV['GITHUB_CLIENT_ID'],
@@ -35,13 +31,6 @@ Rails.application.config.middleware.use(OmniAuth::Builder) do
     scope: BonsaiAssetIndex::Authentication::AUTH_SCOPE,
     provider_ignores_state: true
   ).inspect
-
-  provider(
-    :chef_oauth2,
-    ENV['CHEF_OAUTH2_APP_ID'],
-    ENV['CHEF_OAUTH2_SECRET'],
-    client_options: client_options
-  )
 end
 
 # Use the Rails logger
