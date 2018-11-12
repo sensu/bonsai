@@ -11,7 +11,6 @@ class ApplicationController < ActionController::Base
   include BonsaiAssetIndex::Authorization
   include BonsaiAssetIndex::Authentication
   include BonsaiAssetIndex::LocationStorage
-  include CustomUrlHelper
 
   rescue_from(
     NotAuthorizedError,
