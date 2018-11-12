@@ -260,6 +260,12 @@
     float: left;
     clear: none !important;
     margin-right: -2px;
+
+    .at-icon-wrapper,
+    .at-icon {
+      height:16px !important;
+      width:16px !important;
+    }
   }
 
   .description {
