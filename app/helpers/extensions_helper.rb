@@ -81,7 +81,7 @@ module ExtensionsHelper
       class: 'extension_follow_count'
     )
     follow_html = fa_icon + 'Star' + followers_count_span
-    unfollow_html = fa_icon + 'Unstar' + followers_count_span
+    unfollow_html = fa_icon + 'Starred' + followers_count_span
 
     unless current_user
       return link_to(
@@ -149,7 +149,7 @@ module ExtensionsHelper
   #
   def link_to_sorted_extensions(linked_text, ordering)
     if params[:order] == ordering
-      link_to linked_text, params.except(:order), class: 'button radius secondary active'
+      link_to linked_text, params.to_unsafe_h.except(:order), class: 'button radius secondary active'
     else
       link_to linked_text, params.to_unsafe_h.merge(order: ordering), class: 'button radius secondary'
     end

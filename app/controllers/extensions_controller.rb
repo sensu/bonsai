@@ -374,7 +374,7 @@ class ExtensionsController < ApplicationController
 
   def store_location_then_authenticate_user!
     store_location!(owner_scoped_extension_url(@extension))
-    authenticate_user!
+    authenticate_user!(skip_location_storage: true)
   end
 
   def extension_edit_params

@@ -13,14 +13,12 @@
   <% end %>
 
   <% if extension.github_url.present? %>
-    <div class="small-bottom-space"><%= link_to 'View Source', extension.github_url, itemprop: 'codeRepository', target: "_blank" %></div>
+    <div class="small-bottom-space"><%= link_to 'View Source', extension.github_url, itemprop: 'codeRepository', target: "_blank", class: 'button radius small' %></div>
   <% end %>
 
   <h4 rel="edit-extension-urls">
-    <i class="fa fa-book"></i>
-    Extension Contents
     <% if policy(extension).manage? %>
-      <a href="#" class="toggle-details-edit">edit</a>
+      <a href="#" class="toggle-details-edit">edit details</a>
       <a href="#" class="toggle-details-edit toggle-details-hidden">cancel</a>
     <% end %>
   </h4>
@@ -117,7 +115,7 @@
       <i class="fa fa-download"></i> <span itemprop="interactionCount"><%= number_with_delimiter(version.try(:download_count) || 0) %></span> Downloads of Version <%= version.try(:version) %>
       <small><%= number_with_delimiter(extension.download_count) %> Total Downloads</small>
     </h4>
-    <%= link_to "Download Extension",
+    <%= link_to "Download",
                 download_extension_path(
                     extension,
                     username: extension.owner_name),
