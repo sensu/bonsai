@@ -42,7 +42,7 @@ class Curry::UnauthorizedCommitAuthorComment
       parts << %(
         Hi. I am an automated pull request bot named Curry. There are
         commits in this pull request whose authors are not yet authorized to
-        contribute to Chef Software, Inc. projects or are using a non-GitHub
+        contribute to Bonsai projects or are using a non-GitHub
         verified email address. To become authorized to contribute, you will
         need to sign the Contributor License Agreement (CLA) as an individual or
         on behalf of your company. [You can read more on Chef's
@@ -54,7 +54,7 @@ class Curry::UnauthorizedCommitAuthorComment
         parts << %(
           There are #{@unauthorized_commit_authors.count(&:email)} commit
           author(s) whose commits are authored by a non-GitHub verified email
-          address. Chef will have to manually verify that they are authorized to
+          address. Bonsai will have to manually verify that they are authorized to
           contribute.
         ).squish
       end
