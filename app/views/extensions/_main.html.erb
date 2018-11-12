@@ -17,7 +17,10 @@
       <i class="fa fa-rss"></i> RSS
     <% end %>
   </small>
-  <h1 class="heading">
+
+  <div class="addthis_sharing_toolbox"></div>
+
+  <h1 class="heading" style="clear: both;">
     <span itemprop="name"><%= extension.name %></span>
     <% if extension_versions.count > 0 %>
       <small class="version_dropdown">
@@ -84,8 +87,6 @@
       <%= render 'extensions/follow_button_show', extension: @extension %>
     </span>
   </h1>
-
-  <div class="addthis_sharing_toolbox"></div>
 
   <p class="description" itemprop="description"><%= extension.description %></p>
 
