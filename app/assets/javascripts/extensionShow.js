@@ -32,6 +32,6 @@ $(function() {
     height: "25px",
     spotColor: "",
     spotRadius: 0,
-    disableInteraction: true
+    tooltipFormat: $.spformat('{{prefix}}{{y}}{{suffix}}<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>', 'sparkline-tooltip-class')
   }).addClass("loaded");
 });
