@@ -1,15 +1,15 @@
-<%= provide :title, 'Welcome - The resource for ManageIQ extensions' %>
-<%= provide :description, "Supermarket is ManageIQ's open-source community platform. Find, explore and view ManageIQ extensions for all of your ops needs." %>
+<%= provide :title, 'Welcome - The resource for Bonsai assets' %>
+<%= provide :description, "Asset Index is Bonsia's open-source community platform. Find, explore and view Bonsai assets for all of your ops needs." %>
 
 <div class="page withspace">
   <% if flash[:signout] %>
     <div class="signout-message">
-      <p>You have been signed out of the Extensions Depot.</p>
+      <p>You have been signed out of the Bonsai Asset Index.</p>
     </div>
   <% end %>
 
   <section class="sign_up_in">
-    <h2 class="text-center">Welcome to Supermarket. Find, explore and view ManageIQ extensions for all of your ops needs.</h2>
+    <h2 class="text-center">Welcome to Supermarket. Find, explore and view Bonsai extensions for all of your ops needs.</h2>
 
     <p class="text-center">
       <%= link_to 'Sign Up For a Chef Account', chef_sign_up_url, class: 'button radius' %>
