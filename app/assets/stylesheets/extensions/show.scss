@@ -252,8 +252,13 @@
     margin-bottom: rem-calc(8);
   }
 
+  .rss {
+    float: left;
+  }
+
   .addthis_sharing_toolbox {
-    float: right;
+    float: left;
+    clear: none !important;
     margin-right: -2px;
   }
 
