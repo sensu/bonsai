@@ -79,10 +79,11 @@
             </li>
           </ul>
         <% else %>
-          &nbsp;
-          <i class="fa fa-<%= extension.try(:tier_icon_name) %>"></i>
-          <%= extension.try(:tier_name) %>
-          Tier
+          <span class="tier <%= extension.tier_name.underscore.gsub(/\s+/, '-') %>">
+            <i class="fa fa-<%= extension.try(:tier_icon_name) %>"></i>
+            <%= extension.try(:tier_name) %>
+            Tier
+          </span>
         <% end %>
       </small>
     <% end %>
