@@ -17,7 +17,14 @@
       <i class="fa fa-rss"></i> RSS
     <% end %>
   </small>
-  <h1 class="heading">
+
+  <div class="addthis_sharing_toolbox"></div>
+
+  <span id="follow-button-show">
+    <%= render 'extensions/follow_button_show', extension: @extension %>
+  </span>
+
+  <h1 class="heading" style="clear: both;">
     <span itemprop="name"><%= extension.name %></span>
     <% if extension_versions.count > 0 %>
       <small class="version_dropdown">
@@ -72,20 +79,15 @@
             </li>
           </ul>
         <% else %>
-          &nbsp;
-          <i class="fa fa-<%= extension.try(:tier_icon_name) %>"></i>
-          <%= extension.try(:tier_name) %>
-          Tier
+          <span class="tier <%= extension.tier_name.underscore.gsub(/\s+/, '-') %>">
+            <i class="fa fa-<%= extension.try(:tier_icon_name) %>"></i>
+            <%= extension.try(:tier_name) %>
+            Tier
+          </span>
         <% end %>
       </small>
     <% end %>
-
-    <span id="follow-button-show">
-      <%= render 'extensions/follow_button_show', extension: @extension %>
-    </span>
   </h1>
-
-  <div class="addthis_sharing_toolbox"></div>
 
   <p class="description" itemprop="description"><%= extension.description %></p>
 
