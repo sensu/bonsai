@@ -1,5 +1,3 @@
-require 'active_model/validations/chef_version_constraint_validator'
-
 class ExtensionDependency < ApplicationRecord
   include SeriousErrors
 
@@ -12,5 +10,4 @@ class ExtensionDependency < ApplicationRecord
   # --------------------
   validates :name, presence: true, uniqueness: { scope: [:version_constraint, :extension_version_id] }
   validates :extension_version, presence: true
-  validates :version_constraint, chef_version_constraint: true
 end

@@ -74,13 +74,6 @@
   display: none;
 }
 
-@media #{$mobile-only} {
-  .logomanageiq {
-    margin-left: -40px;
-    width: 170px;
-  }
-}
-
 // App-specific elements
 .appnav {
   @include grid-column(8, $collapse: true);

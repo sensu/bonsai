@@ -5,7 +5,7 @@ class ExtensionUpload
   # This class provides access to extension archives. In particular, it supports
   # finding entries in the archive which have a path matching some regular
   # expression, and it can read the contents of files given their path. These
-  # are the two primary operations required by Supermarket to locate and
+  # are the two primary operations required by this application to locate and
   # process metadata and README files.
   #
   class Archive

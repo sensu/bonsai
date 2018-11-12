@@ -5,7 +5,7 @@ describe OrganizationAuthorizer do
 
   subject { described_class.new(user, record) }
 
-  context 'as a supermarket admin' do
+  context 'as an application admin' do
     let(:user) { create(:user, roles: 'admin') }
 
     it { should permit_authorization(:view_cclas) }

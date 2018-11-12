@@ -46,7 +46,6 @@ gem 'jbuilder', '~> 2.5'
 # gem 'bootsnap', '>= 1.1.0', require: false
 
 gem 'omniauth'
-gem 'omniauth-chef-oauth2'
 gem 'omniauth-github'
 gem 'mixlib-authentication'
 gem 'pundit'
@@ -60,7 +59,6 @@ gem 'aws-sdk-s3', '~> 1'
 gem 'premailer-rails'
 gem 'virtus'
 gem 'validate_url'
-gem 'chef', :require => false
 gem 'semverse'
 gem 'sitemap_generator'
 gem 'yajl-ruby', require: 'yajl'

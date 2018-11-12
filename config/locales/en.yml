@@ -13,7 +13,7 @@ en:
     enabled: "%{name} is now enabled."
     user_is_disabled: "You cannot log in because your account has been disabled by an administrator."
   account:
-    already_connected: "The %{provider} account (%{username}) you are trying to link is already linked to another Supermarket user."
+    already_connected: "The %{provider} account (%{username}) you are trying to link is already linked to another Bonsai user."
     disconnected: "Account disconnected."
   ccla:
     successful_signature: "You successfully signed the CCLA."
@@ -89,10 +89,10 @@ en:
       evaluate: "Curry is now evaluating all open Pull Requests on %{name}."
       subscribe:
         failure: "That repository does not exist on GitHub."
-        success: "Supermarket is now monitoring this repository."
+        success: "Bonsai is now monitoring this repository."
       unsubscribe:
-        failure: "There was an issue unsubscribing Supermarket from the repo."
-        success: "Supermarket is no longer monitoring this repo."
+        failure: "There was an issue unsubscribing Bonsai from the repo."
+        success: "Bonsai is no longer monitoring this repo."
   api:
     error_codes:
       not_found: "NOT_FOUND"
@@ -119,10 +119,10 @@ en:
       version_not_unique: "%{name} (%{version}) already exists. An extension's version number must be unique."
       invalid_username: "Could not find user '%{username}'."
       authentication_request_error: "Authentication failed due to an invalid signed request."
-      authentication_key_error: "Authentication failed due to an invalid public/private key pair. If you have changed your keys recently try logging out and logging back in to Supermarket."
+      authentication_key_error: "Authentication failed due to an invalid public/private key pair. If you have changed your keys recently try logging out and logging back in to Bonsai."
       unauthorized_upload_error: "You are not authorized to upload this extension."
       unauthorized_post_error: "You are not authorized to POST to this end-point"
-      missing_public_key_error: "Before you can perform knife activities that require authentication, you must log into %{current_host} and grant it permission to access your Chef account information."
+      missing_public_key_error: "Before you can perform knife activities that require authentication, you must log into %{current_host} and grant it permission to access your Bonsai account information."
       negative_parameter: "Start and item parameters must be positive numbers but they are start: %{start} and items: %{items}."
       missing_extension_name: "Evaluation POST must contain extension_name."
       missing_extension_version: "Evaluation POST must contain extension_version."

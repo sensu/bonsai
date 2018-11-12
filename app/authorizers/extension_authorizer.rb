@@ -14,7 +14,7 @@ class ExtensionAuthorizer < Authorizer::Base
   end
 
   #
-  # Owners of an extension and Supermarket admins can manage an extension.
+  # Owners of an extension and application admins can manage an extension.
   #
   def manage?
     owner_or_admin?
@@ -30,7 +30,7 @@ class ExtensionAuthorizer < Authorizer::Base
   end
 
   #
-  # Owners and collaborators of an extension and Supermarket admins can manage
+  # Owners and collaborators of an extension and application admins can manage
   # the extension's urls.
   #
   # @return [Boolean]
@@ -49,7 +49,7 @@ class ExtensionAuthorizer < Authorizer::Base
   end
 
   #
-  # Owners of an extension and Supermarket admins can deprecate an extension if
+  # Owners of an extension and application admins can deprecate an extension if
   # that extension is not already deprecated.
   #
   # @return [Boolean]
@@ -59,7 +59,7 @@ class ExtensionAuthorizer < Authorizer::Base
   end
 
   #
-  # Owners of an extension and Supermarket admins can undeprecate an extension if
+  # Owners of an extension and application admins can undeprecate an extension if
   # that extension is deprecated.
   #
   # @return [Boolean]
@@ -69,7 +69,7 @@ class ExtensionAuthorizer < Authorizer::Base
   end
 
   #
-  # Owners of an extension and Supermarket admins can put an extension up for
+  # Owners of an extension and application admins can put an extension up for
   # adoption.
   #
   # @return [Boolean]

@@ -1,31 +1,31 @@
 class OrganizationAuthorizer < Authorizer::Base
   #
-  # A user who is a Supermarket admin or is a member of an organization can view a +CclaSignature+
+  # A user who is an application admin or is a member of an organization can view a +CclaSignature+
   #
   def view_cclas?
     user.is?(:admin) || user.organizations.include?(record)
   end
 
   #
-  # An admin of an organization or Supermarket can resign a CCLA.
+  # An admin of an organization the application can resign a CCLA.
   #
   # @return [Boolean]
   #
   def resign_ccla?
-    organization_or_supermarket_admin?
+    organization_or_application_admin?
   end
 
   #
-  # An admin of an organization or Supermarket can manage its invitations.
+  # An admin of an organization the application can manage its invitations.
   #
   # @return [Boolean]
   #
   def manage_contributors?
-    organization_or_supermarket_admin?
+    organization_or_application_admin?
   end
 
   #
-  # Supermarket admins can manage organizations
+  # application admins can manage organizations
   #
   # @return [Boolean]
   #
@@ -34,7 +34,7 @@ class OrganizationAuthorizer < Authorizer::Base
   end
 
   #
-  # Supermarket admins can see the page to manage organizations
+  # application admins can see the page to manage organizations
   #
   # @return [Boolean]
   #
@@ -43,7 +43,7 @@ class OrganizationAuthorizer < Authorizer::Base
   end
 
   #
-  # Supermarket admins can delete organizations
+  # application admins can delete organizations
   #
   # @return [Boolean]
   #
@@ -52,7 +52,7 @@ class OrganizationAuthorizer < Authorizer::Base
   end
 
   #
-  # Supermarket admins can combine organizations
+  # application admins can combine organizations
   #
   # @return [Boolean]
   #
@@ -71,16 +71,16 @@ class OrganizationAuthorizer < Authorizer::Base
   end
 
   #
-  # A user who is an organization admin or a Supermarket admin can
+  # A user who is an organization admin or an application admin can
   # manage the requests to join
   #
   def manage_requests_to_join?
-    organization_or_supermarket_admin?
+    organization_or_application_admin?
   end
 
   private
 
-  def organization_or_supermarket_admin?
+  def organization_or_application_admin?
     user.is?(:admin) || user.admin_of_organization?(record)
   end
 end
