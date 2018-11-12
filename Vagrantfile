@@ -13,7 +13,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.network :private_network, ip: '172.0.1.50'
   config.vm.network :forwarded_port, guest: 3000, host: VM_PORT
-  config.vm.synced_folder './', '/supermarket', nfs: VM_NFS
+  config.vm.synced_folder './', '/bonsai', nfs: VM_NFS
   config.vm.synced_folder './', '/vagrant', disabled: true
 
   config.vm.provider :virtualbox do |vb, override|
@@ -41,10 +41,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         user: 'vagrant',
         database: 'supermarket_development',
         auth_method: 'trust'
-      },
-      supermarket: {
-        host: 'localhost',
-        port: VM_PORT
       }
     }
 
