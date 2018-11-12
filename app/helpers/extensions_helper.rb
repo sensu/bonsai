@@ -81,7 +81,7 @@ module ExtensionsHelper
       class: 'extension_follow_count'
     )
     follow_html = fa_icon + 'Star' + followers_count_span
-    unfollow_html = fa_icon + 'Unstar' + followers_count_span
+    unfollow_html = fa_icon + 'Starred' + followers_count_span
 
     unless current_user
       return link_to(
