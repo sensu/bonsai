@@ -342,4 +342,8 @@
 
 .tier {
   margin-left: rem-calc(12);
+
+  &.supported {
+    color: #208020;
+  }
 }
