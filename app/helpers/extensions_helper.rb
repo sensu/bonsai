@@ -149,7 +149,7 @@ module ExtensionsHelper
   #
   def link_to_sorted_extensions(linked_text, ordering)
     if params[:order] == ordering
-      link_to linked_text, params.except(:order), class: 'button radius secondary active'
+      link_to linked_text, params.to_unsafe_h.except(:order), class: 'button radius secondary active'
     else
       link_to linked_text, params.to_unsafe_h.merge(order: ordering), class: 'button radius secondary'
     end
