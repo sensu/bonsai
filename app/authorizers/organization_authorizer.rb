@@ -12,7 +12,7 @@ class OrganizationAuthorizer < Authorizer::Base
   # @return [Boolean]
   #
   def resign_ccla?
-    organization_or_supermarket_admin?
+    organization_or_application_admin?
   end
 
   #
@@ -21,7 +21,7 @@ class OrganizationAuthorizer < Authorizer::Base
   # @return [Boolean]
   #
   def manage_contributors?
-    organization_or_supermarket_admin?
+    organization_or_application_admin?
   end
 
   #
@@ -75,12 +75,12 @@ class OrganizationAuthorizer < Authorizer::Base
   # manage the requests to join
   #
   def manage_requests_to_join?
-    organization_or_supermarket_admin?
+    organization_or_application_admin?
   end
 
   private
 
-  def organization_or_supermarket_admin?
+  def organization_or_application_admin?
     user.is?(:admin) || user.admin_of_organization?(record)
   end
 end
