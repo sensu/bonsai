@@ -19,6 +19,8 @@ Bundler.require(*Rails.groups)
 
 module BonsaiAssetIndex
   class Application < Rails::Application
+    config.app_name = "Bonsai Asset Index"
+
     # Use the responders controller from the responders gem
     config.app_generators.scaffold_controller :responders_controller
 
