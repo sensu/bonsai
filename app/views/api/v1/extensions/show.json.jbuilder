@@ -1,1 +1,1 @@
-json.partial! @extension
+json.partial! 'extension', extension: @extension
