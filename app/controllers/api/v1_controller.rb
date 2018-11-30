@@ -44,6 +44,15 @@ class Api::V1Controller < ApplicationController
   # This creates instance variables for +start+ and +items+, which are shared
   # between the index and search methods. Also +order+ which is for ordering.
   #
+  # Pass in the start and items params to specify the index at which to start
+  # and how many to return. You can pass in an order param to specify how
+  # you'd like the the collection ordered. Possible values are
+  # recently_updated, recently_added, most_downloaded, most_followed.
+  #
+  # @example
+  #   GET /api/v1/extensions?start=5&items=15
+  #   GET /api/v1/extensions?order=recently_updated
+  #
   def init_params
     @start = params.fetch(:start, 0).to_i
     @items = [params.fetch(:items, 10).to_i, 100].min
@@ -56,6 +65,10 @@ class Api::V1Controller < ApplicationController
                            items: params.fetch(:items, 'not provided'))]
       )
     end
+    @next_page_params = {
+      start: @start.to_i + @items.to_i,
+      items: params[:items].presence && @items.to_i
+    }
 
     @order = params.fetch(:order, 'name ASC').to_s
   end

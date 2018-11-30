@@ -19,6 +19,9 @@ class ExtensionVersion < ApplicationRecord
   # Delegations
   # --------------------
   delegate :name, :owner, to: :extension
+  delegate :name,         to: :extension, allow_nil: true, prefix: true
+  delegate :namespace,    to: :extension, allow_nil: true, prefix: true
+  delegate :owner_name,   to: :extension, allow_nil: true
   delegate :github_repo,  to: :extension
 
   #
@@ -59,6 +62,14 @@ class ExtensionVersion < ApplicationRecord
 
   def metadata
     (source_file.attached? ? source_file.metadata : nil).to_h
+  end
+
+  def github_assets
+    Array.wrap(config['builds'])
+      .map { |h|
+        attributes = h.merge(version: self)
+        GithubAsset.new(attributes)
+      }
   end
 
   private
