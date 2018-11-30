@@ -66,7 +66,10 @@ $(function(){
 
     engine.initialize();
 
-    el.tokenfield({ typeahead: [null, { source: engine.ttAdapter() }] });
+    el.tokenfield({
+      createTokensOnBlur: true,
+      typeahead:          [null, {source: engine.ttAdapter()}]
+    });
   });
 
   jQuery(".autofill").each(function(i, e) {
