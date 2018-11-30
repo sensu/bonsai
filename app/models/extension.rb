@@ -1,6 +1,11 @@
 class Extension < ApplicationRecord
   include PgSearch
 
+  CONFIG_FILE_NAMES = %w[
+      bonsai.yml
+      bonsai.yaml
+    ]
+
   # Associations
   # --------------------
   belongs_to :category, required: false
