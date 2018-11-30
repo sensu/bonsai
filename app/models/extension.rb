@@ -469,6 +469,10 @@ class Extension < ApplicationRecord
     raw_tier || Tier.default
   end
 
+  def namespace
+    owner_name
+  end
+
   private
 
   #
