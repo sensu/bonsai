@@ -8,7 +8,6 @@ Rails.application.routes.draw do
       get 'metrics' => 'metrics#show'
       get 'health' => 'health#show'
       get 'extensions' => 'extensions#index'
-      get 'search' => 'extensions#search'
       get 'extensions/:username/:id' => 'extensions#show', as: :extension
       get 'extensions/:username/:extension/versions/:version' => 'extension_versions#show', as: :extension_version, constraints: { version: VERSION_PATTERN }
       get 'extensions/:username/:extension/versions/:version/download' => 'extension_versions#download', as: :extension_version_download, constraints: { version: VERSION_PATTERN }
