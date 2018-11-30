@@ -64,6 +64,14 @@ class ExtensionVersion < ApplicationRecord
     (source_file.attached? ? source_file.metadata : nil).to_h
   end
 
+  def github_assets
+    Array.wrap(config['builds'])
+      .map { |h|
+        attributes = h.merge(version: self)
+        GithubAsset.new(attributes)
+      }
+  end
+
   private
 
   #
