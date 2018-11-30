@@ -1,6 +1,5 @@
 class Api::V1::ExtensionsController < Api::V1Controller
   before_action :init_params, only: [:index, :search]
-  before_action :assign_extension, only: [:foodcritic, :contingent]
 
   def index
     scope = Extension.all
@@ -43,11 +42,5 @@ class Api::V1::ExtensionsController < Api::V1Controller
     ).offset(@start).limit(@items)
 
     @total = @results.count(:all)
-  end
-
-  private
-
-  def assign_extension
-    @extension = Extension.with_owner_and_lowercase_name(owner_name: params[:username], lowercase_name: params[:extension])
   end
 end
