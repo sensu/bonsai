@@ -123,4 +123,23 @@
       </li>
     <% end %>
   <% end %>
+
+  <% if policy(version).show_config? %>
+    <li>
+      <%= link_to '#', class: 'config', rel: 'config', 'data-reveal-id' => 'config' do %>
+        <i class="fa fa-file-code-o"></i>
+        Show configuration
+      <% end %>
+    </li>
+
+    <div id="config" class="reveal-modal" data-reveal>
+      <h1>Bonsai Configuration</h1>
+
+      <p>The following data came from processing the Bonsai YAML configuration file in this version's source code.</p>
+
+      <a class="close-reveal-modal">&#215;</a>
+
+      <pre><%= version.config.to_yaml %></pre>
+    </div>
+  <% end %>
 </ul>
