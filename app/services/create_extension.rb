@@ -79,7 +79,11 @@ class CreateExtension
   def validate(extension, github, user)
     return false if !extension.valid?
 
-    (extension.hosted? && extension.tmp_source_file.attached?) || repo_valid?(extension, github, user)
+    if extension.hosted?
+      extension.tmp_source_file.attached?
+    else
+      repo_valid?(extension, github, user)
+    end
   end
 
   def repo_valid?(extension, github, user)
