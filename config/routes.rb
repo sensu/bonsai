@@ -3,6 +3,8 @@ Rails.application.routes.draw do
 
   VERSION_PATTERN = /master|latest|v?([0-9_\-\.]+)/ unless defined?(VERSION_PATTERN)
 
+  apipie
+
   namespace :api, defaults: { format: :json }  do
     namespace :v1 do
       get 'metrics' => 'metrics#show'
