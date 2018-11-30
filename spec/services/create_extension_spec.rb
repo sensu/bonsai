@@ -25,11 +25,13 @@ describe CreateExtension do
   } }
   let(:expected_unnormalized_attributes) { Extension.new(params.merge(owner: user)).attributes }
   let(:expected_normalized_attributes)   { Extension.new(params.merge(owner: user)).attributes.merge(normalized_attributes) }
+  let(:top_level_contents)               { [{name: 'bonsai.yml'}] }
 
   before do
     allow(user).to receive(:octokit) { github }
     allow(github).to receive(:collaborator?).with("cvincent/test", "some_user") { true }
     allow(github).to receive(:repo).with("cvincent/test") { {} }
+    allow(github).to receive(:contents).with("cvincent/test") { top_level_contents }
     allow(CollectExtensionMetadataWorker).to receive(:perform_async)
     allow(SetupExtensionWebHooksWorker).to receive(:perform_async)
     allow(NotifyModeratorsOfNewExtensionWorker).to receive(:perform_async)
@@ -88,6 +90,16 @@ describe CreateExtension do
       result = subject.process!
       expect(result.attributes).to eq(expected_normalized_attributes)
       expect(result.errors[:github_url]).to include(I18n.t("extension.github_url_format_error"))
+    end
+
+    context "no config file" do
+      let(:top_level_contents) { [] }
+
+      it "does not save and adds an error if the repo has no configuration file" do
+        expect_any_instance_of(Extension).not_to receive(:save)
+        result = subject.process!
+        expect(result.errors[:github_url]).to include("must have a top-level bonsai.yml or bonsai.yaml file.")
+      end
     end
   end
 
