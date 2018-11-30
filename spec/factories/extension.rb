@@ -4,6 +4,7 @@ FactoryBot.define do
     association :owner, factory: :user
     sequence(:name) { |n| "redis-#{n}" }
     sequence(:owner_name) { |n| "owner#{n}" }
+    description { 'Wow, what a description!' }
     source_url { 'http://example.com' }
     issues_url { 'http://example.com/issues' }
     deprecated { false }
