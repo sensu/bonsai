@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_30_145316) do
+ActiveRecord::Schema.define(version: 2018_11_13_200329) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -294,6 +294,8 @@ ActiveRecord::Schema.define(version: 2018_10_30_145316) do
     t.string "last_commit_url"
     t.integer "commit_count", default: 0, null: false
     t.text "release_notes"
+    t.jsonb "config", default: {}
+    t.index ["config"], name: "index_extension_versions_on_config", using: :gin
     t.index ["legacy_id"], name: "index_extension_versions_on_legacy_id", unique: true
     t.index ["version", "extension_id"], name: "index_extension_versions_on_version_and_extension_id", unique: true
     t.index ["version"], name: "index_extension_versions_on_version"

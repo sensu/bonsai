@@ -68,6 +68,8 @@ gem 'html_truncator'
 gem 'ranked-model'                      # for managing extension tiers
 gem 'rollout'
 gem 'rubyzip'
+gem 'interactor'                        # better wrangling of service objects
+gem 'faraday_middleware'                # for following redirects
 
 gem 'kaminari'
 

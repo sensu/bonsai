@@ -37,6 +37,7 @@ en:
     activity: "%{maintainer} released v%{version} of the %{extension} extension."
     updated: "The %{name} extension has been successfully updated."
     github_url_format_error: "must be a valid repo on which you are a collaborator."
+    missing_config_file: "must have a top-level %{allowed_config_file_names} file."
     created: "Your extension was added successfully!"
   contributor:
     removed: "Contributor removed."

@@ -79,17 +79,50 @@ class CreateExtension
   def validate(extension, github, user)
     return false if !extension.valid?
 
-    (extension.hosted? && extension.tmp_source_file.attached?) || repo_valid?(extension, github, user)
+    if extension.hosted?
+      extension.tmp_source_file.attached?
+    else
+      repo_valid?(extension, github, user)
+    end
   end
 
   def repo_valid?(extension, github, user)
+    validatate_repo_collaborator(extension, github, user) &&
+      validate_config_file(extension, github)
+  end
+
+  def validatate_repo_collaborator(extension, github, user)
     begin
       result = github.collaborator?(extension.github_repo, user.github_account.username)
     rescue ArgumentError, Octokit::Unauthorized, Octokit::Forbidden
       result = false
     end
 
-    if !result then extension.errors.add(:github_url, I18n.t("extension.github_url_format_error")) end
+    if !result
+      extension.errors.add(:github_url, I18n.t("extension.github_url_format_error"))
+    end
+
+    result
+  end
+
+  def validate_config_file(extension, github)
+    config_file_names = Extension::CONFIG_FILE_NAMES
+
+    begin
+      repo_top_level_file_names   = github.contents(extension.github_repo).map { |h| h[:name] }
+      top_level_config_file_names = repo_top_level_file_names & config_file_names
+      result                      = top_level_config_file_names.any?
+    rescue ArgumentError, Octokit::Unauthorized, Octokit::Forbidden
+      result = false
+    end
+
+    if !result
+      allowed_config_file_names_str = config_file_names.to_sentence(last_word_connector: ', or ',
+                                                                    two_words_connector: ' or ')
+      extension.errors.add(:github_url,
+                           I18n.t("extension.missing_config_file",
+                                  allowed_config_file_names: allowed_config_file_names_str))
+    end
 
     result
   end
