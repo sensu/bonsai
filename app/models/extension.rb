@@ -74,6 +74,10 @@ class Extension < ApplicationRecord
     joins(owner: :github_account).where('accounts.username = ?', username)
   }
 
+  scope :in_namespace, lambda { |namespace|
+    where(owner_name: namespace)
+  }
+
   scope :supported_platforms, lambda { |sp_ids|
     joins(:all_supported_platforms).where('supported_platforms.id IN (?)', sp_ids)
   }
