@@ -16,6 +16,22 @@ describe Extension do
     end
   end
 
+  describe ".in_namespace" do
+    let(:owner_name) { "me"}
+
+    it 'includes extensions having the given owner_name' do
+      expect {
+        create :extension, owner_name: owner_name
+      }.to change{Extension.in_namespace(owner_name).count}.by(1)
+    end
+
+    it 'excludes extensions not having the given owner_name' do
+      expect {
+        create :extension
+      }.not_to change{Extension.in_namespace(owner_name).count}
+    end
+  end
+
   describe '#hosted?' do
     it {expect(create(:extension, :hosted).hosted?).to be_truthy}
     it {expect(create(:extension         ).hosted?).to be_falsey}
