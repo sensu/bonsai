@@ -9,4 +9,8 @@ class GithubAsset < OpenStruct
   def version_name
     version&.version
   end
+
+  def viable?
+    asset_url.present?
+  end
 end
