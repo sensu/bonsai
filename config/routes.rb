@@ -14,6 +14,7 @@ Rails.application.routes.draw do
       get 'extensions/:username/:extension/versions/:version/download' => 'extension_versions#download', as: :extension_version_download, constraints: { version: VERSION_PATTERN }
       delete 'extensions/:username/:extension/versions/:version' => 'extension_uploads#destroy_version', constraints: { version: VERSION_PATTERN }
       get 'users/:user' => 'users#show', as: :user
+      get 'extensions/:username/:id/:version/:platform/:arch/asset' => 'github_assets#show', as: :github_asset, constraints: {version: VERSION_PATTERN}
 
       resources :tags, only: [:index]
     end
