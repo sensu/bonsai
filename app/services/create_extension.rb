@@ -87,13 +87,19 @@ class CreateExtension
   end
 
   def repo_valid?(extension, github, user)
+    validatate_repo_collaborator(extension, github, user)
+  end
+
+  def validatate_repo_collaborator(extension, github, user)
     begin
       result = github.collaborator?(extension.github_repo, user.github_account.username)
     rescue ArgumentError, Octokit::Unauthorized, Octokit::Forbidden
       result = false
     end
 
-    if !result then extension.errors.add(:github_url, I18n.t("extension.github_url_format_error")) end
+    if !result
+      extension.errors.add(:github_url, I18n.t("extension.github_url_format_error"))
+    end
 
     result
   end
