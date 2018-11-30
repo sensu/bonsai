@@ -5,7 +5,10 @@ atom_feed language: 'en-US' do |feed|
   @extensions.each do |extension|
     feed.entry extension, url: owner_scoped_extension_url(extension) do |entry|
       entry.title extension.name
-      entry.content extension_atom_content(extension.latest_extension_version), type: 'html'
+      extension_version = extension.latest_extension_version
+      if extension_version
+        entry.content extension_atom_content(extension_version), type: 'html'
+      end
 
       entry.author do |author|
         author.name extension.maintainer
