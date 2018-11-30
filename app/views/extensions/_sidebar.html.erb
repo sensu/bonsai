@@ -142,5 +142,21 @@
     <% end %>
   </div>
 
+  <%- github_release_assets = gather_viable_release_assets(version) %>
+  <%- if github_release_assets.any? %>
+    <div class="github-release-assets">
+      <h4>
+        <i class="fa fa-folder-open-o"></i> GitHub Release Assets
+      </h4>
+
+      <dl>
+        <% github_release_assets.each do |github_asset| %>
+          <dt><%= link_to github_asset.asset_url %></dt>
+          <dd>SHA: <%= github_asset.asset_sha %></dd>
+        <% end %>
+      </dl>
+    </div>
+  <% end %>
+
   <div style="margin-top: 2rem;"><%= link_to "Flag Extension", "#", data: { :"reveal-id" => "report-extension" } %></div>
 </div>
