@@ -77,4 +77,10 @@ module ExtensionVersionsHelper
       "https://github.com/#{extension_version.github_repo}/archive/#{extension_version.version}.zip"
     end
   end
+
+  def gather_viable_release_assets(extension_version)
+    extension_version.github_assets
+      .find_all(&:viable?)
+      .sort_by(&:asset_url)
+  end
 end
