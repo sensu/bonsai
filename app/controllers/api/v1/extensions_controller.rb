@@ -1,6 +1,6 @@
 class Api::V1::ExtensionsController < Api::V1Controller
   before_action :init_params, only: [:index, :search]
-  before_action :assign_extension, only: [:show, :foodcritic, :contingent]
+  before_action :assign_extension, only: [:foodcritic, :contingent]
 
   #
   # GET /api/v1/extensions
@@ -30,21 +30,8 @@ class Api::V1::ExtensionsController < Api::V1Controller
     end
   end
 
-  #
-  # GET /api/v1/extensions/:extension
-  #
-  # Return the specified extension. If it does not exist, return a 404.
-  #
-  # @example
-  #   GET /api/v1/extensions/redis
-  #
   def show
-    @extension_versions_urls = @extension.sorted_extension_versions.map do |version|
-      api_v1_extension_version_url(
-        @extension,
-        version,
-        username: @extension.owner_name)
-    end
+    @extension = Extension.with_owner_and_lowercase_name(owner_name: params[:username], lowercase_name: params[:id])
   end
 
   #
