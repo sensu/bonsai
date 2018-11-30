@@ -2,31 +2,22 @@ class Api::V1::ExtensionsController < Api::V1Controller
   before_action :init_params, only: [:index, :search]
   before_action :assign_extension, only: [:foodcritic, :contingent]
 
-  #
-  # GET /api/v1/extensions
-  #
-  # Return all Extensions. Defaults to 10 at a time, starting at the first
-  # Extension when sorted alphabetically. The max number of Extensions that can be
-  # returned is 100.
-  #
-  # Pass in the start and items params to specify the index at which to start
-  # and how many to return. You can pass in an order param to specify how
-  # you'd like the the collection ordered. Possible values are
-  # recently_updated, recently_added, most_downloaded, most_followed. Finally,
-  # you can pass in a user param to only show extensions that are owned by
-  # a specific username.
-  #
-  # @example
-  #   GET /api/v1/extensions?start=5&items=15
-  #   GET /api/v1/extensions?order=recently_updated
-  #   GET /api/v1/extensions?user=timmy
-  #
   def index
-    @total = Extension.count
-    @extensions = Extension.index(order: @order, limit: @items, start: @start)
+    scope = Extension.all
 
-    if params[:user]
-      @extensions = @extensions.owned_by(params[:user])
+    if params[:namespace]
+      scope = scope.in_namespace(params[:namespace])
+    end
+
+    if params[:name]
+      scope = scope.with_name(params[:name])
+    end
+
+    @total      = scope.count
+    @extensions = scope.as_index(order: @order, limit: @items, start: @start)
+
+    if @total <= @next_page_params[:start]
+      @next_page_params = nil
     end
   end
 
