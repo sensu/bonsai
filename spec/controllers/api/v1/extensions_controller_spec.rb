@@ -19,6 +19,24 @@ describe Api::V1::ExtensionsController do
   let(:version)    { create :extension_version, config: config }
   let!(:extension) { version.extension }
 
+  describe 'GET #index' do
+    subject do
+      get :index,
+          format: :json
+    end
+
+    it 'succeeds' do
+      subject
+      expect(response).to be_successful
+    end
+
+    it 'returns the proper data' do
+      subject
+      data = JSON.parse(response.body)
+      expect(data["total"]).to be >= 1
+    end
+  end
+
   describe 'GET #show' do
     subject do
       get :show,
