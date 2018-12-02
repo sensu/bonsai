@@ -18,7 +18,7 @@ describe 'api/v1/github_assets/show' do
   end
 
   it "serializes the extension name" do
-    expect(json_body['spec']['name']).to eql(version.extension.name)
+    expect(json_body['metadata']['name']).to eql(version.extension.name)
   end
 
   it "serializes the url" do
@@ -30,6 +30,6 @@ describe 'api/v1/github_assets/show' do
   end
 
   it "serializes the namespace" do
-    expect(json_body['spec']['namespace']).to eql(version.extension.owner_name)
+    expect(json_body['metadata']['namespace']).to eql(version.extension.owner_name)
   end
 end
