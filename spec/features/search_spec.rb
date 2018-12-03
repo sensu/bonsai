@@ -6,8 +6,6 @@ feature 'tools and extensions can be searched for' do
 
   it 'returns results for extensions' do
     within '.search_bar' do
-     follow_relation 'toggle-search-types'
-     follow_relation 'toggle-extension-search'
      fill_in 'q', with: 'apache'
      submit_form
     end

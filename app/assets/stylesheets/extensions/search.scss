@@ -88,7 +88,7 @@
 
 
 .search_field {
-  @include grid-column($columns: 8, $collapse: true);
+  @include grid-column($columns: 10, $collapse: true);
   position: relative;
 
   .fa {
@@ -106,13 +106,13 @@
 
 @media #{$small-only} {
   .search_field {
-    @include grid-column($columns: 7, $collapse: true);
+    @include grid-column($columns: 9, $collapse: true);
   }
 }
 
 @media #{$mobile-only} {
   .search_field {
-    @include grid-column($columns: 7, $collapse: true);
+    @include grid-column($columns: 9, $collapse: true);
 
     .tt-input::-webkit-input-placeholder {
       color: white !important;
