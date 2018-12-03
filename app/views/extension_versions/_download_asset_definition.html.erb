@@ -1,0 +1,47 @@
+<% platforms, archs = determine_viable_platforms_and_archs(version, platform, arch) %>
+
+<div class="row collapse">
+  <div class="small-5 columns">
+    <%= select_tag 'platform',
+                   options_for_select(platforms, platform),
+                   prompt: 'select a platform',
+                   data: {remote: true,
+                          url: extension_version_download_asset_definition_path(extension, version, username: extension.owner_name),
+                          params: {arch: arch}.to_param}
+    %>
+  </div>
+  <div class="small-5 small-offset-1 columns">
+    <%= select_tag 'arch',
+                   options_for_select(archs, arch),
+                   prompt: 'select an arch',
+                   data: {remote: true,
+                          url: extension_version_download_asset_definition_path(extension, version, username: extension.owner_name),
+                          params: {platform: platform}.to_param}
+    %>
+  </div>
+</div>
+
+<% if platform && arch %>
+  <%= link_to "Download Asset Definition",
+              github_asset_download_path(
+                  extension,
+                  version,
+                  username: extension.owner_name,
+                  platform: platform,
+                  arch:     arch),
+              class: 'button primary radius button_download_extension' %>
+<% else %>
+  <% to_select = case
+                 when platform
+                   "an arch"
+                 when arch
+                   "a platform"
+                 else
+                   "a platform and an arch"
+                 end
+  %>
+  <%= link_to "Download Asset Definition",
+              "#",
+              onclick: "alert(\"Please select #{to_select}\")",
+              class:   'button primary radius button_download_extension' %>
+<% end %>
