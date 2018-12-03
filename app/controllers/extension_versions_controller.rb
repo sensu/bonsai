@@ -76,6 +76,13 @@ class ExtensionVersionsController < ApplicationController
     redirect_to({ action: :show }.merge(params.slice(:username, :extension_id, :version)))
   end
 
+  def download_asset_definition
+    @extension = Extension.with_owner_and_lowercase_name(owner_name: params[:username], lowercase_name: params[:extension_id])
+    @version   = @extension.get_version!(params[:version])
+    @platform  = params[:platform].presence
+    @arch      = params[:arch].presence
+  end
+
   private
 
   def extension_version_params
