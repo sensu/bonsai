@@ -3,8 +3,14 @@ require 'spec_helper'
 describe ExtensionVersionsController do
   include ExtensionVersionsHelper
 
-  let(:extension_version) { create :extension_version }
-  let(:extension)         { extension_version.extension }
+  let!(:extension_version) { create :extension_version }
+  let(:extension)          { extension_version.extension }
+
+  let(:params) { {
+    extension_id: extension.lowercase_name,
+    username:     extension.owner_name,
+    version:      extension_version.version,
+  } }
 
   before do
     sign_in create(:admin)
@@ -12,7 +18,7 @@ describe ExtensionVersionsController do
 
   describe "download" do
     it 'succeeds' do
-      get :download, params: {username: extension.owner_name, extension_id: extension.lowercase_name, version: extension_version.version}
+      get :download, params: params
 
       expect(response).to redirect_to download_url_for(extension_version)
     end
@@ -20,7 +26,7 @@ describe ExtensionVersionsController do
 
   describe "new" do
     it "returns a success response" do
-      get :new, params: {extension_id: extension.lowercase_name, username: extension.owner_name}
+      get :new, params: params
       expect(response).to be_successful
     end
   end
@@ -66,15 +72,6 @@ describe ExtensionVersionsController do
 
 
   describe "destroy" do
-    let!(:extension_version) { create :extension_version }
-    let(:extension)          { extension_version.extension }
-
-    let(:params) { {
-      extension_id: extension.lowercase_name,
-      username:     extension.owner_name,
-      version:      extension_version.version,
-    } }
-
     it "destroys the requested extension version" do
       expect {
         delete :destroy, params: params
@@ -84,6 +81,21 @@ describe ExtensionVersionsController do
     it "redirects to the extension page" do
       delete :destroy, params: params
       expect(response).to redirect_to [extension, username: extension.owner_name]
+    end
+  end
+
+  describe "download_asset_definition" do
+    render_views
+
+    it "returns a JS result" do
+      get :download_asset_definition, params: params, xhr: true
+      expect(response).to be_successful
+      expect(response.content_type).to match /javascript/
+    end
+
+    it "returns HTML content" do
+      get :download_asset_definition, params: params, xhr: true
+      expect(response.body).to match /<div/
     end
   end
 end

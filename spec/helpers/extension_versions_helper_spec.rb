@@ -1,7 +1,8 @@
 require 'spec_helper'
 
 describe ExtensionVersionsHelper do
-  let(:extension_version) { build_stubbed :extension_version }
+  let(:config)            { {} }
+  let(:extension_version) { build_stubbed :extension_version, config: config }
 
   describe "download_url_for" do
     it 'returns a GitHub URL' do
@@ -30,6 +31,50 @@ describe ExtensionVersionsHelper do
         result.each do |obj|
           expect(obj).to be_a(GithubAsset)
         end
+      end
+    end
+  end
+
+  describe "determine_viable_platforms_and_archs" do
+    let(:platform) { nil }
+    let(:arch)     { nil }
+    subject        { helper.determine_viable_platforms_and_archs(extension_version, platform, arch) }
+
+    context "version has no config" do
+      before do
+        expect(extension_version.config).to be_blank
+      end
+
+      it "returns empty collections" do
+        expect(subject).to eq [[], []]
+      end
+    end
+
+    context "version has a config" do
+      let(:config)       { {"builds"=>
+                              [{"arch"=>"x86_64",
+                                "filter"=>
+                                  ["System.OS == linux",
+                                   "(System.Arch == x86_64) || (System.Arch == amd64)"],
+                                "platform"=>"linux",
+                                "asset_url"=>"http://asset.url/",
+                                "sha_filename"=>"test_asset-\#{version}-linux-x86_64.sha512.txt",
+                                "asset_filename"=>"test_asset-\#{version}-linux-x86_64.tar.gz"},
+                               {"arch"=>"x86_64",
+                                "filter"=>
+                                  ["System.OS == linux",
+                                   "(System.Arch == x86_64) || (System.Arch == amd64)"],
+                                "platform"=>"OSX",
+                                "asset_url"=>"http://asset.url/",
+                                "sha_filename"=>"test_asset-\#{version}-OSX-x86_64.sha512.txt",
+                                "asset_filename"=>"test_asset-\#{version}-OSX-x86_64.tar.gz"},]} }
+
+      before do
+        expect(extension_version.config).to be_present
+      end
+
+      it "returns non-empty collections" do
+        expect(subject).to eq [["linux", "OSX"], ["x86_64"]]
       end
     end
   end
