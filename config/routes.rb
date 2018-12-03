@@ -75,6 +75,8 @@ Rails.application.routes.draw do
   delete '/extensions/:username/:extension_id/versions/:version' => 'extension_versions#destroy', as: :delete_extension_version, constraints: { version: VERSION_PATTERN }
   put "/extensions/:username/:extension_id/versions/:version/update_platforms" => "extension_versions#update_platforms", as: :extension_update_platforms, constraints: { version: VERSION_PATTERN }
 
+  get '/github_assets/:username/:extension_id/:version/:platform/:arch/download' => 'github_assets#download', as: :github_asset_download, constraints: { version: VERSION_PATTERN }
+
   resources :collaborators, only: [:index, :new, :create, :destroy] do
     member do
       put :transfer
