@@ -2,8 +2,43 @@
   <i class="fa fa-download"></i> <span itemprop="interactionCount"><%= number_with_delimiter(version.try(:download_count) || 0) %></span> Downloads of Version <%= version.try(:version) %>
   <small><%= number_with_delimiter(extension.download_count) %> Total Downloads</small>
 </h4>
-<%= link_to "Download",
-            download_extension_path(
-                extension,
-                username: extension.owner_name),
-            class: 'button primary radius expand button_download_extension' %>
+
+<% if extension.hosted? || version.github_assets.none?(&:viable?)%>
+  <%= link_to "Download",
+              download_extension_path(
+                  extension,
+                  username: extension.owner_name),
+              class: 'button primary radius expand button_download_extension' %>
+<% else %>
+  <%= link_to "Download",
+              "#",
+              class: 'button primary radius expand button_download_extension',
+              rel: 'download_asset_or_definition',
+              'data-reveal-id': 'download_asset_or_definition' %>
+
+  <div id="download_asset_or_definition" class="reveal-modal small" data-reveal>
+    <h1>Download</h1>
+    <a class="close-reveal-modal close-reveal-modal-x">&#215;</a>
+
+    <h3 class="download-choice">Either download the source code:</h3>
+    <%= link_to "Download Source",
+                download_extension_path(
+                    extension,
+                    username: extension.owner_name),
+                class: 'button primary radius button_download_extension' %>
+
+    <h3 class="download-choice">Or download the asset definition:</h3>
+
+    <div id="download-asset-definition">
+      <%= render partial: 'extension_versions/download_asset_definition',
+                 locals: {extension: extension,
+                          version:   version,
+                          platform:  nil,
+                          arch:      nil} %>
+    </div>
+
+    <div style="margin-top: 24px;" class="text-center">
+      <a class="button secondary radius tiny close-reveal-modal">Cancel</a>
+    </div>
+  </div>
+<% end %>
