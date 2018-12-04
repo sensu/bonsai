@@ -142,4 +142,32 @@
       <pre><%= version.config.to_yaml %></pre>
     </div>
   <% end %>
+
+  <% if !extension.hosted? && policy(extension).sync_repo? %>
+    <li>
+      <%= link_to '#', class: 'recompile', rel: 'recompile', 'data-reveal-id' => 'recompile' do %>
+        <i class="fa fa-coffee"></i>
+        Recompile releases...
+      <% end %>
+    </li>
+
+    <div id="recompile" class="reveal-modal small" data-reveal>
+      <h1>Recompile Releases</h1>
+      <a class="close-reveal-modal">&#215;</a>
+
+      <p>
+        Recompiling will update the Bonsai Asset Index with the latest information
+        about GitHub releases and release assets for this extension.
+      </p>
+
+      <div style="margin-top: 24px;" class="text-center">
+        <%= link_to "Recompile",
+                    sync_repo_extension_path(extension, username: extension.owner_name),
+                    method: :put,
+                    class: "button primary radius tiny close-reveal-modal"
+        %>
+        <a class="button secondary radius tiny close-reveal-modal">Cancel</a>
+      </div>
+    </div>
+  <% end %>
 </ul>
