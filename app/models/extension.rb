@@ -4,6 +4,8 @@ class Extension < ApplicationRecord
   CONFIG_FILE_NAMES = %w[
       bonsai.yml
       bonsai.yaml
+      .bonsai.yml
+      .bonsai.yaml
     ]
 
   # Associations

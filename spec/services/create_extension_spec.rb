@@ -98,7 +98,7 @@ describe CreateExtension do
       it "does not save and adds an error if the repo has no configuration file" do
         expect_any_instance_of(Extension).not_to receive(:save)
         result = subject.process!
-        expect(result.errors[:github_url]).to include("must have a top-level bonsai.yml or bonsai.yaml file.")
+        expect(result.errors[:github_url]).to include("must have a top-level bonsai.yml, bonsai.yaml, .bonsai.yml, or .bonsai.yaml file.")
       end
     end
   end
