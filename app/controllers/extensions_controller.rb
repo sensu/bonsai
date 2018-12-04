@@ -327,6 +327,14 @@ class ExtensionsController < ApplicationController
     redirect_to owner_scoped_extension_url(@extension), notice: t("extension.reported", extension: @extension.name)
   end
 
+  def sync_repo
+    extension = Extension.with_owner_and_lowercase_name(owner_name: params[:username], lowercase_name: params[:id])
+    authorize! extension
+
+    SyncExtensionRepoWorker.perform_async(extension.id)
+    redirect_to owner_scoped_extension_url(@extension), notice: t("extension.syncing_in_progress")
+  end
+
   #
   # GET /extensions/:id/deprecate_search?q=QUERY
   #
