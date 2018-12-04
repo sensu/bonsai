@@ -56,6 +56,7 @@ Rails.application.routes.draw do
         put :disable
         put :enable
         put :report
+        put :sync_repo
       end
     end
 

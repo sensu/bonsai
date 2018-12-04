@@ -112,6 +112,10 @@ class ExtensionAuthorizer < Authorizer::Base
     admin?
   end
 
+  def sync_repo?
+    owner_or_admin?
+  end
+
   private
 
   def admin?

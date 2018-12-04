@@ -33,6 +33,7 @@ en:
     disabled: "%{extension} is now disabled."
     enabled: "%{extension} is now enabled."
     reported: "%{extension} has been reported."
+    syncing_in_progress: "Please wait a minute or so for the repository releases to be recompiled, then refresh this page to see the updates."
     deprecate_with_deprecated_failure: "This extension cannot be deprecated in favor of a deprecated extension."
     activity: "%{maintainer} released v%{version} of the %{extension} extension."
     updated: "The %{name} extension has been successfully updated."
