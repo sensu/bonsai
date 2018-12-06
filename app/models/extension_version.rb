@@ -23,6 +23,7 @@ class ExtensionVersion < ApplicationRecord
   delegate :namespace,    to: :extension, allow_nil: true, prefix: true
   delegate :owner_name,   to: :extension, allow_nil: true
   delegate :github_repo,  to: :extension
+  delegate :octokit,      to: :extension
 
   #
   # Returns the verison of the +ExtensionVersion+
