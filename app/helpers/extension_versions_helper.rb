@@ -60,10 +60,10 @@ module ExtensionVersionsHelper
   #
   # @return [String] the Document content ready to be rendered
   #
-  def render_document(content, extension, repo_loc = "", version = "")
+  def render_document(content, extension, repo_loc = "", version = "", hard_wrap: false)
     doc = begin
       if %w(md mdown markdown).include?(extension.downcase)
-        render_markdown(content)
+        render_markdown(content, hard_wrap: hard_wrap)
       else
         content
       end

@@ -36,9 +36,9 @@ module MarkdownHelper
   #
   # @return [String] escaped HTML.
   #
-  def render_markdown(text)
+  def render_markdown(text, hard_wrap: false)
     Redcarpet::Markdown.new(
-      SupermarketRenderer,
+      SupermarketRenderer.new(hard_wrap: hard_wrap),
       autolink: true,
       fenced_code_blocks: true,
       tables: true,
