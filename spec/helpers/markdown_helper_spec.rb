@@ -42,6 +42,15 @@ wrap.
     expect(helper.render_markdown(markdown)).to_not match(/<br>/)
   end
 
+  it "does add br tags on hard wraps if asked to" do
+    markdown = <<-EOH
+There is no hard
+wrap.
+    EOH
+
+    expect(helper.render_markdown(markdown, hard_wrap: true)).to match(/<br>/)
+  end
+
   it "doesn't emphasize underscored words" do
     expect(helper.render_markdown('some_long_method_name')).to_not match(/<em>/)
   end
