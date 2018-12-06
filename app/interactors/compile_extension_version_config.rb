@@ -36,88 +36,73 @@ class CompileExtensionVersionConfig
   include Interactor
 
   BUILDS_KEY = 'builds'
-  SHA_REGEXP = /\A(\h{40,4096})\z/
 
   # The required context attributes:
   delegate :version, to: :context
 
   def call
-    result_hash             = version.config.to_hash rescue {}
-    src_builds              = Array.wrap(result_hash[BUILDS_KEY])
-    extension               = version.extension
-    releases_data           = extension.octokit
-                                .releases(extension.github_repo)
-                                .find { |h| h[:tag_name] == version.version }
-    compiled_builds         = compile_build_hashes(src_builds, releases_data, version.version)
-    result_hash[BUILDS_KEY] = compiled_builds
-    context.data_hash       = result_hash
+    config_hash             = version.config.to_hash rescue {}
+    src_builds              = Array.wrap(config_hash[BUILDS_KEY])
+    config_hash[BUILDS_KEY] = compile_builds(version, src_builds)
+
+    context.data_hash = config_hash
   end
 
   private
 
-  def compile_build_hashes(build_hashes, releases_data, version_name)
-    build_hashes.map { |build_hash|
-      Thread.new { compile_build_hash(build_hash, releases_data, version_name) }
+  def compile_builds(version, src_builds)
+    releases_data = version.octokit
+                      .releases(version.github_repo)
+                      .find { |h| h[:tag_name] == version.version }
+
+    return compile_build_hashes(src_builds, releases_data, version.version)
+  end
+
+  def compile_build_hashes(build_configs, releases_data, version_name)
+    asset_hashes     = Array.wrap(releases_data[:assets])
+    asset_hashes_lut = asset_hashes
+                         .group_by { |h| h[:name] }
+                         .transform_values(&:first)
+
+    build_configs.map { |build_config|
+      Thread.new do
+        compiled_config = compile_build_hash(build_config, asset_hashes_lut, version_name)
+        build_config.merge compiled_config
+      end
     }.map(&:value)
   end
 
-  def compile_build_hash(build_hash, releases_data, version_name)
-    build_hash = add_asset_url(build_hash, releases_data, version_name)
-    build_hash = add_asset_sha(build_hash, releases_data, version_name)
-    return build_hash
-  end
+  def compile_build_hash(build_config, asset_hashes_lut, version_name)
+    src_sha_filename   = build_config['sha_filename']
+    src_asset_filename = build_config['asset_filename']
 
-  def add_asset_url(build_hash, releases_data, version_name)
-    return build_hash unless releases_data.present?
+    compiled_sha_filename   = interpolate_version_name(src_sha_filename, version_name)
+    compiled_asset_filename = interpolate_version_name(src_asset_filename, version_name)
 
-    src_filename = build_hash['asset_filename']
-    return build_hash unless src_filename.present?
+    file_asset_hash = compiled_asset_filename.present? && asset_hashes_lut.fetch(compiled_asset_filename, {})
+    sha_asset_hash  = compiled_sha_filename.present?   && asset_hashes_lut.fetch(compiled_sha_filename,   {})
 
-    compiled_filename = interpolate_version_name(src_filename, version_name)
-    asset_hash        = Array.wrap(releases_data[:assets]).find { |h| h[:name] == compiled_filename }
-    return build_hash unless asset_hash.present?
+    file_download_url = file_asset_hash[:browser_download_url]
+    sha_download_url  = sha_asset_hash[ :browser_download_url]
 
-    build_hash['asset_url'] = asset_hash[:browser_download_url]
-    return build_hash
-  end
+    result = FetchRemoteSha.call(
+      sha_download_url: sha_download_url,
+      sha_filename:     compiled_sha_filename,
+      asset_filename:   compiled_asset_filename
+    )
 
-  def add_asset_sha(build_hash, releases_data, version_name)
-    return build_hash unless releases_data.present?
-
-    src_sha_filename = build_hash['sha_filename']
-    return build_hash unless src_sha_filename.present?
-
-    compiled_sha_filename = interpolate_version_name(src_sha_filename, version_name)
-    sha_asset_hash = Array.wrap(releases_data[:assets]).find {|h| h[:name] == compiled_sha_filename}
-    return build_hash unless sha_asset_hash.present?
-
-    sha_download_url = sha_asset_hash[:browser_download_url]
-    return build_hash unless sha_download_url.present?
-
-    resp = Faraday.new(sha_download_url) { |f|
-      f.use     FaradayMiddleware::FollowRedirects
-      f.adapter :net_http
-    }.get
-    return build_hash unless resp.success?
-
-    sha_file_content = resp.body
-    sha = sha_file_content
-            .to_s
-            .chomp
-            .split(/\s+/)
-            .first
-    return build_hash unless sha.present?
-    return build_hash unless sha =~ SHA_REGEXP
-
-    build_hash['asset_sha'] = sha
-    return build_hash
+    return {
+      'asset_url' => file_download_url,
+      'asset_sha' => result.sha
+    }
   end
 
   # Converts any instances of '#{version}' in the given string to the given version name.
   # E.g. the string 'test_asset-#{version}-linux-x86_64.tar.gz' and the version_name "10.3.4"
   # become 'test_asset-10.3.4-linux-x86_64.tar.gz'.
   def interpolate_version_name(str, version_name)
-    ruby_formatted_str = str.gsub(/\#{/, '%{')
-    ruby_formatted_str % {version: version_name}
+    ruby_formatted_str = str.to_s.gsub(/\#{/, '%{')
+    interpolated_str   = ruby_formatted_str % {version: version_name}
+    return interpolated_str.presence
   end
 end
