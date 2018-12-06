@@ -21,7 +21,7 @@ describe CreateExtension do
   subject { CreateExtension.new(params, user) }
   let(:normalized_attributes) { {
     'github_url'     => "https://github.com/#{github_url}",
-    'lowercase_name' => "asdf",
+    'lowercase_name' => "test",
   } }
   let(:expected_unnormalized_attributes) { Extension.new(params.merge(owner: user)).attributes }
   let(:expected_normalized_attributes)   { Extension.new(params.merge(owner: user)).attributes.merge(normalized_attributes) }

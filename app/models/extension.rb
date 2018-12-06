@@ -482,7 +482,9 @@ class Extension < ApplicationRecord
   private
 
   #
-  # Populates the +lowercase_name+ attribute with the lowercase +name+
+  # Populates the +lowercase_name+ attribute.
+  #
+  # Prefers to use the GitHub repo name, or if that is not available, use the lowercase +name+.be
   #
   # This exists until Rails schema dumping supports Posgres's expression
   # indices, which would allow us to create an index on LOWER(name). To do that
@@ -490,7 +492,7 @@ class Extension < ApplicationRecord
   # less-than ideal
   #
   def copy_name_to_lowercase_name
-    self.lowercase_name = name.to_s.downcase.parameterize
+    self.lowercase_name = File.basename(self.github_url.to_s).presence || name.to_s.downcase.parameterize
   end
 
   #
