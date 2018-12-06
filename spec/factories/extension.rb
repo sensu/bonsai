@@ -9,7 +9,7 @@ FactoryBot.define do
     issues_url { 'http://example.com/issues' }
     deprecated { false }
     featured { false }
-    github_url { "https://github.com/tester/testing" }
+    sequence(:github_url) { |n| "https://github.com/tester/testing#{n}" }
 
     transient do
       extension_versions_count { 2 }
