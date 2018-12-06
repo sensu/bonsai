@@ -54,6 +54,7 @@ class CompileExtensionVersionConfig
     releases_data = version.octokit
                       .releases(version.github_repo)
                       .find { |h| h[:tag_name] == version.version }
+    releases_data ||= {}
 
     return compile_build_hashes(src_builds, releases_data, version.version)
   end
