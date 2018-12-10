@@ -1,6 +1,6 @@
 class Api::V1::GithubAssetsController < Api::V1Controller
   api! <<~EOD
-    Retrieve an extension's asset build-specific details, suitable for consumption by the sensuctl tool.
+    Retrieve #{I18n.t('indefinite_articles.extension')} #{I18n.t('nouns.extension')}'s build-specific details, suitable for consumption by the sensuctl tool.
   EOD
   param :username, String, required: true, desc: "Bonsai Asset Index user name of the asset owner"
   param :id,       String, required: true, desc: "Bonsai Asset Index asset name"

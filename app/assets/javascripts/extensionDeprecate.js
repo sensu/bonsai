@@ -1,6 +1,6 @@
 $(document).on('opened', '[data-reveal]', function () {
   var settings =  {
-    placeholder: 'Search for an extension',
+    placeholder: 'Search for an asset',
     minimumInputLength: 3,
     width: '100%',
     ajax: {

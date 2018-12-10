@@ -1,5 +1,5 @@
 atom_feed language: 'en-US' do |feed|
-  feed.title 'Extensions'
+  feed.title "#{t('nouns.extension').pluralize.titleize}"
   feed.updated safe_updated_at(@extensions)
 
   @extensions.each do |extension|

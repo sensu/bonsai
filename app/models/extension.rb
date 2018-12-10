@@ -214,7 +214,7 @@ class Extension < ApplicationRecord
   # @return [Array<String>] all the error messages
   #
   def seriously_all_of_the_errors
-    messages = errors.full_messages.reject { |e| e == 'Extension version is invalid' }
+    messages = errors.full_messages.reject { |e| e == "#{I18n.t('nouns.extension').capitalize} version is invalid" }
 
     extension_versions.each do |version|
       almost_everything = version.errors.full_messages.reject { |x| x =~ /Tarball can not be/ }

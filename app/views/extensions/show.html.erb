@@ -1,7 +1,7 @@
-<%= provide(:title, "#{@extension.name} Extension") %>
+<%= provide(:title, "#{@extension.name} #{t('nouns.extension').titleize}") %>
 
 <% if @latest_version %>
-  <%= provide(:description, "#{@extension.name} Extension (#{@latest_version.try(:version)}) #{@extension.try(:supported_platforms).map(&:name).join(', ')}".strip) %>
+  <%= provide(:description, "#{@extension.name} #{t('nouns.extension').titleize} (#{@latest_version.try(:version)}) #{@extension.try(:supported_platforms).map(&:name).join(', ')}".strip) %>
 
   <div class="page resource extension_show" data-equalizer itemscope itemtype="http://schema.org/Code">
     <%= render 'main', extension: @extension, version: @latest_version, extension_versions: @extension_versions %>
@@ -11,7 +11,7 @@
   <div class="page nobg">
     <p class="text-center">
       <%= image_tag "spinner.gif" %>
-      Scanning your extension...
+      Scanning your <%= t('nouns.extension') %>...
     </p>
   </div>
 
