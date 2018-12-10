@@ -49,7 +49,7 @@ describe ExtractExtensionVersionWorker do
     allow(octokit).to receive(:readme).with("cvincent/test", ref: "1.0").and_raise(Octokit::NotFound)
 
     expect(versions).to receive(:first_or_create).with(version: "1.0")
-    expect(version).to receive(:update_attributes).with(readme:           "There is no README file for this extension.",
+    expect(version).to receive(:update_attributes).with(readme:           "There is no README file for this asset.",
                                                         readme_extension: "txt",
                                                         yml_line_count:   0,
                                                         rb_line_count:    0)

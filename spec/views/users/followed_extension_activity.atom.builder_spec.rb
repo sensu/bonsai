@@ -44,7 +44,7 @@ describe 'users/followed_extension_activity.atom.builder' do
     end
 
     it 'displays the feed title' do
-      expect(xml_body['feed']['title']).to eql("johndoe's Followed Extension Activity")
+      expect(xml_body['feed']['title']).to eql("johndoe's Followed Asset Activity")
     end
 
     it 'displays when the feed was updated' do
