@@ -47,7 +47,7 @@ class ExtensionVersionsController < ApplicationController
     if @extension_version.save
       ExtensionNotifyWorker.perform_async(@extension_version.id)
       redirect_to owner_scoped_extension_url(@extension_version.extension),
-                  notice: "Successfully created version #{@extension_version.version} of the #{extension.name} extension."
+                  notice: "Successfully created version #{@extension_version.version} of the #{extension.name} #{t('nouns.extension')}."
     else
       render 'new'
     end

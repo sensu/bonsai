@@ -2,7 +2,7 @@
 
 <p>Reported by: <%= @reported_by.try(:github_account).try(:username) || "An anonymous user" %></p>
 <p>Reason given: <%= @description %></p>
-<p>You may disable or edit this extension if necessary.</p>
+<p>You may disable or edit this <%= t('nouns.extension') %> if necessary.</p>
 <div>
-  <%= link_to "View Extension", extension_url(@extension, username: @extension.owner_name), class: "button accept" %>
+  <%= link_to "View #{t('nouns.extension').titleize}", extension_url(@extension, username: @extension.owner_name), class: "button accept" %>
 </div>

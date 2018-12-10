@@ -1,10 +1,10 @@
-<%= provide(:title, "Extensions") %>
-<%= provide(:description, "Browse and search Sensu extensions.") %>
+<%= provide(:title, "#{t('nouns.extension').pluralize.titleize}") %>
+<%= provide(:description, "Browse and search Sensu #{t('nouns.extension').pluralize}.") %>
 
 <div class="page nobg">
   <div class="heading-with-buttons">
     <h1 class="title">
-      <%= pluralize(@number_of_extensions, 'Extension') %>
+      <%= pluralize(@number_of_extensions, t('nouns.extension').titleize) %>
       <small>
         <%= link_to '<i class="fa fa-rss"></i> RSS'.html_safe, params.to_unsafe_h.merge(format: 'atom'), :class => 'rss_feed_link show-for-medium-up' %>
       </small>
@@ -23,13 +23,13 @@
     <%= paginate @extensions %>
   <% else %>
     <div class="no-results">
-      <p>Sorry, no extensions matched your search for <strong><%= params[:q] %></strong>.</p>
+      <p>Sorry, no <%= t('nouns.extension').pluralize %> matched your search for <strong><%= params[:q] %></strong>.</p>
 
       <h3>Search Suggestions:</h3>
       <ul>
         <li>Check your spelling</li>
         <li>Try another search term</li>
-        <li><%= link_to 'Browse the extensions directory', extensions_directory_path %></li>
+        <li><%= link_to "Browse the #{t('nouns.extension').pluralize} directory", extensions_directory_path %></li>
       </ul>
     </div>
   <% end %>

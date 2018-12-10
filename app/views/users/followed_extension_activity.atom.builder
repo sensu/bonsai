@@ -1,5 +1,5 @@
 atom_feed language: 'en-US' do |feed|
-  feed.title "#{@user.username}'s Followed Extension Activity"
+  feed.title "#{@user.username}'s Followed #{t('nouns.extension').titleize} Activity"
   feed.updated safe_updated_at(@followed_extension_activity)
 
   @followed_extension_activity.each do |extension_version|

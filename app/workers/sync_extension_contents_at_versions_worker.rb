@@ -78,7 +78,7 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
       body = body.encode(Encoding.find('UTF-8'), {invalid: :replace, undef: :replace, replace: ''})
       return body, ext
     else
-      return "There is no README file for this extension.", "txt"
+      return "There is no README file for this #{I18n.t('nouns.extension')}.", "txt"
     end
   end
 

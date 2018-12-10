@@ -2,12 +2,12 @@ class Api::V1::ExtensionsController < Api::V1Controller
   before_action :init_params, only: [:index]
 
   api! <<~EOD
-    Retrieve data for all the extensions in the #{Rails.configuration.app_name}.
+    Retrieve data for all the #{I18n.t('nouns.extension').pluralize} in the #{Rails.configuration.app_name}.
     Results are paginated, with pagination controlled via the "start" and "items" params.
     If there are remaining pages to be retrieved, the payload will include a "next" URL.
   EOD
-  param :start, Integer, desc: "zero-based index of the starting extension (default is 0)"
-  param :items, Integer, desc: "zero-based index of the starting extension (default is 10, max is 100)"
+  param :start, Integer, desc: "zero-based index of the starting #{I18n.t('nouns.extension')} (default is 0)"
+  param :items, Integer, desc: "zero-based index of the starting #{I18n.t('nouns.extension')} (default is 10, max is 100)"
   example "GET https://#{ENV['HOST']}/api/v1/extensions"
   example <<-EOX
     {
@@ -71,7 +71,7 @@ class Api::V1::ExtensionsController < Api::V1Controller
   end
 
   api! <<~EOD
-    Retrieve data for a single extension, identified by a username and repo ID.
+    Retrieve data for a single #{I18n.t('nouns.extension')}, identified by a username and repo ID.
   EOD
   param :username, String, required: true, desc: "Bonsai Asset Index user name of the asset owner"
   param :id,       String, required: true, desc: "Bonsai Asset Index asset name"
