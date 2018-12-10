@@ -153,8 +153,8 @@
 </div>
 
 <div class="reveal-modal" id="report-extension" data-reveal>
-  <h1>Are you sure you want to report this extension?</h1>
-  <p>Please describe the reason for reporting this extension. Our moderators will be notified and will disable the extension if it is found to be inappropriate.</p>
+  <h1>Are you sure you want to report this <%= t('nouns.extension') %>?</h1>
+  <p>Please describe the reason for reporting this <%= t('nouns.extension') %>. Our moderators will be notified and will disable the <%= t('nouns.extension') %> if it is found to be inappropriate.</p>
   <a class="close-reveal-modal close-reveal-modal-x">&#215;</a>
   <%= form_for :report, url: report_extension_path(extension, username: extension.owner_name), method: :put do |f| %>
     <div>

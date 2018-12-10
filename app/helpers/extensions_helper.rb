@@ -89,7 +89,7 @@ module ExtensionsHelper
         method: 'put',
         rel: 'sign-in-to-follow',
         class: 'button radius tiny follow',
-        title: 'You must be signed in to star an extension.',
+        title: "You must be signed in to star #{t('indefinite_articles.extension')} #{t('nouns.extension')}.",
         'data-tooltip' => true
       ) do
         if block

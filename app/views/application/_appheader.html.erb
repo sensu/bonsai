@@ -1,7 +1,7 @@
 <nav class="appnav">
   <ul class="mainnav">
     <% if (current_user.try(:roles_mask) || 0) > 0 %>
-      <li><%= link_to 'Extensions', root_path, 'data-hover' => 'Extensions', :rel => 'extensions' %></li>
+      <li><%= link_to "#{t('nouns.extension').pluralize.titleize}", root_path, 'data-hover' => 'Extensions', :rel => 'extensions' %></li>
       <li><%= link_to 'Users List', contributors_path, 'data-hover' => 'Users', :rel => 'users' %></li>
     <% end %>
     <% if policy(Tier).manage? %>

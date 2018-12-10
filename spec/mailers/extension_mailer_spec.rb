@@ -9,7 +9,7 @@ describe ExtensionMailer do
     let(:mail) { ExtensionMailer.notify_moderator_of_new(extension.id, user.id) }
 
     it {expect(mail.to).to include user.email}
-    it {mail.parts.each {|part| expect(part.body).to match /you may disable or edit this extension/i}}
+    it {mail.parts.each {|part| expect(part.body).to match /you may disable or edit this asset/i}}
   end
 
   describe "notify_moderator_of_reported" do

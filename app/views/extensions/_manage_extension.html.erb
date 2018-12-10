@@ -1,4 +1,4 @@
-<a href="#" data-dropdown="manage" class="button radius secondary small dropdown">Manage Extension</a>
+<a href="#" data-dropdown="manage" class="button radius secondary small dropdown">Manage <%= t('nouns.extension').titleize %></a>
 
 <ul class="manage_extension f-dropdown" id="manage" data-dropdown-content>
   <%- if extension.hosted? && policy(extension).add_hosted_extension_version? %>
@@ -38,7 +38,7 @@
 
       <%= form_for extension, url: transfer_ownership_path(extension, username: extension.owner.username), method: :put do |f| %>
         <% if extension.transferrable_to_users.any? %>
-          <p>You can transfer ownership of an extension to any other user who is a Collaborator on that extension in Github.   Please select a new owner below.</p>
+          <p>You can transfer ownership of <%= t('indefinite_articles.extension') %> <%= t('nouns.extension') %> to any other user who is a Collaborator on that <%= t('nouns.extension') %> in Github.   Please select a new owner below.</p>
 
           <div class="row collapse">
             <div class="small-9 columns">
@@ -49,7 +49,7 @@
             </div>
           </div>
         <% else %>
-          <p>You can transfer ownership of an extension to any other user who is a Collaborator on that extension in Github.  This repository has no other commit authors to whom you can transfer ownership.</p>
+          <p>You can transfer ownership of <%= t('indefinite_articles.extension') %> <%= t('nouns.extension') %> to any other user who is a Collaborator on that <%= t('nouns.extension') %> in Github.  This repository has no other commit authors to whom you can transfer ownership.</p>
           <p class="text-right">
             <%= link_to "Okay", "#", class: "button primary close-reveal-modal" %>
           </p>
@@ -67,9 +67,9 @@
     </li>
 
     <div id="deprecate" class="reveal-modal small" data-reveal>
-      <h1>Deprecate Extension</h1>
+      <h1>Deprecate <%= t('nouns.extension').titleize %></h1>
 
-      <p>You can deprecate your extension if you are no longer maintaining it. You must select a replacement extension in order to deprecate your extension.</p>
+      <p>You can deprecate your <%= t('nouns.extension') %> if you are no longer maintaining it. You must select a replacement <%= t('nouns.extension') %> in order to deprecate your <%= t('nouns.extension') %>.</p>
 
       <a class="close-reveal-modal">&#215;</a>
 
@@ -110,9 +110,9 @@
         <%= link_to disable_extension_path(extension, username: extension.owner_name),
                     method: 'put',
                     rel: 'delete',
-                    data: {confirm: "Are you sure you want to delete the #{extension.name} extension?"} do %>
+                    data: {confirm: "Are you sure you want to delete the #{extension.name} #{t('nouns.extension')}?"} do %>
           <i class="fa fa-times"></i>
-          Delete extension
+          Delete <%= t('nouns.extension') %>
         <% end %>
       </li>
     <% else %>
@@ -157,7 +157,7 @@
 
       <p>
         Recompiling will update the Bonsai Asset Index with the latest information
-        about GitHub releases and release assets for this extension.
+        about GitHub releases and release assets for this <%= t('nouns.extension') %>.
       </p>
 
       <div style="margin-top: 24px;" class="text-center">
