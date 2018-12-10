@@ -14,7 +14,7 @@ class ExtensionMailer < ApplicationMailer
     @email_preference = user.email_preference_for('New extension version')
     @to = user.email
 
-    mail(to: @to, subject: "A new version of the #{@extension_version.name} extension has been released")
+    mail(to: @to, subject: "A new version of the #{@extension_version.name} #{I18n.t('nouns.extension')} has been released")
   end
 
   #
@@ -29,7 +29,7 @@ class ExtensionMailer < ApplicationMailer
     @email_preference = user.email_preference_for('Extension deleted')
     @to = user.email
 
-    mail(to: @to, subject: "The #{name} extension has been deleted")
+    mail(to: @to, subject: "The #{name} #{I18n.t('nouns.extension')} has been deleted")
   end
 
   #
@@ -48,8 +48,8 @@ class ExtensionMailer < ApplicationMailer
     @to = user.email
 
     subject = %(
-      The #{@extension.name} extension has been deprecated in favor
-      of the #{@replacement_extension.name} extension
+      The #{@extension.name} #{I18n.t('nouns.extension')} has been deprecated in favor
+      of the #{@replacement_extension.name} #{I18n.t('nouns.extension')}
     ).squish
 
     mail(to: @to, subject: subject)
@@ -69,7 +69,7 @@ class ExtensionMailer < ApplicationMailer
     @extension = transfer_request.extension.name
 
     subject = %(
-      #{@sender} wants to transfer ownership of the #{@extension} extension to
+      #{@sender} wants to transfer ownership of the #{@extension} #{I18n.t('nouns.extension')} to
       you.
     ).squish
 
@@ -87,7 +87,7 @@ class ExtensionMailer < ApplicationMailer
     @extension = Extension.find(extension_id)
     @moderator = User.find(user_id)
 
-    @subject = %(New extension "#{@extension.name}" has been added to the Depot)
+    @subject = %(New #{I18n.t('nouns.extension')} "#{@extension.name}" has been added to the Depot)
 
     mail(to: @moderator.email, subject: @subject)
   end
@@ -105,7 +105,7 @@ class ExtensionMailer < ApplicationMailer
     @description = report_description
     @reported_by = User.where(id: reported_by_id).first
 
-    @subject = %(Extension "#{@extension.name}" reported)
+    @subject = %(#{I18n.t('nouns.extension').capitalize} "#{@extension.name}" reported)
 
     mail(to: @moderator.email, subject: @subject)
   end

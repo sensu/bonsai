@@ -48,7 +48,7 @@ class ExtractExtensionVersionWorker < ApplicationWorker
     return body, ext
 
   rescue Octokit::NotFound
-    return "There is no README file for this extension.", "txt"
+    return "There is no README file for this #{I18n.t('nouns.extension')}.", "txt"
   end
 
   def octokit

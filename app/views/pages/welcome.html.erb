@@ -9,7 +9,7 @@
   <% end %>
 
   <section class="sign_up_in">
-    <h2 class="text-center">Welcome to the Bonsai Asset Index. Find, explore and view Bonsai extensions for all of your ops needs.</h2>
+    <h2 class="text-center">Welcome to the Bonsai Asset Index. Find, explore and view Bonsai <%= t('nouns.extension').pluralize %> for all of your ops needs.</h2>
   </section>
 
   <section class="welcome_resources">
@@ -18,7 +18,7 @@
 
       <ul>
         <li>
-          <%= link_to "Browse Extensions", extensions_path %>
+          <%= link_to "Browse #{t('nouns.extension').pluralize.titleize}", extensions_path %>
         </li>
       </ul>
     </div>

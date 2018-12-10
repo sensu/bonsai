@@ -4,12 +4,12 @@
   <div class="main" data-equalizer-watch>
     <div class="heading-with-buttons">
       <h3 class="title">
-        Followed Extensions Activity
+        Followed <%= t('nouns.extension').pluralize.titleize %> Activity
         <small><%= link_to '<i class="fa fa-rss"></i> rss'.html_safe, followed_extension_activity_user_path(current_user, format: 'atom'), class: 'rss_feed_link show-for-medium-up' %></small>
       </h3>
       <div class="buttons">
         <% if @followed_extension_activity.any? %>
-          <%= link_to "You're Following #{pluralize(current_user.followed_extensions.count, 'Extension')}", user_path(current_user, tab: 'follows') %>
+          <%= link_to "You're Following #{pluralize(current_user.followed_extensions.count, t('nouns.extension')).titleize}", user_path(current_user, tab: 'follows') %>
         <% end %>
       </div>
     </div>
@@ -31,32 +31,32 @@
       </ul>
     <% else %>
       <div class="explore_extensions">
-        <h2>Looks like you're not following any extensions yet!</h2>
-        <p>Search for extensions and follow them to get notified when new versions are released.</p>
-        <%= link_to 'Explore Extensions', extensions_path, class: 'button radius' %>
+        <h2>Looks like you're not following any <%= t('nouns.extension').pluralize %> yet!</h2>
+        <p>Search for <%= t('nouns.extension').pluralize %> and follow them to get notified when new versions are released.</p>
+        <%= link_to "Explore #{t('nouns.extension').pluralize.titleize}", extensions_path, class: 'button radius' %>
       </div>
     <% end %>
   </div>
   <div class="sidebar" data-equalizer-watch>
-    <h3>Your Extensions</h3>
+    <h3>Your <%= t('nouns.extension').pluralize.titleize %></h3>
     <% if @extensions.any? %>
       <ul class="simple_listing hide_owner">
         <%= render partial: 'extensions/simple_extension', collection: @extensions, as: 'extension' %>
       </ul>
-      <%= link_to 'View All of Your Extensions', current_user, class: 'button radius small expand' %>
+      <%= link_to "View All of Your #{t('nouns.extension').pluralize.titleize}", current_user, class: 'button radius small expand' %>
     <% else %>
-      <%= link_to "Share an Extension", new_extension_path, class: 'button secondary radius expand' %>
+      <%= link_to "Share #{t('indefinite_articles.extension')} #{t('nouns.extension').titleize}", new_extension_path, class: 'button secondary radius expand' %>
     <% end %>
 
-    <h3>Extensions You Collaborate On</h3>
+    <h3><%= t('nouns.extension').pluralize.titleize %> You Collaborate On</h3>
     <% if @collaborated_extensions.any? %>
       <ul class="simple_listing">
         <%= render partial: 'extensions/simple_extension', collection: @collaborated_extensions, as: 'extension' %>
       </ul>
-      <%= link_to 'View All Collaborated Extensions', user_path(current_user, tab: 'collaborates'), class: 'button radius small expand' %>
+      <%= link_to "View All Collaborated #{t('nouns.extension').pluralize.titleize}", user_path(current_user, tab: 'collaborates'), class: 'button radius small expand' %>
     <% else %>
       <p>
-        Extension owners can specify other users as collaborators, allowing them to manage and upload new versions of an extension.
+        <%= t('nouns.extension').capitalize %> owners can specify other users as collaborators, allowing them to manage and upload new versions of <%= t('indefinite_articles.extension') %> <%= t('nouns.extension') %>.
       </p>
     <% end %>
   </div>

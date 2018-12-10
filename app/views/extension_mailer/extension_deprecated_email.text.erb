@@ -1,4 +1,4 @@
-The <%= @extension.name %> extension [<%= extension_url(@extension, username: @extension.owner_name) %>] has been deprecated
-in favor of the <%= @replacement_extension.name %> extension [<%= extension_url(@replacement_extension, username: @replacement_extension.owner_name) %>].
+The <%= @extension.name %> <%= t('nouns.extension') %> [<%= extension_url(@extension, username: @extension.owner_name) %>] has been deprecated
+in favor of the <%= @replacement_extension.name %> <%= t('nouns.extension') %> [<%= extension_url(@replacement_extension, username: @replacement_extension.owner_name) %>].
 
 Unsubscribe from this email: <%= unsubscribe_url(@email_preference) %>

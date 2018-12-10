@@ -1,13 +1,13 @@
-<%= provide(:title, "Add an Extension Version") %>
+<%= provide(:title, "Add #{t('indefinite_articles.extension')} #{t('nouns.extension').titleize} Version") %>
 
 <div class="page resource extension_version_show" data-equalizer>
   <div class="main" data-equalizer-watch>
-    <h1 class="heading">Add an Extension Version</h1>
+    <h1 class="heading">Add <%= t('indefinite_articles.extension') %> <%= t('nouns.extension').titleize %> Version</h1>
 
     <h3>
       Upload a new version of the
       <%= @extension_version.name %>
-      extension.
+      <%= t('nouns.extension') %>.
     </h3>
 
     <%- extension = @extension_version.extension %>

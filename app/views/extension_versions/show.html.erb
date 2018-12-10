@@ -1,5 +1,5 @@
-<%= provide(:title, "#{@extension.name} Extension") %>
-<%= provide(:description, "#{@extension.name} Extension (#{@version.version}) #{@version.supported_platforms.map(&:name).join(', ')}".strip) %>
+<%= provide(:title, "#{@extension.name} #{t('nouns.extension').titleize}") %>
+<%= provide(:description, "#{@extension.name} #{t('nouns.extension').titleize} (#{@version.version}) #{@version.supported_platforms.map(&:name).join(', ')}".strip) %>
 
 <div class="page resource extension_show" data-equalizer>
   <%= render 'extensions/main', extension: @extension, version: @version, extension_versions: @extension_versions %>

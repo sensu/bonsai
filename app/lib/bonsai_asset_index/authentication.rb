@@ -33,7 +33,7 @@ module BonsaiAssetIndex
     def authenticate_user!(skip_location_storage: false)
       if !signed_in? or current_user.auth_scope != AUTH_SCOPE
         store_location! unless skip_location_storage
-        redirect_to sign_in_url, notice: t('user.must_be_signed_in')
+        redirect_to sign_in_url, notice: I18n.t('user.must_be_signed_in')
       end
     end
   end
