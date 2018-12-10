@@ -34,12 +34,12 @@ en:
     enabled: "%{extension} is now enabled."
     reported: "%{extension} has been reported."
     syncing_in_progress: "Please wait a minute or so for the repository releases to be recompiled, then refresh this page to see the updates."
-    deprecate_with_deprecated_failure: "This extension cannot be deprecated in favor of a deprecated extension."
-    activity: "%{maintainer} released v%{version} of the %{extension} extension."
-    updated: "The %{name} extension has been successfully updated."
+    deprecate_with_deprecated_failure: "This asset cannot be deprecated in favor of a deprecated asset."
+    activity: "%{maintainer} released v%{version} of the %{extension} asset."
+    updated: "The %{name} asset has been successfully updated."
     github_url_format_error: "must be a valid repo on which you are a collaborator."
     missing_config_file: "must have a top-level %{allowed_config_file_names} file."
-    created: "Your extension was added successfully!"
+    created: "Your asset was added successfully!"
   contributor:
     removed: "Contributor removed."
   contributor_requests:
@@ -62,13 +62,13 @@ en:
   profile:
     updated: "Profile successfully updated."
     no_extensions:
-      owns: "%{username} does not own any extensions."
-      collaborates: "%{username} does not collaborate on any extensions."
-      follows: "%{username} does not follow any extensions."
+      owns: "%{username} does not own any assets."
+      collaborates: "%{username} does not collaborate on any assets."
+      follows: "%{username} does not follow any assets."
     current_user_no_extensions:
-      owns: "You do not own any extensions."
-      collaborates: "You are not a collaborator on any extensions."
-      follows: "You do not follow any extensions."
+      owns: "You do not own any assets."
+      collaborates: "You are not a collaborator on any assets."
+      follows: "You do not follow any assets."
     no_tools: "%{username} does not maintain any tools."
     current_user_no_tools: "You do not maintain any tools."
   requires_linked_github: "You need to link your GitHub account."
@@ -103,7 +103,7 @@ en:
       authentication_failed: "AUTHENTICATION_FAILED"
       unauthorized: "UNAUTHORIZED"
     error_messages:
-      privacy_violation: 'Private extension upload not allowed'
+      privacy_violation: 'Private asset upload not allowed'
       not_found: "Resource does not exist."
       missing_extension: "Mulipart POST must include a part named 'extension'."
       extension_not_json: "Mulipart POST part 'extension' must be a valid JSON string."
@@ -118,11 +118,11 @@ en:
       invalid_version_constraint: "Platform '%{name}' has invalid version constraint '%{version_constraint}'."
       invalid_metadata: "The metadata is formatted incorrectly."
       invalid_platforms: "The list of supported platforms must be a JSON object."
-      version_not_unique: "%{name} (%{version}) already exists. An extension's version number must be unique."
+      version_not_unique: "%{name} (%{version}) already exists. An asset's version number must be unique."
       invalid_username: "Could not find user '%{username}'."
       authentication_request_error: "Authentication failed due to an invalid signed request."
       authentication_key_error: "Authentication failed due to an invalid public/private key pair. If you have changed your keys recently try logging out and logging back in to Bonsai."
-      unauthorized_upload_error: "You are not authorized to upload this extension."
+      unauthorized_upload_error: "You are not authorized to upload this asset."
       unauthorized_post_error: "You are not authorized to POST to this end-point"
       missing_public_key_error: "Before you can perform knife activities that require authentication, you must log into %{current_host} and grant it permission to access your Bonsai account information."
       negative_parameter: "Start and item parameters must be positive numbers but they are start: %{start} and items: %{items}."
