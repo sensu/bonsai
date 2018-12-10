@@ -87,7 +87,7 @@ class ExtensionMailer < ApplicationMailer
     @extension = Extension.find(extension_id)
     @moderator = User.find(user_id)
 
-    @subject = %(New #{I18n.t('nouns.extension')} "#{@extension.name}" has been added to the Depot)
+    @subject = %(New #{I18n.t('nouns.extension')} "#{@extension.name}" has been added to the Bonsai Asset Index)
 
     mail(to: @moderator.email, subject: @subject)
   end
