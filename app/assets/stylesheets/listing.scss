@@ -41,6 +41,10 @@
             width: rem-calc(20);
           }
         }
+
+        .meta {
+          margin-top: 8px;
+        }
       }
 
       .title {
@@ -49,7 +53,7 @@
         line-height: rem-calc(20);
         color: $primary_blue;
         float: left;
-        margin: rem-calc(10 0 0);
+        margin: rem-calc(7 0 0);
 
         .fa {
           // @include inline-block;
