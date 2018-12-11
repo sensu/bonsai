@@ -9,7 +9,7 @@ class Tier < ApplicationRecord
   validates :rank, presence: true, uniqueness: true
 
   def self.default
-    Tier.rank(:rank).first
+    Tier.rank(:rank).first || Tier.new(name: 'No', rank: 0)
   end
 
   # Extensions having a nil tier are considered members of the default tier.
