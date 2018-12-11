@@ -370,12 +370,11 @@ class ExtensionsController < ApplicationController
     @extension ||= begin
       Extension.with_owner_and_lowercase_name(owner_name: params[:username], lowercase_name: params[:id])
     rescue ActiveRecord::RecordNotFound
-      if extension = Extension.unscoped.with_name(params[:id]).first
-        if current_user == extension.owner or (current_user and current_user.roles_mask > 0)
-          @extension = extension
-        else
-          raise ActiveRecord::RecordNotFound
-        end
+      extension = Extension.unscoped.with_name(params[:id]).first
+      if extension && (current_user == extension.owner || (current_user && current_user.roles_mask > 0))
+        @extension = extension
+      else
+        raise
       end
     end
   end
