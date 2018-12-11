@@ -499,6 +499,8 @@ class Extension < ApplicationRecord
   # Normalizes the GitHub URL to a standard format.
   #
   def normalize_github_url
+    return if self.github_url.blank?
+
     url = self.github_url || ""
     url.gsub!(/(https?:\/\/)?(www\.)?github\.com\//, "")
     self.github_url = "https://github.com/#{url}"
