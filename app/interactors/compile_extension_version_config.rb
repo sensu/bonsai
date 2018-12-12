@@ -106,6 +106,7 @@ class CompileExtensionVersionConfig
     ruby_formatted_str = str.to_s.gsub(/\#{/, '%{')
 
     interpolations = {
+      repo:    version.extension_lowercase_name,
       version: version.version,
     }
     interpolated_str = ruby_formatted_str % interpolations
