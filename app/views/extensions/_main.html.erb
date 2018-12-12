@@ -47,7 +47,7 @@
               <%- end %>
               <% extension_versions.each do |extension_version| %>
                 <li>
-                  <%= link_to extension_version_path(extension, extension_version, username: extension.owner.username), rel: 'extension_version' do %>
+                  <%= link_to extension_version_path(extension, extension_version, username: extension.owner_name), rel: 'extension_version' do %>
                     <%= extension_version.version %>
                     <% if extension_version == version %><i class="fa fa-check right"></i><% end %>
                   <% end %>
@@ -68,7 +68,7 @@
               <ul style="list-style-type: none">
                 <% Tier.rank(:rank).each do |tier| %>
                   <li>
-                    <%= link_to extension_tier_path(extension, tier, username: extension.owner.username), method: :put, rel: 'extension_tier' do %>
+                    <%= link_to extension_tier_path(extension, tier, username: extension.owner_name), method: :put, rel: 'extension_tier' do %>
                       <i class="fa fa-<%= tier.icon_name %>"></i>
                       &nbsp;
                       <%= tier.name %>
@@ -106,10 +106,10 @@
 
   <dl class="tabs">
     <dd class="<%= 'active' unless params[:tab] %>">
-      <%= link_to 'README', extension_version_path(extension, version, username: extension.owner.username) %>
+      <%= link_to 'README', extension_version_path(extension, version, username: extension.owner_name) %>
     </dd>
     <dd class="<%= 'active' if params[:tab] == 'release-notes' %>">
-      <%= link_to 'Release Notes', extension_version_path(extension, version, username: extension.owner.username, tab: 'release-notes') %>
+      <%= link_to 'Release Notes', extension_version_path(extension, version, username: extension.owner_name, tab: 'release-notes') %>
     </dd>
   </dl>
 
