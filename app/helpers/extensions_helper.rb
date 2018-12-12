@@ -107,7 +107,7 @@ module ExtensionsHelper
         rel: 'unfollow',
         class: 'button radius tiny follow',
         id: 'unfollow_extension',
-        'data-extension' => extension.name,
+        'data-extension' => extension.lowercase_name,
         remote: true
       ) do
         if block
@@ -123,7 +123,7 @@ module ExtensionsHelper
         rel: 'follow',
         class: 'button radius tiny follow',
         id: 'follow_extension',
-        'data-extension' => extension.name,
+        'data-extension' => extension.lowercase_name,
         remote: true
       ) do
         if block
