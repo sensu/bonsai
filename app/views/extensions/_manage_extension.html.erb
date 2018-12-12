@@ -36,7 +36,7 @@
       <h1>Transfer Ownership</h1>
       <a class="close-reveal-modal close-reveal-modal-x">&#215;</a>
 
-      <%= form_for extension, url: transfer_ownership_path(extension, username: extension.owner.username), method: :put do |f| %>
+      <%= form_for extension, url: transfer_ownership_path(extension, username: extension.owner_name), method: :put do |f| %>
         <% if extension.transferrable_to_users.any? %>
           <p>You can transfer ownership of <%= t('indefinite_articles.extension') %> <%= t('nouns.extension') %> to any other user who is a Collaborator on that <%= t('nouns.extension') %> in Github.   Please select a new owner below.</p>
 
