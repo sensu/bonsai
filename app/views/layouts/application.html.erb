@@ -64,12 +64,16 @@
                   <i class="fa fa-github"></i>
                   <span class="label">GitHub</span>
                 </a>
-                <a class="ext-yt" data-toggle="tooltip" href="#" title="YouTube">
-                  <i class="fa fa-youtube"></i>
-                  <span class="label">YouTube</span>
+                <a href="http://slack.sensu.io/">
+                  <i class="fa fa-slack"></i>
+                  <span class="text-label"></span>
+                </a>
+                <a href="https://twitter.com/sensu">
+                  <i class="fa fa-twitter"></i>
+                  <span class="text-label"></span>
                 </a>
                 <%= link_to "Sensu.io", "http://sensu.io/" %>
-                <%= link_to "#{t('nouns.extension').titleize}", extensions_path %>
+                <%= link_to "#{t('nouns.extension').titleize} Directory", extensions_path %>
                 <%= link_to "User List", contributors_path %>
               </div>
             </section>
@@ -78,14 +82,6 @@
                 <a href="mailto:contact@sensu.io">
                   <i class="fa fa-envelope"></i>
                   <span class="text-label">email</span>
-                </a>
-                <a href="http://sensu.io/community/irc/">
-                  <i class="fa fa-slack"></i>
-                  <span class="text-label">IRC</span>
-                </a>
-                <a href="#">
-                  <i class="fa fa-comments fa-flip-horizontal"></i>
-                  <span class="text-label">forum</span>
                 </a>
               </div>
             </section>
