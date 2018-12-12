@@ -56,10 +56,10 @@ class CompileExtensionVersionConfig
                       .find { |h| h[:tag_name] == version.version }
     releases_data ||= {}
 
-    return compile_build_hashes(src_builds, releases_data, version.version)
+    return compile_build_hashes(src_builds, releases_data, version)
   end
 
-  def compile_build_hashes(build_configs, releases_data, version_name)
+  def compile_build_hashes(build_configs, releases_data, version)
     asset_hashes     = Array.wrap(releases_data[:assets])
     asset_hashes_lut = asset_hashes
                          .group_by { |h| h[:name] }
@@ -67,18 +67,18 @@ class CompileExtensionVersionConfig
 
     build_configs.map { |build_config|
       Thread.new do
-        compiled_config = compile_build_hash(build_config, asset_hashes_lut, version_name)
+        compiled_config = compile_build_hash(build_config, asset_hashes_lut, version)
         build_config.merge compiled_config
       end
     }.map(&:value)
   end
 
-  def compile_build_hash(build_config, asset_hashes_lut, version_name)
+  def compile_build_hash(build_config, asset_hashes_lut, version)
     src_sha_filename   = build_config['sha_filename']
     src_asset_filename = build_config['asset_filename']
 
-    compiled_sha_filename   = interpolate_version_name(src_sha_filename, version_name)
-    compiled_asset_filename = interpolate_version_name(src_asset_filename, version_name)
+    compiled_sha_filename   = interpolate_variables(src_sha_filename, version)
+    compiled_asset_filename = interpolate_variables(src_asset_filename, version)
 
     file_asset_hash = compiled_asset_filename.present? && asset_hashes_lut.fetch(compiled_asset_filename, {})
     sha_asset_hash  = compiled_sha_filename.present?   && asset_hashes_lut.fetch(compiled_sha_filename,   {})
@@ -98,12 +98,13 @@ class CompileExtensionVersionConfig
     }
   end
 
-  # Converts any instances of '#{version}' in the given string to the given version name.
-  # E.g. the string 'test_asset-#{version}-linux-x86_64.tar.gz' and the version_name "10.3.4"
+  # Converts any instances of '#{var-name}' in the given string to the corresponding value from
+  # the given version object.
+  # E.g. the string 'test_asset-#{version}-linux-x86_64.tar.gz' and a version with the name "10.3.4"
   # become 'test_asset-10.3.4-linux-x86_64.tar.gz'.
-  def interpolate_version_name(str, version_name)
+  def interpolate_variables(str, version)
     ruby_formatted_str = str.to_s.gsub(/\#{/, '%{')
-    interpolated_str   = ruby_formatted_str % {version: version_name}
+    interpolated_str   = ruby_formatted_str % {version: version.version}
     return interpolated_str.presence
   end
 end
