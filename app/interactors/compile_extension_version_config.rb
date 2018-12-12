@@ -104,7 +104,12 @@ class CompileExtensionVersionConfig
   # become 'test_asset-10.3.4-linux-x86_64.tar.gz'.
   def interpolate_variables(str, version)
     ruby_formatted_str = str.to_s.gsub(/\#{/, '%{')
-    interpolated_str   = ruby_formatted_str % {version: version.version}
+
+    interpolations = {
+      version: version.version,
+    }
+    interpolated_str = ruby_formatted_str % interpolations
+
     return interpolated_str.presence
   end
 end
