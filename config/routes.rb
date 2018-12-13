@@ -9,13 +9,13 @@ Rails.application.routes.draw do
     namespace :v1 do
       get 'metrics' => 'metrics#show'
       get 'health' => 'health#show'
-      get 'extensions' => 'extensions#index'
-      get 'extensions/:username/:id' => 'extensions#show', as: :extension
-      get 'extensions/:username/:extension/versions/:version' => 'extension_versions#show', as: :extension_version, constraints: { version: VERSION_PATTERN }
-      get 'extensions/:username/:extension/versions/:version/download' => 'extension_versions#download', as: :extension_version_download, constraints: { version: VERSION_PATTERN }
-      delete 'extensions/:username/:extension/versions/:version' => 'extension_uploads#destroy_version', constraints: { version: VERSION_PATTERN }
+      get 'assets' => 'extensions#index', as: :extensions
+      get 'assets/:username/:id' => 'extensions#show', as: :extension
+      get 'assets/:username/:extension/versions/:version' => 'extension_versions#show', as: :extension_version, constraints: { version: VERSION_PATTERN }
+      get 'assets/:username/:extension/versions/:version/download' => 'extension_versions#download', as: :extension_version_download, constraints: { version: VERSION_PATTERN }
+      delete 'assets/:username/:extension/versions/:version' => 'extension_uploads#destroy_version', constraints: { version: VERSION_PATTERN }
       get 'users/:user' => 'users#show', as: :user
-      get 'extensions/:username/:id/:version/:platform/:arch/release_asset' => 'github_assets#show', as: :github_asset, constraints: {version: VERSION_PATTERN}
+      get 'assets/:username/:id/:version/:platform/:arch/release_asset' => 'github_assets#show', as: :github_asset, constraints: {version: VERSION_PATTERN}
 
       resources :tags, only: [:index]
     end
