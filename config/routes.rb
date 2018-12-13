@@ -39,7 +39,7 @@ Rails.application.routes.draw do
   end
 
   resources :extensions, path: "", only: [:new] do
-    scope "/extensions/:username" do
+    scope "/assets/:username" do
       resources :tiers, only: [:update], controller: :extension_tiers
 
       member do

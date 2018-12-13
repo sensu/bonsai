@@ -20,7 +20,7 @@ class Api::V1::ExtensionsController < Api::V1Controller
             "description": "Average CMS Wildcard Admin Redirect WordPress Plugin",
             "url": "https://bonsai-asset-index.com/api/v1/extensions/gofullstack/acms-admin-wildcard-redirect",
             "github_url": "https://github.com/gofullstack/acms-admin-wildcard-redirect",
-            "download_url": "https://bonsai-asset-index.com/extensions/gofullstack/acms-admin-wildcard-redirect/download",
+            "download_url": "https://bonsai-asset-index.com/assets/gofullstack/acms-admin-wildcard-redirect/download",
             "builds": []
         },
         {
@@ -28,7 +28,7 @@ class Api::V1::ExtensionsController < Api::V1Controller
             "description": "A pure-Ruby Markdown-superset interpreter (Official Repo).",
             "url": "https://bonsai-asset-index.com/api/v1/extensions/demillir/maruku",
             "github_url": "https://github.com/demillir/maruku",
-            "download_url": "https://bonsai-asset-index.com/extensions/demillir/maruku/download",
+            "download_url": "https://bonsai-asset-index.com/assets/demillir/maruku/download",
             "builds": [
                 {
                     "platform": "linux",
@@ -82,7 +82,7 @@ class Api::V1::ExtensionsController < Api::V1Controller
         "description": "A pure-Ruby Markdown-superset interpreter (Official Repo).",
         "url": "https://bonsai-asset-index.com/api/v1/extensions/demillir/maruku",
         "github_url": "https://github.com/demillir/maruku",
-        "download_url": "https://bonsai-asset-index.com/extensions/demillir/maruku/download",
+        "download_url": "https://bonsai-asset-index.com/assets/demillir/maruku/download",
         "builds": [
             {
                 "platform": "linux",
