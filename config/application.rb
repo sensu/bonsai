@@ -73,5 +73,9 @@ module BonsaiAssetIndex
       protocol: ENV['PROTOCOL']
     }
 
+    # Because Bonsai has a RESTful resource named "asset",
+    # and because Rails considers the "/assets" path to be reserved,
+    # we must tell Rails to reserve a different path for the asset pipeline.
+    config.assets.prefix = '/web-assets'
   end
 end
