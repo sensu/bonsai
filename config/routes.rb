@@ -9,37 +9,37 @@ Rails.application.routes.draw do
     namespace :v1 do
       get 'metrics' => 'metrics#show'
       get 'health' => 'health#show'
-      get 'extensions' => 'extensions#index'
-      get 'extensions/:username/:id' => 'extensions#show', as: :extension
-      get 'extensions/:username/:extension/versions/:version' => 'extension_versions#show', as: :extension_version, constraints: { version: VERSION_PATTERN }
-      get 'extensions/:username/:extension/versions/:version/download' => 'extension_versions#download', as: :extension_version_download, constraints: { version: VERSION_PATTERN }
-      delete 'extensions/:username/:extension/versions/:version' => 'extension_uploads#destroy_version', constraints: { version: VERSION_PATTERN }
+      get 'assets' => 'extensions#index', as: :extensions
+      get 'assets/:username/:id' => 'extensions#show', as: :extension
+      get 'assets/:username/:extension/versions/:version' => 'extension_versions#show', as: :extension_version, constraints: { version: VERSION_PATTERN }
+      get 'assets/:username/:extension/versions/:version/download' => 'extension_versions#download', as: :extension_version_download, constraints: { version: VERSION_PATTERN }
+      delete 'assets/:username/:extension/versions/:version' => 'extension_uploads#destroy_version', constraints: { version: VERSION_PATTERN }
       get 'users/:user' => 'users#show', as: :user
-      get 'extensions/:username/:id/:version/:platform/:arch/asset' => 'github_assets#show', as: :github_asset, constraints: {version: VERSION_PATTERN}
+      get 'assets/:username/:id/:version/:platform/:arch/release_asset' => 'github_assets#show', as: :github_asset, constraints: {version: VERSION_PATTERN}
 
       resources :tags, only: [:index]
     end
   end
 
-  get 'extensions-directory' => 'extensions#directory'
+  get 'assets-directory' => 'extensions#directory', as: 'extensions_directory'
   get 'universe' => 'api/v1/universe#index', defaults: { format: :json }
   get 'status' => 'api/v1/health#show', defaults: { format: :json }
   get 'unsubscribe/:token' => 'email_preferences#unsubscribe', as: :unsubscribe
 
-  put 'extensions/:username/:id/transfer_ownership' => 'transfer_ownership#transfer', as: :transfer_ownership
+  put 'assets/:username/:id/transfer_ownership' => 'transfer_ownership#transfer', as: :transfer_ownership
   get 'ownership_transfer/:token/accept' => 'transfer_ownership#accept', as: :accept_transfer
   get 'ownership_transfer/:token/decline' => 'transfer_ownership#decline', as: :decline_transfer
 
-  resources :extensions, only: [:index]
+  resources :extensions, path: 'assets', only: [:index]
 
-  scope '/extensions/:username' do
+  scope '/assets/:username' do
     resources :extensions, path: "", constraints: proc { ROLLOUT.active?(:hosted_extensions) }, only: [] do
       resources :extension_versions, as: :versions, path: 'versions', only: [:new, :create]
     end
   end
 
   resources :extensions, path: "", only: [:new] do
-    scope "/extensions/:username" do
+    scope "/assets/:username" do
       resources :tiers, only: [:update], controller: :extension_tiers
 
       member do
@@ -60,7 +60,7 @@ Rails.application.routes.draw do
       end
     end
 
-    scope "/extensions" do
+    scope "/assets" do
       collection do
         post :create
       end
@@ -71,11 +71,11 @@ Rails.application.routes.draw do
     end
   end
 
-  get '/extensions/:username/:extension_id/versions/:version/download' => 'extension_versions#download', as: :extension_version_download, constraints: { version: VERSION_PATTERN }
-  get '/extensions/:username/:extension_id/versions/:version/download_asset_definition' => 'extension_versions#download_asset_definition', as: :extension_version_download_asset_definition, constraints: { version: VERSION_PATTERN }
-  get '/extensions/:username/:extension_id/versions/:version' => 'extension_versions#show', as: :extension_version, constraints: { version: VERSION_PATTERN }
-  delete '/extensions/:username/:extension_id/versions/:version' => 'extension_versions#destroy', as: :delete_extension_version, constraints: { version: VERSION_PATTERN }
-  put "/extensions/:username/:extension_id/versions/:version/update_platforms" => "extension_versions#update_platforms", as: :extension_update_platforms, constraints: { version: VERSION_PATTERN }
+  get '/assets/:username/:extension_id/versions/:version/download' => 'extension_versions#download', as: :extension_version_download, constraints: { version: VERSION_PATTERN }
+  get '/assets/:username/:extension_id/versions/:version/download_asset_definition' => 'extension_versions#download_asset_definition', as: :extension_version_download_asset_definition, constraints: { version: VERSION_PATTERN }
+  get '/assets/:username/:extension_id/versions/:version' => 'extension_versions#show', as: :extension_version, constraints: { version: VERSION_PATTERN }
+  delete '/assets/:username/:extension_id/versions/:version' => 'extension_versions#destroy', as: :delete_extension_version, constraints: { version: VERSION_PATTERN }
+  put "/assets/:username/:extension_id/versions/:version/update_platforms" => "extension_versions#update_platforms", as: :extension_update_platforms, constraints: { version: VERSION_PATTERN }
 
   get '/github_assets/:username/:extension_id/:version/:platform/:arch/download' => 'github_assets#download', as: :github_asset_download, constraints: { version: VERSION_PATTERN }
 
@@ -91,7 +91,7 @@ Rails.application.routes.draw do
       put :disable
       put :enable
       delete :revoke_admin
-      get :followed_extension_activity, format: :atom
+      get :followed_activity, format: :atom
     end
 
     collection do
