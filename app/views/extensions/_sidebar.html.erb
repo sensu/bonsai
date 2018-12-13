@@ -142,7 +142,7 @@
       <dl>
         <% github_release_assets.each do |github_asset| %>
           <dt><%= link_to github_asset.asset_url %></dt>
-          <dd>SHA: <%= github_asset.asset_sha %></dd>
+          <dd class="sha">SHA: <%= github_asset.asset_sha.presence || 'Unknown' %></dd>
         <% end %>
       </dl>
     </div>
