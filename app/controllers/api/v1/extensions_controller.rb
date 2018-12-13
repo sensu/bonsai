@@ -1,6 +1,10 @@
 class Api::V1::ExtensionsController < Api::V1Controller
   before_action :init_params, only: [:index]
 
+  resource_description do
+    name 'Assets'
+  end
+
   api! <<~EOD
     Retrieve data for all the #{I18n.t('nouns.extension').pluralize} in the #{Rails.configuration.app_name}.
     Results are paginated, with pagination controlled via the "start" and "items" params.
