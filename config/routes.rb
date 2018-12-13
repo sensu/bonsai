@@ -91,7 +91,7 @@ Rails.application.routes.draw do
       put :disable
       put :enable
       delete :revoke_admin
-      get :followed_extension_activity, format: :atom
+      get :followed_activity, format: :atom
     end
 
     collection do

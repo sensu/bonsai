@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'users/followed_extension_activity.atom.builder' do
+describe 'users/followed_activity.atom.builder' do
   let!(:test_extension_5_0) do
     create(
       :extension_version,
