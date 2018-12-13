@@ -18,7 +18,7 @@ describe 'api/v1/extensions/index' do
     expect(json_body['start']).to eql(69)
     expect(json_body['total']).to eql(314)
     expect(json_body['next' ]).to match(/\/api\//)
-    expect(json_body['next' ]).to match(/\/extensions/)
+    expect(json_body['next' ]).to match(/\/assets/)
     expect(json_body['next' ]).to match(/start=122/)
   end
 

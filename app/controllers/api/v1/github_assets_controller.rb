@@ -7,7 +7,7 @@ class Api::V1::GithubAssetsController < Api::V1Controller
   param :version,  String, required: true, desc: "asset version"
   param :platform, String, required: true, desc: "target platform"
   param :arch,     String, required: true, desc: "target architecture"
-  example "GET https://#{ENV['HOST']}/api/v1/extensions/demillir/sensu-asset-playground/v0.1-20181030/linux/aarch64/release_asset"
+  example "GET https://#{ENV['HOST']}/api/v1/assets/demillir/sensu-asset-playground/v0.1-20181030/linux/aarch64/release_asset"
   example <<-EOX
     {
         "type": "Asset",

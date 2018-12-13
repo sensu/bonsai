@@ -8,17 +8,17 @@ class Api::V1::ExtensionsController < Api::V1Controller
   EOD
   param :start, Integer, desc: "zero-based index of the starting #{I18n.t('nouns.extension')} (default is 0)"
   param :items, Integer, desc: "zero-based index of the starting #{I18n.t('nouns.extension')} (default is 10, max is 100)"
-  example "GET https://#{ENV['HOST']}/api/v1/extensions"
+  example "GET https://#{ENV['HOST']}/api/v1/assets"
   example <<-EOX
     {
     "start": 0,
     "total": 2,
-    "next": "https://bonsai-asset-index.com/api/v1/extensions?start=10",
+    "next": "https://bonsai-asset-index.com/api/v1/assets?start=10",
     "extensions": [
         {
             "name": "gofullstack/acms-admin-wildcard-redirect",
             "description": "Average CMS Wildcard Admin Redirect WordPress Plugin",
-            "url": "https://bonsai-asset-index.com/api/v1/extensions/gofullstack/acms-admin-wildcard-redirect",
+            "url": "https://bonsai-asset-index.com/api/v1/assets/gofullstack/acms-admin-wildcard-redirect",
             "github_url": "https://github.com/gofullstack/acms-admin-wildcard-redirect",
             "download_url": "https://bonsai-asset-index.com/assets/gofullstack/acms-admin-wildcard-redirect/download",
             "builds": []
@@ -26,7 +26,7 @@ class Api::V1::ExtensionsController < Api::V1Controller
         {
             "name": "demillir/maruku",
             "description": "A pure-Ruby Markdown-superset interpreter (Official Repo).",
-            "url": "https://bonsai-asset-index.com/api/v1/extensions/demillir/maruku",
+            "url": "https://bonsai-asset-index.com/api/v1/assets/demillir/maruku",
             "github_url": "https://github.com/demillir/maruku",
             "download_url": "https://bonsai-asset-index.com/assets/demillir/maruku/download",
             "builds": [
@@ -36,7 +36,7 @@ class Api::V1::ExtensionsController < Api::V1Controller
                     "version": "v0.1-20181022",
                     "asset_url": "https://github.com/demillir/maruku/releases/download/v0.1-20181022/test_asset-v0.1-20181030-linux-x86_64.tar.gz",
                     "asset_sha": "6f2121a6c8690f229e9cb962d8d71f60851684284755d4cdba4e77ef7ba20c03283795c4fccb9d6ac8308b248f2538bf7497d6467de0cf9e9f0814625b4c6f91",
-                    "details_url": "http://srv2:3000/api/v1/extensions/demillir/maruku/v0.1-20181022/linux/x86_64/release_asset"
+                    "details_url": "http://srv2:3000/api/v1/assets/demillir/maruku/v0.1-20181022/linux/x86_64/release_asset"
                 },
                 {
                     "platform": "alpine",
@@ -44,7 +44,7 @@ class Api::V1::ExtensionsController < Api::V1Controller
                     "version": "v0.1-20181030",
                     "asset_url": null,
                     "asset_sha": "67752b4721bb4c61a5c728439141e5b55c361e2867ac0889eacdd887a301ebb2c08abf82a814c201539a588b46b0d356024e03716dd4c1bea60d3cc723885c87",
-                    "details_url": "http://srv2:3000/api/v1/extensions/demillir/maruku/v0.1-20181030/alpine/x86_64/release_asset"
+                    "details_url": "http://srv2:3000/api/v1/assets/demillir/maruku/v0.1-20181030/alpine/x86_64/release_asset"
                 }
             ]
         }
@@ -75,12 +75,12 @@ class Api::V1::ExtensionsController < Api::V1Controller
   EOD
   param :username, String, required: true, desc: "Bonsai Asset Index user name of the asset owner"
   param :id,       String, required: true, desc: "Bonsai Asset Index asset name"
-  example "GET https://#{ENV['HOST']}/api/v1/extensions/demillir/maruku"
+  example "GET https://#{ENV['HOST']}/api/v1/assets/demillir/maruku"
   example <<-EOX
     {
         "name": "demillir/maruku",
         "description": "A pure-Ruby Markdown-superset interpreter (Official Repo).",
-        "url": "https://bonsai-asset-index.com/api/v1/extensions/demillir/maruku",
+        "url": "https://bonsai-asset-index.com/api/v1/assets/demillir/maruku",
         "github_url": "https://github.com/demillir/maruku",
         "download_url": "https://bonsai-asset-index.com/assets/demillir/maruku/download",
         "builds": [
@@ -90,7 +90,7 @@ class Api::V1::ExtensionsController < Api::V1Controller
                 "version": "v0.1-20181022",
                 "asset_url": "https://github.com/demillir/maruku/releases/download/v0.1-20181022/test_asset-v0.1-20181030-linux-x86_64.tar.gz",
                 "asset_sha": "6f2121a6c8690f229e9cb962d8d71f60851684284755d4cdba4e77ef7ba20c03283795c4fccb9d6ac8308b248f2538bf7497d6467de0cf9e9f0814625b4c6f91",
-                "details_url": "http://srv2:3000/api/v1/extensions/demillir/maruku/v0.1-20181022/linux/x86_64/release_asset"
+                "details_url": "http://srv2:3000/api/v1/assets/demillir/maruku/v0.1-20181022/linux/x86_64/release_asset"
             },
             {
                 "platform": "alpine",
@@ -98,7 +98,7 @@ class Api::V1::ExtensionsController < Api::V1Controller
                 "version": "v0.1-20181030",
                 "asset_url": null,
                 "asset_sha": "67752b4721bb4c61a5c728439141e5b55c361e2867ac0889eacdd887a301ebb2c08abf82a814c201539a588b46b0d356024e03716dd4c1bea60d3cc723885c87",
-                "details_url": "http://srv2:3000/api/v1/extensions/demillir/maruku/v0.1-20181030/alpine/x86_64/release_asset"
+                "details_url": "http://srv2:3000/api/v1/assets/demillir/maruku/v0.1-20181030/alpine/x86_64/release_asset"
             }
         ]
     }
