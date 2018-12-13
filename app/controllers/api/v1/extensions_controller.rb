@@ -14,7 +14,7 @@ class Api::V1::ExtensionsController < Api::V1Controller
     "start": 0,
     "total": 2,
     "next": "https://bonsai-asset-index.com/api/v1/assets?start=10",
-    "extensions": [
+    "assets": [
         {
             "name": "gofullstack/acms-admin-wildcard-redirect",
             "description": "Average CMS Wildcard Admin Redirect WordPress Plugin",
