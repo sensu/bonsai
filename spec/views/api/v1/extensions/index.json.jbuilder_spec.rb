@@ -23,11 +23,11 @@ describe 'api/v1/extensions/index' do
   end
 
   it "includes an array of extensions" do
-    expect(json_body['extensions']).to be_a(Array)
+    expect(json_body['assets']).to be_a(Array)
   end
 
   it "each extension includes an array of builds" do
-    extensions = json_body['extensions']
+    extensions = json_body['assets']
     expect(extensions).to be_many
     extensions.each do |extension|
       expect(extension['builds']).to be_a(Array)
