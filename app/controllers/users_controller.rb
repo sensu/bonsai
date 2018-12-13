@@ -46,12 +46,12 @@ class UsersController < ApplicationController
   end
 
   #
-  # GET /users/:id/followed_extension_activity
+  # GET /users/:id/followed_activity
   #
   # Displays a feed of extension activity for the
   # extensions the specified user follows.
   #
-  def followed_extension_activity
+  def followed_activity
     @followed_extension_activity = @user.followed_extension_versions.limit(50)
   end
 

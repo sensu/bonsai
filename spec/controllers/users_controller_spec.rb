@@ -35,15 +35,15 @@ describe UsersController do
     end
   end
 
-  describe 'GET #followed_extension_activity' do
+  describe 'GET #followed_activity' do
     it 'assigns a user' do
-      get :followed_extension_activity,params: {id: user.username}
+      get :followed_activity,params: {id: user.username}
 
       expect(assigns[:user]).to eql(user)
     end
 
     it "assigns a user's followed extension activity" do
-      get :followed_extension_activity, params: {id: user.username}
+      get :followed_activity, params: {id: user.username}
 
       expect(assigns[:followed_extension_activity]).to_not be_nil
     end
