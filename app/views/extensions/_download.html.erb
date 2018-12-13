@@ -21,12 +21,7 @@
     <a class="close-reveal-modal close-reveal-modal-x">&#215;</a>
 
     <h3 class="download-choice">Either download the source code:</h3>
-    <%= link_to "Download Source",
-                download_extension_path(
-                    extension,
-                    username: extension.owner_name),
-                class: 'button primary radius button_download_extension' %>
-
+    <%= render partial: 'extensions/download_source', locals: {extension: extension} %>
     <h3 class="download-choice">Or download the asset definition:</h3>
 
     <div id="download-asset-definition">
