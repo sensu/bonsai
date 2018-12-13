@@ -113,7 +113,7 @@ class ExtensionAuthorizer < Authorizer::Base
   end
 
   def sync_repo?
-    owner_or_admin?
+    owner_or_collaborator? || admin?
   end
 
   private

@@ -2,7 +2,7 @@
   <%= render 'resources/owner', resource: extension %>
   <%= render 'resources/collaborators', collaborators: collaborators, resource: extension %>
 
-  <% if policy(extension).manage? %>
+  <% if policy(extension).manage? || policy(extension).sync_repo? %>
     <%= render "extensions/manage_extension", extension: extension, version: version %>
   <% end %>
 
