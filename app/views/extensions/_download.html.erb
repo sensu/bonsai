@@ -3,23 +3,21 @@
   <small><%= number_with_delimiter(extension.download_count) %> Total Downloads</small>
 </h4>
 
-<% if extension.hosted? || version.github_assets.none?(&:viable?)%>
-  <%= link_to "Download",
-              download_extension_path(
-                  extension,
-                  username: extension.owner_name),
-              class: 'button primary radius expand button_download_extension' %>
-<% else %>
-  <%= link_to "Download",
-              "#",
-              class: 'button primary radius expand button_download_extension',
-              rel: 'download_asset_or_definition',
-              'data-reveal-id': 'download_asset_or_definition' %>
+<%= link_to "Download",
+            "#",
+            class: 'button primary radius expand button_download_extension',
+            rel: 'download_asset_or_definition',
+            'data-reveal-id': 'download_asset_or_definition' %>
 
-  <div id="download_asset_or_definition" class="reveal-modal small" data-reveal>
-    <h1>Download</h1>
-    <a class="close-reveal-modal close-reveal-modal-x">&#215;</a>
+<div id="download_asset_or_definition" class="reveal-modal small" data-reveal>
+  <h1>Download</h1>
+  <a class="close-reveal-modal close-reveal-modal-x">&#215;</a>
 
+  <% if extension.hosted? || version.github_assets.none?(&:viable?)%>
+    <h3 class="download-choice">There are no asset definitions for this version, only source code:</h3>
+    <%= render partial: 'extensions/download_source', locals: {extension: extension} %>
+    <a class="button secondary radius">Cancel</a>
+  <% else %>
     <h3 class="download-choice">Either download the source code:</h3>
     <%= render partial: 'extensions/download_source', locals: {extension: extension} %>
     <h3 class="download-choice">Or download the asset definition:</h3>
@@ -35,5 +33,5 @@
     <div style="margin-top: 24px;" class="text-center">
       <a class="button secondary radius tiny close-reveal-modal">Cancel</a>
     </div>
-  </div>
-<% end %>
+  <% end %>
+</div>
