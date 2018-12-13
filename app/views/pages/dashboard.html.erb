@@ -5,7 +5,7 @@
     <div class="heading-with-buttons">
       <h3 class="title">
         Followed <%= t('nouns.extension').pluralize.titleize %> Activity
-        <small><%= link_to '<i class="fa fa-rss"></i> rss'.html_safe, followed_extension_activity_user_path(current_user, format: 'atom'), class: 'rss_feed_link show-for-medium-up' %></small>
+        <small><%= link_to '<i class="fa fa-rss"></i> rss'.html_safe, followed_activity_user_path(current_user, format: 'atom'), class: 'rss_feed_link show-for-medium-up' %></small>
       </h3>
       <div class="buttons">
         <% if @followed_extension_activity.any? %>

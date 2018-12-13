@@ -18,16 +18,16 @@ describe 'api/v1/extensions/index' do
     expect(json_body['start']).to eql(69)
     expect(json_body['total']).to eql(314)
     expect(json_body['next' ]).to match(/\/api\//)
-    expect(json_body['next' ]).to match(/\/extensions/)
+    expect(json_body['next' ]).to match(/\/assets/)
     expect(json_body['next' ]).to match(/start=122/)
   end
 
   it "includes an array of extensions" do
-    expect(json_body['extensions']).to be_a(Array)
+    expect(json_body['assets']).to be_a(Array)
   end
 
   it "each extension includes an array of builds" do
-    extensions = json_body['extensions']
+    extensions = json_body['assets']
     expect(extensions).to be_many
     extensions.each do |extension|
       expect(extension['builds']).to be_a(Array)
