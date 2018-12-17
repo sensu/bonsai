@@ -9,7 +9,7 @@
 .search_bar {
   background-color: #2c3458;
   border: none;
-  padding: rem-calc(50 55);
+  padding: rem-calc(50 55 21);
 }
 
 @media #{$mobile-only} {
@@ -255,5 +255,117 @@ input[type="search"].extension_search_textfield {
 
   h4 {
     margin-top: 0;
+  }
+}
+
+
+.advanced_search_toggle {
+  @include grid-column($columns: 2, $collapse: true, $offset: 10);
+  cursor: pointer;
+  text-align: center;
+  margin-top: rem-calc(15);
+
+  span {
+    color: lighten($primary_gray, 20%);
+    font: rem-calc(14) $accent_font;
+    &:hover{
+      color: white;
+    }
+  }
+}
+
+@media #{$mobile-only} {
+  .advanced_search_toggle{
+    span {
+      font: rem-calc(11) $accent_font;
+    }
+  }
+}
+
+.advanced_search_body {
+  @include grid-row();
+  background-color: white;
+  border-bottom: rem-calc(2) solid lighten($secondary_gray, 30%);
+  display: none;
+  max-width: $max-width;
+  padding: rem-calc(0 55);
+
+  h4 {
+    color: black;
+    margin-right: rem-calc(20);
+    margin-top: rem-calc(24);
+    margin-bottom: rem-calc(6);
+    text-align: center;
+  }
+}
+
+@media #{$mobile-only} {
+  .advanced_search_body {
+    padding: rem-calc(0 20);
+  }
+}
+
+@media #{$small-only} {
+  .advanced_search_body {
+    padding: rem-calc(0 20);
+  }
+}
+
+@media #{$xlarge-up} {
+  .advanced_search_body {
+    padding: rem-calc(0 40);
+  }
+}
+
+.advanced_search_platforms, .advanced_search_architectures{
+  @include grid-column($columns: 12, $collapse: true);
+  padding-left: rem-calc(70);
+  padding-right: rem-calc(20);
+}
+
+.advanced_search_platforms {
+  margin-bottom: rem-calc(12);
+}
+
+.advanced_search_platform, .advanced_search_architecture {
+  @include grid-column($columns: 2, $collapse: true);
+
+  label {
+    display: block;
+    font: rem-calc(14) $accent_font;
+    margin-bottom: rem-calc(8);
+    vertical-align: middle;
+  }
+
+  input {
+    margin:0;
+    margin-right: rem-calc(5);
+    margin-left: rem-calc(10);
+    padding: 0;
+    position: relative;
+    top: rem-calc(-2);
+    vertical-align: middle;
+  }
+}
+
+@media #{$small-only} {
+  .advanced_search_platforms, .advanced_search_architectures {
+    @include grid-column($columns: 12, $collapse: true);
+    padding-left: rem-calc(20);
+  }
+
+  .advanced_search_platform, .advanced_search_architecture {
+    @include grid-column(3, $collapse: true);
+  }
+}
+
+@media #{$mobile-only} {
+  .advanced_search_platforms, .advanced_search_architectures {
+    @include grid-column($columns: 12, $collapse: true);
+    padding-left: rem-calc(10);
+  }
+
+  .advanced_search_platform, .advanced_search_architecture {
+    @include grid-column(6, $collapse: true);
   }
 }
