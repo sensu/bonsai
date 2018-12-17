@@ -1,16 +1,18 @@
 <div class="search_bar">
   <%= form_tag @search[:path], class: 'search_form', method: :get do %>
-    <div class="search_field">
-      <%= search_field_tag :q, params[:q], placeholder: 'Add-ons, tags, authors...', class: 'extension_search_textfield' %>
-    </div>
+    <div class="quick_search">
+      <div class="search_field">
+        <%= search_field_tag :q, params[:q], placeholder: 'Add-ons, tags, authors...', class: 'extension_search_textfield' %>
+      </div>
 
-    <%= hidden_field_tag :order, params[:order] if params[:order].present? %>
-    <%= hidden_field_tag :supported_platform_id, params[:supported_platform_id] %>
+      <%= hidden_field_tag :order, params[:order] if params[:order].present? %>
+      <%= hidden_field_tag :supported_platform_id, params[:supported_platform_id] %>
 
-    <div class="search_button">
-      <%= button_tag(type: 'submit', class: 'extension_search_button', name: nil) do %>
-        Search
-      <% end %>
+      <div class="search_button">
+        <%= button_tag(type: 'submit', class: 'extension_search_button', name: nil) do %>
+          Search
+        <% end %>
+      </div>
     </div>
   <% end %>
 </div>
