@@ -11,6 +11,6 @@ class GithubAsset < OpenStruct
   end
 
   def viable?
-    asset_url.present?
+    viable
   end
 end
