@@ -1,5 +1,5 @@
-<div class="search_bar">
-  <%= form_tag @search[:path], class: 'search_form', method: :get do %>
+<%= form_tag @search[:path], class: 'search_form', method: :get do %>
+  <div class="search_bar">
     <div class="quick_search">
       <div class="search_field">
         <%= search_field_tag :q, params[:q], placeholder: 'Add-ons, tags, authors...', class: 'extension_search_textfield' %>
@@ -14,5 +14,5 @@
         <% end %>
       </div>
     </div>
-  <% end %>
-</div>
+  </div>
+<% end %>
