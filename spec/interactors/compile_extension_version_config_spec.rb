@@ -29,6 +29,7 @@ describe CompileExtensionVersionConfig do
                                     "platform"       => "linux",
                                     "sha_filename"   => "\#{repo}-\#{version}-linux-x86_64.sha512.txt",
                                     "asset_filename" => "\#{repo}-\#{version}-linux-x86_64.tar.gz",
+                                    "viable"         => true,
                                     "asset_url"      => "https://example.com/download",
                                     "asset_sha"      => "c1ec2f493f0ff9d83914c1ec2f493f0ff9d83914"}]} }
 
