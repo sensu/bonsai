@@ -20,7 +20,7 @@ describe ExtensionVersionsHelper do
 
     context "version has a viable release asset" do
       before do
-        extension_version.config = {"builds" => [{"asset_url" => "http://url.com"}]}
+        extension_version.config = {"builds" => [{"viable"=>true, "asset_url" => "http://url.com"}]}
       end
 
       it "returns an array of GithubAsset objects" do
@@ -57,6 +57,7 @@ describe ExtensionVersionsHelper do
                                   ["System.OS == linux",
                                    "(System.Arch == x86_64) || (System.Arch == amd64)"],
                                 "platform"=>"linux",
+                                "viable"=>true,
                                 "asset_url"=>"http://asset.url/",
                                 "sha_filename"=>"test_asset-\#{version}-linux-x86_64.sha512.txt",
                                 "asset_filename"=>"test_asset-\#{version}-linux-x86_64.tar.gz"},
@@ -65,6 +66,7 @@ describe ExtensionVersionsHelper do
                                   ["System.OS == linux",
                                    "(System.Arch == x86_64) || (System.Arch == amd64)"],
                                 "platform"=>"OSX",
+                                "viable"=>true,
                                 "asset_url"=>"http://asset.url/",
                                 "sha_filename"=>"test_asset-\#{version}-OSX-x86_64.sha512.txt",
                                 "asset_filename"=>"test_asset-\#{version}-OSX-x86_64.tar.gz"},]} }

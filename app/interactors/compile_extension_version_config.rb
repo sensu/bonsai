@@ -93,6 +93,7 @@ class CompileExtensionVersionConfig
     )
 
     return {
+      'viable'    => file_download_url.present?,
       'asset_url' => file_download_url,
       'asset_sha' => result.sha
     }
