@@ -3,6 +3,23 @@ require 'spec_helper'
 describe ExtensionVersion do
   subject { build_stubbed :extension_version }
 
+  describe '.active' do
+    let!(:enabled_extension)  { create :extension }
+    let!(:disabled_extension) { create :extension, :disabled }
+
+    it 'includes versions belonging to enabled extensions' do
+      expect {
+        create :extension_version, extension: enabled_extension
+      }.to change{ExtensionVersion.active.count}.by(1)
+    end
+
+    it 'ignores versions belonging to disabled extensions' do
+      expect {
+        create :extension_version, extension: disabled_extension
+      }.not_to change{ExtensionVersion.active.count}
+    end
+  end
+
   describe '.for_architectures' do
     let(:arch)   { 'my-arch' }
     let(:arch2)  { 'other-arch' }

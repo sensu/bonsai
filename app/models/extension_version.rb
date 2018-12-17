@@ -16,6 +16,9 @@ class ExtensionVersion < ApplicationRecord
   validates :version, presence: true, uniqueness: { scope: :extension }
   validate :semantic_version
 
+  # Leverage the +Extension+ model's default scope
+  scope :active, -> { joins(:extension) }
+
   scope :for_architectures, ->(archs) {
     clauses = assemble_clauses(archs, 'arch')
     where(clauses.reduce(:or))
