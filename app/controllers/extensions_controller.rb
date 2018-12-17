@@ -368,6 +368,14 @@ class ExtensionsController < ApplicationController
       scope = scope.supported_platforms([params[:supported_platform_id]])
     end
 
+    if params[:archs]
+      scope = scope.for_architectures(Array.wrap(params[:archs]))
+    end
+
+    if params[:platforms]
+      scope = scope.for_platforms(Array.wrap(params[:platforms]))
+    end
+
     return scope
   end
 
