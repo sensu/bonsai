@@ -236,6 +236,13 @@ input[type="search"].extension_search_textfield {
   }
 }
 
+.quick_search {
+  @include grid-row();
+  position: relative;
+  max-width: $max-width;
+  border: none;
+}
+
 #advanced-search {
   .supported-platform {
     float: left;
