@@ -13,6 +13,42 @@
           Search
         <% end %>
       </div>
+
+      <% if advanced_options_available? %>
+        <div class="advanced_search_toggle">
+          <span>Advanced Options <i class="fa fa-chevron-down" id="toggle-arrow"></i></span>
+        </div>
+      <% end %>
     </div>
+  </div>
+
+  <div class="advanced_search_body">
+    <% if supported_platforms.any? %>
+      <h4> Select Supported Platforms </h4>
+      <div class = "advanced_search_platforms" >
+        <% supported_platforms.each do |platform| %>
+          <div class="advanced_search_platform">
+            <label>
+              <%=check_box_tag 'platforms[]', platform, params[:platforms] ? params[:platforms].include?(platform) : false %>
+              <%= platform %>
+            </label>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+
+    <% if supported_architectures.any? %>
+      <h4> Select Supported Architectures </h4>
+      <div class = "advanced_search_architectures" >
+        <% supported_architectures.each do |arch| %>
+          <div class="advanced_search_architecture">
+            <label>
+              <%=check_box_tag 'archs[]', arch, params[:archs] ? params[:archs].include?(arch) : false %>
+              <%= arch %>
+            </label>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
   </div>
 <% end %>
