@@ -14,6 +14,7 @@ describe GithubAssetsController do
                           "platform"       => platform,
                           "sha_filename"   => "test_asset-\#{version}-linux-x86_64.sha512.txt",
                           "asset_filename" => "test_asset-\#{version}-linux-x86_64.tar.gz",
+                          "viable"         => true,
                           "asset_url"      => "https://example.com/download",
                           "asset_sha"      => "c1ec2f493f0ff9d83914c1ec2f493f0ff9d83914"}]} }
     let!(:version) { create :extension_version, config: config }
