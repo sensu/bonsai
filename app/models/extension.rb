@@ -93,6 +93,9 @@ class Extension < ApplicationRecord
 
   scope :featured, -> { where(featured: true) }
 
+  scope :for_architectures, ->(archs) { joins(:extension_versions).merge(ExtensionVersion.for_architectures(archs)).distinct }
+  scope :for_platforms, ->(platforms) { joins(:extension_versions).merge(ExtensionVersion.for_platforms(platforms)).distinct }
+
   # Search
   # --------------------
   pg_search_scope(

@@ -22,34 +22,8 @@ class ExtensionsController < ApplicationController
   #   GET /extensions?order=recently_updated
   #
   def index
-    @extensions = Extension.includes(:extension_versions)
-
-    if params[:q].present?
-      @extensions = @extensions.search(params[:q])
-    end
-
-    if params[:featured].present?
-      @extensions = @extensions.featured
-    end
-
-    if params[:tier].present?
-      tier = Tier.find_by(name: params[:tier])
-      if tier
-        @extensions = @extensions.merge(tier.extensions)
-      end
-    end
-
-    if params[:order].present?
-      @extensions = @extensions.ordered_by(params[:order])
-    end
-
-    if params[:order].blank? && params[:q].blank?
-      @extensions = @extensions.order(:name)
-    end
-
-    if params[:supported_platform_id].present?
-      @extensions = @extensions.supported_platforms([params[:supported_platform_id]])
-    end
+    @extensions = qualify_scope(Extension, params)
+                    .includes(:extension_versions)
 
     @number_of_extensions = @extensions.count(:all)
     @extensions = @extensions.page(params[:page]).per(20)
@@ -365,6 +339,45 @@ class ExtensionsController < ApplicationController
   end
 
   private
+
+  def qualify_scope(scope, params)
+    if params[:q].present?
+      scope = scope.search(params[:q])
+    end
+
+    if params[:featured].present?
+      scope = scope.featured
+    end
+
+    if params[:tier].present?
+      tier = Tier.find_by(name: params[:tier])
+      if tier
+        scope = scope.merge(tier.extensions)
+      end
+    end
+
+    if params[:order].present?
+      scope = scope.ordered_by(params[:order])
+    end
+
+    if params[:order].blank? && params[:q].blank?
+      scope = scope.order(:name)
+    end
+
+    if params[:supported_platform_id].present?
+      scope = scope.supported_platforms([params[:supported_platform_id]])
+    end
+
+    if params[:archs]
+      scope = scope.for_architectures(Array.wrap(params[:archs]))
+    end
+
+    if params[:platforms]
+      scope = scope.for_platforms(Array.wrap(params[:platforms]))
+    end
+
+    return scope
+  end
 
   def assign_extension
     @extension ||= begin

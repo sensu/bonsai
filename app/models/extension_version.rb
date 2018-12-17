@@ -16,6 +16,19 @@ class ExtensionVersion < ApplicationRecord
   validates :version, presence: true, uniqueness: { scope: :extension }
   validate :semantic_version
 
+  # Leverage the +Extension+ model's default scope
+  scope :active, -> { joins(:extension) }
+
+  scope :for_architectures, ->(archs) {
+    clauses = assemble_clauses(archs, 'arch')
+    where(clauses.reduce(:or))
+  }
+
+  scope :for_platforms, ->(platforms) {
+    clauses = assemble_clauses(platforms, 'platform')
+    where(clauses.reduce(:or))
+  }
+
   # Delegations
   # --------------------
   delegate :name, :owner, to: :extension
@@ -75,6 +88,21 @@ class ExtensionVersion < ApplicationRecord
   end
 
   private
+
+  def self.assemble_clauses(vals, config_index)
+    builds = Arel::Nodes::InfixOperation.new('->',
+                                             ExtensionVersion.arel_table[:config],
+                                             Arel::Nodes.build_quoted('builds'))
+    vals.map { |val|
+      criteria = {
+        :viable      => true,
+        config_index => val
+      }
+      json = criteria.to_json
+      rhs  = Arel.sql("'[#{json}]'::jsonb")
+      Arel::Nodes::InfixOperation.new('@>', builds, rhs)
+    }
+  end
 
   #
   # Ensure that the version string we have been given conforms to semantic
