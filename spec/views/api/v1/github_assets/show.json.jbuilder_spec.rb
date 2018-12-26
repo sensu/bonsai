@@ -30,6 +30,6 @@ describe 'api/v1/github_assets/show' do
   end
 
   it "serializes the namespace" do
-    expect(json_body['metadata']['namespace']).to eql(version.extension.owner_name)
+    expect(json_body['metadata']['namespace']).to eql('default')
   end
 end
