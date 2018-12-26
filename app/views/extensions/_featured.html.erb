@@ -7,8 +7,8 @@
     <div class="small-10 columns">
       <header>
         <%= link_to e.name, owner_scoped_extension_url(e) %>
-        <span><%= e.latest_extension_version.try(:version) %></span>
         <div class="tier-declaration">
+          <span><%= e.latest_extension_version.try(:version) %></span>
           <i class="fa fa-<%= e.tier_icon_name %>"></i>
           <%= e.tier_name %>
           tier

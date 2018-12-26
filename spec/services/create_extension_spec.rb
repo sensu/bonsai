@@ -106,7 +106,11 @@ describe CreateExtension do
   context 'a hosted extension' do
     let(:github_url)  { nil }
     let(:version)     { 'v1.2.3' }
-    let(:blob)        { ActiveStorage::Blob.create_after_upload!(io: StringIO.new(""), filename: 'not-really-a-file') }
+    let(:blob)        { ActiveStorage::Blob.create_after_upload!(
+      io:           StringIO.new(""),
+      filename:     'not-really-a-file',
+      content_type: 'application/gzip')
+    }
     let(:signed_id)   { blob.signed_id}
     let(:extension)   { build :extension, :hosted, owner: user }
 
