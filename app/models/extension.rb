@@ -135,6 +135,10 @@ class Extension < ApplicationRecord
     allow_nil: true
   }
   validates :replacement, presence: true, if: :deprecated?
+  validates :tmp_source_file, file_content_type: {
+    allow:   /application\/.*(tar|zip|compress|stuff|rar)/,
+    message: ': upload file must be a compressed archive type'
+  }, if: ->(record) { record.tmp_source_file&.attachment }
 
   def self.with_owner_and_lowercase_name(owner_name:, lowercase_name:)
     Extension.find_by!(owner_name: owner_name, lowercase_name: lowercase_name)
