@@ -3,7 +3,7 @@ json.api_version "core/v2"
 
 json.metadata do
   json.name        @github_asset.extension_name
-  json.namespace   @github_asset.extension_namespace
+  json.namespace   'default'
   json.labels      @github_asset.labels.to_h
   json.annotations @github_asset.annotations.to_h
 end
