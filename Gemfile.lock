@@ -127,6 +127,9 @@ GEM
     faraday_middleware (0.12.2)
       faraday (>= 0.7.4, < 1.0)
     ffi (1.9.25)
+    file_validators (2.3.0)
+      activemodel (>= 3.2)
+      mime-types (>= 1.0)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
     hashdiff (0.3.7)
@@ -173,6 +176,9 @@ GEM
       mimemagic (~> 0.3.2)
     maruku (0.7.3)
     method_source (0.9.0)
+    mime-types (3.2.2)
+      mime-types-data (~> 3.2015)
+    mime-types-data (3.2018.0812)
     mimemagic (0.3.2)
     mini_mime (1.0.1)
     mini_portile2 (2.3.0)
@@ -405,6 +411,7 @@ DEPENDENCIES
   dotenv-rails
   factory_bot_rails
   faraday_middleware
+  file_validators
   html_truncator
   interactor
   jbuilder (~> 2.5)
@@ -458,4 +465,4 @@ RUBY VERSION
    ruby 2.5.1p57
 
 BUNDLED WITH
-   1.17.1
+   1.17.2
