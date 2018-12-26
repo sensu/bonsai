@@ -23,7 +23,7 @@ class Extension < ApplicationRecord
   has_many :extension_versions, dependent: :destroy
   has_many :extension_followers
   has_many :followers, through: :extension_followers, source: :user
-  has_many :taggings, as: :taggable
+  has_many :taggings, as: :taggable, dependent: :destroy
   has_many :tags, through: :taggings
 
   # HACK: +Extension+ objects don't really have a source_file attachment or version attribute.
