@@ -72,6 +72,7 @@ gem 'interactor'                        # better wrangling of service objects
 gem 'faraday_middleware'                # for following redirects
 gem 'apipie-rails', '0.5.1'             # Lock to v0.5.1 because subsequent versions drop content after a couple of page refreshes
 gem 'maruku'                            # so apipie can use Markdown
+gem 'file_validators'                   # for validating hosted asset file types
 
 gem 'kaminari'
 
