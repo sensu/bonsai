@@ -23,7 +23,7 @@ class Extension < ApplicationRecord
   has_many :extension_versions, dependent: :destroy
   has_many :extension_followers
   has_many :followers, through: :extension_followers, source: :user
-  has_many :taggings, as: :taggable
+  has_many :taggings, as: :taggable, dependent: :destroy
   has_many :tags, through: :taggings
 
   # HACK: +Extension+ objects don't really have a source_file attachment or version attribute.
@@ -135,6 +135,10 @@ class Extension < ApplicationRecord
     allow_nil: true
   }
   validates :replacement, presence: true, if: :deprecated?
+  validates :tmp_source_file, file_content_type: {
+    allow:   /application\/.*(tar|zip|compress|stuff|rar)/,
+    message: ': upload file must be a compressed archive type'
+  }, if: ->(record) { record.tmp_source_file&.attachment }
 
   def self.with_owner_and_lowercase_name(owner_name:, lowercase_name:)
     Extension.find_by!(owner_name: owner_name, lowercase_name: lowercase_name)
