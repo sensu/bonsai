@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe GithubAssetsController do
+describe ReleaseAssetsController do
   render_views
 
   describe 'GET #download' do
