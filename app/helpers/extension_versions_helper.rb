@@ -85,19 +85,19 @@ module ExtensionVersionsHelper
   end
 
   def determine_viable_platforms_and_archs(version, selected_platform, selected_arch)
-    viable_github_assets    = version.release_assets.find_all(&:viable?)
-    matching_github_assests = viable_github_assets
-                                .find_all { |github_asset|
-                                  (!selected_platform || github_asset.platform == selected_platform) &&
-                                    (!selected_arch || github_asset.arch == selected_arch)
-                                }
+    viable_release_assets    = version.release_assets.find_all(&:viable?)
+    matching_release_assests = viable_release_assets
+                                 .find_all { |release_asset|
+                                   (!selected_platform || release_asset.platform == selected_platform) &&
+                                     (!selected_arch || release_asset.arch == selected_arch)
+                                 }
 
-    platforms = matching_github_assests
+    platforms = matching_release_assests
                   .map(&:platform)
                   .compact
                   .uniq
                   .sort_by(&:downcase)
-    archs     = matching_github_assests
+    archs     = matching_release_assests
                   .map(&:arch)
                   .compact
                   .uniq
