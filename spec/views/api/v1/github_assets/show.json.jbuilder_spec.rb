@@ -1,15 +1,15 @@
 require 'spec_helper'
 
 describe 'api/v1/github_assets/show' do
-  let(:version)       { create :extension_version }
-  let(:url)           { "http://example.com/asset" }
-  let(:sha)           { "abcdef1234" }
-  let!(:github_asset) { ReleaseAsset.new(version:   version,
+  let(:version)        { create :extension_version }
+  let(:url)            { "http://example.com/asset" }
+  let(:sha)            { "abcdef1234" }
+  let!(:release_asset) { ReleaseAsset.new(version:   version,
                                          asset_url: url,
                                          asset_sha: sha) }
 
   before do
-    assign(:github_asset, github_asset)
+    assign(:release_asset, release_asset)
     render
   end
 
