@@ -1,4 +1,4 @@
-class Api::V1::GithubAssetsController < Api::V1Controller
+class Api::V1::ReleaseAssetsController < Api::V1Controller
   api! <<~EOD
     Retrieve #{I18n.t('indefinite_articles.extension')} #{I18n.t('nouns.extension')}'s build-specific details, suitable for consumption by the sensuctl tool.
   EOD
