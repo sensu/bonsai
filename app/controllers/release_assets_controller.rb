@@ -14,7 +14,7 @@ class ReleaseAssetsController < ApplicationController
       @release_asset.arch,
     ].join('-')
 
-    json = render_to_string template: 'api/v1/github_assets/show.json.jbuilder'
+    json = render_to_string template: 'api/v1/release_assets/show.json.jbuilder'
 
     send_data json, filename: "#{filename}.json"
   end
