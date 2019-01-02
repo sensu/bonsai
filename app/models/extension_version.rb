@@ -83,7 +83,7 @@ class ExtensionVersion < ApplicationRecord
     Array.wrap(config['builds'])
       .map { |h|
         attributes = h.merge(version: self)
-        GithubAsset.new(attributes)
+        ReleaseAsset.new(attributes)
       }
   end
 

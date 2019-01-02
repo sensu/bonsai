@@ -1,4 +1,4 @@
-class GithubAsset < OpenStruct
+class ReleaseAsset < OpenStruct
   include ActiveModel::Conversion   # Needed for JBuilder serialization
 
   delegate :extension,           to: :version, allow_nil: true
