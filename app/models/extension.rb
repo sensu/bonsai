@@ -136,7 +136,7 @@ class Extension < ApplicationRecord
   }
   validates :replacement, presence: true, if: :deprecated?
   validates :tmp_source_file, file_content_type: {
-    allow:   /application\/.*(tar|zip|compress|stuff|rar)/,
+    allow:   TarBallAnalyzer::MIME_TYPES + ZipFileAnalyzer::MIME_TYPES,
     message: ': upload file must be a compressed archive type'
   }, if: ->(record) { record.tmp_source_file&.attachment }
 
