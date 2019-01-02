@@ -13,7 +13,7 @@
   <h1>Download</h1>
   <a class="close-reveal-modal close-reveal-modal-x">&#215;</a>
 
-  <% if extension.hosted? || version.github_assets.none?(&:viable?)%>
+  <% if extension.hosted? || version.release_assets.none?(&:viable?)%>
     <h3 class="download-choice">There are no asset definitions for this version, only source code:</h3>
     <%= render partial: 'extensions/download_source', locals: {extension: extension} %>
     <a class="button secondary radius">Cancel</a>

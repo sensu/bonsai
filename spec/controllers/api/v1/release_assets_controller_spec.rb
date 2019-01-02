@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Api::V1::GithubAssetsController do
+describe Api::V1::ReleaseAssetsController do
   render_views
 
   describe 'GET #show' do

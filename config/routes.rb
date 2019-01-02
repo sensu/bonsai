@@ -15,7 +15,7 @@ Rails.application.routes.draw do
       get 'assets/:username/:extension/versions/:version/download' => 'extension_versions#download', as: :extension_version_download, constraints: { version: VERSION_PATTERN }
       delete 'assets/:username/:extension/versions/:version' => 'extension_uploads#destroy_version', constraints: { version: VERSION_PATTERN }
       get 'users/:user' => 'users#show', as: :user
-      get 'assets/:username/:id/:version/:platform/:arch/release_asset' => 'github_assets#show', as: :github_asset, constraints: {version: VERSION_PATTERN}
+      get 'assets/:username/:id/:version/:platform/:arch/release_asset' => 'release_assets#show', as: :release_asset, constraints: {version: VERSION_PATTERN}
 
       resources :tags, only: [:index]
     end
@@ -77,7 +77,7 @@ Rails.application.routes.draw do
   delete '/assets/:username/:extension_id/versions/:version' => 'extension_versions#destroy', as: :delete_extension_version, constraints: { version: VERSION_PATTERN }
   put "/assets/:username/:extension_id/versions/:version/update_platforms" => "extension_versions#update_platforms", as: :extension_update_platforms, constraints: { version: VERSION_PATTERN }
 
-  get '/github_assets/:username/:extension_id/:version/:platform/:arch/download' => 'github_assets#download', as: :github_asset_download, constraints: { version: VERSION_PATTERN }
+  get '/release_assets/:username/:extension_id/:version/:platform/:arch/download' => 'release_assets#download', as: :release_asset_download, constraints: { version: VERSION_PATTERN }
 
   resources :collaborators, only: [:index, :new, :create, :destroy] do
     member do

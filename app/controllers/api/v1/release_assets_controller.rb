@@ -1,4 +1,4 @@
-class Api::V1::GithubAssetsController < Api::V1Controller
+class Api::V1::ReleaseAssetsController < Api::V1Controller
   api! <<~EOD
     Retrieve #{I18n.t('indefinite_articles.extension')} #{I18n.t('nouns.extension')}'s build-specific details, suitable for consumption by the sensuctl tool.
   EOD
@@ -22,7 +22,7 @@ class Api::V1::GithubAssetsController < Api::V1Controller
   def show
     extension = Extension.with_owner_and_lowercase_name(owner_name: params[:username], lowercase_name: params[:id])
     version = extension.extension_versions.find_by!(version: params[:version])
-    @github_asset = version.github_assets.find {|ga| ga.platform == params[:platform] && ga.arch == params[:arch]}
-    raise ActiveRecord::RecordNotFound unless @github_asset
+    @release_asset = version.release_assets.find {|ga| ga.platform == params[:platform] && ga.arch == params[:arch]}
+    raise ActiveRecord::RecordNotFound unless @release_asset
   end
 end
