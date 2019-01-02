@@ -2,14 +2,14 @@ json.type        "Asset"
 json.api_version "core/v2"
 
 json.metadata do
-  json.name        @github_asset.extension_name
+  json.name        @release_asset.extension_name
   json.namespace   'default'
-  json.labels      @github_asset.labels.to_h
-  json.annotations @github_asset.annotations.to_h
+  json.labels      @release_asset.labels.to_h
+  json.annotations @release_asset.annotations.to_h
 end
 
 json.spec do
-  json.url     @github_asset.asset_url
-  json.sha512  @github_asset.asset_sha
-  json.filters Array.wrap(@github_asset.filter)
+  json.url     @release_asset.asset_url
+  json.sha512  @release_asset.asset_sha
+  json.filters Array.wrap(@release_asset.filter)
 end
