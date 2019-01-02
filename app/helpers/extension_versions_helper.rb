@@ -79,13 +79,13 @@ module ExtensionVersionsHelper
   end
 
   def gather_viable_release_assets(extension_version)
-    extension_version.github_assets
+    extension_version.release_assets
       .find_all(&:viable?)
       .sort_by(&:asset_url)
   end
 
   def determine_viable_platforms_and_archs(version, selected_platform, selected_arch)
-    viable_github_assets    = version.github_assets.find_all(&:viable?)
+    viable_github_assets    = version.release_assets.find_all(&:viable?)
     matching_github_assests = viable_github_assets
                                 .find_all { |github_asset|
                                   (!selected_platform || github_asset.platform == selected_platform) &&
