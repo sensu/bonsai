@@ -23,13 +23,13 @@ describe ExtensionVersionsHelper do
         extension_version.config = {"builds" => [{"viable"=>true, "asset_url" => "http://url.com"}]}
       end
 
-      it "returns an array of GithubAsset objects" do
+      it "returns an array of ReleaseAsset objects" do
         result = helper.gather_viable_release_assets(extension_version)
 
         expect(result).to be_a(Array)
         expect(result).to_not be_empty
         result.each do |obj|
-          expect(obj).to be_a(GithubAsset)
+          expect(obj).to be_a(ReleaseAsset)
         end
       end
     end

@@ -132,17 +132,18 @@
     <% end %>
   </div>
 
-  <%- github_release_assets = gather_viable_release_assets(version) %>
-  <%- if github_release_assets.any? %>
+  <%- release_assets = gather_viable_release_assets(version) %>
+  <%- if release_assets.any? %>
     <div class="github-release-assets">
       <h4>
         <i class="fa fa-folder-open-o"></i> GitHub Release Assets
       </h4>
 
       <dl>
-        <% github_release_assets.each do |github_asset| %>
-          <dt><%= link_to github_asset.asset_url %></dt>
-          <dd class="sha">SHA: <%= github_asset.asset_sha.presence || 'Unknown' %></dd>
+        <% release_assets.each do |release_asset| %>
+          <%- is_url = release_asset.asset_uri =~ /\Ahttp/i -%>
+          <dt><%= link_to_if is_url, release_asset.asset_uri %></dt>
+          <dd class="sha">SHA: <%= release_asset.asset_sha.presence || 'Unknown' %></dd>
         <% end %>
       </dl>
     </div>
