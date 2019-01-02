@@ -5,5 +5,5 @@ json.github_url   extension.github_url
 json.download_url download_extension_url(extension, username: extension.owner_name)
 
 json.builds extension.extension_versions.flat_map(&:release_assets),
-            partial: 'github_asset',
-            as:      :github_asset
+            partial: 'release_asset',
+            as:      :release_asset
