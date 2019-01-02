@@ -23,7 +23,7 @@
 
 <% if platform && arch %>
   <%= link_to "Download Asset Definition",
-              github_asset_download_path(
+              release_asset_download_path(
                   extension,
                   version,
                   username: extension.owner_name,

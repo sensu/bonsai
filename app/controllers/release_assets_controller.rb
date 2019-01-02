@@ -1,4 +1,4 @@
-class GithubAssetsController < ApplicationController
+class ReleaseAssetsController < ApplicationController
   def download
     extension      = Extension.with_owner_and_lowercase_name(owner_name: params[:username], lowercase_name: params[:extension_id])
     version        = extension.extension_versions.find_by!(version: params[:version])
