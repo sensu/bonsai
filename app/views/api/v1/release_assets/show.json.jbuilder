@@ -9,7 +9,11 @@ json.metadata do
 end
 
 json.spec do
-  json.url     @release_asset.asset_uri
+  if @release_asset.hosted?
+    json.path  @release_asset.asset_uri
+  else
+    json.url   @release_asset.asset_uri
+  end
   json.sha512  @release_asset.asset_sha
   json.filters Array.wrap(@release_asset.filter)
 end
