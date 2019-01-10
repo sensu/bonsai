@@ -51,12 +51,12 @@ class CompileExtensionVersionConfig
   private
 
   def compile_builds(version, src_builds)
-    asset_hashes = gather_github_release_asset_hashes(version)
+    github_asset_data_hashes = gather_github_release_asset_data_hashes(version)
 
-    return compile_build_hashes(src_builds, asset_hashes, version)
+    return compile_build_hashes(src_builds, github_asset_data_hashes, version)
   end
 
-  def gather_github_release_asset_hashes(version)
+  def gather_github_release_asset_data_hashes(version)
     releases_data = version.octokit
                       .releases(version.github_repo)
                       .find { |h| h[:tag_name] == version.version }
@@ -64,31 +64,31 @@ class CompileExtensionVersionConfig
     Array.wrap(releases_data[:assets])
   end
 
-  def compile_build_hashes(build_configs, asset_hashes, version)
-    asset_hashes_lut = asset_hashes
-                         .group_by { |h| h[:name] }
-                         .transform_values(&:first)
+  def compile_build_hashes(build_configs, github_asset_data_hashes, version)
+    github_asset_data_hashes_lut = github_asset_data_hashes
+                                     .group_by { |h| h[:name] }
+                                     .transform_values(&:first)
 
     build_configs.map { |build_config|
       Thread.new do
-        compiled_config = compile_build_hash(build_config, asset_hashes_lut, version)
+        compiled_config = compile_build_hash(build_config, github_asset_data_hashes_lut, version)
         build_config.merge compiled_config
       end
     }.map(&:value)
   end
 
-  def compile_build_hash(build_config, asset_hashes_lut, version)
+  def compile_build_hash(build_config, github_asset_data_hashes_lut, version)
     src_sha_filename   = build_config['sha_filename']
     src_asset_filename = build_config['asset_filename']
 
     compiled_sha_filename   = interpolate_variables(src_sha_filename, version)
     compiled_asset_filename = interpolate_variables(src_asset_filename, version)
 
-    file_asset_hash = compiled_asset_filename.present? && asset_hashes_lut.fetch(compiled_asset_filename, {})
-    sha_asset_hash  = compiled_sha_filename.present?   && asset_hashes_lut.fetch(compiled_sha_filename,   {})
+    file_asset_data = compiled_asset_filename.present? && github_asset_data_hashes_lut.fetch(compiled_asset_filename, {})
+    sha_asset_data  = compiled_sha_filename.present?   && github_asset_data_hashes_lut.fetch(compiled_sha_filename,   {})
 
-    file_download_url = file_asset_hash[:browser_download_url]
-    sha_download_url  = sha_asset_hash[ :browser_download_url]
+    file_download_url = file_asset_data[:browser_download_url]
+    sha_download_url  = sha_asset_data[ :browser_download_url]
 
     result = FetchRemoteSha.call(
       sha_download_url: sha_download_url,
