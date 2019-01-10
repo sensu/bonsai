@@ -31,6 +31,7 @@ describe CompileExtensionVersionConfig do
                                     "asset_filename" => "\#{repo}-\#{version}-linux-x86_64.tar.gz",
                                     "viable"         => true,
                                     "asset_url"      => "https://example.com/download",
+                                    "base_filename"  => "my_repo-1.2.2-linux-x86_64.tar.gz",
                                     "asset_sha"      => "c1ec2f493f0ff9d83914c1ec2f493f0ff9d83914"}]} }
 
     before do
