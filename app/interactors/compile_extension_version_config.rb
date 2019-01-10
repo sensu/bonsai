@@ -88,7 +88,6 @@ class CompileExtensionVersionConfig
 
     result = FetchRemoteSha.call(
       sha_download_url: sha_download_url,
-      sha_filename:     compiled_sha_filename,
       asset_filename:   compiled_asset_filename
     )
 
