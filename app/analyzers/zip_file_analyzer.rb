@@ -4,7 +4,7 @@
 require 'zip'
 
 class ZipFileAnalyzer < ActiveStorage::Analyzer
-  include ExtractsReadmeFiles
+  include ExtractsFiles
 
   MIME_TYPES = %w[
     application/zip
