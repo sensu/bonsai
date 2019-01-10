@@ -84,11 +84,7 @@ class CompileExtensionVersionConfig
     compiled_sha_filename   = interpolate_variables(src_sha_filename, version)
     compiled_asset_filename = interpolate_variables(src_asset_filename, version)
 
-    file_asset_data = compiled_asset_filename.present? && github_asset_data_hashes_lut.fetch(compiled_asset_filename, {})
-    sha_asset_data  = compiled_sha_filename.present?   && github_asset_data_hashes_lut.fetch(compiled_sha_filename,   {})
-
-    file_download_url = file_asset_data[:browser_download_url]
-    sha_download_url  = sha_asset_data[ :browser_download_url]
+    file_download_url, sha_download_url = github_download_urls(compiled_asset_filename, compiled_sha_filename, github_asset_data_hashes_lut)
 
     result = FetchRemoteSha.call(
       sha_download_url: sha_download_url,
@@ -101,6 +97,16 @@ class CompileExtensionVersionConfig
       'asset_url' => file_download_url,
       'asset_sha' => result.sha
     }
+  end
+
+  def github_download_urls(asset_filename, sha_filename, github_asset_data_hashes_lut)
+    file_asset_data = asset_filename.present? && github_asset_data_hashes_lut.fetch(asset_filename, {})
+    sha_asset_data  = sha_filename.present?   && github_asset_data_hashes_lut.fetch(sha_filename,   {})
+
+    file_download_url = file_asset_data[:browser_download_url]
+    sha_download_url  = sha_asset_data[ :browser_download_url]
+
+    return file_download_url, sha_download_url
   end
 
   # Converts any instances of '#{var-name}' in the given string to the corresponding value from
