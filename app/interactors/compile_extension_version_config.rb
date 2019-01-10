@@ -32,6 +32,9 @@
 # The compilation is lossless because none of the source configuration is changed,
 # only new configuration items are added.  Therefore, the compilation is idempotent
 # and can be re-run multiple times.
+
+require 'fetch_remote_sha'
+
 class CompileExtensionVersionConfig
   include Interactor
 
@@ -67,7 +70,7 @@ class CompileExtensionVersionConfig
   private
 
   def compile_builds(version, src_builds)
-    github_asset_data_hashes = gather_github_release_asset_data_hashes(version)
+    github_asset_data_hashes = version.hosted? ? nil : gather_github_release_asset_data_hashes(version)
 
     return compile_build_hashes(src_builds, github_asset_data_hashes, version)
   end
@@ -81,7 +84,7 @@ class CompileExtensionVersionConfig
   end
 
   def compile_build_hashes(build_configs, github_asset_data_hashes, version)
-    github_asset_data_hashes_lut = github_asset_data_hashes
+    github_asset_data_hashes_lut = Array.wrap(github_asset_data_hashes)
                                      .group_by { |h| h[:name] }
                                      .transform_values(&:first)
 
@@ -100,18 +103,44 @@ class CompileExtensionVersionConfig
     compiled_sha_filename   = self.class.interpolate_variables(src_sha_filename, version)
     compiled_asset_filename = self.class.interpolate_variables(src_asset_filename, version)
 
-    file_download_url, sha_download_url = github_download_urls(compiled_asset_filename, compiled_sha_filename, github_asset_data_hashes_lut)
+    file_download_url, sha_download_url =
+      version.hosted? ?
+        hosted_download_urls(build_config, version) :
+        github_download_urls(compiled_asset_filename, compiled_sha_filename, github_asset_data_hashes_lut)
 
     result = FetchRemoteSha.call(
       sha_download_url: sha_download_url,
-      asset_filename:   compiled_asset_filename
+      asset_filename:   File.basename(compiled_asset_filename)
     )
 
     return {
-      'viable'    => file_download_url.present?,
-      'asset_url' => file_download_url,
-      'asset_sha' => result.sha
+      'viable'        => file_download_url.present?,
+      'asset_url'     => file_download_url,
+      'base_filename' => File.basename(compiled_asset_filename),
+      'asset_sha'     => result.sha
     }
+  end
+
+  def hosted_download_urls(build_config, version)
+    extension = version.extension
+    platform  = build_config['platform']
+    arch      = build_config['arch']
+
+    # Eat our own dog food
+    file_download_url = Rails.application.routes.url_helpers.release_asset_asset_file_url(
+      extension,
+      version,
+      username: extension.owner_name,
+      platform: platform,
+      arch:     arch)
+    sha_download_url  = Rails.application.routes.url_helpers.release_asset_sha_file_url(
+      extension,
+      version,
+      username: extension.owner_name,
+      platform: platform,
+      arch:     arch)
+
+    return file_download_url, sha_download_url
   end
 
   def github_download_urls(asset_filename, sha_filename, github_asset_data_hashes_lut)
