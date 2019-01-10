@@ -51,13 +51,17 @@ class CompileExtensionVersionConfig
   private
 
   def compile_builds(version, src_builds)
+    asset_hashes = gather_github_release_asset_hashes(version)
+
+    return compile_build_hashes(src_builds, asset_hashes, version)
+  end
+
+  def gather_github_release_asset_hashes(version)
     releases_data = version.octokit
                       .releases(version.github_repo)
                       .find { |h| h[:tag_name] == version.version }
                       .to_h
-    asset_hashes  = Array.wrap(releases_data[:assets])
-
-    return compile_build_hashes(src_builds, asset_hashes, version)
+    Array.wrap(releases_data[:assets])
   end
 
   def compile_build_hashes(build_configs, asset_hashes, version)
