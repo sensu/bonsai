@@ -18,4 +18,31 @@ class ReleaseAssetsController < ApplicationController
 
     send_data json, filename: "#{filename}.json"
   end
+
+  def asset_file
+    send_file_content(:asset_filename)
+  end
+
+  def sha_file
+    send_file_content(:sha_filename)
+  end
+
+  private
+
+  def send_file_content(filename_method)
+    extension = Extension.with_owner_and_lowercase_name(owner_name: params[:username], lowercase_name: params[:extension_id])
+    version   = extension.extension_versions.find_by!(version: params[:version])
+    raise ActiveRecord::RecordNotFound unless version.source_file.attached?
+
+    release_asset = version.release_assets.find { |ra| ra.platform == params[:platform] && ra.arch == params[:arch] }
+    raise ActiveRecord::RecordNotFound unless release_asset
+
+    file_path = CompileExtensionVersionConfig.interpolate_variables(release_asset.send(filename_method), version)
+
+    result = FetchHostedFile.call(blob: version.source_file.blob, file_path: file_path)
+    content = result.content
+    raise ActiveRecord::RecordNotFound if content.nil?
+
+    send_data content, filename: release_asset.base_filename
+  end
 end

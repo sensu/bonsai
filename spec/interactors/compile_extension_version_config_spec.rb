@@ -31,6 +31,7 @@ describe CompileExtensionVersionConfig do
                                     "asset_filename" => "\#{repo}-\#{version}-linux-x86_64.tar.gz",
                                     "viable"         => true,
                                     "asset_url"      => "https://example.com/download",
+                                    "base_filename"  => "my_repo-1.2.2-linux-x86_64.tar.gz",
                                     "asset_sha"      => "c1ec2f493f0ff9d83914c1ec2f493f0ff9d83914"}]} }
 
     before do
@@ -45,6 +46,22 @@ describe CompileExtensionVersionConfig do
 
     it "complies the configuration" do
       expect(context.data_hash).to eql(expected_data_hash)
+    end
+  end
+
+  describe ".interpolate_variables" do
+    let(:raw_string) { '  this #{repo} is #{version} wert      '}
+    let(:version)    { build :extension_version, extension: extension, version: version_name }
+    subject          { CompileExtensionVersionConfig.interpolate_variables(raw_string, version) }
+
+    it {expect(subject).to eql "  this my_repo is 1.2.2 wert      "}
+
+    describe 'a nil input string' do
+      let(:raw_string) { nil }
+
+      it 'returns a nil' do
+        expect(subject).to be_nil
+      end
     end
   end
 end

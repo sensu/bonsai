@@ -32,6 +32,9 @@
 # The compilation is lossless because none of the source configuration is changed,
 # only new configuration items are added.  Therefore, the compilation is idempotent
 # and can be re-run multiple times.
+
+require 'fetch_remote_sha'
+
 class CompileExtensionVersionConfig
   include Interactor
 
@@ -48,62 +51,11 @@ class CompileExtensionVersionConfig
     context.data_hash = config_hash
   end
 
-  private
-
-  def compile_builds(version, src_builds)
-    releases_data = version.octokit
-                      .releases(version.github_repo)
-                      .find { |h| h[:tag_name] == version.version }
-    releases_data ||= {}
-
-    return compile_build_hashes(src_builds, releases_data, version)
-  end
-
-  def compile_build_hashes(build_configs, releases_data, version)
-    asset_hashes     = Array.wrap(releases_data[:assets])
-    asset_hashes_lut = asset_hashes
-                         .group_by { |h| h[:name] }
-                         .transform_values(&:first)
-
-    build_configs.map { |build_config|
-      Thread.new do
-        compiled_config = compile_build_hash(build_config, asset_hashes_lut, version)
-        build_config.merge compiled_config
-      end
-    }.map(&:value)
-  end
-
-  def compile_build_hash(build_config, asset_hashes_lut, version)
-    src_sha_filename   = build_config['sha_filename']
-    src_asset_filename = build_config['asset_filename']
-
-    compiled_sha_filename   = interpolate_variables(src_sha_filename, version)
-    compiled_asset_filename = interpolate_variables(src_asset_filename, version)
-
-    file_asset_hash = compiled_asset_filename.present? && asset_hashes_lut.fetch(compiled_asset_filename, {})
-    sha_asset_hash  = compiled_sha_filename.present?   && asset_hashes_lut.fetch(compiled_sha_filename,   {})
-
-    file_download_url = file_asset_hash[:browser_download_url]
-    sha_download_url  = sha_asset_hash[ :browser_download_url]
-
-    result = FetchRemoteSha.call(
-      sha_download_url: sha_download_url,
-      sha_filename:     compiled_sha_filename,
-      asset_filename:   compiled_asset_filename
-    )
-
-    return {
-      'viable'    => file_download_url.present?,
-      'asset_url' => file_download_url,
-      'asset_sha' => result.sha
-    }
-  end
-
   # Converts any instances of '#{var-name}' in the given string to the corresponding value from
   # the given version object.
   # E.g. the string 'test_asset-#{version}-linux-x86_64.tar.gz' and a version with the name "10.3.4"
   # become 'test_asset-10.3.4-linux-x86_64.tar.gz'.
-  def interpolate_variables(str, version)
+  def self.interpolate_variables(str, version)
     ruby_formatted_str = str.to_s.gsub(/\#{/, '%{')
 
     interpolations = {
@@ -113,5 +65,89 @@ class CompileExtensionVersionConfig
     interpolated_str = ruby_formatted_str % interpolations
 
     return interpolated_str.presence
+  end
+
+  private
+
+  def compile_builds(version, src_builds)
+    github_asset_data_hashes = version.hosted? ? nil : gather_github_release_asset_data_hashes(version)
+
+    return compile_build_hashes(src_builds, github_asset_data_hashes, version)
+  end
+
+  def gather_github_release_asset_data_hashes(version)
+    releases_data = version.octokit
+                      .releases(version.github_repo)
+                      .find { |h| h[:tag_name] == version.version }
+                      .to_h
+    Array.wrap(releases_data[:assets])
+  end
+
+  def compile_build_hashes(build_configs, github_asset_data_hashes, version)
+    github_asset_data_hashes_lut = Array.wrap(github_asset_data_hashes)
+                                     .group_by { |h| h[:name] }
+                                     .transform_values(&:first)
+
+    build_configs.map do |build_config|
+      compiled_config = compile_build_hash(build_config, github_asset_data_hashes_lut, version)
+      build_config.merge compiled_config
+    end
+  end
+
+  def compile_build_hash(build_config, github_asset_data_hashes_lut, version)
+    src_sha_filename   = build_config['sha_filename']
+    src_asset_filename = build_config['asset_filename']
+
+    compiled_sha_filename   = self.class.interpolate_variables(src_sha_filename, version)
+    compiled_asset_filename = self.class.interpolate_variables(src_asset_filename, version)
+
+    file_download_url, sha_download_url =
+      version.hosted? ?
+        hosted_download_urls(build_config, version) :
+        github_download_urls(compiled_asset_filename, compiled_sha_filename, github_asset_data_hashes_lut)
+
+    result = FetchRemoteSha.call(
+      sha_download_url: sha_download_url,
+      asset_filename:   File.basename(compiled_asset_filename)
+    )
+
+    return {
+      'viable'        => file_download_url.present?,
+      'asset_url'     => file_download_url,
+      'base_filename' => File.basename(compiled_asset_filename),
+      'asset_sha'     => result.sha
+    }
+  end
+
+  def hosted_download_urls(build_config, version)
+    extension = version.extension
+    platform  = build_config['platform']
+    arch      = build_config['arch']
+
+    # Eat our own dog food
+    file_download_url = Rails.application.routes.url_helpers.release_asset_asset_file_url(
+      extension,
+      version,
+      username: extension.owner_name,
+      platform: platform,
+      arch:     arch)
+    sha_download_url  = Rails.application.routes.url_helpers.release_asset_sha_file_url(
+      extension,
+      version,
+      username: extension.owner_name,
+      platform: platform,
+      arch:     arch)
+
+    return file_download_url, sha_download_url
+  end
+
+  def github_download_urls(asset_filename, sha_filename, github_asset_data_hashes_lut)
+    file_asset_data = asset_filename.present? && github_asset_data_hashes_lut.fetch(asset_filename, {})
+    sha_asset_data  = sha_filename.present?   && github_asset_data_hashes_lut.fetch(sha_filename,   {})
+
+    file_download_url = file_asset_data[:browser_download_url]
+    sha_download_url  = sha_asset_data[ :browser_download_url]
+
+    return file_download_url, sha_download_url
   end
 end

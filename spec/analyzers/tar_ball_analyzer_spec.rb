@@ -71,4 +71,18 @@ describe TarBallAnalyzer do
       it { expect(TarBallAnalyzer.accept?(blob)).to be_falsey }
     end
   end
+
+  describe '#fetch_file_content' do
+    it 'returns a string' do
+      result = subject.fetch_file_content(file_path: 'redis-test/recipes/default.rb')
+      expect(result).to be_a String
+      expect(result.size).to eql 136
+    end
+
+    context 'unknown file' do
+      it 'returns nil' do
+        expect(subject.fetch_file_content(file_path: 'not a file')).to eql nil
+      end
+    end
+  end
 end

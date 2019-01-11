@@ -78,6 +78,8 @@ Rails.application.routes.draw do
   put "/assets/:username/:extension_id/versions/:version/update_platforms" => "extension_versions#update_platforms", as: :extension_update_platforms, constraints: { version: VERSION_PATTERN }
 
   get '/release_assets/:username/:extension_id/:version/:platform/:arch/download' => 'release_assets#download', as: :release_asset_download, constraints: { version: VERSION_PATTERN }
+  get '/release_assets/:username/:extension_id/:version/:platform/:arch/asset_file' => 'release_assets#asset_file', as: :release_asset_asset_file, constraints: { version: VERSION_PATTERN }
+  get '/release_assets/:username/:extension_id/:version/:platform/:arch/sha_file' => 'release_assets#sha_file', as: :release_asset_sha_file, constraints: { version: VERSION_PATTERN }
 
   resources :collaborators, only: [:index, :new, :create, :destroy] do
     member do

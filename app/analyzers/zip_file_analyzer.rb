@@ -4,7 +4,7 @@
 require 'zip'
 
 class ZipFileAnalyzer < ActiveStorage::Analyzer
-  include ExtractsReadmeFiles
+  include ExtractsFiles
 
   MIME_TYPES = %w[
     application/zip
@@ -21,6 +21,18 @@ class ZipFileAnalyzer < ActiveStorage::Analyzer
       readme:           content,
       readme_extension: extension,
     }.compact
+  end
+
+  def fetch_file_content(file_path:)
+    download_blob_to_tempfile do |file|
+      Zip::File.open(file.path.to_s) do |files|
+        extract_file(file_path: file_path, files: files, path_method: :name, file_reader: self.method(:zipped_file_reader))
+      end
+    end
+  rescue
+    #:nocov:
+    return nil
+    #:nocov:
   end
 
   private
