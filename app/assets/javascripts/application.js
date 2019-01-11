@@ -20,6 +20,7 @@
 //= require foundation.min
 //= require jquery.slugit
 //= require checkbox
+//= require direct_uploads
 //= require extensionShow
 //= require extensionFollowing
 //= require joinOrganization
