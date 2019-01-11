@@ -88,12 +88,10 @@ class CompileExtensionVersionConfig
                                      .group_by { |h| h[:name] }
                                      .transform_values(&:first)
 
-    build_configs.map { |build_config|
-      Thread.new do
-        compiled_config = compile_build_hash(build_config, github_asset_data_hashes_lut, version)
-        build_config.merge compiled_config
-      end
-    }.map(&:value)
+    build_configs.map do |build_config|
+      compiled_config = compile_build_hash(build_config, github_asset_data_hashes_lut, version)
+      build_config.merge compiled_config
+    end
   end
 
   def compile_build_hash(build_config, github_asset_data_hashes_lut, version)
