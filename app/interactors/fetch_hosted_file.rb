@@ -7,13 +7,19 @@ class FetchHostedFile
   delegate :file_path, to: :context
 
   def call
-    context.content = case
-                      when TarBallAnalyzer.accept?(blob)
-                        TarBallAnalyzer.new(blob).fetch_file_content(file_path: file_path)
-                      when ZipFileAnalyzer.accept?(blob)
-                        ZipFileAnalyzer.new(blob).fetch_file_content(file_path: file_path)
-                      else
-                        nil
-                      end
+    context.content = do_fetch(blob, file_path)
+  end
+
+  private
+
+  def do_fetch(blob, file_path)
+    case
+    when TarBallAnalyzer.accept?(blob)
+      TarBallAnalyzer.new(blob).fetch_file_content(file_path: file_path)
+    when ZipFileAnalyzer.accept?(blob)
+      ZipFileAnalyzer.new(blob).fetch_file_content(file_path: file_path)
+    else
+      nil
+    end
   end
 end
