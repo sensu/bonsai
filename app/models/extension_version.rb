@@ -33,6 +33,7 @@ class ExtensionVersion < ApplicationRecord
   # --------------------
   delegate :name, :owner, to: :extension
   delegate :name,         to: :extension, allow_nil: true, prefix: true
+  delegate :hosted?,      to: :extension, allow_nil: true
   delegate :lowercase_name,to: :extension, allow_nil: true, prefix: true
   delegate :namespace,    to: :extension, allow_nil: true, prefix: true
   delegate :owner_name,   to: :extension, allow_nil: true
