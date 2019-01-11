@@ -32,15 +32,4 @@ describe 'api/v1/release_assets/show' do
   it "serializes the namespace" do
     expect(json_body['metadata']['namespace']).to eql('default')
   end
-
-  context 'hosted extensions' do
-    let(:extension) { create :extension, :hosted }
-    let(:version)   { create :extension_version, extension: extension }
-    let(:path)      { 'path/to/release/asset' }
-    let(:uri)       { path }
-
-    it "serializes the path" do
-      expect(json_body['spec']['path']).to eql(path)
-    end
-  end
 end
