@@ -7,7 +7,6 @@
 }
 
 .announcement_banner_header {
-  cursor: pointer;
   text-align: center;
   transition: background-color 100ms ease-out 0s;
 
@@ -20,6 +19,19 @@
     color: white;
     margin: 0;
     padding: rem-calc(15 0 15 0);
+
+    a {
+      color: white;
+      text-decoration: underline;
+    }
+  }
+
+  .close-reveal-modal-x {
+    float: right;
+    color: white;
+    font-size: 1.5em;
+    margin-right: 1em;
+    padding-top: 0.25em;
   }
 }
 
