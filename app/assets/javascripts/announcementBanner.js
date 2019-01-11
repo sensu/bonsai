@@ -4,7 +4,9 @@ $(function() {
   }
   $(".announcement_banner_header .close-reveal-modal-x").click(function() {
     $(".announcement_banner_header").slideUp(240);
-    document.cookie = "no_announcement_banner=beta_launch; max_age=31536000; path=/"
+    let aYearFromNow = (new Date(new Date().setFullYear(new Date().getFullYear() + 1)));
+    let expirationStr = aYearFromNow.toUTCString();
+    document.cookie = `no_announcement_banner=beta_launch; expires=${expirationStr}; path=/`;
   });
 
   $(".announcement_banner_header.clickable").click(function() {
