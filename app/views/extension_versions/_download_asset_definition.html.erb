@@ -21,27 +21,42 @@
   </div>
 </div>
 
-<% if platform && arch %>
+<% if extension.hosted? %>
+  <label>
+    <%= check_box_tag 'acknowledge',
+                      '1',
+                      acknowledge,
+                      data: {remote: true,
+                             url: extension_version_download_asset_definition_path(extension, version, username: extension.owner_name),
+                             params: {arch: arch, platform: platform}.to_param} %>
+    I acknowledge that this asset is only for enterprise license holders
+  </label>
+<% end %>
+
+<% if platform && arch && (!extension.hosted? || acknowledge) %>
   <%= link_to "Download Asset Definition",
               release_asset_download_path(
                   extension,
                   version,
                   username: extension.owner_name,
                   platform: platform,
-                  arch:     arch),
+                  arch:     arch,
+                  acknowledge: acknowledge),
               class: 'button primary radius button_download_extension' %>
 <% else %>
-  <% to_select = case
-                 when platform
-                   "an arch"
-                 when arch
-                   "a platform"
-                 else
-                   "a platform and an arch"
-                 end
+  <% msg = case
+           when !platform
+             "Please select a platform"
+           when !arch
+             "Please select an arch"
+           when extension.hosted? && !acknowledge
+             "Please acknowledge"
+           else
+             "Please select a platform and an arch"
+           end
   %>
   <%= link_to "Download Asset Definition",
               "#",
-              onclick: "alert(\"Please select #{to_select}\")",
+              onclick: "alert(\"#{msg}\")",
               class:   'button primary radius button_download_extension' %>
 <% end %>
