@@ -7,7 +7,10 @@ class FetchHostedFile
   delegate :file_path, to: :context
 
   def call
-    context.content = do_fetch(blob, file_path)
+    cache_key = "FetchHostedFile: #{blob.id}/#{file_path}"
+    context.content = Rails.cache.fetch(cache_key) do
+      do_fetch(blob, file_path)
+    end
   end
 
   private
