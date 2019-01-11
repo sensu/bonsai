@@ -24,7 +24,7 @@
 #        "platform"=>"linux",
 #        "sha_filename"=>"test_asset-\#{version}-linux-x86_64.sha512.txt",
 #        "asset_filename"=>"test_asset-\#{version}-linux-x86_64.tar.gz",
-#        "asset_uri"=>
+#        "asset_url"=>
 #          "https://github.com/some-user/some-repo/releases/download/v0.1-20181115/test_asset-v0.1-20181115-linux-x86_64.tar.gz",
 #        "asset_sha"=>
 #          "6f2121a6c8690f229e9cb962d8d71f60851684284755d4cdba4e77ef7ba20c03283795c4fccb9d6ac8308b248f2538bf7497d6467de0cf9e9f0814625b4c6f91"}]}
@@ -94,7 +94,7 @@ class CompileExtensionVersionConfig
 
     return {
       'viable'    => file_download_url.present?,
-      'asset_uri' => file_download_url,
+      'asset_url' => file_download_url,
       'asset_sha' => result.sha
     }
   end

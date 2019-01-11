@@ -81,7 +81,7 @@ module ExtensionVersionsHelper
   def gather_viable_release_assets(extension_version)
     extension_version.release_assets
       .find_all(&:viable?)
-      .sort_by(&:asset_uri)
+      .sort_by(&:asset_url)
   end
 
   def determine_viable_platforms_and_archs(version, selected_platform, selected_arch)

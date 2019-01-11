@@ -141,7 +141,7 @@
 
       <dl>
         <% release_assets.each do |release_asset| %>
-          <dt><%= link_to release_asset.asset_uri %></dt>
+          <dt><%= link_to release_asset.asset_url %></dt>
           <dd class="sha">SHA: <%= release_asset.asset_sha.presence || 'Unknown' %></dd>
         <% end %>
       </dl>

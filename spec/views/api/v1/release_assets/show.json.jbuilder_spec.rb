@@ -2,10 +2,10 @@ require 'spec_helper'
 
 describe 'api/v1/release_assets/show' do
   let(:version)        { create :extension_version }
-  let(:uri)            { "http://example.com/asset" }
+  let(:url)            { "http://example.com/asset" }
   let(:sha)            { "abcdef1234" }
   let!(:release_asset) { ReleaseAsset.new(version:   version,
-                                          asset_uri: uri,
+                                          asset_url: url,
                                           asset_sha: sha) }
 
   before do
@@ -22,7 +22,7 @@ describe 'api/v1/release_assets/show' do
   end
 
   it "serializes the url" do
-    expect(json_body['spec']['url']).to eql(uri)
+    expect(json_body['spec']['url']).to eql(url)
   end
 
   it "serializes the sha" do
