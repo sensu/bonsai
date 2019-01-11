@@ -81,6 +81,7 @@ class ExtensionVersionsController < ApplicationController
     @version   = @extension.get_version!(params[:version])
     @platform  = params[:platform].presence
     @arch      = params[:arch].presence
+    @acknowledge = params[:acknowledge]
   end
 
   private

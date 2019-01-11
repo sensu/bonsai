@@ -13,25 +13,45 @@
   <h1>Download</h1>
   <a class="close-reveal-modal close-reveal-modal-x">&#215;</a>
 
-  <% if extension.hosted? || version.release_assets.none?(&:viable?)%>
-    <h3 class="download-choice">There are no asset definitions for this version, only source code:</h3>
-    <%= render partial: 'extensions/download_source', locals: {extension: extension} %>
-    <a class="button secondary radius">Cancel</a>
-  <% else %>
-    <h3 class="download-choice">Either download the source code:</h3>
-    <%= render partial: 'extensions/download_source', locals: {extension: extension} %>
-    <h3 class="download-choice">Or download the asset definition:</h3>
-
-    <div id="download-asset-definition">
-      <%= render partial: 'extension_versions/download_asset_definition',
-                 locals: {extension: extension,
-                          version:   version,
-                          platform:  nil,
-                          arch:      nil} %>
-    </div>
-
+  <% if extension.hosted? %>
+    <h3 class="download-choice">This asset is intended for enterprise license holders only.</h3>
+    <% if version.release_assets.none?(&:viable?)%>
+      <h3 class="download-choice">There are no asset definitions for this version.</h3>
+    <% else %>
+      <div id="download-asset-definition">
+        <%= render partial: 'extension_versions/download_asset_definition',
+                   locals: {extension: extension,
+                            version:   version,
+                            platform:  nil,
+                            arch:      nil,
+                            acknowledge: false} %>
+      </div>
+    <% end %>
     <div style="margin-top: 24px;" class="text-center">
       <a class="button secondary radius tiny close-reveal-modal">Cancel</a>
     </div>
+  <% else %>
+    <% if version.release_assets.none?(&:viable?)%>
+      <h3 class="download-choice">There are no asset definitions for this version, only source code:</h3>
+      <%= render partial: 'extensions/download_source', locals: {extension: extension} %>
+      <a class="button secondary radius large close-reveal-modal">Cancel</a>
+    <% else %>
+      <h3 class="download-choice">Either download the source code:</h3>
+      <%= render partial: 'extensions/download_source', locals: {extension: extension} %>
+      <h3 class="download-choice">Or download the asset definition:</h3>
+
+      <div id="download-asset-definition">
+        <%= render partial: 'extension_versions/download_asset_definition',
+                   locals: {extension: extension,
+                            version:   version,
+                            platform:  nil,
+                            arch:      nil,
+                            acknowledge: false} %>
+      </div>
+
+      <div style="margin-top: 24px;" class="text-center">
+        <a class="button secondary radius tiny close-reveal-modal">Cancel</a>
+      </div>
+    <% end %>
   <% end %>
 </div>

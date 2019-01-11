@@ -6,6 +6,8 @@ class ReleaseAssetsController < ApplicationController
     raise ActiveRecord::RecordNotFound unless @release_asset
     raise ActiveRecord::RecordNotFound unless @release_asset.viable?
 
+    raise ActiveRecord::RecordNotFound if extension.hosted? && !params[:acknowledge]
+
     filename = [
       extension.namespace,
       extension.lowercase_name,
