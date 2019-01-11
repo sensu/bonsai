@@ -13,4 +13,12 @@ class ReleaseAsset < OpenStruct
   def viable?
     viable
   end
+
+  def annotations
+    {}.tap do |results|
+      if version.hosted?
+        results['bonsai.sensu.io.message'] = "This asset is for users with a valid Enterprise license"
+      end
+    end
+  end
 end
