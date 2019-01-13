@@ -53,21 +53,8 @@ class CompileExtensionVersionConfig
 
   private
 
-  def compile_builds(version, src_builds)
-    github_asset_data_hashes = version.hosted? ? nil : gather_github_release_asset_data_hashes(version)
-
-    return compile_build_hashes(src_builds, github_asset_data_hashes, version)
-  end
-
-  def gather_github_release_asset_data_hashes(version)
-    releases_data = version.octokit
-                      .releases(version.github_repo)
-                      .find { |h| h[:tag_name] == version.version }
-                      .to_h
-    Array.wrap(releases_data[:assets])
-  end
-
-  def compile_build_hashes(build_configs, github_asset_data_hashes, version)
+  def compile_builds(version, build_configs)
+    github_asset_data_hashes     = gather_github_release_asset_data_hashes(version)
     github_asset_data_hashes_lut = Array.wrap(github_asset_data_hashes)
                                      .group_by { |h| h[:name] }
                                      .transform_values(&:first)
@@ -78,6 +65,14 @@ class CompileExtensionVersionConfig
         build_config.merge compiled_config
       end
     }.map(&:value)
+  end
+
+  def gather_github_release_asset_data_hashes(version)
+    releases_data = version.octokit
+                      .releases(version.github_repo)
+                      .find { |h| h[:tag_name] == version.version }
+                      .to_h
+    Array.wrap(releases_data[:assets])
   end
 
   def compile_build_hash(build_config, github_asset_data_hashes_lut, version)
