@@ -5,12 +5,19 @@ describe SyncExtensionContentsAtVersionsWorker do
     Account.destroy_all
   end
 
-  let!(:extension) { create :extension }
-  subject          { SyncExtensionContentsAtVersionsWorker.new }
+  let(:asset_hash1)  { {name: "my_repo-1.2.2-linux-x86_64.tar.gz",
+                        browser_download_url: "https://example.com/download"} }
+  let(:asset_hash2)  { {name: "my_repo-1.2.2-linux-x86_64.sha512.txt",
+                        browser_download_url: "https://example.com/sha_download"} }
+  let(:release_data) { {tag_name: version.version, assets: [asset_hash1, asset_hash2]} }
+  let!(:version)     { create :extension_version, config: config }
+  let(:extension)    { version.extension }
+  subject            { SyncExtensionContentsAtVersionsWorker.new }
 
   before do
     FileUtils.mkdir_p extension.repo_path
     allow_any_instance_of(CmdAtPath).to receive(:cmd) { "" }
+    allow_any_instance_of(Octokit::Client).to receive(:releases) { [release_data] }
   end
 
   describe 'tag checking' do

@@ -181,28 +181,10 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
   end
 
   def scan_config_yml_file(version)
-    name_switches = Extension::CONFIG_FILE_NAMES
-                      .map {|name| "-name '#{name}'"}
-                      .join(" -o ")
-    find_command = "find . -maxdepth 1 #{name_switches}"
-    path = @run
-             .cmd(find_command)
-             .tap { |r| logger.info("CONFIG YAML FILE: #{r.inspect}") }
-             .split("\n")
-             .first
-    logger.info("SCANNING CONFIG FILE: #{path}")
-
-    if path.present?
-      body           = @run.cmd("cat '#{path}'")
-      config_hash    = YAML.load(body.to_s) rescue {}
-      if config_hash.is_a?(Hash)
-        version.config = config_hash # Until we get a successful compilation.
-        result         = CompileExtensionVersionConfig.call(version: version)
-        version.config = result.data_hash if result.success?
-      end
+    compilation_result = CompileExtensionVersionConfig.call(version: version, system_command_runner: @run)
+    if compilation_result.success?
+      version.update_column(:config, compilation_result.data_hash)
     end
-
-    logger.info("CONFIG: #{version.config}")
   end
 
   def scan_class_dirs(version)
