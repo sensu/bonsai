@@ -4,7 +4,7 @@ class CreateExtension
     @tags = params[:tag_tokens]
     @compatible_platforms = params[:compatible_platforms] || []
     @user = user
-    @github = @user.octokit
+    @octokit = user.octokit
     @version_name = params[:version].presence || 'v0.0.1'
   end
 
@@ -13,9 +13,9 @@ class CreateExtension
       extension.owner = @user
     end
 
-    if validate(candidate, @github, @user)
+    if validate(candidate, @octokit, @user)
       candidate.save
-      postprocess(candidate, @github, @compatible_platforms, @version_name)
+      postprocess(candidate, @octokit, @compatible_platforms, @version_name)
     else
       existing = Extension.unscoped.where(enabled: false, github_url: candidate.github_url).first
       if existing
@@ -30,11 +30,11 @@ class CreateExtension
 
   private
 
-  def postprocess(extension, github, compatible_platforms, version_name)
+  def postprocess(extension, octokit, compatible_platforms, version_name)
     if extension.hosted?
       postprocess_hosted_extension(extension, version_name)
     else
-      postprocess_github_extension(extension, github, compatible_platforms)
+      postprocess_github_extension(extension, octokit, compatible_platforms)
     end
   end
 
@@ -70,8 +70,8 @@ class CreateExtension
     end
   end
 
-  def postprocess_github_extension(extension, github, compatible_platforms)
-    repo_info = github.repo(extension.github_repo)
+  def postprocess_github_extension(extension, octokit, compatible_platforms)
+    repo_info = octokit.repo(extension.github_repo)
     org       = repo_info[:organization]
 
     github_organization = if org
@@ -92,24 +92,24 @@ class CreateExtension
     NotifyModeratorsOfNewExtensionWorker.perform_async(extension.id)
   end
 
-  def validate(extension, github, user)
+  def validate(extension, octokit, user)
     return false if !extension.valid?
 
     if extension.hosted?
       extension.tmp_source_file.attached?
     else
-      repo_valid?(extension, github, user)
+      repo_valid?(extension, octokit, user)
     end
   end
 
-  def repo_valid?(extension, github, user)
-    validatate_repo_collaborator(extension, github, user) &&
-      validate_config_file(extension, github)
+  def repo_valid?(extension, octokit, user)
+    validatate_repo_collaborator(extension, octokit, user) &&
+      validate_config_file(extension, octokit)
   end
 
-  def validatate_repo_collaborator(extension, github, user)
+  def validatate_repo_collaborator(extension, octokit, user)
     begin
-      result = github.collaborator?(extension.github_repo, user.github_account.username)
+      result = octokit.collaborator?(extension.github_repo, user.github_account.username)
     rescue ArgumentError, Octokit::Unauthorized, Octokit::Forbidden
       result = false
     end
@@ -121,11 +121,11 @@ class CreateExtension
     result
   end
 
-  def validate_config_file(extension, github)
+  def validate_config_file(extension, octokit)
     config_file_names = Extension::CONFIG_FILE_NAMES
 
     begin
-      repo_top_level_file_names   = github.contents(extension.github_repo).map { |h| h[:name] }
+      repo_top_level_file_names   = octokit.contents(extension.github_repo).map { |h| h[:name] }
       top_level_config_file_names = repo_top_level_file_names & config_file_names
       result                      = top_level_config_file_names.any?
     rescue ArgumentError, Octokit::Unauthorized, Octokit::Forbidden
