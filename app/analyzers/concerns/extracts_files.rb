@@ -24,8 +24,9 @@ module ExtractsFiles
     best_path      = matching_paths.sort_by { |path| [path.split('/').size, File.basename(path).size] }.first
 
     # Don't go deeper than one level down, e.g. foo/<file_path> is fine, but foo/down/<file_path> is not.
-    return nil if best_path.split('/').size > file_path.split('/').size + 1
+    return [nil, nil] if best_path.split('/').size > file_path.split('/').size + 1
 
-    file_reader.call(files, best_path).presence
+    content = file_reader.call(files, best_path).presence
+    return content, best_path
   end
 end
