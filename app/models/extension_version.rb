@@ -88,6 +88,22 @@ class ExtensionVersion < ApplicationRecord
       }
   end
 
+  # Converts any instances of '#{var-name}' in the given string to the corresponding value from
+  # this +Version+ object.
+  # E.g. the string 'test_asset-#{version}-linux-x86_64.tar.gz' and a version with the name "10.3.4"
+  # become 'test_asset-10.3.4-linux-x86_64.tar.gz'.
+  def interpolate_variables(str)
+    ruby_formatted_str = str.to_s.gsub(/\#{/, '%{')
+
+    interpolations = {
+      repo:    extension_lowercase_name,
+      version: version,
+    }
+    interpolated_str = ruby_formatted_str % interpolations
+
+    return interpolated_str.presence
+  end
+
   private
 
   def self.assemble_clauses(vals, config_index)

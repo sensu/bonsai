@@ -48,20 +48,4 @@ describe CompileExtensionVersionConfig do
       expect(context.data_hash).to eql(expected_data_hash)
     end
   end
-
-  describe ".interpolate_variables" do
-    let(:raw_string) { '  this #{repo} is #{version} wert      '}
-    let(:version)    { build :extension_version, extension: extension, version: version_name }
-    subject          { CompileExtensionVersionConfig.interpolate_variables(raw_string, version) }
-
-    it {expect(subject).to eql "  this my_repo is 1.2.2 wert      "}
-
-    describe 'a nil input string' do
-      let(:raw_string) { nil }
-
-      it 'returns a nil' do
-        expect(subject).to be_nil
-      end
-    end
-  end
 end
