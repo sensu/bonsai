@@ -14,12 +14,6 @@ module ExtractsFiles
 
   private
 
-  def extract_readme(files:, path_method:, file_reader:)
-    file = find_file(file_path: /\/readme/i, files: files, path_method: path_method, file_reader: file_reader)
-    extension = File.extname(file&.path.to_s).to_s.sub(/\A\./, '').presence  # strip off any leading '.'
-    return file&.read, extension
-  end
-
   def find_file(file_path:, files:, path_method:, file_reader:)
     full_paths     = files.map(&path_method)
     regexp         = file_path.is_a?(Regexp) ? file_path : /#{file_path}\z/
