@@ -15,7 +15,9 @@ class ZipFileAnalyzer < ActiveStorage::Analyzer
   end
 
   def metadata
-    content, extension = fetch_readme_from_blob
+    file      = fetch_readme_from_blob
+    content   = file&.read
+    extension = File.extname(file&.path.to_s).to_s.sub(/\A\./, '').presence # strip off any leading '.'
 
     {
       readme:           content.presence,
@@ -44,12 +46,15 @@ class ZipFileAnalyzer < ActiveStorage::Analyzer
   def fetch_readme_from_blob
     download_blob_to_tempfile do |file|
       Zip::File.open(file.path.to_s) do |files|
-        return extract_readme(files: files, path_method: :name, file_reader: self.method(:zipped_file_reader))
+        return find_file(file_path:   /\/readme/i,
+                         files:       files,
+                         path_method: :name,
+                         file_reader: self.method(:zipped_file_reader))
       end
     end
   rescue
     #:nocov:
-    return [nil, nil]
+    return nil
     #:nocov:
   end
 
