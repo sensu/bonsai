@@ -18,7 +18,7 @@ class TarBallAnalyzer < ActiveStorage::Analyzer
   end
 
   def metadata
-    file      = fetch_readme_from_blob
+    file      = fetch_file(file_path: /\/readme/i)
     content   = file&.read
     extension = File.extname(file&.path.to_s).to_s.sub(/\A\./, '').presence # strip off any leading '.'
 
@@ -44,21 +44,6 @@ class TarBallAnalyzer < ActiveStorage::Analyzer
   end
 
   private
-
-  def fetch_readme_from_blob
-    download_blob_to_tempfile do |file|
-      Gem::Package::TarReader.new(Zlib::GzipReader.open(file)) do |files|
-        return find_file(file_path:   /\/readme/i,
-                         files:       files,
-                         path_method: :full_name,
-                         file_reader: self.method(:tarred_file_reader))
-      end
-    end
-  rescue
-    #:nocov:
-    return nil
-    #:nocov:
-  end
 
   def tarred_file_reader(files, file_path)
     files.rewind
