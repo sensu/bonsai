@@ -29,7 +29,8 @@ class TarBallAnalyzer < ActiveStorage::Analyzer
   def fetch_file_content(file_path:)
     download_blob_to_tempfile do |file|
       Gem::Package::TarReader.new(Zlib::GzipReader.open(file)) do |files|
-        return extract_file(file_path: file_path, files: files, path_method: :full_name, file_reader: self.method(:tarred_file_reader))
+        content, _ = extract_file(file_path: file_path, files: files, path_method: :full_name, file_reader: self.method(:tarred_file_reader))
+        return content
       end
     end
   rescue
