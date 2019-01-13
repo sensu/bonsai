@@ -33,7 +33,7 @@ class CreateExtension
     if extension.hosted?
       postprocess_hosted_extension(extension, version_name)
     else
-      postprocess_github_extension(extension, octokit, compatible_platforms)
+      SetUpGithubExtension.call(extension: extension, octokit: octokit, compatible_platforms: compatible_platforms)
     end
   end
 
