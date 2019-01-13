@@ -1,11 +1,10 @@
 class CreateExtension
   def initialize(params, user)
-    @params = params
-    @tags = params[:tag_tokens]
+    @params               = params
     @compatible_platforms = params[:compatible_platforms] || []
-    @user = user
-    @octokit = user.octokit
-    @version_name = params[:version].presence || 'v0.0.1'
+    @version_name         = params[:version].presence || 'v0.0.1'
+    @user                 = user
+    @octokit              = user.octokit
   end
 
   def process!
