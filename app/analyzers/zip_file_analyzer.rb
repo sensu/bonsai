@@ -25,14 +25,13 @@ class ZipFileAnalyzer < ActiveStorage::Analyzer
     }.compact
   end
 
-  def fetch_file_content(file_path:)
+  def fetch_file(file_path:)
     download_blob_to_tempfile do |file|
       Zip::File.open(file.path.to_s) do |files|
-        file = find_file(file_path:   file_path,
+        return find_file(file_path:   file_path,
                          files:       files,
                          path_method: :name,
                          file_reader: self.method(:zipped_file_reader))
-        file&.read
       end
     end
   rescue
