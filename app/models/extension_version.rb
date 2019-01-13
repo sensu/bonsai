@@ -104,6 +104,23 @@ class ExtensionVersion < ApplicationRecord
     return interpolated_str.presence
   end
 
+  def with_files(&block)
+    return unless source_file.attached?
+
+    blob     = source_file.blob
+    analyzer = case
+               when TarBallAnalyzer.accept?(blob)
+                 TarBallAnalyzer.new(blob)
+               when ZipFileAnalyzer.accept?(blob)
+                 ZipFileAnalyzer.new(blob)
+               else
+                 nil
+               end
+    return unless analyzer
+
+    analyzer.with_files(&block)
+  end
+
   private
 
   def self.assemble_clauses(vals, config_index)
