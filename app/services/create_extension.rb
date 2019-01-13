@@ -31,41 +31,9 @@ class CreateExtension
 
   def postprocess(extension, octokit, compatible_platforms, version_name)
     if extension.hosted?
-      postprocess_hosted_extension(extension, version_name)
+      SetUpHostedExtension.call(extension: extension, version_name: version_name)
     else
       SetUpGithubExtension.call(extension: extension, octokit: octokit, compatible_platforms: compatible_platforms)
-    end
-  end
-
-  def postprocess_hosted_extension(extension, version_name='master')
-    owner_name = extension.owner.username
-
-    extension.update_attributes(
-      owner_name: owner_name
-    )
-
-    extension_version = extension.extension_versions.create!(version: version_name)
-
-    if extension.tmp_source_file.attached?
-      # Transfer the temporarily-staged attachment to the extension_version.
-      extension_version.source_file.attach(extension.tmp_source_file.blob)
-      extension.tmp_source_file.detach
-      process_hosted_config_file(extension_version)
-    end
-  end
-
-  def process_hosted_config_file(version)
-    files_regexp = "(#{Extension::CONFIG_FILE_NAMES.join('|')})"
-    result       = FetchHostedFile.call(blob: version.source_file.blob, file_path: files_regexp)
-    body         = result.content
-    config_hash = YAML.load(body.to_s) rescue {}
-
-    if config_hash.is_a?(Hash)
-      version.config = config_hash
-      version.save # Until we get a successful compilation, we need the initial config to compile.
-      result         = CompileExtensionVersionConfig.call(version: version)
-      version.config = result.data_hash if result.success?
-      version.save
     end
   end
 
