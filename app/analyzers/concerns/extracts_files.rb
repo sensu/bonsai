@@ -12,6 +12,18 @@ module ExtractsFiles
     end
   end
 
+  class FileFinder
+    include ExtractsFiles
+
+    def initialize(files:, path_method:, reader:)
+      @files, @path_method, @reader = files, path_method, reader
+    end
+
+    def find(file_path:)
+      find_file(file_path: file_path, files: @files, path_method: @path_method, file_reader: @reader)
+    end
+  end
+
   private
 
   def find_file(file_path:, files:, path_method:, file_reader:)

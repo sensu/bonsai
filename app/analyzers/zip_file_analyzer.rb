@@ -40,6 +40,21 @@ class ZipFileAnalyzer < ActiveStorage::Analyzer
     #:nocov:
   end
 
+  def with_files(&block)
+    download_blob_to_tempfile do |file|
+      Zip::File.open(file.path.to_s) do |files|
+        finder = FileFinder.new(files:       files,
+                                path_method: :name,
+                                reader:      self.method(:zipped_file_reader))
+        return yield(finder)
+      end
+    end
+  rescue
+    #:nocov:
+    return nil
+    #:nocov:
+  end
+
   private
 
   def zipped_file_reader(files, file_path)
