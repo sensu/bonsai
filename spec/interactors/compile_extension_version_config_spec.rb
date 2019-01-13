@@ -13,7 +13,8 @@ describe CompileExtensionVersionConfig do
                             "asset_filename"=>"\#{repo}-\#{version}-linux-x86_64.tar.gz"}]} }
   let(:extension)    { create :extension, extension_versions_count: 0, github_url: "https://github.com/owner/#{repo_name}" }
   let(:version)      { create :extension_version, extension: extension, config: config, version: version_name }
-  subject(:context)  { CompileExtensionVersionConfig.call(version: version) }
+  let(:cmd_runner)   { double("command runner", :cmd => config.to_yaml) }
+  subject(:context)  { CompileExtensionVersionConfig.call(version: version, system_command_runner: cmd_runner) }
 
   describe ".call" do
     let(:asset_hash1)        { {name: "my_repo-1.2.2-linux-x86_64.tar.gz",
