@@ -21,11 +21,6 @@ class FetchRemoteSha
   def read_remote_file(url)
     return nil unless url.present?
 
-    if Rails.env.development?
-      # This is a hack to support Dan Milliron's development environment.
-      url = url.sub('srv2', '0.0.0.0')
-    end
-
     resp = Faraday.new(url) { |f|
       f.use     FaradayMiddleware::FollowRedirects
       f.adapter :net_http
