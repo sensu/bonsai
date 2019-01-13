@@ -72,16 +72,17 @@ describe TarBallAnalyzer do
     end
   end
 
-  describe '#fetch_file_content' do
+  describe '#fetch_file' do
     it 'returns a string' do
-      result = subject.fetch_file_content(file_path: 'redis-test/recipes/default.rb')
+      file = subject.fetch_file(file_path: 'redis-test/recipes/default.rb')
+      result = file.read
       expect(result).to be_a String
       expect(result.size).to eql 136
     end
 
     context 'unknown file' do
       it 'returns nil' do
-        expect(subject.fetch_file_content(file_path: 'not a file')).to eql nil
+        expect(subject.fetch_file(file_path: 'not a file')).to eql nil
       end
     end
   end
