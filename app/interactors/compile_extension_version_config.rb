@@ -51,22 +51,6 @@ class CompileExtensionVersionConfig
     context.data_hash = config_hash
   end
 
-  # Converts any instances of '#{var-name}' in the given string to the corresponding value from
-  # the given version object.
-  # E.g. the string 'test_asset-#{version}-linux-x86_64.tar.gz' and a version with the name "10.3.4"
-  # become 'test_asset-10.3.4-linux-x86_64.tar.gz'.
-  def self.interpolate_variables(str, version)
-    ruby_formatted_str = str.to_s.gsub(/\#{/, '%{')
-
-    interpolations = {
-      repo:    version.extension_lowercase_name,
-      version: version.version,
-    }
-    interpolated_str = ruby_formatted_str % interpolations
-
-    return interpolated_str.presence
-  end
-
   private
 
   def compile_builds(version, src_builds)
@@ -98,8 +82,8 @@ class CompileExtensionVersionConfig
     src_sha_filename   = build_config['sha_filename']
     src_asset_filename = build_config['asset_filename']
 
-    compiled_sha_filename   = self.class.interpolate_variables(src_sha_filename, version)
-    compiled_asset_filename = self.class.interpolate_variables(src_asset_filename, version)
+    compiled_sha_filename   = version.interpolate_variables(src_sha_filename)
+    compiled_asset_filename = version.interpolate_variables(src_asset_filename)
 
     file_download_url, sha_download_url =
       version.hosted? ?

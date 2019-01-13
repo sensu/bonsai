@@ -150,4 +150,23 @@ describe ExtensionVersion do
       end
     end
   end
+
+  describe '#interpolate_variables' do
+    let(:version_name) { "1.2.2"}
+    let(:repo_name)    { "my_repo" }
+    let(:extension)    { create :extension, extension_versions_count: 0, github_url: "https://github.com/owner/#{repo_name}" }
+    let(:version)      { build :extension_version, extension: extension, version: version_name }
+    let(:raw_string)   { '  this #{repo} is #{version} wert      '}
+    subject            { version.interpolate_variables(raw_string) }
+
+    it {expect(subject).to eql "  this my_repo is 1.2.2 wert      "}
+
+    describe 'a nil input string' do
+      let(:raw_string) { nil }
+
+      it 'returns a nil' do
+        expect(subject).to be_nil
+      end
+    end
+  end
 end

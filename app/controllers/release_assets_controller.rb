@@ -39,7 +39,7 @@ class ReleaseAssetsController < ApplicationController
     release_asset = version.release_assets.find { |ra| ra.platform == params[:platform] && ra.arch == params[:arch] }
     raise ActiveRecord::RecordNotFound unless release_asset
 
-    file_path = CompileExtensionVersionConfig.interpolate_variables(release_asset.send(filename_method), version)
+    file_path = version.interpolate_variables(release_asset.send(filename_method))
 
     result = FetchHostedFile.call(blob: version.source_file.blob, file_path: file_path)
     content = result.content
