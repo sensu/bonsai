@@ -5,7 +5,7 @@ class CreateExtension
     @compatible_platforms = params[:compatible_platforms] || []
     @user = user
     @github = @user.octokit
-    @version = params[:version].presence || 'v0.0.1'
+    @version_name = params[:version].presence || 'v0.0.1'
   end
 
   def process!
@@ -15,7 +15,7 @@ class CreateExtension
 
     if validate(candidate, @github, @user)
       candidate.save
-      postprocess(candidate, @github, @compatible_platforms, @version)
+      postprocess(candidate, @github, @compatible_platforms, @version_name)
     else
       existing = Extension.unscoped.where(enabled: false, github_url: candidate.github_url).first
       if existing
@@ -30,22 +30,22 @@ class CreateExtension
 
   private
 
-  def postprocess(extension, github, compatible_platforms, version)
+  def postprocess(extension, github, compatible_platforms, version_name)
     if extension.hosted?
-      postprocess_hosted_extension(extension, version)
+      postprocess_hosted_extension(extension, version_name)
     else
       postprocess_github_extension(extension, github, compatible_platforms)
     end
   end
 
-  def postprocess_hosted_extension(extension, version='master')
+  def postprocess_hosted_extension(extension, version_name='master')
     owner_name = extension.owner.username
 
     extension.update_attributes(
       owner_name: owner_name
     )
 
-    extension_version = extension.extension_versions.create!(version: version)
+    extension_version = extension.extension_versions.create!(version: version_name)
 
     if extension.tmp_source_file.attached?
       # Transfer the temporarily-staged attachment to the extension_version.
