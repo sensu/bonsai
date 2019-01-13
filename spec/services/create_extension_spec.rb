@@ -35,6 +35,7 @@ describe CreateExtension do
     allow(CollectExtensionMetadataWorker).to receive(:perform_async)
     allow(SetupExtensionWebHooksWorker).to receive(:perform_async)
     allow(NotifyModeratorsOfNewExtensionWorker).to receive(:perform_async)
+    allow(SetUpGithubExtension).to receive(:call)
   end
 
   after do
@@ -67,6 +68,11 @@ describe CreateExtension do
 
     it "kicks off a worker to notify operators" do
       expect(NotifyModeratorsOfNewExtensionWorker).to receive(:perform_async)
+      expect(subject.process!).to be_persisted
+    end
+
+    it "calls the set-up service" do
+      expect(SetUpGithubExtension).to receive(:call)
       expect(subject.process!).to be_persisted
     end
 
