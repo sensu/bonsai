@@ -43,6 +43,21 @@ class TarBallAnalyzer < ActiveStorage::Analyzer
     #:nocov:
   end
 
+  def with_files(&block)
+    download_blob_to_tempfile do |file|
+      Gem::Package::TarReader.new(Zlib::GzipReader.open(file)) do |files|
+        finder = FileFinder.new(files:       files,
+                                path_method: :full_name,
+                                reader:      self.method(:tarred_file_reader))
+        return yield(finder)
+      end
+    end
+  rescue
+    #:nocov:
+    return nil
+    #:nocov:
+  end
+
   private
 
   def tarred_file_reader(files, file_path)
