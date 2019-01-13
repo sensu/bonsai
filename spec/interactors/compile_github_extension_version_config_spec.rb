@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe CompileExtensionVersionConfig do
+describe CompileGithubExtensionVersionConfig do
   let(:version_name) { "1.2.2"}
   let(:repo_name)    { "my_repo" }
   let(:config)       { {"builds"=>
@@ -14,7 +14,7 @@ describe CompileExtensionVersionConfig do
   let(:extension)    { create :extension, extension_versions_count: 0, github_url: "https://github.com/owner/#{repo_name}" }
   let(:version)      { create :extension_version, extension: extension, config: config, version: version_name }
   let(:cmd_runner)   { double("command runner", :cmd => config.to_yaml) }
-  subject(:context)  { CompileExtensionVersionConfig.call(version: version, system_command_runner: cmd_runner) }
+  subject(:context)  { CompileGithubExtensionVersionConfig.call(version: version, system_command_runner: cmd_runner) }
 
   describe ".call" do
     let(:asset_hash1)        { {name: "my_repo-1.2.2-linux-x86_64.tar.gz",

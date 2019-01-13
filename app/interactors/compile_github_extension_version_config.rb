@@ -35,7 +35,7 @@
 
 require 'fetch_remote_sha'
 
-class CompileExtensionVersionConfig
+class CompileGithubExtensionVersionConfig
   include Interactor
 
   # The required context attributes:
