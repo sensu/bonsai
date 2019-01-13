@@ -32,9 +32,6 @@ describe CreateExtension do
     allow(github).to receive(:collaborator?).with("cvincent/test", "some_user") { true }
     allow(github).to receive(:repo).with("cvincent/test") { {} }
     allow(github).to receive(:contents).with("cvincent/test") { top_level_contents }
-    allow(CollectExtensionMetadataWorker).to receive(:perform_async)
-    allow(SetupExtensionWebHooksWorker).to receive(:perform_async)
-    allow(NotifyModeratorsOfNewExtensionWorker).to receive(:perform_async)
     allow(SetUpGithubExtension).to receive(:call)
   end
 
@@ -56,21 +53,6 @@ describe CreateExtension do
   end
 
   context 'a github extension' do
-    it "kicks off a worker to gather metadata about the valid extension" do
-      expect(CollectExtensionMetadataWorker).to receive(:perform_async)
-      expect(subject.process!).to be_persisted
-    end
-
-    it "kicks off a worker to set up the repo's web hook for updates" do
-      expect(SetupExtensionWebHooksWorker).to receive(:perform_async)
-      expect(subject.process!).to be_persisted
-    end
-
-    it "kicks off a worker to notify operators" do
-      expect(NotifyModeratorsOfNewExtensionWorker).to receive(:perform_async)
-      expect(subject.process!).to be_persisted
-    end
-
     it "calls the set-up service" do
       expect(SetUpGithubExtension).to receive(:call)
       expect(subject.process!).to be_persisted

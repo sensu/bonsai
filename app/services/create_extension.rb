@@ -69,28 +69,6 @@ class CreateExtension
     end
   end
 
-  def postprocess_github_extension(extension, octokit, compatible_platforms)
-    repo_info = octokit.repo(extension.github_repo)
-    org       = repo_info[:organization]
-
-    github_organization = if org
-                            GithubOrganization.where(github_id: org[:id]).first_or_create!(
-                              name:       org[:login],
-                              avatar_url: org[:avatar_url]
-                            )
-                          end
-    owner_name = org ? org[:login] : extension.owner.username
-
-    extension.update_attributes(
-      github_organization: github_organization,
-      owner_name:          owner_name
-    )
-
-    CollectExtensionMetadataWorker.perform_async(extension.id, compatible_platforms.select { |p| !p.strip.blank? })
-    SetupExtensionWebHooksWorker.perform_async(extension.id)
-    NotifyModeratorsOfNewExtensionWorker.perform_async(extension.id)
-  end
-
   def validate(extension, octokit, user)
     return false if !extension.valid?
 
