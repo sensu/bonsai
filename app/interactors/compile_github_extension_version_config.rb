@@ -100,16 +100,18 @@ class CompileGithubExtensionVersionConfig
     file_download_url = github_download_url(compiled_asset_filename, github_asset_data_hashes_lut)
     sha_download_url  = github_download_url(compiled_sha_filename, github_asset_data_hashes_lut)
 
+    asset_filename = File.basename(compiled_asset_filename)
     result = FetchRemoteSha.call(
       sha_download_url: sha_download_url,
-      asset_filename:   File.basename(compiled_asset_filename)
+      asset_filename:   asset_filename
     )
+    sha = result.sha
 
     return {
       'viable'        => file_download_url.present?,
       'asset_url'     => file_download_url,
-      'base_filename' => File.basename(compiled_asset_filename),
-      'asset_sha'     => result.sha
+      'base_filename' => asset_filename,
+      'asset_sha'     => sha
     }
   end
 
