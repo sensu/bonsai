@@ -97,10 +97,7 @@ class CompileGithubExtensionVersionConfig
     compiled_sha_filename   = version.interpolate_variables(src_sha_filename)
     compiled_asset_filename = version.interpolate_variables(src_asset_filename)
 
-    file_download_url, sha_download_url =
-      version.hosted? ?
-        hosted_download_urls(build_config, version) :
-        github_download_urls(compiled_asset_filename, compiled_sha_filename, github_asset_data_hashes_lut)
+    file_download_url, sha_download_url = github_download_urls(compiled_asset_filename, compiled_sha_filename, github_asset_data_hashes_lut)
 
     result = FetchRemoteSha.call(
       sha_download_url: sha_download_url,
@@ -113,28 +110,6 @@ class CompileGithubExtensionVersionConfig
       'base_filename' => File.basename(compiled_asset_filename),
       'asset_sha'     => result.sha
     }
-  end
-
-  def hosted_download_urls(build_config, version)
-    extension = version.extension
-    platform  = build_config['platform']
-    arch      = build_config['arch']
-
-    # Eat our own dog food
-    file_download_url = Rails.application.routes.url_helpers.release_asset_asset_file_url(
-      extension,
-      version,
-      username: extension.owner_name,
-      platform: platform,
-      arch:     arch)
-    sha_download_url  = Rails.application.routes.url_helpers.release_asset_sha_file_url(
-      extension,
-      version,
-      username: extension.owner_name,
-      platform: platform,
-      arch:     arch)
-
-    return file_download_url, sha_download_url
   end
 
   def github_download_urls(asset_filename, sha_filename, github_asset_data_hashes_lut)
