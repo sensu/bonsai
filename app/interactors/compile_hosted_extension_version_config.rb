@@ -71,8 +71,9 @@ class CompileHostedExtensionVersionConfig
     compiled_asset_filename = version.interpolate_variables(src_asset_filename)
 
     asset_filename    = File.basename(compiled_asset_filename)
-    sha               = read_sha_file(compiled_sha_filename, asset_filename, file_finder)
     file_download_url = hosted_download_url(build_config, version)
+
+    sha = read_sha_file(compiled_sha_filename, asset_filename, file_finder)
 
     return {
       'viable'        => file_download_url.present?,
