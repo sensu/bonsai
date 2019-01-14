@@ -1,6 +1,7 @@
 require "spec_helper"
 
 describe ZipFileAnalyzer do
+  let(:version)    { create :extension_version }
   let(:file_name)  { 'private-extension.zip' }
   let(:file_path)  { Rails.root.join('spec', 'support', 'extension_fixtures', file_name) }
   let(:attachable) { fixture_file_upload(file_path) }
@@ -25,6 +26,11 @@ describe ZipFileAnalyzer do
 
     it 'includes the extension' do
       expect(metadata[:readme_extension]).to eq 'md'
+    end
+
+    it 'includes the config data' do
+      version.source_file.attach(blob)
+      expect(metadata[:config]).to have_key "builds"
     end
 
     context 'readme file name has no extension' do
