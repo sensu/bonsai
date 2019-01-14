@@ -22,12 +22,12 @@ class SetUpHostedExtension
       extension_version.source_file.attach(extension.tmp_source_file.blob)
       extension.tmp_source_file.detach
 
-      extension_version.with_files do |file_finder|
-        compilation_result = CompileHostedExtensionVersionConfig.call(version: extension_version, file_finder: file_finder)
-        if compilation_result.success?
-          extension_version.update_column(:config, compilation_result.data_hash)
-        end
-      end
+      metadata = extension_version.source_file
+      extension_version.update_attributes(
+        readme:           metadata[:readme].to_s,
+        readme_extension: metadata[:readme_extension].to_s,
+        config:           metadata[:config].to_h,
+      )
     end
   end
 end
