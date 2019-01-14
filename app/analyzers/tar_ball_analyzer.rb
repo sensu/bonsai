@@ -18,7 +18,7 @@ class TarBallAnalyzer < ActiveStorage::Analyzer
     MIME_TYPES.include? blob.content_type.to_s
   end
 
-  def with_files(&block)
+  def with_file_finder(&block)
     download_blob_to_tempfile do |file|
       Gem::Package::TarReader.new(Zlib::GzipReader.open(file)) do |files|
         finder = FileFinder.new(files:       files,

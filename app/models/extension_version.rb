@@ -104,7 +104,7 @@ class ExtensionVersion < ApplicationRecord
     return interpolated_str.presence
   end
 
-  def with_files(&block)
+  def with_file_finder(&block)
     return unless source_file.attached?
 
     blob     = source_file.blob
@@ -118,7 +118,7 @@ class ExtensionVersion < ApplicationRecord
                end
     return unless analyzer
 
-    analyzer.with_files(&block)
+    analyzer.with_file_finder(&block)
   end
 
   private
