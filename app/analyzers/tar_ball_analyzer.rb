@@ -18,13 +18,12 @@ class TarBallAnalyzer < ActiveStorage::Analyzer
   end
 
   def metadata
-    file      = fetch_file(file_path: /\/readme/i)
-    content   = file&.read
-    extension = File.extname(file&.path.to_s).to_s.sub(/\A\./, '').presence # strip off any leading '.'
-
-    {
-      readme:           content.presence,
-      readme_extension: extension,
+    {}.tap { |results|
+      with_files do |finder|
+        readme_file                = finder.find(file_path: /\/readme/i)
+        results[:readme]           = readme_file&.read.presence
+        results[:readme_extension] = File.extname(readme_file&.path.to_s).to_s.sub(/\A\./, '').presence # strip off any leading '.'
+      end
     }.compact
   end
 
