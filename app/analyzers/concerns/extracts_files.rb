@@ -33,6 +33,8 @@ module ExtractsFiles
   private
 
   def find_file(file_path:, files:, path_method:, file_reader:)
+    files.rewind if files.respond_to?(:rewind)
+
     full_paths     = files.map(&path_method)
     regexp         = file_path.is_a?(Regexp) ? file_path : /#{file_path}\z/
     matching_paths = full_paths.grep regexp
