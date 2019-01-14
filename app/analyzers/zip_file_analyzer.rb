@@ -15,7 +15,7 @@ class ZipFileAnalyzer < ActiveStorage::Analyzer
     MIME_TYPES.include? blob.content_type.to_s
   end
 
-  def with_files(&block)
+  def with_file_finder(&block)
     download_blob_to_tempfile do |file|
       Zip::File.open(file.path.to_s) do |files|
         finder = FileFinder.new(files:       files,
