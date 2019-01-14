@@ -24,6 +24,12 @@ module ExtractsFiles
     end
   end
 
+  def fetch_file(file_path:)
+    with_files do |finder|
+      finder.find(file_path: file_path)
+    end
+  end
+
   private
 
   def find_file(file_path:, files:, path_method:, file_reader:)
