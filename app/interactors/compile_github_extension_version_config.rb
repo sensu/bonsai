@@ -97,7 +97,8 @@ class CompileGithubExtensionVersionConfig
     compiled_sha_filename   = version.interpolate_variables(src_sha_filename)
     compiled_asset_filename = version.interpolate_variables(src_asset_filename)
 
-    file_download_url, sha_download_url = github_download_urls(compiled_asset_filename, compiled_sha_filename, github_asset_data_hashes_lut)
+    file_download_url = github_download_url(compiled_asset_filename, github_asset_data_hashes_lut)
+    sha_download_url  = github_download_url(compiled_sha_filename, github_asset_data_hashes_lut)
 
     result = FetchRemoteSha.call(
       sha_download_url: sha_download_url,
@@ -112,13 +113,8 @@ class CompileGithubExtensionVersionConfig
     }
   end
 
-  def github_download_urls(asset_filename, sha_filename, github_asset_data_hashes_lut)
-    file_asset_data = asset_filename.present? && github_asset_data_hashes_lut.fetch(asset_filename, {})
-    sha_asset_data  = sha_filename.present?   && github_asset_data_hashes_lut.fetch(sha_filename,   {})
-
-    file_download_url = file_asset_data[:browser_download_url]
-    sha_download_url  = sha_asset_data[ :browser_download_url]
-
-    return file_download_url, sha_download_url
+  def github_download_url(filename, github_asset_data_hashes_lut)
+    asset_data = filename.present? && github_asset_data_hashes_lut.fetch(filename, {})
+    asset_data[:browser_download_url]
   end
 end
