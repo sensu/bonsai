@@ -115,6 +115,6 @@ class CompileGithubExtensionVersionConfig
 
   def github_download_url(filename, github_asset_data_hashes_lut)
     asset_data = filename.present? && github_asset_data_hashes_lut.fetch(filename, {})
-    asset_data[:browser_download_url]
+    asset_data.to_h[:browser_download_url]
   end
 end
