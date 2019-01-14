@@ -4,6 +4,7 @@
 require 'zip'
 
 class ZipFileAnalyzer < ActiveStorage::Analyzer
+  include HasArchiveMetadata
   include ExtractsFiles
 
   MIME_TYPES = %w[
@@ -12,28 +13,6 @@ class ZipFileAnalyzer < ActiveStorage::Analyzer
 
   def self.accept?(blob)
     MIME_TYPES.include? blob.content_type.to_s
-  end
-
-  def metadata
-    {}.tap { |results|
-      with_files do |finder|
-        readme_file        = finder.find(file_path: /\/readme/i)
-        version = blob.attachments.first&.record
-        config = version ?
-                   CompileHostedExtensionVersionConfig.call(version: version, file_finder: finder).data_hash.to_h :
-                   {}
-
-        results[:readme]           = readme_file&.read.presence
-        results[:readme_extension] = File.extname(readme_file&.path.to_s).to_s.sub(/\A\./, '').presence # strip off any leading '.'
-        results[:config]           = config
-      end
-    }.compact
-  end
-
-  def fetch_file(file_path:)
-    with_files do |finder|
-      finder.find(file_path: file_path)
-    end
   end
 
   def with_files(&block)
