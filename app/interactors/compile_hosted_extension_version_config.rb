@@ -34,15 +34,14 @@ class CompileHostedExtensionVersionConfig
   include ExtractsShas
 
   # The required context attributes:
-  delegate :version, to: :context
+  delegate :version,     to: :context
+  delegate :file_finder, to: :context
 
   def call
-    version.with_files do |file_finder|
-      config_hash           = fetch_bonsai_config(file_finder) || {}
-      config_hash['builds'] = compile_builds(version, config_hash['builds'], file_finder)
+    config_hash           = fetch_bonsai_config(file_finder) || {}
+    config_hash['builds'] = compile_builds(version, config_hash['builds'], file_finder)
 
-      context.data_hash = config_hash
-    end
+    context.data_hash = config_hash
   end
 
   private

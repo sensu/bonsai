@@ -22,9 +22,11 @@ class SetUpHostedExtension
       extension_version.source_file.attach(extension.tmp_source_file.blob)
       extension.tmp_source_file.detach
 
-      compilation_result = CompileHostedExtensionVersionConfig.call(version: extension_version)
-      if compilation_result.success?
-        extension_version.update_column(:config, compilation_result.data_hash)
+      extension_version.with_files do |file_finder|
+        compilation_result = CompileHostedExtensionVersionConfig.call(version: extension_version, file_finder: file_finder)
+        if compilation_result.success?
+          extension_version.update_column(:config, compilation_result.data_hash)
+        end
       end
     end
   end
