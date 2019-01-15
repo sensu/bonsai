@@ -80,4 +80,71 @@ describe ExtensionVersionsHelper do
       end
     end
   end
+
+  describe "extension_version_analyzed?" do
+    subject { helper.extension_version_analyzed?(extension_version) }
+
+    context 'Github-based extensions' do
+      before do
+        expect(extension_version).to_not be_hosted
+      end
+
+      it 'returns true' do
+        expect(subject).to be_truthy
+      end
+    end
+
+    context 'hosted extensions' do
+      let(:extension)         { create :extension, :hosted }
+      let(:extension_version) { extension.extension_versions.first }
+
+      before do
+        expect(extension_version).to be_hosted
+      end
+
+      context 'with no source file' do
+        it 'returns false' do
+          expect(subject).to be_falsey
+        end
+      end
+
+      context 'with an analyzed source file' do
+        let(:file_name)    { 'private-extension.tgz' }
+        let(:file_path)    { Rails.root.join('spec', 'support', 'extension_fixtures', file_name) }
+        let(:attachable)   { fixture_file_upload(file_path) }
+        let(:blob_hash)    { {
+          io:           attachable.open,
+          filename:     attachable.original_filename,
+          content_type: attachable.content_type
+        } }
+        let(:blob)         { ActiveStorage::Blob.create_after_upload! blob_hash }
+
+        before do
+          extension_version.source_file.attach(blob)
+        end
+
+        context 'before analysis' do
+          before do
+            expect(extension_version.source_file).not_to be_analyzed
+          end
+
+          it 'returns false' do
+            expect(subject).to be_falsey
+          end
+        end
+
+        context 'after analysis' do
+          before do
+            extension_version.source_file.analyze
+            extension_version.reload
+            expect(extension_version.source_file).to be_analyzed
+          end
+
+          it 'returns false' do
+            expect(subject).to be_truthy
+          end
+        end
+      end
+    end
+  end
 end
