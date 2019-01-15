@@ -2,8 +2,6 @@ class SyncExtensionRepoWorker < ApplicationWorker
 
   def perform(extension_id, compatible_platforms = [])
     @extension = Extension.find(extension_id)
-    return if @extension.hosted?
-
     releases = @extension.octokit.releases(@extension.github_repo)
 
     clone_repo
