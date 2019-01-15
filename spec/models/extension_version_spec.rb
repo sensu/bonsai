@@ -169,4 +169,36 @@ describe ExtensionVersion do
       end
     end
   end
+
+  describe '#after_attachment_analysis' do
+    let(:file_name)  { 'private-extension.tgz' }
+    let(:file_path)  { Rails.root.join('spec', 'support', 'extension_fixtures', file_name) }
+    let(:attachable) { fixture_file_upload(file_path) }
+    let(:blob_hash)  { {
+      io:           attachable.open,
+      filename:     attachable.original_filename,
+      content_type: attachable.content_type
+    } }
+    let(:blob)       { ActiveStorage::Blob.create_after_upload! blob_hash }
+    subject          { create :extension_version, readme_extension: 'txt' }
+
+    it "updates the version's metadata" do
+      orig_readme     = subject.readme
+      orig_readme_ext = subject.readme_extension
+      orig_config     = subject.config
+
+      subject.source_file.attach(blob)
+      subject.source_file.analyze
+      subject.reload
+      expect(subject.source_file).to be_attached
+
+      expect(subject.readme          ).to be_present
+      expect(subject.readme_extension).to be_present
+      expect(subject.config          ).to be_present
+
+      expect(subject.readme          ).not_to eql orig_readme
+      expect(subject.readme_extension).not_to eql orig_readme_ext
+      expect(subject.config          ).not_to eql orig_config
+    end
+  end
 end

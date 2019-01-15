@@ -121,6 +121,16 @@ class ExtensionVersion < ApplicationRecord
     analyzer.with_file_finder(&block)
   end
 
+  def after_attachment_analysis(attachment, metadata)
+    return unless attachment.name == 'source_file'
+
+    update_attributes(
+      readme:           metadata[:readme].to_s,
+      readme_extension: metadata[:readme_extension].to_s,
+      config:           metadata[:config].to_h,
+    )
+  end
+
   private
 
   def self.assemble_clauses(vals, config_index)
