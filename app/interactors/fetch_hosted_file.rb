@@ -7,8 +7,8 @@ class FetchHostedFile
   delegate :file_path, to: :context
 
   def call
-    cache_key = "FetchHostedFile: #{blob.id}/#{file_path}"
-    context.content = self.class.cache.fetch(cache_key) do
+    key = self.class.cache_key(blob: blob, file_path: file_path)
+    context.content = self.class.cache.fetch(key) do
       file = do_fetch(blob, file_path)
       file&.read
     end
@@ -18,6 +18,10 @@ class FetchHostedFile
 
   def self.cache
     Rails.env.test? ? Rails.cache : Rails.configuration.active_storage_cache
+  end
+
+  def self.cache_key(blob:, file_path:)
+    "FetchHostedFile: #{blob.id}/#{file_path}"
   end
 
   def do_fetch(blob, file_path)
