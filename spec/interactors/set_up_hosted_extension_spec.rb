@@ -1,48 +1,53 @@
 require "spec_helper"
 
 describe SetUpHostedExtension do
-  before do
-    allow(user).to receive(:octokit) { github }
-    allow(github).to receive(:repo) { {} }
-  end
-
-  let(:repo_info)   { {organization: {id:         1,
-                                      login:      'my-org',
-                                      avatar_url: 'https://avatar.com'}} }
-  let(:github)      { double(:github) }
-  let(:user)        { create(:user) }
-  let(:octokit)     { user.octokit }
-  let(:extension)   { build :extension }
-  let(:platforms)   { ["", "p1", "p2"] }
-  subject(:context) { SetUpGithubExtension.call(extension:            extension,
-                                                octokit:              octokit,
-                                                compatible_platforms: platforms) }
+  let(:file_name)    { 'private-extension.tgz' }
+  let(:file_path)    { Rails.root.join('spec', 'support', 'extension_fixtures', file_name) }
+  let(:attachable)   { fixture_file_upload(file_path) }
+  let(:blob_hash)    { {
+    io:           attachable.open,
+    filename:     attachable.original_filename,
+    content_type: attachable.content_type
+  } }
+  let(:blob)         { ActiveStorage::Blob.create_after_upload! blob_hash }
+  let(:version_name) { 'v0.1.2' }
+  let(:extension)    { create :extension }
+  subject(:context)  { SetUpHostedExtension.call(extension:    extension,
+                                                 version_name: version_name) }
 
   before do
-    allow(github).to receive(:repo) { repo_info }
-    allow(user).to receive(:octokit) { github }
+    extension.tmp_source_file.attach(blob)
   end
 
   describe '.call' do
-    it "sets the extension's repo info" do
-      expect(context).to be_a_success
-      expect(extension.github_organization.name).to eql 'my-org'
-      expect(extension.owner_name              ).to eql 'my-org'
+    it "sets the extension's owner name" do
+      orig_owner_name = extension.owner_name
+      subject
+      extension.reload
+      expect(extension.owner_name).to     be_present
+      expect(extension.owner_name).to_not eql orig_owner_name
     end
 
-    it "kicks off a worker to gather metadata about the valid extension" do
-      expect(CollectExtensionMetadataWorker).to receive(:perform_async)
-      expect(context).to be_a_success
+    it "transfers the source file attachment to the new version child" do
+      expect(extension.tmp_source_file).to     be_attached
+
+      subject
+      extension.reload
+      version = extension.extension_versions.last
+
+      expect(extension.tmp_source_file).to_not be_attached
+      expect(version.source_file      ).to     be_attached
     end
 
-    it "kicks off a worker to set up the repo's web hook for updates" do
-      expect(SetupExtensionWebHooksWorker).to receive(:perform_async)
-      expect(context).to be_a_success
-    end
+    it "runs the post-metadata-analysis hook" do
+      extension.tmp_source_file.analyze
+      subject
+      extension.reload
+      version = extension.extension_versions.last
 
-    it "kicks off a worker to notify operators" do
-      expect(NotifyModeratorsOfNewExtensionWorker).to receive(:perform_async)
-      expect(context).to be_a_success
+      expect(version.readme          ).to be_present
+      expect(version.readme_extension).to be_present
+      expect(version.config          ).to be_present
     end
   end
 end
