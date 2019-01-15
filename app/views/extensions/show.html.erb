@@ -1,6 +1,6 @@
 <%= provide(:title, "#{@extension.name} #{t('nouns.extension').titleize}") %>
 
-<% if @latest_version %>
+<% if @latest_version && extension_version_analyzed?(@latest_version) %>
   <%= provide(:description, "#{@extension.name} #{t('nouns.extension').titleize} (#{@latest_version.try(:version)}) #{@extension.try(:supported_platforms).map(&:name).join(', ')}".strip) %>
 
   <div class="page resource extension_show" data-equalizer itemscope itemtype="http://schema.org/Code">

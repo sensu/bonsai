@@ -105,4 +105,11 @@ module ExtensionVersionsHelper
 
     return platforms, archs
   end
+
+  def extension_version_analyzed?(version)
+    return true unless version.hosted?
+
+    source_file = version.source_file
+    source_file.attached? && source_file.analyzed?
+  end
 end

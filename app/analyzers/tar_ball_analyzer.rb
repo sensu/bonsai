@@ -6,6 +6,7 @@ require 'zlib'
 
 
 class TarBallAnalyzer < ActiveStorage::Analyzer
+  include HasArchiveMetadata
   include ExtractsFiles
 
   MIME_TYPES = %w[
@@ -17,19 +18,13 @@ class TarBallAnalyzer < ActiveStorage::Analyzer
     MIME_TYPES.include? blob.content_type.to_s
   end
 
-  def metadata
-    content, extension = fetch_readme_from_blob
-
-    {
-      readme:           content,
-      readme_extension: extension,
-    }.compact
-  end
-
-  def fetch_file_content(file_path:)
+  def with_file_finder(&block)
     download_blob_to_tempfile do |file|
       Gem::Package::TarReader.new(Zlib::GzipReader.open(file)) do |files|
-        return extract_file(file_path: file_path, files: files, path_method: :full_name, file_reader: self.method(:tarred_file_reader))
+        finder = FileFinder.new(files:       files,
+                                path_method: :full_name,
+                                reader:      self.method(:tarred_file_reader))
+        return yield(finder)
       end
     end
   rescue
@@ -39,18 +34,6 @@ class TarBallAnalyzer < ActiveStorage::Analyzer
   end
 
   private
-
-  def fetch_readme_from_blob
-    download_blob_to_tempfile do |file|
-      Gem::Package::TarReader.new(Zlib::GzipReader.open(file)) do |files|
-        return extract_readme(files: files, path_method: :full_name, file_reader: self.method(:tarred_file_reader))
-      end
-    end
-  rescue
-    #:nocov:
-    return [nil, nil]
-    #:nocov:
-  end
 
   def tarred_file_reader(files, file_path)
     files.rewind

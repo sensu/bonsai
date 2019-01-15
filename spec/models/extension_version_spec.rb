@@ -150,4 +150,55 @@ describe ExtensionVersion do
       end
     end
   end
+
+  describe '#interpolate_variables' do
+    let(:version_name) { "1.2.2"}
+    let(:repo_name)    { "my_repo" }
+    let(:extension)    { create :extension, extension_versions_count: 0, github_url: "https://github.com/owner/#{repo_name}" }
+    let(:version)      { build :extension_version, extension: extension, version: version_name }
+    let(:raw_string)   { '  this #{repo} is #{version} wert      '}
+    subject            { version.interpolate_variables(raw_string) }
+
+    it {expect(subject).to eql "  this my_repo is 1.2.2 wert      "}
+
+    describe 'a nil input string' do
+      let(:raw_string) { nil }
+
+      it 'returns a nil' do
+        expect(subject).to be_nil
+      end
+    end
+  end
+
+  describe '#after_attachment_analysis' do
+    let(:file_name)  { 'private-extension.tgz' }
+    let(:file_path)  { Rails.root.join('spec', 'support', 'extension_fixtures', file_name) }
+    let(:attachable) { fixture_file_upload(file_path) }
+    let(:blob_hash)  { {
+      io:           attachable.open,
+      filename:     attachable.original_filename,
+      content_type: attachable.content_type
+    } }
+    let(:blob)       { ActiveStorage::Blob.create_after_upload! blob_hash }
+    subject          { create :extension_version, readme_extension: 'txt' }
+
+    it "updates the version's metadata" do
+      orig_readme     = subject.readme
+      orig_readme_ext = subject.readme_extension
+      orig_config     = subject.config
+
+      subject.source_file.attach(blob)
+      subject.source_file.analyze
+      subject.reload
+      expect(subject.source_file).to be_attached
+
+      expect(subject.readme          ).to be_present
+      expect(subject.readme_extension).to be_present
+      expect(subject.config          ).to be_present
+
+      expect(subject.readme          ).not_to eql orig_readme
+      expect(subject.readme_extension).not_to eql orig_readme_ext
+      expect(subject.config          ).not_to eql orig_config
+    end
+  end
 end

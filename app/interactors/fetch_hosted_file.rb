@@ -9,7 +9,8 @@ class FetchHostedFile
   def call
     cache_key = "FetchHostedFile: #{blob.id}/#{file_path}"
     context.content = Rails.cache.fetch(cache_key) do
-      do_fetch(blob, file_path)
+      file = do_fetch(blob, file_path)
+      file&.read
     end
   end
 
@@ -18,9 +19,9 @@ class FetchHostedFile
   def do_fetch(blob, file_path)
     case
     when TarBallAnalyzer.accept?(blob)
-      TarBallAnalyzer.new(blob).fetch_file_content(file_path: file_path)
+      TarBallAnalyzer.new(blob).fetch_file(file_path: file_path)
     when ZipFileAnalyzer.accept?(blob)
-      ZipFileAnalyzer.new(blob).fetch_file_content(file_path: file_path)
+      ZipFileAnalyzer.new(blob).fetch_file(file_path: file_path)
     else
       nil
     end
