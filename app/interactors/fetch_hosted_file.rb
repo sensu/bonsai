@@ -14,6 +14,21 @@ class FetchHostedFile
     end
   end
 
+  def self.bulk_cache(extension_version:, file_paths:)
+    return unless extension_version.source_file.attached?
+    blob = extension_version.source_file.blob
+
+    extension_version.with_file_finder do |finder|
+      file_paths.each do |file_path|
+        key = cache_key(blob: blob, file_path: file_path)
+        self.cache.fetch(key) do
+          file = finder.find(file_path: file_path)
+          file&.read
+        end
+      end
+    end
+  end
+
   private
 
   def self.cache
