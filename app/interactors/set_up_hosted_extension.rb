@@ -22,12 +22,12 @@ class SetUpHostedExtension
       extension_version.source_file.attach(extension.tmp_source_file.blob)
       extension.tmp_source_file.detach
 
-      metadata = extension_version.source_file
-      extension_version.update_attributes(
-        readme:           metadata[:readme].to_s,
-        readme_extension: metadata[:readme_extension].to_s,
-        config:           metadata[:config].to_h,
-      )
+      attachment = extension_version.source_file.attachment
+      if attachment.analyzed?
+        extension_version.after_attachment_analysis(attachment)
+      else
+        attachment.analyze_later
+      end
     end
   end
 end
