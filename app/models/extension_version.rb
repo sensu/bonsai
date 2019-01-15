@@ -40,6 +40,17 @@ class ExtensionVersion < ApplicationRecord
   delegate :github_repo,  to: :extension
   delegate :octokit,      to: :extension
 
+  def self.pick_blob_analyzer(blob)
+    case
+    when TarBallAnalyzer.accept?(blob)
+      TarBallAnalyzer.new(blob)
+    when ZipFileAnalyzer.accept?(blob)
+      ZipFileAnalyzer.new(blob)
+    else
+      nil
+    end
+  end
+
   #
   # Returns the verison of the +ExtensionVersion+
   #
@@ -108,14 +119,7 @@ class ExtensionVersion < ApplicationRecord
     return unless source_file.attached?
 
     blob     = source_file.blob
-    analyzer = case
-               when TarBallAnalyzer.accept?(blob)
-                 TarBallAnalyzer.new(blob)
-               when ZipFileAnalyzer.accept?(blob)
-                 ZipFileAnalyzer.new(blob)
-               else
-                 nil
-               end
+    analyzer = ExtensionVersion.pick_blob_analyzer(blob)
     return unless analyzer
 
     analyzer.with_file_finder(&block)
