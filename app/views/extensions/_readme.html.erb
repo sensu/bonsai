@@ -1,5 +1,1 @@
-<%- if extension.hosted? %>
-  <%= render_document(version.metadata.fetch(:readme, ""), version.metadata.fetch(:readme_extension, "")) %>
-<% else %>
-  <%= render_document(version.try(:readme) || "", version.try(:readme_extension) || "", version.try(:extension).github_repo, version.try(:version)) %>
-<% end %>
+<%= render_document(version.try(:readme) || "", version.try(:readme_extension) || "", version.try(:extension).github_repo, version.try(:version)) %>
