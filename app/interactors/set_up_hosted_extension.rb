@@ -24,9 +24,11 @@ class SetUpHostedExtension
 
       attachment = extension_version.source_file.attachment
       if attachment.analyzed?
-        extension_version.after_attachment_analysis(attachment)
+        extension_version.after_attachment_analysis(attachment, attachment.metadata)
       else
+        #:nocov:
         attachment.analyze_later
+        #:nocov:
       end
     end
   end
