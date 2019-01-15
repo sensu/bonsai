@@ -1,37 +1,7 @@
 # Compiles an +ExtensionVersion+'s raw configuration by interpolating strings and
 # fetching GitHub asset information.
 #
-# For example, if the raw source configuration looks like:
-#
-#   {"description" => "Test Asset",
-#    "builds"      =>
-#      [{"arch"           => "x86_64",
-#        "filter"         =>
-#          ["System.OS == linux",
-#           "(System.Arch == x86_64) || (System.Arch == amd64)"],
-#        "platform"       => "linux",
-#        "sha_filename"   => "test_asset-\#{version}-linux-x86_64.sha512.txt",
-#        "asset_filename" => "test_asset-\#{version}-linux-x86_64.tar.gz"}]}
-#
-# The compiled configuration might look like:
-#
-#   {"description"=>"Test Asset",
-#    "builds"=>
-#      [{"arch"=>"x86_64",
-#        "filter"=>
-#          ["System.OS == linux",
-#           "(System.Arch == x86_64) || (System.Arch == amd64)"],
-#        "platform"=>"linux",
-#        "sha_filename"=>"test_asset-\#{version}-linux-x86_64.sha512.txt",
-#        "asset_filename"=>"test_asset-\#{version}-linux-x86_64.tar.gz",
-#        "asset_url"=>
-#          "https://github.com/some-user/some-repo/releases/download/v0.1-20181115/test_asset-v0.1-20181115-linux-x86_64.tar.gz",
-#        "asset_sha"=>
-#          "6f2121a6c8690f229e9cb962d8d71f60851684284755d4cdba4e77ef7ba20c03283795c4fccb9d6ac8308b248f2538bf7497d6467de0cf9e9f0814625b4c6f91"}]}
-#
-# The compilation is lossless because none of the source configuration is changed,
-# only new configuration items are added.  Therefore, the compilation is idempotent
-# and can be re-run multiple times.
+# See the example in ./compile_hosted_extension_version_config.rb.
 
 require 'fetch_remote_sha'
 
