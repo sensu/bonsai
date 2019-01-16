@@ -52,4 +52,35 @@ describe FetchHostedFile do
       end
     end
   end
+
+  describe ".bulk_cache" do
+    let(:file_name)    { 'sensu-particle-checks-dan.tgz' }
+    let(:version_name) { '0.0.2' }
+    let(:repo)         { 'sensu-particle-checks-dan' }
+    let(:extension)    { create :extension, :hosted, name: repo }
+    let(:version)      { create :extension_version, extension: extension, version: version_name }
+    let(:file_paths)   { version.release_assets.map {|ra| version.interpolate_variables((ra.asset_filename))} }
+
+    subject { FetchHostedFile.bulk_cache(extension_version: version, file_paths: file_paths) }
+
+    before do
+      version.source_file.attach(blob)
+      version.source_file.analyze
+      version.reload
+    end
+
+    it "caches the files at the given paths" do
+      file_paths.each do |file_path|
+        key = FetchHostedFile.cache_key(blob: blob, file_path: file_path)
+        expect(Rails.cache.fetch(key)).to be_nil
+      end
+
+      subject
+
+      file_paths.each do |file_path|
+        key = FetchHostedFile.cache_key(blob: blob, file_path: file_path)
+        expect(Rails.cache.fetch(key)).to be_present
+      end
+    end
+  end
 end
