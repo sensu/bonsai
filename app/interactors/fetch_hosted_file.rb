@@ -8,13 +8,17 @@ class FetchHostedFile
 
   def call
     cache_key = "FetchHostedFile: #{blob.id}/#{file_path}"
-    context.content = Rails.cache.fetch(cache_key) do
+    context.content = self.class.cache.fetch(cache_key) do
       file = do_fetch(blob, file_path)
       file&.read
     end
   end
 
   private
+
+  def self.cache
+    Rails.env.test? ? Rails.cache : Rails.configuration.active_storage_cache
+  end
 
   def do_fetch(blob, file_path)
     case
