@@ -77,5 +77,8 @@ module BonsaiAssetIndex
     # and because Rails considers the "/assets" path to be reserved,
     # we must tell Rails to reserve a different path for the asset pipeline.
     config.assets.prefix = '/web-assets'
+
+    require Rails.root.join('lib', 'active_storage_cache_store').to_s
+    config.active_storage_cache = ActiveStorageCacheStore.new
   end
 end
