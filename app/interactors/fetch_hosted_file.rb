@@ -17,7 +17,7 @@ class FetchHostedFile
   private
 
   def self.cache
-    Rails.cache
+    Rails.env.test? ? Rails.cache : Rails.configuration.active_storage_cache
   end
 
   def do_fetch(blob, file_path)
