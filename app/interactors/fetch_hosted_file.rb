@@ -7,10 +7,25 @@ class FetchHostedFile
   delegate :file_path, to: :context
 
   def call
-    cache_key = "FetchHostedFile: #{blob.id}/#{file_path}"
-    context.content = self.class.cache.fetch(cache_key) do
+    key = self.class.cache_key(blob: blob, file_path: file_path)
+    context.content = self.class.cache.fetch(key) do
       file = do_fetch(blob, file_path)
       file&.read
+    end
+  end
+
+  def self.bulk_cache(extension_version:, file_paths:)
+    return unless extension_version.source_file.attached?
+    blob = extension_version.source_file.blob
+
+    extension_version.with_file_finder do |finder|
+      file_paths.each do |file_path|
+        key = cache_key(blob: blob, file_path: file_path)
+        self.cache.fetch(key) do
+          file = finder.find(file_path: file_path)
+          file&.read
+        end
+      end
     end
   end
 
@@ -20,14 +35,14 @@ class FetchHostedFile
     Rails.env.test? ? Rails.cache : Rails.configuration.active_storage_cache
   end
 
+  def self.cache_key(blob:, file_path:)
+    "FetchHostedFile: #{blob.id}/#{file_path}"
+  end
+
   def do_fetch(blob, file_path)
-    case
-    when TarBallAnalyzer.accept?(blob)
-      TarBallAnalyzer.new(blob).fetch_file(file_path: file_path)
-    when ZipFileAnalyzer.accept?(blob)
-      ZipFileAnalyzer.new(blob).fetch_file(file_path: file_path)
-    else
-      nil
-    end
+    analyzer = ExtensionVersion.pick_blob_analyzer(blob)
+    return nil unless analyzer
+
+    analyzer.fetch_file(file_path: file_path)
   end
 end
