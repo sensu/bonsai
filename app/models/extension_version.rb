@@ -133,6 +133,8 @@ class ExtensionVersion < ApplicationRecord
       readme_extension: metadata[:readme_extension].to_s,
       config:           metadata[:config].to_h,
     )
+
+    WarmUpReleaseAssetCacheJob.perform_later self
   end
 
   private
