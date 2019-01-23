@@ -1,5 +1,5 @@
 <div class="owner_avatar">
-  <% if resource.github_organization %>
+  <% if resource.hosted? || resource.github_organization %>
     <%= gravatar_for resource.github_organization, size: 144 %>
     <span itemprop="author"><%= resource.github_organization.name %></span>
   <% else %>
