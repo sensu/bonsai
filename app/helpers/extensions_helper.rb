@@ -154,4 +154,32 @@ module ExtensionsHelper
       link_to linked_text, params.to_unsafe_h.merge(order: ordering), class: 'button radius secondary'
     end
   end
+
+  #
+  # Selects the appropriate avatar 
+  # only link if the avatar is that of the owner
+  # only show organization avatar for hosted assets
+  #
+  # @param extension [active record]
+  # @param options [Hash] options for the Gravatar
+  # @option options [Integer] :size (48) the size of the Gravatar in pixels
+  # @option options [String] :maintainer the id to associate with the gravatar
+  #
+  def link_to_gravatar(extension, options)
+    options = {
+      size: 48
+    }.merge(options)
+
+    size = options[:size]
+    maintainer = options[:maintainer] || nil
+
+    if extension.hosted? || extension.github_organization
+      gravatar_for(extension.github_organization, size: size)
+    else
+      link_to extension.owner do
+        gravatar_for(extension.owner, size: size)
+        maintainer
+      end
+    end
+  end
 end
