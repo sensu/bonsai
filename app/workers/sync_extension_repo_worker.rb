@@ -1,14 +1,17 @@
 class SyncExtensionRepoWorker < ApplicationWorker
 
   def perform(extension_id, compatible_platforms = [])
-    @extension = Extension.find(extension_id)
-    releases = @extension.octokit.releases(@extension.github_repo)
+    @extension = Extension.find_by(id: extension_id)
+    raise RuntimeError.new("#{I18n.t('nouns.extension')} not found.") unless @extension
+    @extension.with_lock do
+      releases = @extension.octokit.releases(@extension.github_repo)
 
-    clone_repo
-    @tags = extract_tags_from_releases(releases)
-    destroy_unreleased_versions
+      clone_repo
+      @tags = extract_tags_from_releases(releases)
+      destroy_unreleased_versions
 
-    release_infos_by_tag = releases.group_by {|release| release[:tag_name]}.transform_values {|arr| arr.first.to_h}
+      release_infos_by_tag = releases.group_by {|release| release[:tag_name]}.transform_values {|arr| arr.first.to_h}
+    end  
     SyncExtensionContentsAtVersionsWorker.perform_async(extension_id, @tags, compatible_platforms, release_infos_by_tag)
   end
 
