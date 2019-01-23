@@ -18,7 +18,7 @@
         <% @followed_extension_activity.each do |extension_version| %>
           <li>
             <div>
-              <%= link_to gravatar_for(extension_version.owner), extension_version.owner %>
+              <%= link_to_gravatar_for(extension_version.owner), extension_version.owner %>
               <%= t('extension.activity',
                     maintainer: link_to(extension_version.extension.maintainer, extension_version.owner),
                     version: extension_version.version,
