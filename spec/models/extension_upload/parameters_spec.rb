@@ -98,6 +98,15 @@ describe ExtensionUpload::Parameters do
       expect(params.readme.file_extension).to eql('md')
     end
 
+    it 'is extracted from a hosted tarball' do
+      tarball = File.open('spec/support/extension_fixtures/redis-test-v3.tgz')
+
+      params = params(extension: '{}', tarball: tarball)
+
+      expect(params.readme.contents).to_not be_empty
+      expect(params.readme.file_extension).to eql('md')
+    end
+
     it 'is extracted from the top-level README' do
       tarball = Tempfile.new('multiple-readme', 'tmp').tap do |file|
         io = AndFeathers.build('multiple-readme') do |base|

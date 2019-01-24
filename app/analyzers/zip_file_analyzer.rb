@@ -9,6 +9,9 @@ class ZipFileAnalyzer < ActiveStorage::Analyzer
 
   MIME_TYPES = %w[
     application/zip
+    application/octet-stream
+    application/x-zip-compressed
+    multipart/x-zip
   ]
 
   def self.accept?(blob)
