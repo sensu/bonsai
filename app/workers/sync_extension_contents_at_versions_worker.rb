@@ -7,14 +7,9 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
   def perform(extension_id, tags, compatible_platforms = [], release_infos_by_tag = {})
     logger.info("PERFORMING: #{extension_id}, #{tags.inspect}, #{compatible_platforms.inspect}")
 
-    #@extension = Extension.where(id: extension_id, syncing: false).first
     @extension = Extension.find_by(id: extension_id)
     raise RuntimeError.new("#{I18n.t('nouns.extension')} not found.") unless @extension
-    #vraise RuntimeError.new("Syncing already in progress.") unless @extension
     @extension.with_lock do
-      # don't need to detect syncing process with lock
-      # @extension.update_attribute(:syncing, true)
-   
       @tags = tags
       @tag = @tags.shift
       @compatible_platforms = compatible_platforms
@@ -26,11 +21,8 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
         sync_extension_version(release_info)
         tally_commits if @tag == "master"
       end
-
-      perform_next
-    # ensure
-      # @extension.update_attribute(:syncing, false)
     end
+    perform_next
   end
 
   private
@@ -50,7 +42,6 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
 
   def perform_next
     if @tags.any?
-      # @extension.update_attribute(:syncing, false)
       self.class.perform_async(@extension.id, @tags, @compatible_platforms, @release_infos_by_tag)
     end
   end
