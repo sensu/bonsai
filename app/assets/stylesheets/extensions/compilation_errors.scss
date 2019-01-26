@@ -1,0 +1,29 @@
+.compilation-errors {
+  left: 0;
+  right: 0;
+  top: 0;
+  margin-bottom: 1.5em;
+  padding: 0.8em 1.5em;
+
+  border: 1px solid #F04124;
+  border-radius: 5px;
+  background-color: #f0dbd8;
+
+  font-size: smaller;
+
+  details {
+    summary {
+      outline: none;
+    }
+
+    ul {
+      padding: 0 1em;
+      font-size: smaller;
+      margin-bottom: 0;
+
+      li {
+        margin-top: 0.5em;
+      }
+    }
+  }
+}
