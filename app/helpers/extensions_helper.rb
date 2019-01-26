@@ -154,4 +154,19 @@ module ExtensionsHelper
       link_to linked_text, params.to_unsafe_h.merge(order: ordering), class: 'button radius secondary'
     end
   end
+
+  def compilation_errors(extension)
+    pairs = extension
+              .extension_versions
+              .map {|version| [version, compilation_error(version)]}
+              .find_all {|_, error| error.present?}
+    pairs.map {|version, error| "Version #{version.version}: #{error}"}
+  end
+
+  def compilation_error(version)
+    return unless version.compilation_error.present?
+    return if !version.hosted? && version.version == 'master'
+
+    version.compilation_error
+  end
 end
