@@ -7,14 +7,22 @@ module HasArchiveMetadata
     {}.tap { |results|
       with_file_finder do |finder|
         readme_file = finder.find(file_path: /(\A|\/)readme/i)
-        version     = blob.attachments.first&.record
-        config      = version ?
-                        CompileHostedExtensionVersionConfig.call(version: version, file_finder: finder).data_hash.to_h :
-                        {}
-
         results[:readme]           = readme_file&.read.presence
         results[:readme_extension] = File.extname(readme_file&.path.to_s).to_s.sub(/\A\./, '').presence # strip off any leading '.'
-        results[:config]           = config
+
+        version = blob.attachments
+                    .map(&:record)
+                    .find { |record| record.is_a?(ExtensionVersion) }
+        if version
+          compilation_result = CompileHostedExtensionVersionConfig.call(
+            version:     version,
+            file_finder: finder)
+          if compilation_result.success?
+            results[:config] = compilation_result.data_hash
+          else
+            results[:compilation_error] = compilation_result.error
+          end
+        end
       end
     }.compact.tap {|results|
       blob.attachments.each do |attachment|
