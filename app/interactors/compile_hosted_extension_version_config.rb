@@ -39,12 +39,14 @@ class CompileHostedExtensionVersionConfig
 
   def call
     config_hash = fetch_bonsai_config(file_finder)
+    context.fail!(error: "Bonsai configuration has no 'builds' section") unless config_hash['builds'].present?
 
     config_hash['builds'] = compile_builds(version, config_hash['builds'], file_finder)
 
     context.data_hash = config_hash
-  rescue
-    context.fail!(data_hash: {})
+  rescue => boom
+    raise if Interactor::Failure === boom   # Don't trap context.fail! calls
+    context.fail!(error: "could not compile the Bonsai configuration file: #{boom}")
   end
 
   private
@@ -52,10 +54,16 @@ class CompileHostedExtensionVersionConfig
   def fetch_bonsai_config(file_finder)
     files_regexp = "(#{Extension::CONFIG_FILE_NAMES.join('|')})"
     file         = file_finder.find(file_path: files_regexp)
+    context.fail!(error: 'cannot find a Bonsai configuration file') unless file
 
     body = file.read
-    config_hash = YAML.load(body.to_s)
+    begin
+      config_hash = YAML.load(body.to_s)
+    rescue => boom
+      context.fail!(error: "cannot parse the Bonsai configuration file: #{boom.message}")
+    end
 
+    context.fail!(error: "Bonsai configuration is invalid") unless config_hash.is_a?(Hash)
     config_hash
   end
 
@@ -67,13 +75,19 @@ class CompileHostedExtensionVersionConfig
   end
 
   def compile_build_hash(build_config, num, version, file_finder)
+    context.fail!(error: "build ##{num} is malformed (perhaps missing indentation)") unless build_config.is_a?(Hash)
+
     src_sha_filename = build_config['sha_filename']
+    context.fail!(error: "build ##{num} is missing a 'sha_filename' value") unless src_sha_filename.present?
 
     src_asset_filename = build_config['asset_filename']
+    context.fail!(error: "build ##{num} is missing an 'asset_filename' value") unless src_asset_filename.present?
 
     compiled_sha_filename = version.interpolate_variables(src_sha_filename)
+    context.fail!(error: "build ##{num} 'sha_filename' value could not be interpolated") unless compiled_sha_filename.present?
 
     compiled_asset_filename = version.interpolate_variables(src_asset_filename)
+    context.fail!(error: "build ##{num} 'asset_filename' value could not be interpolated") unless compiled_asset_filename.present?
 
     asset_filename    = File.basename(compiled_asset_filename)
     file_download_url = hosted_download_url(build_config, num, version)
@@ -90,15 +104,21 @@ class CompileHostedExtensionVersionConfig
 
   def read_sha_file(sha_filename, asset_filename, file_finder)
     file = file_finder.find(file_path: sha_filename)
+    context.fail!(error: "cannot find the #{sha_filename} SHA file") unless file
 
     sha_file_content = file.read
-    extract_sha_for_binary(asset_filename, sha_file_content)
+    extract_sha_for_binary(asset_filename, sha_file_content).tap do |sha_result|
+      context.fail!(error: "cannot extract the SHA for #{asset_filename}") unless sha_result.present?
+    end
   end
 
   def hosted_download_url(build_config, num, version)
     extension = version.extension
     platform  = build_config['platform']
     arch      = build_config['arch']
+
+    context.fail!(error: "build ##{num} is missing a platform specification") unless platform.present?
+    context.fail!(error: "build ##{num} is missing an arch specification"   ) unless arch.present?
 
     # Eat our own dog food
     file_download_url = Rails.application.routes.url_helpers.release_asset_asset_file_url(
