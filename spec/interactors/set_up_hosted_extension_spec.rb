@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe SetUpHostedExtension do
-  let(:file_name)    { 'private-extension.tgz' }
+  let(:file_name)    { 'sensu-particle-checks-dan.tgz' }
   let(:file_path)    { Rails.root.join('spec', 'support', 'extension_fixtures', file_name) }
   let(:attachable)   { fixture_file_upload(file_path) }
   let(:blob_hash)    { {
@@ -10,12 +10,14 @@ describe SetUpHostedExtension do
     content_type: attachable.content_type
   } }
   let(:blob)         { ActiveStorage::Blob.create_after_upload! blob_hash }
-  let(:version_name) { 'v0.1.2' }
-  let(:extension)    { create :extension }
+  let(:version_name) { '0.0.2' }
+  let(:repo)         { 'sensu-particle-checks-dan' }
+  let(:extension)    { create :extension, :hosted, name: repo }
   subject(:context)  { SetUpHostedExtension.call(extension:    extension,
                                                  version_name: version_name) }
 
   before do
+    Extension.destroy_all
     extension.tmp_source_file.attach(blob)
   end
 
@@ -47,7 +49,6 @@ describe SetUpHostedExtension do
 
       expect(version.readme          ).to be_present
       expect(version.readme_extension).to be_present
-      expect(version.config          ).to be_present
     end
   end
 end
