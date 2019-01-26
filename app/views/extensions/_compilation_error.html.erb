@@ -1,0 +1,13 @@
+<%- error = compilation_error(version) %>
+<% if error.present? %>
+  <div class="compilation-errors">
+    <details open>
+      <summary>This version has a compilation error</summary>
+      <ul>
+        <li class="compilation-error">
+          <%= error %>
+        </li>
+      </ul>
+    </details>
+  </div>
+<% end %>
