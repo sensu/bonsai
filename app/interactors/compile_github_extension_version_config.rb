@@ -13,7 +13,8 @@ class CompileGithubExtensionVersionConfig
   delegate :system_command_runner, to: :context
 
   def call
-    config_hash           = fetch_bonsai_config(system_command_runner) || {}
+    config_hash = fetch_bonsai_config(system_command_runner)
+
     config_hash['builds'] = compile_builds(version, config_hash['builds'])
 
     context.data_hash = config_hash
@@ -37,7 +38,7 @@ class CompileGithubExtensionVersionConfig
     body = cmd_runner.cmd("cat '#{path}'")
     config_hash = YAML.load(body.to_s) rescue {}
 
-    return config_hash.is_a?(Hash) && config_hash
+    config_hash
   end
 
   def compile_builds(version, build_configs)
@@ -46,9 +47,9 @@ class CompileGithubExtensionVersionConfig
                                      .group_by { |h| h[:name] }
                                      .transform_values(&:first)
 
-    Array.wrap(build_configs).map { |build_config|
+    Array.wrap(build_configs).each_with_index.map { |build_config, idx|
       Thread.new do
-        compiled_config = compile_build_hash(build_config, github_asset_data_hashes_lut, version)
+        compiled_config = compile_build_hash(build_config, idx+1, github_asset_data_hashes_lut, version)
         build_config.merge compiled_config
       end
     }.map(&:value)
@@ -62,11 +63,13 @@ class CompileGithubExtensionVersionConfig
     Array.wrap(releases_data[:assets])
   end
 
-  def compile_build_hash(build_config, github_asset_data_hashes_lut, version)
-    src_sha_filename   = build_config['sha_filename']
+  def compile_build_hash(build_config, num, github_asset_data_hashes_lut, version)
+    src_sha_filename = build_config['sha_filename']
+
     src_asset_filename = build_config['asset_filename']
 
-    compiled_sha_filename   = version.interpolate_variables(src_sha_filename)
+    compiled_sha_filename = version.interpolate_variables(src_sha_filename)
+
     compiled_asset_filename = version.interpolate_variables(src_asset_filename)
 
     asset_filename    = File.basename(compiled_asset_filename)
@@ -92,7 +95,8 @@ class CompileGithubExtensionVersionConfig
   end
 
   def github_download_url(filename, github_asset_data_hashes_lut)
-    asset_data = filename.present? && github_asset_data_hashes_lut.fetch(filename, {})
-    asset_data.to_h[:browser_download_url]
+    asset_data = github_asset_data_hashes_lut.dig(filename)
+
+    asset_data[:browser_download_url]
   end
 end
