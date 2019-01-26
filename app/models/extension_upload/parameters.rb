@@ -155,7 +155,7 @@ class ExtensionUpload
       errors = ActiveModel::Errors.new([])
 
       begin
-        path = archive.find(%r{\A(\.\/)?[^\/]+\/metadata\.json\Z}).first
+        path = archive.find(%r{(\.\/)?[^\/]+\/metadata\.json}).first
 
         if path
           metadata = Metadata.new(JSON.parse(archive.read(path)))
@@ -190,8 +190,7 @@ class ExtensionUpload
       errors = ActiveModel::Errors.new([])
 
       begin
-        path = archive.find(%r{\A(\.\/)?#{file_extension}\/readme(\.\w+)?\Z}i).first
-
+        path = archive.find(%r{(\.\/)?#{file_extension}\/readme(\.\w+)?}i).first
         if path
           readme = Document.new(
             contents: archive.read(path),
@@ -229,8 +228,7 @@ class ExtensionUpload
       errors = ActiveModel::Errors.new([])
 
       begin
-        path = archive.find(%r{\A(\.\/)?#{file_extension}\/changelog(\.\w+)?\Z}i).first
-
+        path = archive.find(%r{(\.\/)?#{file_extension}\/changelog(\.\w+)?}i).first
         if path
           changelog = Document.new(
             contents: archive.read(path),

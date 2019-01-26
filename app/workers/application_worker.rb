@@ -4,7 +4,6 @@ class ApplicationWorker
   private
 
   def default_url_options
-    debugger
     ActionController::Base.default_url_options
   end
 
