@@ -178,6 +178,8 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
     compilation_result = CompileGithubExtensionVersionConfig.call(version: version, system_command_runner: @run)
     if compilation_result.success?
       version.update_column(:config, compilation_result.data_hash)
+    else
+      version.update_column(:compilation_error, compilation_result.error)
     end
   end
 
