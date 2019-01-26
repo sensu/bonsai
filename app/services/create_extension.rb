@@ -15,7 +15,7 @@ class CreateExtension
     if validate(candidate, @octokit, @user)
       candidate.save
       postprocess(candidate, @octokit, @compatible_platforms, @version_name)
-    else
+    elsif !candidate.hosted?
       existing = Extension.unscoped.where(enabled: false, github_url: candidate.github_url).first
       if existing
         # A disabled extension is available for re-use, but it must first be re-enabled.
