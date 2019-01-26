@@ -17,6 +17,8 @@ class CompileGithubExtensionVersionConfig
     config_hash['builds'] = compile_builds(version, config_hash['builds'])
 
     context.data_hash = config_hash
+  rescue
+    context.fail!(data_hash: {})
   end
 
   private
