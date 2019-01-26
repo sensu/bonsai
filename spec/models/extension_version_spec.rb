@@ -171,7 +171,11 @@ describe ExtensionVersion do
   end
 
   describe '#after_attachment_analysis' do
-    let(:file_name)  { 'private-extension.tgz' }
+    let(:file_name)    { 'sensu-particle-checks-dan.tgz' }
+    let(:version_name) { '0.0.2' }
+    let(:repo)         { 'sensu-particle-checks-dan' }
+    let(:extension)    { create :extension, :hosted, name: repo }
+
     let(:file_path)  { Rails.root.join('spec', 'support', 'extension_fixtures', file_name) }
     let(:attachable) { fixture_file_upload(file_path) }
     let(:blob_hash)  { {
@@ -180,7 +184,11 @@ describe ExtensionVersion do
       content_type: attachable.content_type
     } }
     let(:blob)       { ActiveStorage::Blob.create_after_upload! blob_hash }
-    subject          { create :extension_version, readme_extension: 'txt' }
+    subject          { create :extension_version, extension: extension, version: version_name, readme_extension: 'txt' }
+
+    before do
+      Extension.destroy_all
+    end
 
     it "updates the version's metadata" do
       orig_readme     = subject.readme
