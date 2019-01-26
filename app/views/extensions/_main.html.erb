@@ -1,4 +1,6 @@
 <div class="main" data-equalizer-watch>
+  <%= render 'extensions/compilation_errors', extension: @extension %>
+
   <% if extension.deprecated? %>
     <div class="deprecation-notice">
       <h2 class="deprecation-copy">
