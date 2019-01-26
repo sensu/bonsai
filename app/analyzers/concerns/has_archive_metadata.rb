@@ -6,7 +6,7 @@ module HasArchiveMetadata
   def metadata
     {}.tap { |results|
       with_file_finder do |finder|
-        readme_file = finder.find(file_path: /\/readme/i)
+        readme_file = finder.find(file_path: /(\A|\/)readme/i)
         version     = blob.attachments.first&.record
         config      = version ?
                         CompileHostedExtensionVersionConfig.call(version: version, file_finder: finder).data_hash.to_h :
