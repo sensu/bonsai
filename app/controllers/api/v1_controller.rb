@@ -75,6 +75,8 @@ class Api::V1Controller < ApplicationController
     @order = params.fetch(:order, 'name ASC').to_s
   end
 
+  private 
+
   #
   # Finds a user specified in the request header or renders an error if
   # the user doesn't exist. Then attempts to authorize the signed request
@@ -82,7 +84,7 @@ class Api::V1Controller < ApplicationController
   #
   def authenticate_user!
     username = request.headers['X-Ops-Userid']
-    user = Account.for_provider.where(username: username).first.try(:user)
+    user = Account.for(ENV['OAUTH_ACCOUNT_PROVIDER']).where(username: username).first.try(:user)
 
     unless user
       return error(
@@ -110,7 +112,7 @@ class Api::V1Controller < ApplicationController
         request,
         OpenSSL::PKey::RSA.new(user.public_key)
       )
-    else
+    else 
       auth = true
     end
 
