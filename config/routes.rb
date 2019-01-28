@@ -10,7 +10,9 @@ Rails.application.routes.draw do
       get 'metrics' => 'metrics#show'
       get 'health' => 'health#show'
       get 'assets' => 'extensions#index', as: :extensions
+
       get 'assets/:username/:id' => 'extensions#show', as: :extension
+      get 'assets/recompile/:username/:id' => 'extensions#sync_repo', as: :extension_recompile
       get 'assets/:username/:extension/versions/:version' => 'extension_versions#show', as: :extension_version, constraints: { version: VERSION_PATTERN }
       get 'assets/:username/:extension/versions/:version/download' => 'extension_versions#download', as: :extension_version_download, constraints: { version: VERSION_PATTERN }
       delete 'assets/:username/:extension/versions/:version' => 'extension_uploads#destroy_version', constraints: { version: VERSION_PATTERN }
