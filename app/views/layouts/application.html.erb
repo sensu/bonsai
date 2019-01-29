@@ -21,9 +21,11 @@
     <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-558071333389cb6a" async="async"></script>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-    <%# render 'google_analytics' %>
+    <%= render 'google_analytics' %>
+    <%= render 'google_tag_manager_head' %>
   </head>
   <body class="<%= controller.controller_name %>">
+    <%= render 'google_tag_manager_body' %>
     <div class="inner-wrap">
       <header class="globalheader">
         <div class="inner_wrap">
