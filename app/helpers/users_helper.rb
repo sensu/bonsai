@@ -30,6 +30,19 @@ module UsersHelper
   end
 
   #
+  # Return the image_tag of the host gravatar for hosted extensions
+  # The default size is 48 pixels.
+  #
+  def gravatar_for_hosted(options = {})
+    options = {
+      size: 48
+    }.merge(options)
+
+    size = options[:size]
+    image_tag('sensu.png', alt: 'Sensu Inc.', class: 'gravatar')
+  end
+
+  #
   # Outputs pluralized stats with contextually appropriate markup
   #
   # @param count [Integer] how many there are
