@@ -305,7 +305,7 @@ class ExtensionsController < ApplicationController
     extension = Extension.with_owner_and_lowercase_name(owner_name: params[:username], lowercase_name: params[:id])
     authorize! extension
 
-    SyncExtensionRepoWorker.perform_async(extension.id)
+    CompileExtension.call(extension: extension)
     redirect_to owner_scoped_extension_url(@extension), notice: t("extension.syncing_in_progress")
   end
 
