@@ -1,8 +1,7 @@
 <% extensions.each do |e| %>
   <div class="row featured-extension">
     <div class="small-2 columns">
-      <% avatar_source = e.github_organization || e.owner %>
-      <%= link_to_if avatar_source == e.owner, gravatar_for(avatar_source, size: 64), e.owner %>
+      <%= link_to_gravatar(e, {size: 64}) %>
     </div>
     <div class="small-10 columns">
       <header>
