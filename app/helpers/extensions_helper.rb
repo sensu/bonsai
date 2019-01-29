@@ -173,7 +173,9 @@ module ExtensionsHelper
     size = options[:size]
     maintainer = options[:maintainer] || nil
 
-    if extension.hosted? || extension.github_organization
+    if extension.hosted?
+      gravatar_for_hosted(size: size)
+    elsif extension.github_organization
       gravatar_for(extension.github_organization, size: size)
     else
       link_to extension.owner do
