@@ -186,7 +186,7 @@ module ExtensionsHelper
     }.merge(options)
 
     size = options[:size]
-    maintainer = options[:maintainer] || nil
+    maintainer = options[:maintainer] || ''
 
     if extension.hosted?
       gravatar_for_hosted(size: size)
@@ -194,8 +194,7 @@ module ExtensionsHelper
       gravatar_for(extension.github_organization, size: size)
     else
       link_to extension.owner do
-        gravatar_for(extension.owner, size: size)
-        maintainer
+        gravatar_for(extension.owner, size: size) + content_tag('span', maintainer)
       end
     end
   end
