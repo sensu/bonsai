@@ -10,10 +10,14 @@ describe CompileHostedExtensionVersionConfig do
     content_type: attachable.content_type
   } }
   let(:blob)         { ActiveStorage::Blob.create_after_upload! blob_hash }
-  let(:version)      { create :extension_version }
+  let(:version_name) { '0.0.2' }
+  let(:repo)         { 'sensu-particle-checks-dan' }
+  let(:extension)    { create :extension, :hosted, name: repo }
+  let(:version)      { create :extension_version, extension: extension, version: version_name }
 
   describe ".call" do
     around(:each) do |example|
+      Extension.destroy_all
       version.source_file.attach(blob)
       version.with_file_finder do |finder|
         @result = CompileHostedExtensionVersionConfig.call(version: version, file_finder: finder)

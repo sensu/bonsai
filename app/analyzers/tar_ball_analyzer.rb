@@ -11,7 +11,14 @@ class TarBallAnalyzer < ActiveStorage::Analyzer
 
   MIME_TYPES = %w[
     application/gzip
+    application/x-gzip
+    application/x-gzip-compressed
+    application/x-compressed
     application/x-compressed-tar
+    application/gzip-compressed
+    application/gzipped
+    application/x-gunzip
+    gzip/document
   ]
 
   def self.accept?(blob)

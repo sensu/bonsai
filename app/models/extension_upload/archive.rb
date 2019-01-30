@@ -40,9 +40,14 @@ class ExtensionUpload
       matches = []
 
       each do |entry|
-        next unless entry.full_name.match(pattern)
-
-        matches << entry.full_name
+        full_name = entry.full_name.gsub(/\s+/, "")
+        regex_name = full_name
+        # Hosted assets don't have the full path used in the regex
+        unless regex_name.index('./') == 0
+          regex_name = './' +  regex_name
+        end
+        next unless regex_name.match(pattern)
+        matches << full_name
       end
 
       matches

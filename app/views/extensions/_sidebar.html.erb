@@ -132,6 +132,8 @@
     <% end %>
   </div>
 
+  <%= render 'extensions/compilation_error', version: version %>
+
   <%- release_assets = gather_viable_release_assets(version) %>
   <%- if release_assets.any? %>
     <div class="github-release-assets">

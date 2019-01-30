@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_15_224507) do
+ActiveRecord::Schema.define(version: 2019_01_26_050254) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -302,6 +302,7 @@ ActiveRecord::Schema.define(version: 2019_01_15_224507) do
     t.integer "commit_count", default: 0, null: false
     t.text "release_notes"
     t.jsonb "config", default: {}
+    t.string "compilation_error"
     t.index ["config"], name: "index_extension_versions_on_config", using: :gin
     t.index ["legacy_id"], name: "index_extension_versions_on_legacy_id", unique: true
     t.index ["version", "extension_id"], name: "index_extension_versions_on_version_and_extension_id", unique: true
@@ -330,7 +331,6 @@ ActiveRecord::Schema.define(version: 2019_01_15_224507) do
     t.string "license_name", default: ""
     t.text "license_text", default: ""
     t.boolean "enabled", default: true, null: false
-    t.boolean "syncing", default: false
     t.integer "github_organization_id"
     t.string "owner_name"
     t.bigint "tier_id"

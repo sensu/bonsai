@@ -18,6 +18,10 @@ RSpec.describe WarmUpReleaseAssetCacheJob, type: :job do
 
   subject { WarmUpReleaseAssetCacheJob.perform_now(version) }
 
+  before do
+    Extension.destroy_all
+  end
+
   context 'no attachment' do
     before do
       expect(version.source_file).to_not be_attached

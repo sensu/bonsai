@@ -129,9 +129,10 @@ class ExtensionVersion < ApplicationRecord
     return unless attachment.name == 'source_file'
 
     update_attributes(
-      readme:           metadata[:readme].to_s,
-      readme_extension: metadata[:readme_extension].to_s,
-      config:           metadata[:config].to_h,
+      readme:            metadata[:readme].to_s,
+      readme_extension:  metadata[:readme_extension].to_s,
+      config:            metadata[:config].to_h,
+      compilation_error: metadata[:compilation_error],
     )
 
     WarmUpReleaseAssetCacheJob.perform_later self
