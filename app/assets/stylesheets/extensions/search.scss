@@ -33,7 +33,8 @@
 .search_form {
   @include grid-row();
   position: relative;
-  max-width: $max-width;
+  //max-width: $max-width;
+  max-width: 99%;
 }
 
 .search_toggle {

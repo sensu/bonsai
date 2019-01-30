@@ -1,0 +1,15 @@
+<%- errors = compilation_errors(extension) %>
+<% if errors.any? %>
+  <div class="compilation-errors">
+    <details open>
+      <summary>This <%= t('nouns.extension') %> has compilation errors</summary>
+      <ul>
+        <% errors.each do |error| %>
+          <li class="compilation-error">
+            <%= error %>
+          </li>
+        <% end %>
+      </ul>
+    </details>
+  </div>
+<% end %>

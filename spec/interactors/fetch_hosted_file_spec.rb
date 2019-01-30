@@ -64,6 +64,7 @@ describe FetchHostedFile do
     subject { FetchHostedFile.bulk_cache(extension_version: version, file_paths: file_paths) }
 
     before do
+      Extension.destroy_all
       version.source_file.attach(blob)
       version.source_file.analyze
       version.reload
