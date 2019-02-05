@@ -35,11 +35,11 @@ module UsersHelper
   #
   def gravatar_for_hosted(options = {})
     options = {
-      size: 48
+      size: 48,
     }.merge(options)
 
     size = options[:size]
-    image_tag('sensu.png', alt: 'Sensu Inc.', class: 'gravatar')
+    image_tag("#{ENV['HOST_LOGO']}", class: 'gravatar')
   end
 
   #
