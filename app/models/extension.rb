@@ -310,6 +310,7 @@ class Extension < ApplicationRecord
         changelog_extension: changelog.extension
       )
 
+
       self.updated_at = Time.now
 
       [:source_url, :issues_url].each do |url|
