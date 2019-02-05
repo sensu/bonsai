@@ -109,7 +109,7 @@
     <% end %>
 
     <h4><i class="fa fa-key"></i> License</h4>
-    <p><%= version.try(:license) || "Unknown" %></p>
+    <p><%= extension.license_name.present? ? extension.license_name : "Unknown" %></p>
 
     <%= render 'extensions/download', extension: extension, version: version %></div>
   <h4>
