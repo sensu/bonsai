@@ -28,7 +28,11 @@ class ApplicationController < ActionController::Base
   protected
 
   def owner_scoped_extension_url(extension)
-    extension_url(extension, username: extension.owner_name)
+    if extension.hosted?
+      extension_url(extension, username: "#{ENV['HOST_ORGANIZATION']}")
+    else
+      extension_url(extension, username: extension.owner_name)
+    end
   end
 
   def not_found!(error = nil)
