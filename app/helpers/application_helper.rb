@@ -54,6 +54,13 @@ module ApplicationHelper
     Array.wrap(platforms_or_nil)
   end
 
+  def supported_tiers
+    cache_key = Tier.maximum(:updated_at).to_f
+    return Rails.cache.fetch("#{cache_key}/tiers_summary") do
+      Tier.all.order(:name)
+    end
+  end
+
   private
 
   # Returns a +Hash+ that looks like:
