@@ -119,10 +119,10 @@ class CompileGithubExtensionVersionConfig
     # retreive the data based on the index
     unless data_index.nil?
       asset_data = github_asset_data_hashes_lut.values[data_index]
-      unless data_index.nil? || asset_data.nil? || !asset_data.is_a?(Hash)
+      unless asset_data.nil? || !asset_data.is_a?(Hash)
         return asset_data[:browser_download_url]
       end
-    ends
+    end
     context.fail!(error: "missing GitHub release asset for #{filename}")
     return ''
   end
