@@ -177,7 +177,8 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
   def scan_config_yml_file(version)
     compilation_result = CompileGithubExtensionVersionConfig.call(version: version, system_command_runner: @run)
     if compilation_result.success?
-      version.update_column(:config, compilation_result.data_hash)
+      version.update_columns(config:            compilation_result.data_hash,
+                             compilation_error: nil)
     else
       version.update_column(:compilation_error, compilation_result.error)
     end
