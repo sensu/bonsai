@@ -22,7 +22,6 @@ class ExtensionsController < ApplicationController
   #   GET /extensions?order=recently_updated
   #
   def index
-    puts params
     @extensions = qualify_scope(Extension, params)
                     .includes(:extension_versions)
 
@@ -351,10 +350,9 @@ class ExtensionsController < ApplicationController
     end
 
     if params[:tiers].present?
-      tier = Tier.find_by(id: params[:tiers])
-      if tier
-        scope = scope.merge(tier.extensions)
-      end
+      # allow nil tier_id if default tier included
+      params[:tiers] << nil if params[:tiers].include?(Tier.default.id.to_s)
+      scope = scope.merge(Extension.where(tier_id: params[:tiers]))
     end
 
     if params[:order].present?
