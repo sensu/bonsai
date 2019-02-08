@@ -1,3 +1,5 @@
+require "sidekiq/web"
+
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
@@ -168,7 +170,16 @@ Rails.application.routes.draw do
   get 'dashboard' => 'pages#dashboard'
   get 'robots.:format' => 'pages#robots'
   root 'extensions#directory'
+  
+  constraints lambda { |r| AuthConstraint.is_admin?(r) } do
+    mount Sidekiq::Web => "/sidekiq"
+  end
 
-  require "sidekiq/web"
-  mount Sidekiq::Web => "/sidekiq"
+end
+
+class AuthConstraint
+  def self.is_admin?(request)
+    return false unless (user_id = request.session[:user_id])
+    return User.find_by(id: user_id).is?(:admin) rescue false
+  end
 end
