@@ -70,9 +70,9 @@ module ExtensionVersionsHelper
     end
     # exlude any domains which we can call directly
     unless document[/(?:travis-ci)/]
-      document.gsub!(/src="(?!http)(.+)"/, %(src="https://github.com/#{repo_loc}/raw/#{version}/\\1")).html_safe
+      document.gsub!(/src="(?!http)(.+)"/, %(src="https://github.com/#{repo_loc}/raw/#{version}/\\1"))
     end
-    document
+    document.html_safe
   end
 
   def download_url_for(extension_version)
