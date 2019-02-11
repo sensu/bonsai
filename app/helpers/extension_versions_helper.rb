@@ -68,10 +68,8 @@ module ExtensionVersionsHelper
         content
       end
     end
-    # exlude any domains which we can call directly
-    unless document[/(?:travis-ci)/]
-      document.gsub!(/src="(?!http)(.+)"/, %(src="https://github.com/#{repo_loc}/raw/#{version}/\\1"))
-    end
+    # exlude (?!.*) any domains which we should call directly
+    document.gsub!(/src="(?!.*travis.ci)(?!http)(.+)"/, %(src="https://github.com/#{repo_loc}/raw/#{version}/\\1"))
     document.html_safe
   end
 
