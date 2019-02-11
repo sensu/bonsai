@@ -18,6 +18,8 @@ class SyncExtensionRepoWorker < ApplicationWorker
   private
 
   def clone_repo
+    # Must clear any old repo as git will not clone to a non-empty directory
+    FileUtils.rm_rf(Dir["#{@extension.repo_path}"])
     `git clone #{@extension.github_url} #{@extension.repo_path}`
   end
 
