@@ -349,11 +349,10 @@ class ExtensionsController < ApplicationController
       scope = scope.featured
     end
 
-    if params[:tier].present?
-      tier = Tier.find_by(name: params[:tier])
-      if tier
-        scope = scope.merge(tier.extensions)
-      end
+    if params[:tiers].present?
+      # allow nil tier_id if default tier included
+      params[:tiers] << nil if params[:tiers].include?(Tier.default.id.to_s)
+      scope = scope.merge(Extension.where(tier_id: params[:tiers]))
     end
 
     if params[:order].present?

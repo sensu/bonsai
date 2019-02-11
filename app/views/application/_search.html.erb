@@ -50,5 +50,20 @@
         <% end %>
       </div>
     <% end %>
+
+    <% if supported_tiers.any? %>
+      <h4> Select Tier </h4>
+      <div class = "advanced_search_architectures" >
+        <% supported_tiers.each do |tier| %>
+          <div class="advanced_search_architecture">
+            <label>
+              <%=check_box_tag 'tiers[]', tier.id, params[:tiers] ? params[:tiers].include?(tier) : false %>
+              <%= tier.name %>
+            </label>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+
   </div>
 <% end %>

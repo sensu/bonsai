@@ -120,6 +120,7 @@ class Extension < ApplicationRecord
   delegate :foodcritic_feedback, to: :latest_extension_version, allow_nil: true
   delegate :name,                to: :tier, allow_nil: true, prefix: true
   delegate :icon_name,           to: :tier, allow_nil: true, prefix: true
+  delegate :id,                  to: :tier, allow_nil: true, prefix: true
 
   # Validations
   # --------------------
