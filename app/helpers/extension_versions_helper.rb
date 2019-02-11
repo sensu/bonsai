@@ -61,13 +61,16 @@ module ExtensionVersionsHelper
   # @return [String] the Document content ready to be rendered
   #
   def render_document(content, extension, repo_loc = "", version = "", hard_wrap: false)
-    doc = begin
+    document = begin
       if %w(md mdown markdown).include?(extension.downcase)
         render_markdown(content, hard_wrap: hard_wrap)
       else
         content
       end
-    end.gsub(/src="(?!http)(.+)"/, %(src="https://github.com/#{repo_loc}/raw/#{version}/\\1")).html_safe
+    end
+    # exlude (?!.*) any domains which we should call directly
+    document.gsub!(/src="(?!.*travis.ci)(?!http)(.+)"/, %(src="https://github.com/#{repo_loc}/raw/#{version}/\\1"))
+    document.html_safe
   end
 
   def download_url_for(extension_version)
