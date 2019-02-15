@@ -4,7 +4,7 @@
     <span itemprop="author"><%= resource.github_organization.name %></span>
   <% else %>
     <%= link_to resource.owner do %>
-      <%= gravatar_for resource.owner, size: 48 %>
+      <%= gravatar_for resource.owner, size: 48, hosted: resource.hosted? %>
       <span itemprop="author"><%= resource.maintainer %></span>
       <small><%= resource.owner.name %></small>
     <% end %>

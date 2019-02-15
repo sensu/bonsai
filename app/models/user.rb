@@ -377,12 +377,7 @@ class User < ApplicationRecord
   # used as owner of hosted extensions
   #
   def self.host_organization
-    find_or_create_by(email: ENV['HOST_EMAIL'], company: ENV['HOST_ORGANIZATION']).tap do |user|
-      if user.avatar_url.blank?
-        avatar_url = ActionController::Base.helpers.asset_url("#{ENV['HOST_LOGO']}")
-        user.update_column(:avatar_url, avatar_url )
-      end 
-    end 
+    find_or_create_by(email: ENV['HOST_EMAIL'], company: ENV['HOST_ORGANIZATION'])
   end
 
   def to_param

@@ -7,6 +7,7 @@ module UsersHelper
   # @param user [User] the User for get the Gravatar for
   # @param options [Hash] options for the Gravatar
   # @option options [Integer] :size (48) the size of the Gravatar in pixels
+  # @option options [Boolean] :hosted (false) the asset is hosted
   #
   # @example Gravtar for current_user
   #   gravatar_for current_user, size: 72
@@ -17,14 +18,16 @@ module UsersHelper
   #
   def gravatar_for(user, options = {})
     options = {
-      size: 48
+      size: 48,
+      hosted: false,
     }.merge(options)
 
     size = options[:size]
+    hosted = options[:hosted]
 
-    if user.avatar_url.present? && user.avatar_url[/\/web-assets\//]  # local asset 
-      image_tag(user.avatar_url, style: "height: #{size}px; width: #{size}px", alt: user.name, class: 'gravatar')
-
+    if hosted || (user.try(:company) && user.company == ENV['HOST_ORGANIZATION'])
+      avatar_url = ActionController::Base.helpers.asset_url("#{ENV['HOST_LOGO']}")
+      image_tag(avatar_url, style: "height: #{size}px; width: #{size}px", alt: user.name, class: 'gravatar')
     else
       gravatar_id = Digest::MD5.hexdigest(user.try(:email).try(:downcase) || "")
       gravatar_url = "#{user.avatar_url}&size=#{size}"
