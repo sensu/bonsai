@@ -1,12 +1,10 @@
 <div class="owner_avatar">
-  <% if resource.hosted? %>
-    <%= gravatar_for_hosted(size: 144) %>
-  <% elsif resource.github_organization %>
-    <%= gravatar_for resource.github_organization, size: 144 %>
+  <% if resource.github_organization %>
+    <%= gravatar_for resource.github_organization, size: 48 %>
     <span itemprop="author"><%= resource.github_organization.name %></span>
   <% else %>
     <%= link_to resource.owner do %>
-      <%= gravatar_for resource.owner, size: 144 %>
+      <%= gravatar_for resource.owner, size: 48 %>
       <span itemprop="author"><%= resource.maintainer %></span>
       <small><%= resource.owner.name %></small>
     <% end %>

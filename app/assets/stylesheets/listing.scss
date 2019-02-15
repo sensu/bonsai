@@ -33,7 +33,7 @@
 
         .gravatar {
           @include box-sizing(content-box);
-          width: rem-calc(24);
+          //width: rem-calc(24);
         }
 
         @media #{$small-down} {
