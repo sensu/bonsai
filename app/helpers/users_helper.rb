@@ -21,25 +21,17 @@ module UsersHelper
     }.merge(options)
 
     size = options[:size]
-    gravatar_id = Digest::MD5.hexdigest(user.try(:email).try(:downcase) || "")
 
-    gravatar_url = "#{user.avatar_url}&size=#{size}"
-    gravatar_url = "https://secure.gravatar.com/avatar/#{gravatar_id}?s=#{size}" if user.avatar_url.nil?
+    if user.avatar_url.present? && user.avatar_url[/\/web-assets\//]  # local asset 
+      image_tag(user.avatar_url, style: "height: #{size}px; width: #{size}px", alt: user.name, class: 'gravatar')
 
-    image_tag(gravatar_url, alt: user.name, class: 'gravatar')
-  end
+    else
+      gravatar_id = Digest::MD5.hexdigest(user.try(:email).try(:downcase) || "")
+      gravatar_url = "#{user.avatar_url}&size=#{size}"
+      gravatar_url = "https://secure.gravatar.com/avatar/#{gravatar_id}?s=#{size}" if user.avatar_url.nil?
 
-  #
-  # Return the image_tag of the host gravatar for hosted extensions
-  # The default size is 48 pixels.
-  #
-  def gravatar_for_hosted(options = {})
-    options = {
-      size: 48,
-    }.merge(options)
-
-    size = options[:size]
-    image_tag("#{ENV['HOST_LOGO']}", class: 'gravatar')
+      image_tag(gravatar_url, alt: user.name, class: 'gravatar')
+    end
   end
 
   #

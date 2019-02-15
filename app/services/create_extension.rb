@@ -9,7 +9,11 @@ class CreateExtension
 
   def process!
     candidate = Extension.new(@params) do |extension|
-      extension.owner = @user
+      if extension.hosted?
+        extension.owner = User.host_organization
+      else
+        extension.owner = @user
+      end
     end
 
     if validate(candidate, @octokit, @user)
