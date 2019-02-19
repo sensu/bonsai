@@ -188,13 +188,13 @@ module ExtensionsHelper
     size = options[:size]
     maintainer = options[:maintainer] || ''
 
-    if extension.hosted?
-      gravatar_for_hosted(size: size)
-    elsif extension.github_organization
+    if extension.github_organization
       gravatar_for(extension.github_organization, size: size)
+    elsif extension.hosted?
+      gravatar_for(extension.owner, size: size, hosted: true)
     else
       link_to extension.owner do
-        gravatar_for(extension.owner, size: size) + content_tag('span', maintainer)
+        gravatar_for(extension.owner, size: size) + content_tag('div', maintainer)
       end
     end
   end

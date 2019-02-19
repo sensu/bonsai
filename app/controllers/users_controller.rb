@@ -19,7 +19,7 @@ class UsersController < ApplicationController
     when 'follows'
       @extensions = @user.followed_extensions
     else
-      @extensions = @user.owned_extensions
+      @extensions = @user.owned_extensions.not_hosted
     end
 
     @extensions = @extensions.unscope(where: :enabled) if @user == current_user
