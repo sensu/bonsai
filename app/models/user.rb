@@ -373,6 +373,13 @@ class User < ApplicationRecord
     account.user
   end
 
+  #
+  # used as owner of hosted extensions
+  #
+  def self.host_organization
+    find_or_create_by(email: ENV['HOST_EMAIL'], company: ENV['HOST_ORGANIZATION'])
+  end
+
   def to_param
     username
   end

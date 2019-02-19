@@ -102,6 +102,25 @@ describe CreateExtension do
     let(:signed_id)   { blob.signed_id}
     let(:extension)   { build :extension, :hosted, owner: user }
 
+    let(:params) { {
+      name:                 "asdf",
+      description:          "desc",
+      github_url:           github_url,
+      tag_tokens:           "tag1, tag2",
+      compatible_platforms: ["", "p1", "p2"],
+      tmp_source_file:      signed_id,
+      version:              version,
+    } }
+    let(:extension)      { build :extension, owner: user }
+
+    subject { CreateExtension.new(params, user) }
+   
+    it "creates a new User for Hosted Extensions" do
+      new_extension = subject.process!
+      expect(User.find_by(company: ENV['HOST_ORGANIZATION'])).to be_present
+      expect(new_extension.owner.company).to eq(ENV['HOST_ORGANIZATION'])
+    end
+
     it "creates an ExtensionVersion child for the extension" do
       expect {
         new_extension = subject.process!

@@ -10,9 +10,8 @@ class SetUpHostedExtension
   delegate :version_name, to: :context
 
   def call
-    owner_name = extension.owner.username
     extension.update_attributes(
-      owner_name: owner_name
+      owner_name: ENV['HOST_ORGANIZATION']
     )
 
     extension_version = extension.extension_versions.create!(version: version_name)

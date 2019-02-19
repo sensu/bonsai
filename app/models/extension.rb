@@ -92,6 +92,8 @@ class Extension < ApplicationRecord
   }
 
   scope :featured, -> { where(featured: true) }
+  scope :hosted, -> { where("COALESCE( TRIM(github_url), '') = ''") }
+  scope :not_hosted, -> { where("COALESCE( TRIM(github_url), '') != ''") }
 
   scope :for_architectures, ->(archs) { joins(:extension_versions).merge(ExtensionVersion.for_architectures(archs)).distinct }
   scope :for_platforms, ->(platforms) { joins(:extension_versions).merge(ExtensionVersion.for_platforms(platforms)).distinct }
