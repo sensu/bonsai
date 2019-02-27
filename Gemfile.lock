@@ -100,6 +100,8 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.12.2)
+    commonmarker (0.18.2)
+      ruby-enum (~> 0.5)
     concurrent-ruby (1.1.4)
     connection_pool (2.2.2)
     crack (0.4.3)
@@ -311,6 +313,8 @@ GEM
       unicode-display_width (~> 1.4.0)
     rubocop-rspec (1.32.0)
       rubocop (>= 0.60.0)
+    ruby-enum (0.7.2)
+      i18n
     ruby-progressbar (1.10.0)
     ruby_dep (1.5.0)
     ruby_http_client (3.3.0)
@@ -413,6 +417,7 @@ DEPENDENCIES
   capybara (>= 2.15)
   chromedriver-helper
   coffee-rails (~> 4.2)
+  commonmarker
   database_cleaner
   dotenv-rails
   factory_bot_rails
