@@ -1,22 +1,22 @@
-<% extensions.each do |e| %>
+<% extensions.each do |extension| %>
   <div class="row featured-extension">
     <div class="small-2 columns">
-      <%= link_to_gravatar(e, {size: 64}) %>
+      <%= link_to_gravatar(extension) %>
     </div>
     <div class="small-10 columns">
       <header>
-        <%= link_to e.name, owner_scoped_extension_url(e) %>
+        <%= link_to extension.name, owner_scoped_extension_url(extension) %>
         <div class="tier-declaration">
-          <span><%= e.latest_extension_version.try(:version) %></span>
-          <i class="fa fa-<%= e.tier_icon_name %>"></i>
-          <%= e.tier_name %>
+          <span><%= extension.latest_extension_version.try(:version) %></span>
+          <i class="fa fa-<%= extension.tier_icon_name %>"></i>
+          <%= extension.tier_name %>
           tier
         </div>
       </header>
-      <p><%= e.description %></p>
+      <p><%= extension.description %></p>
       <p class="tags">
-        <% e.tags.each do |t| %>
-          <%= link_to t.name, extensions_path(q: t.name) %>
+        <% extension.tags.each do |tag| %>
+          <%= link_to tag.name, extensions_path(q: tag.name) %>
         <% end %>
       </p>
     </div>
