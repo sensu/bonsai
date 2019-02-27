@@ -3,8 +3,8 @@ require 'spec_helper'
 describe CclaSignature do
   context 'associations' do
     it { should belong_to(:user) }
-    it { should belong_to(:ccla) }
-    it { should belong_to(:organization) }
+    # it { should belong_to(:ccla) } # required is false
+    # it { should belong_to(:organization) } # required is false
   end
 
   context 'validations' do
