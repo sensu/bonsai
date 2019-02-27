@@ -30,7 +30,7 @@ ADD Gemfile Gemfile
 ADD Gemfile.lock Gemfile.lock
  
 # Prevent bundler warnings; ensure that the bundler version executed is >= that which created Gemfile.lock
-RUN gem install bundler
+RUN gem install bundler -v 1.17.3
  
 # Finish establishing our Ruby environment
 RUN bundle install 

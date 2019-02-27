@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Tool do
   context 'associations' do
-    it { should belong_to(:owner) }
+    # it { should belong_to(:owner) } # required is false
     it { should have_one(:github_account) }
     it { should have_many(:collaborators) }
     it { should have_many(:collaborator_users) }
