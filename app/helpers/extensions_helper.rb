@@ -180,7 +180,7 @@ module ExtensionsHelper
   # @option options [Integer] :size (48) the size of the Gravatar in pixels
   # @option options [String] :maintainer the id to associate with the gravatar
   #
-  def link_to_gravatar(extension, options)
+  def link_to_gravatar(extension, options={})
     options = {
       size: 48
     }.merge(options)
