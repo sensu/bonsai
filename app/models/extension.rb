@@ -107,6 +107,9 @@ class Extension < ApplicationRecord
       tags: [:name],
       github_account: [:username],
       extension_versions: [:description]
+    },
+    using: {
+      tsearch: {prefix: true}
     }
   )
 
