@@ -24,16 +24,17 @@ module UsersHelper
 
     size = options[:size]
     hosted = options[:hosted]
-    gravatar_url = ''
 
     if hosted || (user.try(:company) && user.company == ENV['HOST_ORGANIZATION'])
-      gravatar_url = ActionController::Base.helpers.asset_url("#{ENV['HOST_LOGO']}")
+      avatar_url = ActionController::Base.helpers.asset_url("#{ENV['HOST_LOGO']}")
+      image_tag(avatar_url, style: "height: #{size}px; width: #{size}px", alt: user.name, class: 'gravatar')
     else
       gravatar_id = Digest::MD5.hexdigest(user.try(:email).try(:downcase) || "")
       gravatar_url = "#{user.avatar_url}&size=#{size}"
       gravatar_url = "https://secure.gravatar.com/avatar/#{gravatar_id}?s=#{size}" if user.avatar_url.nil?
+
+      image_tag(gravatar_url, alt: user.name, class: 'gravatar')
     end
-    image_tag(gravatar_url, style: "height: #{size}px; width: #{size}px", alt: user.name, class: 'gravatar')
   end
 
   #
