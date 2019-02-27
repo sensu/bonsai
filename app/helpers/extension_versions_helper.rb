@@ -1,3 +1,5 @@
+require 'commonmarker'
+
 module ExtensionVersionsHelper
   include MarkdownHelper
 
@@ -63,7 +65,9 @@ module ExtensionVersionsHelper
   def render_document(content, extension, repo_loc = "", version = "", hard_wrap: false)
     document = begin
       if %w(md mdown markdown).include?(extension.downcase)
-        render_markdown(content, hard_wrap: hard_wrap)
+        # use commonmarker instead of redcarpet for markdown
+        #render_markdown(content, hard_wrap: hard_wrap)
+        CommonMarker.render_html(content, :DEFAULT)
       else
         content
       end

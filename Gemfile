@@ -51,6 +51,7 @@ gem 'mixlib-authentication'
 gem 'pundit'
 
 gem 'redcarpet' # markdown parsing
+gem 'commonmarker' # markdown parsing used by Github
 gem 'safe_yaml', :require => false
 
 gem 'octokit'
