@@ -40,7 +40,8 @@ describe ReleaseAssetsController do
                    platform:     platform,
                    arch:         arch}
       expect(response).to be_successful
-      expect(JSON.parse(response.body)).to be_a(Hash)
+      #expect(JSON.parse(response.body)).to be_a(Hash)
+      expect(YAML.load(response.body)).to be_a(Hash)
     end
 
     it 'returns a file attachment' do
@@ -54,14 +55,16 @@ describe ReleaseAssetsController do
       expect(response.headers['Content-Disposition']).to match /filename=/
     end
 
-    it 'returns a JSON stream' do
+    #it 'returns a JSON stream' do
+    it 'returns a YAML stream' do
       get :download,
           params: {extension_id: version.extension,
                    username:     version.extension.owner_name,
                    version:      version,
                    platform:     platform,
                    arch:         arch}
-      streamed_data = JSON.parse(response.stream.body)
+      #streamed_data = JSON.parse(response.stream.body)
+      streamed_data = YAML.load(response.stream.body)
       expect(streamed_data).to be_a(Hash)
       expect(streamed_data.keys).to include 'api_version'
     end
