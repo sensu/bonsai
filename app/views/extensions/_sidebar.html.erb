@@ -6,14 +6,101 @@
     <%= render "extensions/manage_extension", extension: extension, version: version %>
   <% end %>
 
+  <%= link_to "Download", "#", class: 'button primary small radius expand button_download_extension', rel: 'download_asset_or_definition', 'data-reveal-id': 'download_asset_or_definition' %>
+
+  <div class="extension-details">
+    <h5>Stats</h5>
+    <div class="extension-urls">
+      <% item_types = version.extension_version_content_items.select("distinct item_type").map(&:item_type).sort %>
+      <% if item_types.present? %>
+        <ul>
+          <% item_types.each do |item_type| %>
+            <% count = version.extension_version_content_items.where(item_type: item_type).count %>
+            <% if count > 0 %>
+              <li><%= pluralize(count, item_type) %></li>
+            <% end %>
+          <% end %>
+        </ul>
+      <% end %>
+
+      <% if extension.issues_url.present? %>
+        <div class="small-bottom-space">
+          <%= link_to 'View Issues', extension.issues_url, itemprop: 'discussionUrl, target: "_blank"' %>
+        </div>
+      <% end %>
+    </div>
+
+    <h4>
+      <i class="fa fa-clock-o"></i> 
+      <span>Updated </span>
+      <span itemprop="datePublished"><%= (version.try(:updated_at) || extension.updated_at).to_s(:longish) %></span>
+      <small>Created on <span itemprop="dateModified"><%= extension.created_at.to_s(:longish) %></span></small>
+    </h4>
+
+    <% if false %>
+      <h4>
+        <i class="fa fa-desktop"></i> Compatible Bonsai Versions
+        <% if policy(extension).manage? %>
+          <a href="#" class="toggle-platforms-edit">edit</a>
+          <a href="#" class="toggle-platforms-edit toggle-platforms-hidden">cancel</a>
+        <% end %>
+      </h4>
+
+
+      <% if supported_platforms.present? %>
+        <ul class="extension_platforms toggle-platforms-edit">
+          <% supported_platforms.each do |platform| %>
+            <li title="<%= platform.name %>">
+              <span><%= platform.name %></span>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <ul class="extension_platforms">
+          <li>Not specified</li>
+        </ul>
+      <% end %>
+
+      <%= form_tag({controller:   "extension_versions",
+                    action:       "update_platforms",
+                    username:     extension.owner_name,
+                    extension_id: extension.lowercase_name,
+                    version:      version.try(:version)
+                   },
+                   method: :put,
+                   class:  "toggle-platforms-edit toggle-platforms-hidden") do %>
+        <ul class="extension_platforms">
+          <% SupportedPlatform.all.each do |sp| %>
+            <li title="<%= sp.name %>">
+              <label>
+                <%= check_box_tag :"supported_platforms[]", sp.name, supported_platforms.include?(sp) %>
+                <span><%= sp.name %></span>
+              </label>
+            </li>
+          <% end %>
+
+          <%= submit_tag "Save", class: "button primary small" %>
+        </ul>
+      <% end %>
+    <% end %>
+
+    <h4><i class="fa fa-key"></i> License</h4>
+    <p><%= extension.license_name.present? ? extension.license_name : "Unknown" %></p>
+
+    <%= render 'extensions/download', extension: extension, version: version %>
+
+  </div>
+
   <% if extension.up_for_adoption? %>
     <div>
-      <%= link_to 'Adopt me!', adoption_extension_path(extension, username: extension.owner_name), method: :post, class: 'button radius tiny' %>
+      <%= link_to 'Adopt me!', adoption_extension_path(extension, username: extension.owner_name), method: :post, class: 'button expand secondary radius tiny' %>
     </div>
   <% end %>
 
   <% if extension.github_url.present? %>
-    <div class="small-bottom-space"><%= link_to 'View Source', extension.github_url, itemprop: 'codeRepository', target: "_blank", class: 'button radius small' %></div>
+    <div class="small-bottom-space">
+      <%= link_to 'View Source', extension.github_url, itemprop: 'codeRepository', target: "_blank", class: 'button expand secondary radius tiny' %>
+      </div>
   <% end %>
 
   <h4 rel="edit-extension-urls">
@@ -22,6 +109,27 @@
       <a href="#" class="toggle-details-edit toggle-details-hidden">cancel</a>
     <% end %>
   </h4>
+
+  <h4>
+    <i class="fa fa-tags"></i> Tags
+    <% if policy(extension).manage? %>
+      <a href="#" class="toggle-tags-edit">edit</a>
+      <a href="#" class="toggle-tags-edit toggle-tags-hidden">cancel</a>
+    <% end %>
+  </h4>
+
+  <p class="toggle-tags-edit">
+    <%= extension.tags.map { |t| link_to(t.name, controller: "extensions", action: "index", q: t.name).html_safe }.join(", ").html_safe %>
+  </p>
+
+  <div class="toggle-tags-edit toggle-tags-hidden">
+    <%= form_for @extension, url: extension_path(@extension, username: @extension.owner_name) do |f| %>
+      <div class="tag_tokens-field">
+        <%= f.text_field :tag_tokens, placeholder: "Tags", title: "Tags", class: "tokenfield", data: { autofill: Tag::DEFAULT_TAGS } %>
+      </div>
+      <%= submit_tag "Save", class: "button primary small" %>
+    <% end %>
+  </div>
 
   <div class="toggle-details-edit toggle-details-hidden">
     <%= form_for @extension, url: extension_path(@extension, username: @extension.owner_name) do |f| %>
@@ -34,101 +142,6 @@
       <div class="edit-field">
         <%= submit_tag "Save", class: "button primary small" %>
       </div>
-    <% end %>
-  </div>
-
-  <div class="extension-details">
-    <div class="extension-urls">
-      <% item_types = version.extension_version_content_items.select("distinct item_type").map(&:item_type).sort %>
-      <ul>
-        <% item_types.each do |item_type| %>
-          <% count = version.extension_version_content_items.where(item_type: item_type).count %>
-          <% if count > 0 %>
-            <li><%= pluralize(count, item_type) %></li>
-          <% end %>
-        <% end %>
-      </ul>
-
-      <% if extension.issues_url.present? %>
-        <div class="small-bottom-space"><%= link_to 'View Issues', extension.issues_url, itemprop: 'discussionUrl, target: "_blank"' %></div>
-      <% end %>
-    </div>
-
-    <h4>
-      <i class="fa fa-clock-o"></i> Updated <span itemprop="datePublished"><%= (version.try(:updated_at) || extension.updated_at).to_s(:longish) %></span>
-      <small>Created on <span itemprop="dateModified"><%= extension.created_at.to_s(:longish) %></span></small>
-    </h4>
-
-    <% if false %>
-    <h4>
-      <i class="fa fa-desktop"></i> Compatible Bonsai Versions
-      <% if policy(extension).manage? %>
-        <a href="#" class="toggle-platforms-edit">edit</a>
-        <a href="#" class="toggle-platforms-edit toggle-platforms-hidden">cancel</a>
-      <% end %>
-    </h4>
-
-
-    <% if supported_platforms.present? %>
-      <ul class="extension_platforms toggle-platforms-edit">
-        <% supported_platforms.each do |platform| %>
-          <li title="<%= platform.name %>">
-            <%= platform.name %>
-          </li>
-        <% end %>
-      </ul>
-    <% else %>
-      <ul class="extension_platforms">
-        <li>
-          Not specified
-        </li>
-      </ul>
-    <% end %>
-
-    <%= form_tag({controller:   "extension_versions",
-                  action:       "update_platforms",
-                  username:     extension.owner_name,
-                  extension_id: extension.lowercase_name,
-                  version:      version.try(:version)
-                 },
-                 method: :put,
-                 class:  "toggle-platforms-edit toggle-platforms-hidden") do %>
-      <ul class="extension_platforms">
-        <% SupportedPlatform.all.each do |sp| %>
-          <li title="<%= sp.name %>">
-            <label>
-              <%= check_box_tag :"supported_platforms[]", sp.name, supported_platforms.include?(sp) %>
-              <%= sp.name %>
-            </label>
-          </li>
-        <% end %>
-
-        <%= submit_tag "Save", class: "button primary small" %>
-      </ul>
-    <% end %>
-    <% end %>
-
-    <h4><i class="fa fa-key"></i> License</h4>
-    <p><%= extension.license_name.present? ? extension.license_name : "Unknown" %></p>
-
-    <%= render 'extensions/download', extension: extension, version: version %></div>
-  <h4>
-    <i class="fa fa-tags"></i> Tags
-    <% if policy(extension).manage? %>
-      <a href="#" class="toggle-tags-edit">edit</a>
-      <a href="#" class="toggle-tags-edit toggle-tags-hidden">cancel</a>
-    <% end %>
-  </h4>
-  <p class="toggle-tags-edit">
-    <%= extension.tags.map { |t| link_to(t.name, controller: "extensions", action: "index", q: t.name).html_safe }.join(", ").html_safe %>
-  </p>
-
-  <div class="toggle-tags-edit toggle-tags-hidden">
-    <%= form_for @extension, url: extension_path(@extension, username: @extension.owner_name) do |f| %>
-      <div class="tag_tokens-field">
-        <%= f.text_field :tag_tokens, placeholder: "Tags", title: "Tags", class: "tokenfield", data: { autofill: Tag::DEFAULT_TAGS } %>
-      </div>
-      <%= submit_tag "Save", class: "button primary small" %>
     <% end %>
   </div>
 

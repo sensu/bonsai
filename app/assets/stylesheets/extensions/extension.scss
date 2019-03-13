@@ -248,10 +248,6 @@
 
 .versions_count {
   color: $body-font-color;
-  font: {
-    size: rem-calc(12);
-    weight: $bold;
-  }
   // @include inline-block;
   margin: rem-calc(0 20 0 0);
 }

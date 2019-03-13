@@ -18,7 +18,7 @@ module UsersHelper
   #
   def gravatar_for(user, options = {})
     options = {
-      size: 48,
+      size: 36,
       hosted: false,
     }.merge(options)
 
@@ -33,7 +33,7 @@ module UsersHelper
       avatar_url = "#{user.avatar_url}&size=#{size}"
       avatar_url = "https://secure.gravatar.com/avatar/#{gravatar_id}?s=#{size}" if user.avatar_url.nil?
     end
-    image_tag(avatar_url, style: "height: #{size}px; width: #{size}px", alt: user.name, class: 'gravatar')
+    image_tag(avatar_url, style: "max-height: #{size}px; max-width: #{size}px", alt: user.name, class: 'gravatar')
   end
 
   #

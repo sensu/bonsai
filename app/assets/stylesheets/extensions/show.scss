@@ -4,6 +4,11 @@
 // @import "compass/css3/inline-block";
 
 .extension_show {
+
+  .main-header {
+    margin: rem-calc(18);
+  }
+
   .deprecation-notice {
     @include single-transition($speed: 100ms);
     // @include border-radius(rem-calc(2));
@@ -285,6 +290,12 @@
 
   .description {
     width: 540px;
+    font-size: smaller;
+  }
+
+  .downloads-commits {
+    font-size: 10px;
+    color: $secondary_gray;
   }
 
   .row {
@@ -353,8 +364,8 @@
 
 .tier {
   margin-left: rem-calc(12);
-
-  &.supported {
-    color: #208020;
+  color: $primary_green;
+  a {
+    color: $primary_green;
   }
 }

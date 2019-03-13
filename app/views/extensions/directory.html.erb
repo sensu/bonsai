@@ -1,34 +1,60 @@
 <%= provide(:title, "#{t('nouns.extension').pluralize.titleize} Directory") %>
 <%= provide(:description, "Browse and search Sensu #{t('nouns.extension').pluralize}. Learn how to use and create #{t('nouns.extension').pluralize} for configuring your infrastructure.") %>
 <%= provide(:cta) do %>
-  <p>Extend Sensu using add-ons and <%= link_to "share your own", new_extension_path %> with the community</p>
+  <span>Welcome to Bonsai, the Sensu asset index.<br/> Discover and <%= link_to "share", new_extension_path %> assets for all your monitoring needs.</span>
 <% end %>
 
 <div class="page nobg">
   <div class="row extensions-features bottom-space standard-typography">
-    <div class="medium-5 columns">
-      <header>New &amp; updated</header>
+    <div class="medium-4 columns">
+      <header>Recently Updated</header>
       <%= render "featured", extensions: @recently_updated_extensions %>
     </div>
     <div class="medium-5 columns">
-      <header>Noteworthy</header>
+      <header>Featured</header>
       <%= render "featured", extensions: @most_downloaded_extensions %>
     </div>
-    <div class="medium-2 columns">
-      <header>Categories</header>
-      <ul>
-        <% @top_tags.each do |t| %>
-          <li><%= link_to t.name, extensions_path(q: t.name) %></li>
-        <% end %>
-      </ul>
+    <div class="medium-3 columns">
+      <header>Tags</header>
+      <div class='categories-container'>
+        <ul>
+          <% @top_tags.each do |t| %>
+            <li><%= link_to t.name.titlecase, extensions_path(q: t.name) %></li>
+          <% end %>
+        </ul>
+      </div>
     </div>
   </div>
 
   <div class="row share-cta standard-typography">
-    <div class="medium-8 medium-offset-2 columns">
-      <header>Share your creations!</header>
-      <p class="bottom-space">Have a modification you've made to your own instance of Sensu? Package it up and share it with everyone!</p>
-      <p><%= link_to "Upload your #{t('nouns.extension')}", new_extension_path %></p>
+    <div class="medium-10 medium-offset-1 columns share-cta-container">
+      <div class="share-cta-logo-container">
+        <%= image_tag 'logo-icon-sensu.svg', class: 'logoIcon filter-primary-blue share-cta-logo' %>
+      </div>
+      <div class="small-3 columns">
+        <%= image_tag 'bonsai-tree.svg', class: 'filter-primary-blue' %>
+      </div>
+      <div class="small-9 columns share-cta-header end">
+        <h3>Learn about Sensu assets</h3>
+      
+        <p><strong>What is an asset?</strong><br>
+        Assets are shareable, reusable packages that make it easy to deploy Sensu plugins. You can use assets to provide the plugins, libraries, and runtimes you need to automate your monitoring workflows. Log in with your GitHub account to <a href="https://bonsai.sensu.io/new" rel="nofollow">share your assets</a> on Bonsai.</p>
+        <p><strong>Tiers</strong></p>
+        <ul>
+          <li><a href="https://bonsai.sensu.io/assets?tiers%5B%5D=1" rel="nofollow">Community</a> - Open-source assets shared by the Sensu Community. Collaborate, share, and star your favorites with Bonsai.</li>
+          <li><a href="https://bonsai.sensu.io/assets?tiers%5B%5D=2" rel="nofollow">Supported</a> - Open-source assets supported by Sensu Inc., including supported <a href="https://bonsai.sensu.io/assets/sensu/sensu-slack-handler" rel="nofollow">Slack</a>, <a href="https://bonsai.sensu.io/assets/sensu/sensu-pagerduty-handler" rel="nofollow">PagerDuty</a>, and <a href="https://bonsai.sensu.io/assets/sensu/sensu-influxdb-handler" rel="nofollow">InfluxDB</a> handlers.</li>
+          <li><a href="https://bonsai.sensu.io/assets?tiers%5B%5D=4" rel="nofollow">Enterprise</a> - Hosted assets unlocked with a Sensu enterprise license. See the <a href="https://docs.sensu.io/sensu-go/latest/getting-started/enterprise" rel="nofollow">Sensu docs</a> for more information about managing your Sensu license.</li>
+        </ul>
+        <p><strong>Resources</strong></p>
+        <ul>
+          <li><a href="https://docs.sensu.io/sensu-go/latest/guides/install-check-executables-with-assets" rel="nofollow">Deploying Sensu plugins with Bonsai</a></li>
+          <li><a href="https://docs.sensu.io/sensu-go/latest/reference/assets#sharing-an-asset-on-bonsai" rel="nofollow">Sharing an asset on Bonsai</a></li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>
+
+<td class="d-block comment-body markdown-body  js-comment-body">
+
+          
