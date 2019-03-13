@@ -12,8 +12,7 @@
       </h2>
       <span class="meta tier-declaraion">
         <i class="fa fa-<%= extension.tier_icon_name %>"></i>
-        <%= extension.tier_name %>
-        tier
+          <span><%= extension.tier_name %> tier</span>
       </span>
       <span class="meta">
         <i class="fa fa-clock-o"></i> Updated <span itemprop="dateModified"><%= extension.updated_at.to_s(:longish) %></span><br />
@@ -23,9 +22,9 @@
         <span class="meta">
           <%- replacement_extension = extension.replacement %>
           <% if replacement_extension.present? %>
-            <i class="fa fa-exclamation-triangle"></i> Deprecated in favor of <%= link_to replacement_extension.name, owner_scoped_extension_url(replacement_extension) %>
+            <i class="fa fa-exclamation-triangle"></i> <span>Deprecated in favor of <%= link_to replacement_extension.name, owner_scoped_extension_url(replacement_extension) %></span>
           <% else %>
-            <i class="fa fa-exclamation-triangle"></i> Deprecated
+            <i class="fa fa-exclamation-triangle"></i> <span>Deprecated</span>
           <% end %>
         </span>
       <% end %>
@@ -40,7 +39,7 @@
   <div class="body">
     <div class="body-content">
       <p itemprop="description">
-        <%= extension.description %>
+        <span><%= extension.description %></span>
       </p>
     </div>
   </div>
