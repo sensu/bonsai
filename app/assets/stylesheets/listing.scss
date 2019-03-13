@@ -7,7 +7,7 @@
   margin: rem-calc(0 0 20 0);
 
   li {
-    margin-bottom: rem-calc(20);
+    margin-bottom: rem-calc(10);
 
     .header {
       @include grid-row();
@@ -15,16 +15,17 @@
       border-top: 1px solid $extension_border;
       border-right: 1px solid $extension_border;
       border-left: 1px solid $extension_border;
+      border-top-right-radius: rem-calc(3);
+      border-top-left-radius: rem-calc(3);
     }
 
     .header-content {
       @include grid-column($columns: 12, $collapse: true);
-      background-color: white;
-      min-height: rem-calc(62);
-      padding: rem-calc(15 30);
+      background-color: $trinary_gray;
+      min-height: rem-calc(26);
+      padding: rem-calc(5 15);
 
       .owner {
-        float: right;
 
         h5 {
           display: inline;
@@ -33,7 +34,6 @@
 
         .gravatar {
           @include box-sizing(content-box);
-          //width: rem-calc(24);
         }
 
         @media #{$small-down} {
@@ -43,16 +43,15 @@
         }
 
         .meta {
-          margin-top: 8px;
+          margin-right: rem-calc(8);
         }
       }
 
       .title {
         @include dark-links;
-        font-size: rem-calc(20);
+        font-size: rem-calc(12);
         line-height: rem-calc(20);
         color: $primary_blue;
-        float: left;
         margin: rem-calc(7 0 0);
 
         .fa {
@@ -61,24 +60,18 @@
           font-size: rem-calc(18);
           margin: rem-calc(-2 0 0 16);
         }
+      }
 
-        small {
-          // @include inline-block;
-          color: $secondary_gray;
-          font: {
-            size: rem-calc(16);
-            weight: $normal;
-          }
-        }
+      .version {
+        color: $primary_gray;
+      }
+
+      .date-modified {
+        font-size: rem-calc(10)
       }
 
       .meta {
-        color: $concrete;
-        font: $normal rem-calc(16) $accent_font;
-        line-height: rem-calc(16);
-        float: left;
-        margin: rem-calc(10 0 0);
-        text-align: right;
+        font-size: rem-calc(12);
 
         .fa {
           // @include inline-block;
@@ -118,20 +111,19 @@
     .body {
       @include grid-row();
       background-color: $extension_partial_sidebar;
-      border-top: 1px solid $extension_border;
-      border-right: 1px solid $extension_border;
-      border-left: 1px solid $extension_border;
+      border: 1px solid $extension_border;
+      border-bottom-right-radius: rem-calc(3);
+      border-bottom-left-radius: rem-calc(3);
     }
 
     .body-content {
       @include grid-column($columns: 12, $collapse: true);
       background-color: white;
-      border-bottom: 1px solid $extension_border;
-      padding: rem-calc(20 30 30);
+      padding: rem-calc(12 10);
 
       p {
-        color: $concrete;
-        font-size: rem-calc(18);
+        font-size: rem-calc(12);
+        font-weight: 600;
         margin: 0;
       }
 
@@ -145,30 +137,28 @@
 
     .bottom {
       @include grid-row();
-      background-color: $extension_partial_sidebar_footer;
-      border-right: 1px solid $extension_border;
-      border-bottom: 1px solid $extension_border;
-      border-left: 1px solid $extension_border;
     }
 
     .bottom-content {
-      background-color: $extension_footer;
       @include grid-column($columns: 12, $collapse: true);
-      min-height: rem-calc(62);
-      padding: rem-calc(15 30);
+      min-height: rem-calc(12);
+      padding: rem-calc(2 10);
 
       h5 {
-        color: $concrete;
+        color: $primary_gray;
         font: {
-          size: rem-calc(16);
+          size: rem-calc(12);
           weight: $normal;
         }
-        text-transform: uppercase;
         margin: rem-calc(0 0 4);
       }
 
       .extension_platforms_content {
         float: left;
+      }
+      .extension_stats li {
+        color: $primary_gray;
+        font-size: rem-calc(12);
       }
     }
   }

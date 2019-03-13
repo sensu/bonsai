@@ -10,7 +10,7 @@
 // Header wrapping element and row
 .globalheader {
   background-color: white;
-  height: rem-calc(113);
+  height: rem-calc(90);
   padding: rem-calc(0 55);
 
   .inner_wrap {
@@ -93,7 +93,7 @@
 
         a {
           color: lighten($concrete, 5%);
-          font: rem-calc(12) $accent_font;
+          font-size: rem-calc(12);
           line-height: rem-calc(102);
 
           &:hover, &:active {
@@ -110,7 +110,6 @@
         line-height: rem-calc(102);
         @include single-transition(color, $speed: 100ms);
         text-decoration: none;
-        text-transform: lowercase;
 
         &:hover, &:active {
           color: lighten($concrete, 10%);
@@ -142,9 +141,8 @@
   color: darken($concrete, 5%);
   cursor: pointer;
   float: right;
-  font: rem-calc(14) $accent_font;
-  height: rem-calc(100);
-  line-height: rem-calc(102);
+  height: rem-calc(90);
+  line-height: rem-calc(90);
   margin-left: rem-calc(20);
   position: relative;
   @include single-transition(color, $speed: 100ms);
@@ -181,14 +179,15 @@
 
 .appnav .userdropdown {
   background-color: white;
-  // @include border-bottom-radius(rem-calc(5));
-  // @include box-shadow(rgba(0,0,0,.2) 0 rem-calc(5) rem-calc(10));
+  border: 0.5px solid $secondary_gray;
+  border-bottom-radius: rem-calc(3);
+  box-shadow: rgba(0,0,0,.2) 0 rem-calc(5) rem-calc(10);
   display: none;
   margin: 0;
   padding: 0;
   position: absolute;
   right: rem-calc(-20);
-  top: rem-calc(100);
+  top: rem-calc(70);
   width: rem-calc(220);
   z-index: 101;
 

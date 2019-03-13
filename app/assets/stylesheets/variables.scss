@@ -1,7 +1,8 @@
 // Bonsai Default Colors
 $primary_orange: #EF2929;
-$primary_gray: #F8F8F8;
-$primary_blue: #89A3CA;
+$primary_gray: #333333;
+$primary_blue: #222844;
+$primary_green: #89c967;
 $primary_red: #EF2929;
 $secondary_gray: #CCCCCC;
 $secondary_blue: #ACC2E0;
@@ -10,13 +11,14 @@ $secondary_yellow: #fcb713;
 $secondary_red: #7c3a00;
 $trinary_gray: #F0F0F0;
 $sidebar_blue: #f8f9fa;
+$black: #000000;
 $body-bg: #ecf0f1;
-$body-font-color: #333;
-$primary-color: #89A3CA;
+$body-font-color: $black;
+$primary-color: $primary_blue;
 $header-font-color: $body-font-color;
 
 // Layout Defaults
-$body-font-family: "Noto Sans", "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+$body-font-family: "Work Sans", "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
 $row-width: 100%;
 $column-gutter: rem-calc(30);
 $total-columns: 12;
@@ -104,7 +106,7 @@ O Generic
   font-style: normal;
 }
 
-$default_font: "helvetica neue", helvetica, arial, sans-serif;
+$default_font: "Work Sans", "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
 $accent_font: "Noto Sans", $default_font;
 $bold: 700;
 $normal: 400;

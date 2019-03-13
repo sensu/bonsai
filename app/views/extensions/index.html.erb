@@ -3,12 +3,9 @@
 
 <div class="page nobg">
   <div class="heading-with-buttons">
-    <h1 class="title">
+    <h2 class="title">
       <%= pluralize(@number_of_extensions, t('nouns.extension').titleize) %>
-      <small>
-        <%= link_to '<i class="fa fa-rss"></i> RSS'.html_safe, params.to_unsafe_h.merge(format: 'atom'), :class => 'rss_feed_link show-for-medium-up' %>
-      </small>
-    </h1>
+    </h2>
 
     <div class="buttons">
       <span>Sort by</span>

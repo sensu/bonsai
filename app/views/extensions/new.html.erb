@@ -57,11 +57,17 @@
   </div>
 
   <div class="sidebar" data-equalizer-watch>
-    <h3>Adding <%= t('indefinite_articles.extension') %> <%= t('nouns.extension').titleize %></h3>
-    <p class="no-left-margin">To add <%= t('indefinite_articles.extension') %> <%= t('nouns.extension') %>, the <%= t('nouns.extension') %>'s source files must be hosted in a public <a target="_blank" href="http://www.github.com">GitHub</a> repository on which you have access rights. The Asset Index will access that repository, and pull relevant information about your <%= t('nouns.extension') %>.</p>
-    <p class="no-left-margin">The Asset Index will use the README file in the root of your GitHub repository as the description of your <%= t('nouns.extension') %>. For best results, please make sure this file is formatted using <a href="https://help.github.com/articles/github-flavored-markdown/" target="_blank">GitHub Flavored Markdown</a>, and that it contains a description of the contents of the repository, and any installation instructions.</p>
-    <p class="no-left-margin">Github Releases tagged on your repository will be added as new versions of the <%= t('nouns.extension') %> in the Asset Index. We will use the Github release number for the version number of the <%= t('nouns.extension') %>.</p>
-    <p class="no-left-margin">The Asset Index will do it's best to stay in sync with your Github repository. When new commits are pushed to your master branch, the Asset Index will be updated with those new commits. When new releases are added through Github, a new version of the <%= t('nouns.extension') %> will be created.</p>
+    <h3>How to share <%= t('nouns.extension').pluralize(2) %> on Bonsai</h3>
+
+    <p>Thank you for sharing your asset with the Sensu Community! Here’s how it works: Bonsai pulls project details and release information from GitHub to populate an asset page. To share an asset on Bonsai, the asset should be in a public GitHub repository that includes:</p>
+    <ul>
+      <li><a href="https://help.github.com/articles/creating-releases/">GitHub release</a> tags</li>
+      <li>bonsai.yml <a href="https://docs.sensu.io/sensu-go/latest/reference/assets#sharing-an-asset-on-bonsai" rel="nofollow">configuration file</a> with the project description, platforms, asset filenames, and checksums</li>
+      <li>A helpful README following the <a href="https://github.com/sensu/sensu-go-plugin">asset README template</a></li>
+      <li>A license and code of conduct (We <g-emoji class="g-emoji" alias="heart" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/2764.png">❤️</g-emoji> the <a href="https://github.com/sensu/sensu-go/blob/master/LICENSE">MIT license</a> and welcome you to borrow from our <a href="https://sensu.io/conduct/" rel="nofollow">community code of conduct</a>.)</li>
+    </ul>
+    <p>Bonsai automatically keeps in sync with your GitHub releases. For more information about creating and sharing assets, see the <a href="https://docs.sensu.io/sensu-go/latest/reference/assets" rel="nofollow">Sensu docs</a> and the <a href="https://github.com/sensu/sensu-go-plugin">Sensu Go plugin template</a>.</p>
+
   </div>
 </div>
 

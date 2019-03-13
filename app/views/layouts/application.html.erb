@@ -6,8 +6,8 @@
   <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui">
-    <title><%= [content_for(:title), "Bonsai Asset Index"].compact.join(' - ').html_safe %></title>
-    <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Bonsai" %>">
+    <title><%= ["Sensu assets | Bonsai asset index", content_for(:title)].compact.join(' - ').html_safe %></title>
+    <meta name="description" content="Welcome to Bonsai, the Sensu asset index. Bonsai offers popular integrations like the Sensu Slack, InfluxDB, and PagerDuty handlers. Discover, download, and share assets for all your monitoring needs.">
     <% if ROLLOUT.active?(:no_crawl) %>
       <meta name="robots" content="noindex, nofollow">
     <% end %>
@@ -37,7 +37,7 @@
           <div class="logo_and_nav_toggle">
             <%= link_to root_path do %>
               <%= image_tag 'logo-wordmark-sensu.svg', class: 'logoWordmark' %>
-              <%= image_tag 'logo-icon-sensu.svg', class: 'logoIcon' %>
+              <%= image_tag 'logo-icon-sensu.svg', class: 'logoIcon filter-primary-green' %>
               <h2 class="logoText"><span>Sensu Asset Index</span></h2>
             <% end %>
           </div>
@@ -64,42 +64,36 @@
 
       <footer id="subfooter">
         <section class="subfooter-communication">
-          <div class="row">
-            <section class="left-side">
-              <div class="follow" id="follow">
-                <a class="ext-gh" data-toggle="tooltip" href="https://github.com/sensu/" title="GitHub">
-                  <i class="fa fa-github"></i>
-                  <span class="label">GitHub</span>
-                </a>
-                <a href="http://slack.sensu.io/">
-                  <i class="fa fa-slack"></i>
-                  <span class="text-label"></span>
-                </a>
-                <a href="https://twitter.com/sensu">
-                  <i class="fa fa-twitter"></i>
-                  <span class="text-label"></span>
-                </a>
-                <%= link_to "Sensu.io", "http://sensu.io/" %>
-                <%= link_to "#{t('nouns.extension').titleize} Directory", extensions_path %>
-                <%= link_to "User List", contributors_path %>
-                <%= link_to "Issues", "https://github.com/sensu/bonsai-asset-index/issues" %>
-              </div>
-            </section>
-            <section class="right-side">
-              <div class="contact-us">
-                <a href="mailto:contact@sensu.io">
-                  <i class="fa fa-envelope"></i>
-                  <span class="text-label">email</span>
-                </a>
-              </div>
-            </section>
+          <div class='row'>
+            <div class="follow" id="follow">
+              <a class="ext-gh" data-toggle="tooltip" href="https://github.com/sensu/" title="GitHub">
+                <i class="fa fa-github"></i>
+                <span class="text-label"></span>
+              </a>
+              <a href="http://slack.sensu.io/">
+                <i class="fa fa-slack"></i>
+                <span class="text-label"></span>
+              </a>
+              <a href="https://twitter.com/sensu">
+                <i class="fa fa-twitter"></i>
+                <span class="text-label"></span>
+              </a>
+            </div>
+          </div>
+          <div class='row'>
+            <div class="footer-links">
+              <%= link_to "Sensu.io", "http://sensu.io/" %>
+              <%= link_to "#{t('nouns.extension').titleize} Directory", extensions_path %>
+              <%= link_to "User List", contributors_path %>
+              <%= link_to "Issues", "https://github.com/sensu/bonsai-asset-index/issues" %>
+            </div>
           </div>
         </section>
       </footer>
       <footer id="footer">
         <section class="footer-area">
           <div class="row text-center">
-            <div class="copyright">© 2018 Sensu, Inc.</div>
+            <div class="copyright">Made with #monitoringlove by Sensu, Inc. © 2013-2019</div>
           </div>
         </section>
       </footer>
