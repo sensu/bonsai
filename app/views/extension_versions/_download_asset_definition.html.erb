@@ -42,7 +42,7 @@
                   platform: platform,
                   arch:     arch,
                   acknowledge: acknowledge),
-              class: 'button primary radius button_download_extension' %>
+              class: 'button primary tiny radius button_download_extension' %>
 <% else %>
   <% msg = case
            when !platform
@@ -58,5 +58,5 @@
   <%= link_to "Download Asset Definition",
               "#",
               onclick: "alert(\"#{msg}\")",
-              class:   'button primary radius button_download_extension' %>
+              class:   'button primary tiny radius button_download_extension' %>
 <% end %>

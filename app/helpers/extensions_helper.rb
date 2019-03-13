@@ -88,7 +88,7 @@ module ExtensionsHelper
         follow_extension_path(extension, params.merge(username: extension.owner_name)),
         method: 'put',
         rel: 'sign-in-to-follow',
-        class: 'button radius tiny follow',
+        class: 'button radius tiny secondary follow',
         title: "You must be signed in to star #{t('indefinite_articles.extension')} #{t('nouns.extension')}.",
         'data-tooltip' => true
       ) do
@@ -105,7 +105,7 @@ module ExtensionsHelper
         unfollow_extension_path(extension, params.merge(username: extension.owner_name)),
         method: 'delete',
         rel: 'unfollow',
-        class: 'button radius tiny follow',
+        class: 'button radius tiny secondary follow',
         id: 'unfollow_extension',
         'data-extension' => extension.lowercase_name,
         remote: true
@@ -149,9 +149,9 @@ module ExtensionsHelper
   #
   def link_to_sorted_extensions(linked_text, ordering)
     if params[:order] == ordering
-      link_to linked_text, params.to_unsafe_h.except(:order), class: 'button radius secondary active'
+      link_to linked_text, params.to_unsafe_h.except(:order), class: 'button radius secondary tiny active'
     else
-      link_to linked_text, params.to_unsafe_h.merge(order: ordering), class: 'button radius secondary'
+      link_to linked_text, params.to_unsafe_h.merge(order: ordering), class: 'button radius secondary tiny'
     end
   end
 
@@ -182,21 +182,24 @@ module ExtensionsHelper
   #
   def link_to_gravatar(extension, options={})
     options = {
-      size: 48
+      size: 36
     }.merge(options)
 
     size = options[:size]
     maintainer = options[:maintainer] || ''
+    html = ''
 
     if extension.github_organization
-      gravatar_for(extension.github_organization, size: size)
+      html = gravatar_for(extension.github_organization, size: size)
     elsif extension.hosted?
-      gravatar_for(extension.owner, size: size, hosted: true)
+      html = gravatar_for(extension.owner, size: size, hosted: true)
     else
       link_to extension.owner do
-        gravatar_for(extension.owner, size: size) + content_tag('div', maintainer)
+        html = gravatar_for(extension.owner, size: size)
+        html += content_tag('div', maintainer) if maintainer.present?
       end
     end
+    html.html_safe
   end
 end
 

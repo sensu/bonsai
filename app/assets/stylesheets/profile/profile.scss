@@ -4,8 +4,13 @@
 @import "foundation/components/block-grid";
 
 .profile {
+  .main.user-assets {
+    margin-top: rem-calc(25);
+  }
   .sidebar {
     text-align: center;
+    margin-top: 0;
+    padding-top: 30px;
 
     a {
       text-decoration: none !important;
@@ -14,6 +19,8 @@
     h3, h4, h5 {
       margin: 0;
       border-bottom: none;
+      text-align: left;
+      padding: 0;
     }
 
     h4 img {
@@ -26,16 +33,16 @@
     }
 
     ul {
-      border-top: rem-calc(2) solid lighten($secondary_gray, 30%);
       list-style-type: none;
       text-align: left;
-      margin: rem-calc(20 0 0 0);
-      padding-top: rem-calc(20);
+      margin: 0;
+      padding-top: rem-calc(3);
 
       .has-tip, a {
         border-bottom: none;
         color: $body-font-color;
-        font-size: rem-calc(14);
+        font-size: rem-calc(10);
+        margin: 0;
       }
     }
 
@@ -47,15 +54,20 @@
       margin-bottom: rem-calc(20);
     }
 
+    .user-info {
+      padding-left: 0;
+    }
+
     .user_stats {
       @include block-grid(3, $spacing: 0);
-      border: rem-calc(1) solid lighten($secondary_gray, 30%);
+      
       margin: rem-calc(20 0 20 0);
 
       h3 {
         margin: 0;
         padding: rem-calc(10 0 10 0);
         text-align: center;
+        font-size: rem-calc(12);
 
         span {
           display: block;
@@ -83,10 +95,7 @@
     }
 
     .avatar-size-limiter {
-      width: 180px;
-      height: 180px;
-      margin: auto;
-      margin-bottom: 15px;
+      text-align: left;
       img {
         width: 100%;
       }

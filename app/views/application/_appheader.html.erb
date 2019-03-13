@@ -13,8 +13,7 @@
   </ul>
   <% if signed_in? %>
     <div class="usermenu">
-      <%= gravatar_for current_user, size: 80 %>
-      <%= current_user.username %> <i class="fa fa-caret-down"></i>
+      <%= gravatar_for current_user, size: 30 %> <%= current_user.username %> <i class="fa fa-caret-down"></i>
       <ul class="userdropdown">
         <li><%= link_to 'View Profile', current_user, class: 'fa fa-user', rel: 'view_profile' %></li>
         <li><%= link_to 'Manage Profile', edit_profile_path, class: 'fa fa-cog', rel: 'manage_profile' %></li>
@@ -25,7 +24,9 @@
           </li>
         <% end %>
 
-        <li><%= link_to 'Sign Out', sign_out_path, :class => 'fa fa-power-off', method: :delete, rel: 'sign_out' %></li>
+        <li>
+          <%= link_to 'Sign Out', sign_out_path, :class => 'fa fa-power-off', method: :delete, rel: 'sign_out' %>
+        </li>
       </ul>
     </div>
   <% end %>

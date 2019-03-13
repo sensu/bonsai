@@ -4,13 +4,19 @@
 <div class="page profile" data-equalizer>
   <%= render 'sidebar' %>
 
-  <div class="main" data-equalizer-watch>
+  <div class="main user-assets" data-equalizer-watch>
       <%= render 'heading', user: @user, title: "#{posessivize(@user.name)} #{t('nouns.extension').pluralize.titleize}", active: 'extensions' %>
 
       <dl class="tabs radius">
-        <dd class="<%= 'active' unless params[:tab] %>"><%= link_to 'Owns', @user %></dd>
-        <dd class="<%= 'active' if params[:tab] == 'collaborates' %>"><%= link_to 'Collaborates', user_path(@user, tab: 'collaborates') %></dd>
-        <dd class="<%= 'active' if params[:tab] == 'follows' %>"><%= link_to 'Follows', user_path(@user, tab: 'follows') %></dd>
+        <dd class="<%= 'active' unless params[:tab] %>">
+          <%= link_to 'Owns', @user %>
+        </dd>
+        <dd class="<%= 'active' if params[:tab] == 'collaborates' %>">
+          <%= link_to 'Collaborates', user_path(@user, tab: 'collaborates') %>
+        </dd>
+        <dd class="<%= 'active' if params[:tab] == 'follows' %>">
+          <%= link_to 'Follows', user_path(@user, tab: 'follows') %>
+        </dd>
       </dl>
 
     <div class="tabs-content">

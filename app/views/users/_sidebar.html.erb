@@ -1,50 +1,53 @@
-<div class="profile_sidebar sidebar" data-equalizer-watch>
-  <div class="avatar-size-limiter">
-    <%= gravatar_for @user, size: 48 %>
+<div class="profile_sidebar sidebar full-height" data-equalizer-watch>
+  <div class="small-5 columns avatar-size-limiter">
+    <%= gravatar_for @user, size: 100 %>
   </div>
-  <h3><%= @user.name %></h3>
 
-  <% if ROLLOUT.active?(:cla) && ROLLOUT.active?(:github) %>
-    <% if @user.authorized_to_contribute? %>
-      <h4><i class="fa fa-check"></i> Authorized to Contribute</h4>
+  <div class="small-7 columns user-info">
+    <h3><%= @user.name %></h3>
+
+    <% if ROLLOUT.active?(:cla) && ROLLOUT.active?(:github) %>
+      <% if @user.authorized_to_contribute? %>
+        <h4><i class="fa fa-check"></i> Authorized to Contribute</h4>
+      <% end %>
     <% end %>
-  <% end %>
 
-  <ul>
-    <% if @user.company.present? %>
-      <li data-tooltip class="has-tip" title="The company <%= @user.name %> associates with">
-        <span class="fa fa-briefcase"></span> <%= @user.company %>
+    <ul>
+      <% if @user.company.present? %>
+        <li data-tooltip class="has-tip" title="The company <%= @user.name %> associates with">
+          <span class="fa fa-briefcase"></span> <%= @user.company %>
+        </li>
+      <% end %>
+
+      <% if @user.twitter_username.present? %>
+        <li data-tooltip class="has-tip" title="<%= posessivize(@user.name) %> Twitter Username">
+          <a href="https://twitter.com/<%= @user.twitter_username %>" target="_blank"><i class="fa fa-twitter"></i> <%= @user.twitter_username %></a>
+        </li>
+      <% end %>
+
+      <% @user.accounts.for(:github).each do |account| %>
+        <li data-tooltip class="has-tip" title="<%= posessivize(@user.name) %> GitHub Username">
+          <a href="https://github.com/<%= account.username %>" target="_blank"><i class="fa fa-github"></i> <%= account.username %></a>
+        </li>
+      <% end %>
+
+      <% if @user.irc_nickname.present? %>
+        <li data-tooltip class="has-tip" title="<%= posessivize(@user.name) %> IRC Nickname">
+          <i class="fa fa-comment"></i> <%= @user.irc_nickname %>
+        </li>
+      <% end %>
+
+      <% if @user.jira_username.present? %>
+        <li data-tooltip class="has-tip" title="<%= posessivize(@user.name) %> Jira Username">
+          <i class="fa fa-ticket"></i> <%= @user.jira_username %>
+        </li>
+      <% end %>
+
+      <li data-tooltip class="has-tip" title="When <%= @user.name %> joined the Bonsai Asset Index site">
+        <i class="fa fa-clock-o"></i> Joined <%= time_ago_in_words(@user.created_at) %> ago.
       </li>
-    <% end %>
-
-    <% if @user.twitter_username.present? %>
-      <li data-tooltip class="has-tip" title="<%= posessivize(@user.name) %> Twitter Username">
-        <a href="https://twitter.com/<%= @user.twitter_username %>" target="_blank"><i class="fa fa-twitter"></i> <%= @user.twitter_username %></a>
-      </li>
-    <% end %>
-
-    <% @user.accounts.for(:github).each do |account| %>
-      <li data-tooltip class="has-tip" title="<%= posessivize(@user.name) %> GitHub Username">
-        <a href="https://github.com/<%= account.username %>" target="_blank"><i class="fa fa-github"></i> <%= account.username %></a>
-      </li>
-    <% end %>
-
-    <% if @user.irc_nickname.present? %>
-      <li data-tooltip class="has-tip" title="<%= posessivize(@user.name) %> IRC Nickname">
-        <i class="fa fa-comment"></i> <%= @user.irc_nickname %>
-      </li>
-    <% end %>
-
-    <% if @user.jira_username.present? %>
-      <li data-tooltip class="has-tip" title="<%= posessivize(@user.name) %> Jira Username">
-        <i class="fa fa-ticket"></i> <%= @user.jira_username %>
-      </li>
-    <% end %>
-
-    <li data-tooltip class="has-tip" title="When <%= @user.name %> joined the Bonsai Asset Index site">
-      <i class="fa fa-clock-o"></i> Joined <%= time_ago_in_words(@user.created_at) %> ago.
-    </li>
-  </ul>
+    </ul>
+  </div>
 
   <ul class="user_stats">
     <li>
