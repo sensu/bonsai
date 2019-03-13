@@ -17,8 +17,11 @@ class ReleaseAssetsController < ApplicationController
     ].join('-')
 
     json = render_to_string template: 'api/v1/release_assets/show.json.jbuilder'
+    yaml = YAML.dump(JSON.parse(json))
 
-    send_data json, filename: "#{filename}.json"
+    # uncomment to revert to json format
+    # send_data json, filename: "#{filename}.json"
+    send_data yaml, filename: "#{filename}.yml"
   end
 
   def asset_file
