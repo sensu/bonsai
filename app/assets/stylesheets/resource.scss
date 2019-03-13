@@ -37,11 +37,19 @@
       margin: rem-calc(10 0 0 0);
     }
 
+    h5 {
+      margin-top: rem-calc(15);
+      margin-bottom: 0;
+      font-size: larger;
+      border: none;
+    }
+
     p {
       color: $body-font-color;
       font: $normal rem-calc(12) $default_font;
       margin: rem-calc(0 0 24 20);
     }
+
 
     .gravatar {
       height: rem-calc(72);
@@ -50,8 +58,9 @@
     }
 
     .collaborators_avatar {
-      margin-bottom: rem-calc(20);
-
+      margin-bottom: rem-calc(10);
+      font-size: 11px;
+      border-bottom: 1px solid #cccdef;
       ul li {
         list-style-type: none;
         margin-bottom: 0;
@@ -60,6 +69,7 @@
       .gravatar-container {
         // @include inline-block;
         display: inline-block;
+        margin-top: rem-calc(5);
       }
 
       .f-dropdown {
@@ -74,7 +84,16 @@
     }
 
     .button {
-      margin-bottom: rem-calc(30);
+      background-color: $secondary_gray;
+    }
+
+    .button.secondary{
+      background-color: $secondary_gray;
+      border: 1px solid #333333;
+    }
+
+    .button.primary {
+      background-color: $primary_green;
     }
 
     @media #{$medium-down} {
@@ -139,20 +158,18 @@
 
   .heading {
     border: none;
-    font-size: rem-calc(30);
-    margin-bottom: rem-calc(15);
+    font-size: rem-calc(20);
+    margin-bottom: rem-calc(10);
     position: relative;
     z-index: 1;
 
-    @media #{$small-down} {
-      small {
-        display: block;
-        float: none;
-        margin: rem-calc(5 0 5 0);
-      }
+    .button {
+      border: 1px solid $primary_blue;
+      padding-top: rem-calc(6);
+      padding-bottom: rem-calc(6);
     }
 
-    @media #{$small-down} {
+    @media #{$mobile-only} {
       .button {
         width: 100%;
       }

@@ -1,8 +1,8 @@
 @import "common";
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: join("Cabin", $body-font-family);
-  font-weight: 400;
+  font-family: $body-font-family;
+  font-weight: 600;
   color: $body-font-color;
   line-height: 1.4;
   margin-bottom: 1.5rem;
@@ -38,7 +38,7 @@ small {
 }
 
 a {
-  color: $secondary_blue;
+  color: $primary_blue;
 }
 
 p {
@@ -54,4 +54,8 @@ blockquote {
 
 .monospace {
   font-family: Consolas,"Liberation Mono",Courier,monospace;
+}
+
+.text-primary-green {
+  color: $primary_green !important;
 }

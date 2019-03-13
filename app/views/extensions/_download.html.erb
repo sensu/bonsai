@@ -1,20 +1,16 @@
 <h4 class="extension_show_sidebar_downloads">
-  <i class="fa fa-download"></i> <span itemprop="interactionCount"><%= number_with_delimiter(version.try(:download_count) || 0) %></span> Downloads of Version <%= version.try(:version) %>
+  <i class="fa fa-download"></i> 
+  <span itemprop="interactionCount"><%= number_with_delimiter(version.try(:download_count) || 0) %></span> 
+  <span>Downloads of Version <%= version.try(:version) %></span>
   <small><%= number_with_delimiter(extension.download_count) %> Total Downloads</small>
 </h4>
-
-<%= link_to "Download",
-            "#",
-            class: 'button primary radius expand button_download_extension',
-            rel: 'download_asset_or_definition',
-            'data-reveal-id': 'download_asset_or_definition' %>
 
 <div id="download_asset_or_definition" class="reveal-modal small" data-reveal>
   <h1>Download</h1>
   <a class="close-reveal-modal close-reveal-modal-x">&#215;</a>
 
   <% if extension.hosted? %>
-    <h3 class="download-choice">This asset is intended for enterprise license holders only.</h3>
+    <h3 class="download-choice">This asset is enterprise only and requires an <a src='https://docs.sensu.io/sensu-go/latest/getting-started/enterprise/' target='_blank' title='Enterprise License'>enterprise license.</a> By clicking download, you agree to the <a src="https://sensu.io/sensu-terms-and-conditions" target="_blank" title="Terms and Conditions">Sensu terms and conditions</a> and <a src="https://sensu.io/sensu-license" target="_blank" title="License Agreement">license agreement.</a></h3>
     <% if version.release_assets.none?(&:viable?)%>
       <h3 class="download-choice">There are no asset definitions for this version.</h3>
     <% else %>

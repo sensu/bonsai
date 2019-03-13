@@ -7,7 +7,11 @@
 // Styles for the Extensions search interface
 
 .search_bar {
-  background-color: #2c3458;
+  background-color: #202641;
+  background-image: image_url("header_background.png");
+  background-repeat: no-repeat;
+  background-position: right;
+  background-size: contain;
   border: none;
   padding: rem-calc(50 55 21);
 }
@@ -87,9 +91,8 @@
   }
 }
 
-
 .search_field {
-  @include grid-column($columns: 10, $collapse: true);
+  @include grid-column($offset: 2, $columns: 6, $collapse: true);
   position: relative;
 
   .fa {
@@ -98,7 +101,7 @@
       family: "fontawesome" !important;
       size: rem-calc(24);
     }
-    left: rem-calc(25);
+    left: rem-calc(15);
     position: absolute;
     top: rem-calc(20);
     z-index: 2;
@@ -107,13 +110,13 @@
 
 @media #{$small-only} {
   .search_field {
-    @include grid-column($columns: 9, $collapse: true);
+    @include grid-column($offset: 2, $columns: 6, $collapse: true);
   }
 }
 
 @media #{$mobile-only} {
   .search_field {
-    @include grid-column($columns: 9, $collapse: true);
+    @include grid-column($offset: 2, $columns: 6, $collapse: true);
 
     .tt-input::-webkit-input-placeholder {
       color: white !important;
@@ -149,7 +152,8 @@
 input[type="search"].extension_search_textfield {
   background-color: white;
   border: none;
-  // @include border-left-radius(rem-calc(3));
+  border-top-left-radius: rem-calc(3);
+  border-bottom-left-radius: rem-calc(3);
   // @include box-shadow(none);
   color: #797979;
   font: rem-calc(24) $accent_font;
@@ -213,8 +217,9 @@ input[type="search"].extension_search_textfield {
 }
 
 .extension_search_button {
-  background-color: #789fcd;
-  // @include border-right-radius(rem-calc(3));
+  background-color: #89c967;
+  border-top-right-radius: rem-calc(3);
+  border-bottom-right-radius: rem-calc(3);
   color: white;
   font-size: rem-calc(24);
   height: rem-calc(64);
@@ -226,7 +231,7 @@ input[type="search"].extension_search_textfield {
   font-weight: 400;
 
   &:hover, &:active, &:focus {
-    background-color: lighten(#789fcd, 5%);
+    background-color: lighten(#89c967, 5%);
     color: white;
   }
 }
@@ -261,14 +266,15 @@ input[type="search"].extension_search_textfield {
 
 
 .advanced_search_toggle {
-  @include grid-column($columns: 2, $collapse: true, $offset: 10);
+  @include grid-column($columns: 2, $collapse: true, $offset: 8);
   cursor: pointer;
   text-align: center;
-  margin-top: rem-calc(15);
+  margin-top: rem-calc(5);
+  color: white;
 
   span {
-    color: lighten($primary_gray, 20%);
-    font: rem-calc(14) $accent_font;
+    color: white;
+    font: rem-calc(12) $accent_font;
     &:hover{
       color: white;
     }
