@@ -27,7 +27,7 @@
           <div class="advanced_search_platform">
             <label>
               <%=check_box_tag 'platforms[]', platform, params[:platforms] ? params[:platforms].include?(platform) : false %>
-              <%= platform %>
+              <span><%= platform %></span>
             </label>
           </div>
         <% end %>

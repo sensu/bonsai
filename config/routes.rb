@@ -89,6 +89,7 @@ Rails.application.routes.draw do
     end
   end
 
+  get '/users', to: redirect('/contributors')
   resources :users, only: [:show] do
     member do
       put :make_admin
