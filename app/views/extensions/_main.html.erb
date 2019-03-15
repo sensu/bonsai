@@ -1,11 +1,11 @@
 <div class="main" data-equalizer-watch>
 
   <dl class="tabs">
-    <dd class="<%= 'active' unless params[:tab] %>">
-      <%= link_to 'README', extension_version_path(extension, version, username: extension.owner_name) %>
+    <dd class="tab-title <%= 'active' unless params[:tab] %>">
+      <%= link_to 'README', extension_version_path(extension, version, username: extension.owner_name), remote: true %>
     </dd>
-    <dd class="<%= 'active' if params[:tab] == 'release-notes' %>">
-      <%= link_to 'Release Notes', extension_version_path(extension, version, username: extension.owner_name, tab: 'release-notes') %>
+    <dd class="tab-title <%= 'active' if params[:tab] == 'release-notes' %>">
+      <%= link_to 'Release Notes', extension_version_path(extension, version, username: extension.owner_name, tab: 'release-notes'), remote: true %>
     </dd>
   </dl>
 

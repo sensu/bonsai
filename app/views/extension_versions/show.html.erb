@@ -2,6 +2,11 @@
 <%= provide(:description, "#{@extension.name} #{t('nouns.extension').titleize} (#{@version.version}) #{@version.supported_platforms.map(&:name).join(', ')}".strip) %>
 
 <div class="page resource extension_show" data-equalizer>
-  <%= render 'extensions/main', extension: @extension, version: @version, extension_versions: @extension_versions %>
+	<div id='main-header-container'>
+    <%= render 'extensions/main_header', extension: @extension, version: @version, extension_versions: @extension_versions %>
+  </div>
+  <div id='main-container'>
+  	<%= render 'extensions/main', extension: @extension, version: @version, extension_versions: @extension_versions %>
+  </div>
   <%= render 'extensions/sidebar', extension: @extension, version: @version, supported_platforms: @supported_platforms, owner: @owner, collaborators: @collaborators %>
 </div>
