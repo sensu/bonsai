@@ -1,0 +1,3 @@
+$("#main-container").html(
+	"<%= escape_javascript( render 'extensions/main', extension: @extension, version: @version, extension_versions: @extension_versions ) %>"
+);

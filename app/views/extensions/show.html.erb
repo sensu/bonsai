@@ -5,119 +5,16 @@
 
   <div class="page resource extension_show" data-equalizer itemscope itemtype="http://schema.org/Code">
 
-    <div class="main-header">
-      <%= render 'extensions/compilation_error', version: @latest_version %>
-
-      <% if @extension.deprecated? %>
-        <div class="deprecation-notice">
-          <h2 class="deprecation-copy">
-            <%- replacement_extension = @extension.replacement %>
-            <% if replacement_extension.present? %>
-              <i class="fa fa-exclamation-triangle"></i> <%= @extension.name %> has been deprecated in favor of <%= link_to replacement_extension.name, owner_scoped_extension_url(replacement_extension) %>
-            <% else %>
-              <i class="fa fa-exclamation-triangle"></i> <%= @extension.name %> has been deprecated
-            <% end %>
-          </h2>
-        </div>
-      <% end %>
-
-      <% if false # disable community links %>
-        <small class="rss">
-          <%= link_to extension_path(@extension, username: @extension.owner_name, format: 'atom'), class: 'rss_feed_link' do %>
-            <i class="fa fa-rss"></i> RSS
-          <% end %>
-        </small>
-
-        <div class="addthis_sharing_toolbox"></div>
-
-        <span id="follow-button-show">
-          <%= render 'extensions/follow_button_show', extension: @extension %>
-        </span>
-      <% end %>
-
-      <h1 class="heading">
-        <span itemprop="name"><%= @extension.name %></span>
-        <% if @extension_versions.count > 0 %>
-          <small class="version_dropdown">
-            <%= link_to '#', 'data-dropdown' => 'versions', class: 'button radius tiny dropdown secondary', rel: 'extension_versions' do %>
-              <span class="versions_count"><%= pluralize "(#{@extension_versions.count})", 'Version' %></span>
-              <%= @version.try(:version) %>
-            <% end %>
-            <ul id="versions" data-dropdown-content class="f-dropdown">
-              <li>
-                <ul>
-                  <%- if @extension.hosted? && policy(@extension).add_hosted_extension_version? %>
-                    <li>
-                      <%= link_to new_extension_version_path(@extension, username: @extension.owner_name), rel: 'add-version' do %>
-                        <i class="fa fa-cloud-upload"></i>
-                        <span>Add a version</span>
-                      <% end %>
-                    </li>
-                  <%- end %>
-                  <% @extension_versions.each do |extension_version| %>
-                    <li>
-                      <%= link_to extension_version_path(@extension, extension_version, username: @extension.owner_name), rel: 'extension_version' do %>
-                        <%= extension_version.version %>
-                        <% if extension_version == @latest_version %><i class="fa fa-check right"></i><% end %>
-                      <% end %>
-                    </li>
-                  <% end %>
-                </ul>
-              </li>
-            </ul>
-
-            <%- if policy(@extension).change_tier? %>
-              <%= link_to '#', 'data-dropdown' => 'tiers', class: 'button radius tiny dropdown secondary', rel: 'extension_tiers' do %>
-                <i class="fa fa-<%= @extension.try(:tier_icon_name) %>"></i>
-                <span><%= @extension.try(:tier_name) %> Tier</span>
-              <% end %>
-              <ul id="tiers" data-dropdown-content class="f-dropdown">
-                <li>
-                  <ul style="list-style-type: none">
-                    <% Tier.rank(:rank).each do |tier| %>
-                      <li>
-                        <%= link_to extension_tier_path(@extension, tier, username: @extension.owner_name), method: :put, rel: 'extension_tier' do %>
-                          <span><i class="fa fa-<%= tier.icon_name %>"></i> <%= tier.name %></span>
-                        <% end %>
-                      </li>
-                    <% end %>
-                  </ul>
-                </li>
-              </ul>
-            <% else %>
-              <% if (tier_id = @extension.try(:tier_id)).present? %>
-                <span class="tier <%= @extension.tier_name.underscore.gsub(/\s+/, '-') %>">
-                  <i class="fa fa-<%= @extension.try(:tier_icon_name) %>"></i>
-                  <%= link_to extensions_path('tiers[]' => tier_id ) do %>
-                    <span><%= @extension.try(:tier_name) %> Tier</span>
-                  <% end %>
-                </span>
-              <% end %>
-            <% end %>
-          </small>
-        <% end %>
-      </h1>
-
-      <p class="description" itemprop="description"><%= @extension.description %></p>
-
-      <div class="row">
-        <div class="small-4 columns ">
-          <span class='downloads-commits'>Downloads in last month</span>
-          <div class="sparkline"><%= @downloads.join(",") %></div>
-        </div>
-        <%- if is_commitable?(@extension) %>
-          <div class="small-4 column end">
-            <span class='downloads-commits'>Commits in last year</span>
-            <div class="sparkline"><%= @commits.join(",") %></div>
-          </div>
-        <% end %>
-      </div>
-
+    <div id='main-header-container'>
+      <%= render 'extensions/main_header', extension: @extension, version: @latest_version, extension_versions: @extension_versions %>
     </div>
 
+    <div id='main-container'>
+      <%= render 'extensions/main', extension: @extension, version: @latest_version, extension_versions: @extension_versions %>
+    </div>
 
-    <%= render 'main', extension: @extension, version: @latest_version, extension_versions: @extension_versions %>
-    <%= render 'sidebar', extension: @extension, version: @latest_version, supported_platforms: @supported_platforms, collaborators: @collaborators %>
+    <%= render 'extensions/sidebar', extension: @extension, version: @latest_version, supported_platforms: @supported_platforms, collaborators: @collaborators %>
+
   </div>
 <% else %>
   <div class="page nobg">

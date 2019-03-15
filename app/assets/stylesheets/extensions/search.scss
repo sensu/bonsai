@@ -266,9 +266,9 @@ input[type="search"].extension_search_textfield {
 
 
 .advanced_search_toggle {
-  @include grid-column($columns: 2, $collapse: true, $offset: 8);
+  @include grid-column($columns: 8, $collapse: true, $offset: 2);
   cursor: pointer;
-  text-align: center;
+  text-align: left;
   margin-top: rem-calc(5);
   color: white;
 
@@ -291,30 +291,42 @@ input[type="search"].extension_search_textfield {
 
 .advanced_search_body {
   @include grid-row();
+  @include grid-column($columns: 10, $offset: 1);
   background-color: white;
-  border-bottom: rem-calc(2) solid lighten($secondary_gray, 30%);
+  border-bottom: rem-calc(1) solid $secondary_gray;
+  border-right: rem-calc(1) solid $secondary_gray;
+  border-left: rem-calc(1) solid $secondary_gray;
+  border-bottom-left-radius: rem-calc(5);
+  border-bottom-right-radius: rem-calc(5);
+  box-shadow: rem-calc(3) rem-calc(5) $trinary_gray;
   display: none;
-  max-width: $max-width;
-  padding: rem-calc(0 55);
+  padding: rem-calc(0 5);
+  padding-bottom: rem-calc(10);
+  background-color: $trinary_gray;
 
   h4 {
     color: black;
     margin-right: rem-calc(20);
     margin-top: rem-calc(24);
     margin-bottom: rem-calc(6);
-    text-align: center;
+    text-align: left;
+    padding-left: rem-calc(30);
   }
 }
 
 @media #{$mobile-only} {
   .advanced_search_body {
-    padding: rem-calc(0 20);
+    h4 {
+      padding-left: rem-calc(20);
+    }
   }
 }
 
 @media #{$small-only} {
   .advanced_search_body {
-    padding: rem-calc(0 20);
+    h4 {
+      padding-left: rem-calc(20);
+    }
   }
 }
 
@@ -336,6 +348,7 @@ input[type="search"].extension_search_textfield {
 
 .advanced_search_platform, .advanced_search_architecture {
   @include grid-column($columns: 2, $collapse: true);
+  white-space: nowrap;
 
   label {
     display: block;
