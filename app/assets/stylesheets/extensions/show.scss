@@ -139,6 +139,8 @@
 
     .sha {
       word-wrap: break-word;
+      border-bottom: rem-calc(1) solid $secondary_gray;
+      padding-bottom: rem-calc(7);
     }
   }
 
