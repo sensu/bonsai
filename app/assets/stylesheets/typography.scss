@@ -38,7 +38,15 @@ small {
 }
 
 a {
-  color: $primary_blue;
+  color: $primary_blue !important;
+}
+
+a:hover {
+  color: scale-color($primary_blue, $lightness: 35%) !important;
+}
+
+li {
+  color: $primary_gray;
 }
 
 p {
