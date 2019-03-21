@@ -10,8 +10,9 @@ class SemverNormalizer
 
     tag
       .to_s
+      .strip # strip off any leading or trailing /t or /n or spaces
       .sub(/\Av/i, '') # strip off any leading 'v'
-      .strip
+      .strip # strip any spaces after removing "v"
       # stripping hypends and underscores substantially changes the version string
       #.gsub(/[-_]/, '.')     # convert hyphens and underscores to dots
   end
