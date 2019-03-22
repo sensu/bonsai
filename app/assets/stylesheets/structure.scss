@@ -662,14 +662,41 @@ footer#footer {
 }
 
 .bottom-space {
-  margin-bottom: 32px !important;
+  margin-bottom: rem-calc(32) !important;
 }
 .small-bottom-space {
-  margin-bottom: 16px !important;
+  margin-bottom: rem-calc(16) !important;
 }
 
 .button.tiny {
   padding: rem-calc(4 16);
   font-size: 0.6875rem;
   border: 1px solid $primary_gray;
+}
+
+/* Maximum height math is:
+   line-height x #oflines - 0.4
+   the 0.4 offset is to make the cutoff  look nicer */
+.lines-3{
+  max-height: 4.5em;
+  min-height: 3em;
+}
+.lines-6{
+  max-height: 7.8em;
+  min-height: 6em;
+}
+.truncate {
+  overflow: hidden; 
+  position: relative;
+  line-height: 1.2em;
+}
+.truncate:after{
+    content:""; 
+    height: 1em; 
+    display: block; 
+    width: 100%; 
+    position: absolute;
+    background-color: white;
+    bottom: -0.2em;
+    -webkit-mask-image: -webkit-gradient(linear, left bottom, left top, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)));
 }
