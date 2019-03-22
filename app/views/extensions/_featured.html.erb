@@ -9,11 +9,10 @@
         <div class="tier-declaration">
           <span><%= extension.latest_extension_version.try(:version) %></span>
           <i class="fa fa-<%= extension.tier_icon_name %>"></i>
-          <%= extension.tier_name %>
-          tier
+          <span><%= extension.tier_name %> tier</span>
         </div>
       </header>
-      <p><%= extension.description %></p>
+      <p class='truncate lines-3'><%= extension.description %></p>
       <p class="tags">
         <% extension.tags.each do |tag| %>
           <%= link_to tag.name, extensions_path(q: tag.name) %>
