@@ -44,6 +44,8 @@ class TarBallAnalyzer < ActiveStorage::Analyzer
 
   def tarred_file_reader(files, file_path)
     files.rewind
-    files.seek(file_path) { |file| file.read }
+    files.seek(file_path) { |file| 
+      file.read.encode('utf-8', invalid: :replace, undef: :replace, replace: '_')
+    }
   end
 end
