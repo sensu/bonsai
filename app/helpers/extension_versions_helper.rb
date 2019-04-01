@@ -67,7 +67,7 @@ module ExtensionVersionsHelper
       if %w(md mdown markdown).include?(extension.downcase)
         # use commonmarker instead of redcarpet for markdown
         #render_markdown(content, hard_wrap: hard_wrap)
-        CommonMarker.render_html(content, :DEFAULT)
+        CommonMarker.render_html(content, :DEFAULT, [:table])
       else
         content
       end
