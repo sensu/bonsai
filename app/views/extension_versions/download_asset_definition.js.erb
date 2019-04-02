@@ -1,8 +1,8 @@
-$("#download-asset-definition").html("<%=
-  escape_javascript render(partial: 'extension_versions/download_asset_definition',
-                           locals: {extension: @extension,
-                                    version:   @version,
-                                    platform:  @platform,
-                                    arch:      @arch,
-                                    acknowledge: @acknowledge})
+$("#download-asset-definition").html("<%= \
+		escape_javascript render(partial: 'extension_versions/download_asset_definition', \
+                           locals: {extension: @extension, \
+                                    version:   @version, \
+                                    platform:  @platform, \
+                                    arch:      @arch, \
+                                    acknowledge: @acknowledge}) \
 %>");

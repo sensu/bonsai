@@ -14,8 +14,12 @@ class CompileGithubExtensionVersionConfig
 
   def call
     config_hash = fetch_bonsai_config(system_command_runner)
-    context.fail!(error: "Bonsai configuration has no 'builds' section") unless config_hash['builds'].present?
-
+    if config_hash['builds'].present?
+      version.update_column(:config, config_hash)
+    else
+      context.fail!(error: "Bonsai configuration has no 'builds' section")
+    end
+ 
     config_hash['builds'] = compile_builds(version, config_hash['builds'])
 
     context.data_hash = config_hash
@@ -50,6 +54,7 @@ class CompileGithubExtensionVersionConfig
 
   def compile_builds(version, build_configs)
     github_asset_data_hashes     = gather_github_release_asset_data_hashes(version)
+
     github_asset_data_hashes_lut = Array.wrap(github_asset_data_hashes)
                                      .group_by { |h| h[:name] }
                                      .transform_values(&:first)
@@ -64,9 +69,9 @@ class CompileGithubExtensionVersionConfig
 
   def gather_github_release_asset_data_hashes(version)
     releases_data = version.octokit
-                      .releases(version.github_repo)
-                      .find { |h| h[:tag_name] == version.version }
-                      .to_h
+      .releases(version.github_repo)
+      .find { |h| h[:tag_name] == version.version }
+      .to_h
     Array.wrap(releases_data[:assets])
   end
 
