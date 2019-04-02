@@ -56,7 +56,7 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
       Semverse::Version.new(SemverNormalizer.call(@tag))
       return true
     rescue Semverse::InvalidVersionFormat
-      logger.info "#{@extension.lowercase_name} release #{@tag} is invalid.")
+      logger.info "#{@extension.lowercase_name} release #{@tag} is invalid."
       return false
     end
   end
