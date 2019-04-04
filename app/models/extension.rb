@@ -129,8 +129,8 @@ class Extension < ApplicationRecord
 
   # Validations
   # --------------------
-  validates :name, presence: true, uniqueness: { case_sensitive: false }, format: /\A[\w\s_-]+\z/i
-  validates :lowercase_name, presence: true, uniqueness: true
+  validates :name, presence: true, format: /\A[\w\s_-]+\z/i
+  validates :lowercase_name, presence: true
   # validates :extension_versions, presence: true
   validates :source_url, url: {
     allow_blank: true,
