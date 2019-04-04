@@ -3,7 +3,7 @@ require "sidekiq/web"
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
-  VERSION_PATTERN = /master|latest|v?([0-9_\-\.]+)/ unless defined?(VERSION_PATTERN)
+  VERSION_PATTERN = /master|latest|v?(\d+\.?){1,3}(\-[a-zA-Z0-9]+)?/ unless defined?(VERSION_PATTERN)
 
   apipie
 
@@ -171,7 +171,7 @@ Rails.application.routes.draw do
   get 'dashboard' => 'pages#dashboard'
   get 'robots.:format' => 'pages#robots'
   root 'extensions#directory'
-  
+
   constraints lambda { |r| AuthConstraint.is_admin?(r) } do
     mount Sidekiq::Web => "/sidekiq"
   end
