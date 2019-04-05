@@ -10,10 +10,6 @@ class SetUpHostedExtension
   delegate :version_name, to: :context
 
   def call
-    extension.update_attributes(
-      owner_name: ENV['HOST_ORGANIZATION']
-    )
-
     extension_version = extension.extension_versions.create!(version: version_name)
 
     if extension.tmp_source_file.attached?
@@ -31,4 +27,5 @@ class SetUpHostedExtension
       end
     end
   end
+
 end

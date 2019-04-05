@@ -11,21 +11,13 @@ class SetUpGithubExtension
   delegate :compatible_platforms, to: :context
 
   def call
-    github_organization, owner_name = gather_github_info(extension, octokit)
-    extension.update_attributes(
-      github_organization: github_organization,
-      owner_name:          owner_name
-    )
-
     platforms = compatible_platforms.select { |p| !p.strip.blank? }
     CollectExtensionMetadataWorker.perform_async(extension.id, platforms)
     SetupExtensionWebHooksWorker.perform_async(extension.id)
     NotifyModeratorsOfNewExtensionWorker.perform_async(extension.id)
   end
 
-  private
-
-  def gather_github_info(extension, octokit)
+  def self.gather_github_info(extension, octokit, owner)
     repo_info = octokit.repo(extension.github_repo)
     org       = repo_info[:organization]
 
@@ -35,7 +27,8 @@ class SetUpGithubExtension
                               avatar_url: org[:avatar_url]
                             )
                           end
-    owner_name          = org ? org[:login] : extension.owner.username
+    owner_name          = org ? org[:login] : owner.username
     return github_organization, owner_name
   end
+
 end
