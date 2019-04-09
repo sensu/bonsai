@@ -7,6 +7,7 @@ class ExtensionVersion < ApplicationRecord
   has_many :supported_platforms, through: :extension_version_platforms
   has_many :extension_dependencies, dependent: :destroy
   has_many :extension_version_content_items, dependent: :destroy
+  has_many :release_assets # do not dependent: :destroy
   belongs_to :extension, required: false
 
   has_one_attached :source_file
@@ -89,14 +90,6 @@ class ExtensionVersion < ApplicationRecord
 
   def metadata
     (source_file.attached? ? source_file.metadata : nil).to_h
-  end
-
-  def release_assets
-    Array.wrap(config['builds'])
-      .map { |h|
-        attributes = h.merge(version: self)
-        ReleaseAsset.new(attributes)
-      }
   end
 
   # Converts any instances of '#{var-name}' in the given string to the corresponding value from

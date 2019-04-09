@@ -16,5 +16,16 @@ namespace 'extension' do
 		tier = Tier.find_by(name: 'Enterprise')
 		tier.update_column(:icon_name, 'rocket')
 	end
+
+	task :update_s3_store => :environment do
+		worker = SyncExtensionContentsAtVersionsWorker.new
+		Extension.not_hosted.each do |extension|
+			puts "Copying assets for #{extension.name}"
+			extension.extension_versions.each do |version|
+				worker.send(:persist_assets, version)
+			end
+		end
+
+	end
 	
 end

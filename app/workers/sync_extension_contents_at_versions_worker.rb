@@ -1,14 +1,28 @@
 class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
 
+  def initialize
+    s3 = Aws::S3::Resource.new(
+      access_key_id: ENV['AWS_S3_KEY_ID'],
+      secret_access_key: ENV['AWS_S3_ACCESS_KEY'],
+      region: ENV['AWS_S3_REGION']
+    )
+
+    @s3_bucket = s3.bucket(ENV['AWS_S3_ASSETS_BUCKET'])
+    unless @s3_bucket.exists?
+      raise RuntimeError.new("S3 error: #{ENV['AWS_S3_ASSETS_BUCKET']} bucket not found")
+    end
+  end
+
   def logger
     @logger ||= Logger.new("log/scan.log")
   end
 
-  def perform(extension_id, tags, compatible_platforms = [], release_infos_by_tag = {})
-    logger.info("PERFORMING: #{extension_id}, #{tags.inspect}, #{compatible_platforms.inspect}")
+  def perform(extension, tags, compatible_platforms = [], release_infos_by_tag = {})
+    logger.info("PERFORMING: #{extension.id}, #{tags.inspect}, #{compatible_platforms.inspect}")
 
-    @extension = Extension.find_by(id: extension_id)
+    @extension = extension
     raise RuntimeError.new("#{I18n.t('nouns.extension')} not found.") unless @extension
+
     @extension.with_lock do
       @tags = tags
       @tag = @tags.shift
@@ -39,13 +53,94 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
     set_commit_count(version)
     scan_files(version)
     sync_release_info(version, release_info)
-
+    persist_assets(version)
     version.save
   end
 
+  def persist_assets(version)
+    return if version.blank? || version.version == 'master' || version.config.blank?
+
+    unless version.config['builds'].present?
+      puts "#{version.version} config builds not found"
+      return
+      #raise RuntimeError.new("Version ID: #{version.id} config builds not found")
+    end
+
+    puts "Copying assets for #{version.version} to S3"
+
+    version.config['builds'].each do |build|
+
+      if build['asset_url'].blank?
+        puts "**** Error in Github URL: #{build['asset_url']}"
+        next
+      end
+
+      release_asset = version.release_assets.find_by(
+                          platform: build['platform'],
+                          arch: build['arch'],
+                          commit_sha: version.last_commit_sha)
+
+      if !release_asset
+
+        github_asset_filename = version.interpolate_variables(build['asset_filename'])
+        github_sha_filename = version.interpolate_variables( build['sha_filename'])
+        
+        release_asset = ReleaseAsset.create(
+          platform: build['platform'],
+          arch: build['arch'],
+          viable: build['viable'],
+          commit_sha: version.last_commit_sha,
+          commit_at: version.last_commit_at,
+          github_asset_sha: build['asset_sha'],
+          github_asset_url: build['asset_url'],
+          github_sha_filename: github_sha_filename,
+          github_base_filename: build['base_filename'],
+          github_asset_filename: github_asset_filename
+        )
+
+        version.release_assets << release_asset
+      end
+
+      begin
+        url = URI(release_asset.github_asset_url)
+      rescue URI::Error => error
+        puts "******** URI error: #{release_asset.github_asset_url} - #{error.message}"
+        next
+      end
+
+      key = release_asset.destination_pathname
+
+      if @s3_bucket.object(key).exists?
+        puts "Already on S3: #{key}"
+        next
+      else
+        begin
+          url.open do |file|
+            @s3_bucket.object(key).put(body: file)
+          end
+          puts "S3 success: #{key}"
+        rescue OpenURI::HTTPError => error
+          status = error.io.status[0]
+          message = error.io.status[1]
+          puts "****** file read error: #{status} - #{message}"
+          next
+        rescue Aws::S3::Errors::ServiceError => error 
+          puts "****** S3 error: #{error.code} - #{error.message}"
+          next
+        end
+
+        s3_uri = URI(@s3_bucket.object(key).public_url)
+        s3_last_modified = @s3_bucket.object(key).last_modified
+        s3_uri.host = ENV['AWS_S3_VANITY_HOST']
+        release_asset.update_columns(s3_url: s3_uri.to_s, s3_last_modified: s3_last_modified)
+
+      end # object.exists?
+    end # builds.each
+  end # persist_assets
+
   def perform_next
     if @tags.any?
-      self.class.perform_async(@extension.id, @tags, @compatible_platforms, @release_infos_by_tag)
+      self.class.perform_async(@extension, @tags, @compatible_platforms, @release_infos_by_tag)
     end
   end
 
@@ -124,7 +219,6 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
     message = message.gsub("\n", " ").strip
     sha = sha.gsub("commit ", "")
     date = Time.parse(date.gsub("Date:", "").strip)
-
     version.last_commit_sha = sha
     version.last_commit_at = date
     version.last_commit_string = message

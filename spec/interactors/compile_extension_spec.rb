@@ -8,7 +8,7 @@ describe CompileExtension do
       let(:extension) { create :extension }
 
       it 'delegates to the SyncExtensionRepoWorker service class' do
-        expect(SyncExtensionRepoWorker).to receive(:perform_async).with(extension.id)
+        expect(SyncExtensionRepoWorker).to receive(:perform_async).with(extension)
         subject
       end
     end

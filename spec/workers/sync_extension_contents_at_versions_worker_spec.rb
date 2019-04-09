@@ -10,8 +10,9 @@ describe SyncExtensionContentsAtVersionsWorker do
   let(:asset_hash2)  { {name: "my_repo-1.2.2-linux-x86_64.sha512.txt",
                         browser_download_url: "https://example.com/sha_download"} }
   let(:release_data) { {tag_name: version.version, assets: [asset_hash1, asset_hash2]} }
-  let!(:version)     { create :extension_version, config: config }
+  let!(:version)     { create :extension_version }
   let(:extension)    { version.extension }
+  
   subject            { SyncExtensionContentsAtVersionsWorker.new }
 
   before do
@@ -25,7 +26,7 @@ describe SyncExtensionContentsAtVersionsWorker do
       tags = ["0.01"]   # is semver-conformant
 
       expect {
-        subject.perform(extension.id, tags)
+        subject.perform(extension, tags)
       }.to change{ExtensionVersion.count}.by 1
     end
 
@@ -33,7 +34,7 @@ describe SyncExtensionContentsAtVersionsWorker do
       tags = ["v0.1A20180919"]  # is not semver-conformant
 
       expect {
-        subject.perform(extension.id, tags)
+        subject.perform(extension, tags)
       }.not_to change{ExtensionVersion.count}
     end
   end
@@ -44,8 +45,18 @@ describe SyncExtensionContentsAtVersionsWorker do
     let(:tags)                  { release_infos_by_tag.keys }
 
     it 'puts the release notes into the release notes field' do
-      subject.perform(extension.id, tags, [], release_infos_by_tag)
+      subject.perform(extension, tags, [], release_infos_by_tag)
       expect(extension.reload.extension_versions.last.release_notes).to eq body
+    end
+  end
+
+  describe 'persist_assets' do
+    let (:version) { create :extension_version_with_config }
+
+    it 'creates release assets' do
+      expect {
+        subject.send(:persist_assets, version)
+      }.to change{version.release_assets.count}.by(2)
     end
   end
 end
