@@ -23,8 +23,8 @@ describe CreateExtension do
     'github_url'     => "https://github.com/#{github_url}",
     'lowercase_name' => "test",
   } }
-  let(:expected_unnormalized_attributes) { Extension.new(params.merge(owner: user)).attributes }
-  let(:expected_normalized_attributes)   { Extension.new(params.merge(owner: user)).attributes.merge(normalized_attributes) }
+  let(:expected_unnormalized_attributes) { Extension.new(params.merge(owner: user, owner_name: 'some_user')).attributes }
+  let(:expected_normalized_attributes)   { Extension.new(params.merge(owner: user, owner_name: 'some_user')).attributes.merge(normalized_attributes) }
   let(:top_level_contents)               { [{name: 'bonsai.yml'}] }
 
   before do
@@ -114,7 +114,7 @@ describe CreateExtension do
     let(:extension)      { build :extension, owner: user }
 
     subject { CreateExtension.new(params, user) }
-   
+
     it "creates a new User for Hosted Extensions" do
       new_extension = subject.process!
       expect(User.find_by(company: ENV['HOST_ORGANIZATION'])).to be_present

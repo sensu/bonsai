@@ -11,7 +11,9 @@ class CreateExtension
     candidate = Extension.new(@params) do |extension|
       if extension.hosted?
         extension.owner = User.host_organization
+        extension.owner_name = ENV['HOST_ORGANIZATION']
       else
+        extension.github_organization, extension.owner_name = SetUpGithubExtension.gather_github_info(extension, @octokit, @user)
         extension.owner = @user
       end
     end

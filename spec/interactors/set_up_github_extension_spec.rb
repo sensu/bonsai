@@ -24,11 +24,6 @@ describe SetUpGithubExtension do
   end
 
   describe '.call' do
-    it "sets the extension's repo info" do
-      expect(context).to be_a_success
-      expect(extension.github_organization.name).to eql 'my-org'
-      expect(extension.owner_name              ).to eql 'my-org'
-    end
 
     it "kicks off a worker to gather metadata about the valid extension" do
       expect(CollectExtensionMetadataWorker).to receive(:perform_async)

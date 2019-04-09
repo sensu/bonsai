@@ -129,8 +129,7 @@ class Extension < ApplicationRecord
 
   # Validations
   # --------------------
-  validates :name, presence: true, uniqueness: { case_sensitive: false }, format: /\A[\w\s_-]+\z/i
-  validates :lowercase_name, presence: true, uniqueness: true
+  validates :name, presence: true, uniqueness: { scope: :owner_name, case_sensitive: false, message: "already exists in this namespace" }, format: /\A[\w\s_-]+\z/i
   # validates :extension_versions, presence: true
   validates :source_url, url: {
     allow_blank: true,
