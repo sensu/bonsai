@@ -4,6 +4,8 @@ class CmdAtPath
   end
 
   def cmd(a_cmd)
-    `cd #{@path} && #{a_cmd}`
+  	Dir.chdir(@path) do 
+  		`#{a_cmd}`
+  	end
   end
 end

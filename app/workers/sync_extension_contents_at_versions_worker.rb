@@ -56,6 +56,7 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
       Semverse::Version.new(SemverNormalizer.call(@tag))
       return true
     rescue Semverse::InvalidVersionFormat
+      logger.info "#{@extension.lowercase_name} release #{@tag} is invalid."
       return false
     end
   end
@@ -179,12 +180,8 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
 
   def scan_config_yml_file(version)
     compilation_result = CompileGithubExtensionVersionConfig.call(version: version, system_command_runner: @run)
-    if compilation_result.success?
-      version.update_columns(config:            compilation_result.data_hash,
-                             compilation_error: nil)
-    else
-      version.update_column(:compilation_error, compilation_result.error)
-    end
+    compilation_error = compilation_result.success? ? nil : compilation_result.error
+    version.update_column(:compilation_error, compilation_error)
   end
 
   def scan_class_dirs(version)
