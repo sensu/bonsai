@@ -3,6 +3,8 @@ require "sidekiq/web"
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
+  VERSION_PATTERN = /[^\/]+/  unless defined?(VERSION_PATTERN) # Allow any value, including "."
+
   apipie
 
   namespace :api, defaults: { format: :json }  do
@@ -11,11 +13,11 @@ Rails.application.routes.draw do
       get 'health' => 'health#show'
       get 'assets' => 'extensions#index', as: :extensions
       get 'assets/:username/:id' => 'extensions#show', as: :extension
-      get 'assets/:username/:extension/versions/:version' => 'extension_versions#show', as: :extension_version
-      get 'assets/:username/:extension/versions/:version/download' => 'extension_versions#download', as: :extension_version_download
-      delete 'assets/:username/:extension/versions/:version' => 'extension_uploads#destroy_version'
+      get 'assets/:username/:extension/versions/:version' => 'extension_versions#show', as: :extension_version, constraints: { version: VERSION_PATTERN }
+      get 'assets/:username/:extension/versions/:version/download' => 'extension_versions#download', as: :extension_version_download, constraints: { version: VERSION_PATTERN }
+      delete 'assets/:username/:extension/versions/:version' => 'extension_uploads#destroy_version', constraints: { version: VERSION_PATTERN }
       get 'users/:user' => 'users#show', as: :user
-      get 'assets/:username/:id/:version/:platform/:arch/release_asset' => 'release_assets#show', as: :release_asset
+      get 'assets/:username/:id/:version/:platform/:arch/release_asset' => 'release_assets#show', as: :release_asset, constraints: {version: VERSION_PATTERN}
 
       resources :tags, only: [:index]
     end
@@ -71,15 +73,15 @@ Rails.application.routes.draw do
     end
   end
 
-  get '/assets/:username/:extension_id/versions/:version/download' => 'extension_versions#download', as: :extension_version_download
-  get '/assets/:username/:extension_id/versions/:version/download_asset_definition' => 'extension_versions#download_asset_definition', as: :extension_version_download_asset_definition
-  get '/assets/:username/:extension_id/versions/:version' => 'extension_versions#show', as: :extension_version
-  delete '/assets/:username/:extension_id/versions/:version' => 'extension_versions#destroy', as: :delete_extension_version
-  put "/assets/:username/:extension_id/versions/:version/update_platforms" => "extension_versions#update_platforms", as: :extension_update_platforms
+  get '/assets/:username/:extension_id/versions/:version/download' => 'extension_versions#download', as: :extension_version_download, constraints: { version: VERSION_PATTERN }
+  get '/assets/:username/:extension_id/versions/:version/download_asset_definition' => 'extension_versions#download_asset_definition', as: :extension_version_download_asset_definition, constraints: { version: VERSION_PATTERN }
+  get '/assets/:username/:extension_id/versions/:version' => 'extension_versions#show', as: :extension_version, constraints: { version: VERSION_PATTERN }
+  delete '/assets/:username/:extension_id/versions/:version' => 'extension_versions#destroy', as: :delete_extension_version, constraints: { version: VERSION_PATTERN }
+  put "/assets/:username/:extension_id/versions/:version/update_platforms" => "extension_versions#update_platforms", as: :extension_update_platforms, constraints: { version: VERSION_PATTERN }
 
-  get '/release_assets/:username/:extension_id/:version/:platform/:arch/download' => 'release_assets#download', as: :release_asset_download
-  get '/release_assets/:username/:extension_id/:version/:platform/:arch/asset_file' => 'release_assets#asset_file', as: :release_asset_asset_file
-  get '/release_assets/:username/:extension_id/:version/:platform/:arch/sha_file' => 'release_assets#sha_file', as: :release_asset_sha_file
+  get '/release_assets/:username/:extension_id/:version/:platform/:arch/download' => 'release_assets#download', as: :release_asset_download, constraints: { version: VERSION_PATTERN }
+  get '/release_assets/:username/:extension_id/:version/:platform/:arch/asset_file' => 'release_assets#asset_file', as: :release_asset_asset_file, constraints: { version: VERSION_PATTERN }
+  get '/release_assets/:username/:extension_id/:version/:platform/:arch/sha_file' => 'release_assets#sha_file', as: :release_asset_sha_file, constraints: { version: VERSION_PATTERN }
 
   resources :collaborators, only: [:index, :new, :create, :destroy] do
     member do
