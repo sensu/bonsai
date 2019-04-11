@@ -61,7 +61,7 @@ class CompileGithubExtensionVersionConfig
 
     Array.wrap(build_configs).each_with_index.map { |build_config, idx|
       Thread.new do
-        compiled_config = compile_build_hash(build_config, idx+1, github_asset_data_hashes_lut, version)
+        compiled_config = compile_build_hash(build_config, idx + 1, github_asset_data_hashes_lut, version)
         build_config.merge compiled_config
       end
     }.map(&:value)
@@ -110,6 +110,10 @@ class CompileGithubExtensionVersionConfig
       sha_download_url: sha_download_url,
       asset_filename:   asset_filename
     )
+    unless result.sha.present?
+      context.fail!(error: "no SHA found in checksums file for #{asset_filename}")
+      return
+    end
     result.sha.tap do |sha_result|
       context.fail!(error: "cannot extract the SHA for #{asset_filename}") unless sha_result.present?
     end
