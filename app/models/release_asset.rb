@@ -6,12 +6,7 @@ class ReleaseAsset < ApplicationRecord
   delegate :extension_name,      to: :extension_version, allow_nil: true
   delegate :extension_namespace, to: :extension_version, allow_nil: true
   delegate :owner_name,          to: :extension_version, allow_nil: true
-  delegate :version,             to: :extension_verison, allow_nil: true
-
-  # TODO: refactor to use attribute of this model
-  def version_name
-    extension_version&.version
-  end
+  delegate :version,             to: :extension_version, allow_nil: true
 
   def viable?
     viable
@@ -19,7 +14,7 @@ class ReleaseAsset < ApplicationRecord
 
   def annotations
     {}.tap do |results|
-      if extension_version.hosted?
+      if extension.hosted?
         results['bonsai.sensu.io.message'] = "This asset is for users with a valid Enterprise license"
       end
     end

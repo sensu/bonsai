@@ -4,19 +4,25 @@ describe Api::V1::ReleaseAssetsController do
   render_views
 
   describe 'GET #show' do
-    let(:platform) { "linux" }
-    let(:arch)     { "x86_64" }
-    let(:config)   { {"builds" =>
-                        [{"arch"           => arch,
-                          "filter"         =>
-                            ["System.OS == linux",
-                             "(System.Arch == x86_64) || (System.Arch == amd64)"],
-                          "platform"       => platform,
-                          "sha_filename"   => "test_asset-\#{version}-linux-x86_64.sha512.txt",
-                          "asset_filename" => "test_asset-\#{version}-linux-x86_64.tar.gz",
-                          "asset_url"      => "https://example.com/download",
-                          "asset_sha"      => "c1ec2f493f0ff9d83914c1ec2f493f0ff9d83914"}]} }
-    let!(:version) { create :extension_version, config: config }
+    let(:platform) { "debian" }
+    let(:arch)     { "amd64" }
+    
+    let!(:version) { create :extension_version_with_config }
+
+    before do 
+      version.config['builds'].each do |build|
+        version.release_assets << build(:release_asset,
+          platform: build['platform'],
+          arch: build['arch'],
+          viable: build['viable'],
+          github_asset_sha: build['asset_sha'],
+          github_asset_url: build['asset_url'],
+          github_sha_filename: build['sha_filename'],
+          github_base_filename: build['base_filename'],
+          github_asset_filename: build['asset_filename']
+        )
+      end
+    end
 
     it 'succeeds' do
       get :show,
@@ -27,7 +33,9 @@ describe Api::V1::ReleaseAssetsController do
                    arch:     arch},
           format: :json
       expect(response).to be_successful
-      expect(JSON.parse(response.body)).to be_a(Hash)
+      data = JSON.parse(response.body)
+      expect(data).to be_a(Hash)
+      expect(data['spec']).to be_a(Hash)
     end
   end
 end

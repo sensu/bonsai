@@ -21,6 +21,21 @@ describe ReleaseAssetsController do
                               "asset_sha"      => "c1ec2f493f0ff9d83914c1ec2f493f0ff9d83914"}]} }
   let!(:version)       { create :extension_version, config: config }
 
+  before do 
+    version.config['builds'].each do |build|
+      version.release_assets << build(:release_asset,
+        platform: build['platform'],
+        arch: build['arch'],
+        viable: build['viable'],
+        github_asset_sha: build['asset_sha'],
+        github_asset_url: build['asset_url'],
+        github_sha_filename: build['sha_filename'],
+        github_base_filename: build['base_filename'],
+        github_asset_filename: build['asset_filename']
+      )
+    end
+  end
+
   let(:file_name)  { 'private-extension.tgz' }
   let(:file_path)  { Rails.root.join('spec', 'support', 'extension_fixtures', file_name) }
   let(:attachable) { fixture_file_upload(file_path) }

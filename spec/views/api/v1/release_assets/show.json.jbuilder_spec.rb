@@ -1,15 +1,23 @@
 require 'spec_helper'
 
 describe 'api/v1/release_assets/show' do
-  let(:version)        { create :extension_version }
-  let(:url)            { "http://example.com/asset" }
-  let(:sha)            { "abcdef1234" }
-  let!(:release_asset) { ReleaseAsset.new(version:   version,
-                                          asset_url: url,
-                                          asset_sha: sha) }
-
+  let(:version)  { create :extension_version_with_config }
+  
   before do
-    assign(:release_asset, release_asset)
+    version.config['builds'].each do |build|
+      version.release_assets << build(:release_asset,
+        platform: build['platform'],
+        arch: build['arch'],
+        viable: build['viable'],
+        github_asset_sha: build['asset_sha'],
+        github_asset_url: build['asset_url'],
+        github_sha_filename: build['sha_filename'],
+        github_base_filename: build['base_filename'],
+        github_asset_filename: build['asset_filename']
+      )
+    end
+    @asset = version.release_assets.first
+    assign(:release_asset, @asset)
     render
   end
 
@@ -22,14 +30,14 @@ describe 'api/v1/release_assets/show' do
   end
 
   it "serializes the url" do
-    expect(json_body['spec']['url']).to eql(url)
+    expect(json_body['spec']['url']).to eql(@asset.github_asset_url)
   end
 
   it "serializes the sha" do
-    expect(json_body['spec']['sha512']).to eql(sha)
+    expect(json_body['spec']['sha512']).to eql(@asset.github_asset_sha)
   end
 
   it "serializes the namespace" do
-    expect(json_body['metadata']['namespace']).to eql('default')
+    expect(json_body['metadata']['namespace']).to eql(@asset.extension_namespace)
   end
 end

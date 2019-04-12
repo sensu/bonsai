@@ -110,12 +110,9 @@ class CompileGithubExtensionVersionConfig
       sha_download_url: sha_download_url,
       asset_filename:   asset_filename
     )
-    unless result.sha.present?
-      context.fail!(error: "no SHA found in checksums file for #{asset_filename}")
-      return
-    end
-    result.sha.tap do |sha_result|
-      context.fail!(error: "cannot extract the SHA for #{asset_filename}") unless sha_result.present?
+
+    result.tap do |sha_result|
+      context.fail!(error: "cannot extract the SHA for #{asset_filename}") unless sha_result.sha.present?
     end
   end
 

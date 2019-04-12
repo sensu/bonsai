@@ -3,7 +3,8 @@ class ReleaseAssetsController < ApplicationController
   def download
     extension = Extension.with_owner_and_lowercase_name(owner_name: params[:username], lowercase_name: params[:extension_id])
     version = extension.extension_versions.find_by!(version: params[:version])
-    @release_asset = version.release_assets.find { |ga| ga.platform == params[:platform] && ga.arch == params[:arch] }
+    @release_asset = version.release_assets.find_by(platform: params[:platform], arch: params[:arch])
+
     raise ActiveRecord::RecordNotFound unless @release_asset
     raise ActiveRecord::RecordNotFound unless @release_asset.viable?
 
@@ -26,11 +27,11 @@ class ReleaseAssetsController < ApplicationController
   end
 
   def asset_file
-    send_file_content(:asset_filename)
+    send_file_content(:github_asset_filename)
   end
 
   def sha_file
-    send_file_content(:sha_filename)
+    send_file_content(:github_sha_filename)
   end
 
   private
@@ -40,7 +41,7 @@ class ReleaseAssetsController < ApplicationController
     version   = extension.extension_versions.find_by!(version: params[:version])
     raise ActiveRecord::RecordNotFound unless version.source_file.attached?
 
-    release_asset = version.release_assets.find { |ra| ra.platform == params[:platform] && ra.arch == params[:arch] }
+    release_asset = version.release_assets.find_by(platform: params[:platform], arch: params[:arch])
     raise ActiveRecord::RecordNotFound unless release_asset
 
     file_path = version.interpolate_variables(release_asset.send(filename_method))
@@ -49,6 +50,6 @@ class ReleaseAssetsController < ApplicationController
     content = result.content
     raise ActiveRecord::RecordNotFound if content.nil?
 
-    send_data content, filename: release_asset.base_filename
+    send_data content, filename: release_asset.github_base_filename
   end
 end

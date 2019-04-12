@@ -51,7 +51,6 @@ describe ExtensionsController do
 
         it "excludes non-viable results" do
           expect(extension.name).to be_present
-
           get :index, params: {archs: [arch2]}
           expect(response.body).to_not include(extension.name)
         end

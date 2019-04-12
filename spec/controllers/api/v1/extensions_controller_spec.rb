@@ -3,20 +3,7 @@ require 'spec_helper'
 describe Api::V1::ExtensionsController do
   render_views
 
-  let(:platform)   { "linux" }
-  let(:arch)       { "x86_64" }
-  let(:sha)        { "c1ec2f493f0ff9d83914c1ec2f493f0ff9d83914" }
-  let(:config)     { {"builds" =>
-                        [{"arch"           => arch,
-                          "filter"         =>
-                            ["System.OS == linux",
-                             "(System.Arch == x86_64) || (System.Arch == amd64)"],
-                          "platform"       => platform,
-                          "sha_filename"   => "test_asset-\#{version}-linux-x86_64.sha512.txt",
-                          "asset_filename" => "test_asset-\#{version}-linux-x86_64.tar.gz",
-                          "asset_url"      => "https://example.com/download",
-                          "asset_sha"      => sha}]} }
-  let(:version)    { create :extension_version, config: config }
+  let(:version)    { create :extension_version_with_config }
   let!(:extension) { version.extension }
 
   describe 'GET #index' do
@@ -38,6 +25,21 @@ describe Api::V1::ExtensionsController do
   end
 
   describe 'GET #show' do
+
+    before do 
+      version.config['builds'].each do |build|
+        version.release_assets << build(:release_asset,
+          platform: build['platform'],
+          arch: build['arch'],
+          viable: build['viable'],
+          github_asset_sha: build['asset_sha'],
+          github_asset_url: build['asset_url'],
+          github_sha_filename: build['sha_filename'],
+          github_base_filename: build['base_filename'],
+          github_asset_filename: build['asset_filename']
+        )
+      end
+    end
     subject do
       get :show,
           params: {id:       extension,
@@ -53,7 +55,7 @@ describe Api::V1::ExtensionsController do
     it 'returns the proper data' do
       subject
       data = JSON.parse(response.body)
-      expect(data["builds"].first["asset_sha"]).to eql(sha)
+      expect(data['versions'][0]['assets'].length).to eql(2)
     end
   end
 end

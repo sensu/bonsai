@@ -13,7 +13,6 @@ describe ExtensionVersionsHelper do
   describe "gather_viable_release_assets" do
     context "version has no viable release assets" do
       it "returns an empty array" do
-        expect(helper.gather_viable_release_assets(extension_version)).to be_a(Array)
         expect(helper.gather_viable_release_assets(extension_version)).to be_empty
       end
     end
@@ -23,10 +22,23 @@ describe ExtensionVersionsHelper do
         extension_version.config = {"builds" => [{"viable"=>true, "asset_url" => "http://url.com"}]}
       end
 
+      before do 
+        extension_version.config['builds'].each do |build|
+          extension_version.release_assets << build(:release_asset,
+            platform: build['platform'],
+            arch: build['arch'],
+            viable: build['viable'],
+            github_asset_sha: build['asset_sha'],
+            github_asset_url: build['asset_url'],
+            github_sha_filename: build['sha_filename'],
+            github_base_filename: build['base_filename'],
+            github_asset_filename: build['asset_filename']
+          )
+        end
+      end
+
       it "returns an array of ReleaseAsset objects" do
         result = helper.gather_viable_release_assets(extension_version)
-
-        expect(result).to be_a(Array)
         expect(result).to_not be_empty
         result.each do |obj|
           expect(obj).to be_a(ReleaseAsset)
@@ -73,6 +85,21 @@ describe ExtensionVersionsHelper do
 
       before do
         expect(extension_version.config).to be_present
+      end
+
+      before do 
+        extension_version.config['builds'].each do |build|
+          extension_version.release_assets << build(:release_asset,
+            platform: build['platform'],
+            arch: build['arch'],
+            viable: build['viable'],
+            github_asset_sha: build['asset_sha'],
+            github_asset_url: build['asset_url'],
+            github_sha_filename: build['sha_filename'],
+            github_base_filename: build['base_filename'],
+            github_asset_filename: build['asset_filename']
+          )
+        end
       end
 
       it "returns non-empty collections" do
