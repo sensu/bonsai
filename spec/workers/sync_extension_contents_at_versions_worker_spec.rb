@@ -23,7 +23,7 @@ describe SyncExtensionContentsAtVersionsWorker do
 
   describe 'tag checking' do
     it 'honors semver tags' do
-      tags = ["0.01"]   # is semver-conformant
+      tags = ["0.0.1"]   # is semver-conformant
 
       expect {
         subject.perform(extension, tags)

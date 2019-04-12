@@ -119,6 +119,8 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
             @s3_bucket.object(key).put(body: file)
           end
           puts "S3 success: #{key}"
+          s3_uri = URI(@s3_bucket.object(key).public_url)
+          s3_last_modified = @s3_bucket.object(key).last_modified
         rescue OpenURI::HTTPError => error
           status = error.io.status[0]
           message = error.io.status[1]
@@ -129,8 +131,6 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
           next
         end
 
-        s3_uri = URI(@s3_bucket.object(key).public_url)
-        s3_last_modified = @s3_bucket.object(key).last_modified
         s3_uri.host = ENV['AWS_S3_VANITY_HOST']
         release_asset.update_columns(s3_url: s3_uri.to_s, s3_last_modified: s3_last_modified)
 
