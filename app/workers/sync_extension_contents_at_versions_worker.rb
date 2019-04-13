@@ -8,8 +8,10 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
     )
 
     @s3_bucket = s3.bucket(ENV['AWS_S3_ASSETS_BUCKET'])
-    unless @s3_bucket.exists?
-      raise RuntimeError.new("S3 error: #{ENV['AWS_S3_ASSETS_BUCKET']} bucket not found")
+    begin
+      raise RuntimeError.new("S3 error: #{ENV['AWS_S3_ASSETS_BUCKET']} bucket not found") unless @s3_bucket.exists?
+    rescue
+      raise RuntimeError.new("S3 error: network connection to S3 failed")
     end
   end
 

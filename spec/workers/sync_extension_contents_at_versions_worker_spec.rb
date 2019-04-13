@@ -19,6 +19,26 @@ describe SyncExtensionContentsAtVersionsWorker do
     FileUtils.mkdir_p extension.repo_path
     allow_any_instance_of(CmdAtPath).to receive(:cmd) { "" }
     allow_any_instance_of(Octokit::Client).to receive(:releases) { [release_data] }
+
+    s3 = Aws::S3::Resource.new(
+      access_key_id: ENV['AWS_S3_KEY_ID'],
+      secret_access_key: ENV['AWS_S3_ACCESS_KEY'],
+      region: ENV['AWS_S3_REGION']
+    )
+    @s3_bucket = s3.bucket(ENV['AWS_S3_ASSETS_BUCKET'])
+
+    begin
+      stub_aws unless @s3_bucket.exists?
+    rescue
+      stub_aws
+    end
+    
+
+  end
+
+  def stub_aws
+    Aws::S3::Resource.any_instance.stub_chain(:bucket, :exists?).and_return(true)
+    Aws::S3::Resource.any_instance.stub_chain(:bucket, :object, :exists?).and_return(true)
   end
 
   describe 'tag checking' do
