@@ -27,13 +27,13 @@ describe SyncExtensionContentsAtVersionsWorker do
     )
     @s3_bucket = s3.bucket(ENV['AWS_S3_ASSETS_BUCKET'])
 
+    # trap incorrect ENV variables (Travis) or no network connection
     begin
       stub_aws unless @s3_bucket.exists?
     rescue
       stub_aws
     end
     
-
   end
 
   def stub_aws
