@@ -12,7 +12,7 @@ class CompileExtension
     if extension.hosted?
       compile_hosted_extension(extension)
     else
-      SyncExtensionRepoWorker.perform_async(extension)
+      SyncExtensionRepoWorker.perform_async(extension.id)
     end
   end
 

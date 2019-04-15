@@ -19,10 +19,11 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
     @logger ||= Logger.new("log/scan.log")
   end
 
-  def perform(extension, tags, compatible_platforms = [], release_infos_by_tag = {})
-    logger.info("PERFORMING: #{extension.id}, #{tags.inspect}, #{compatible_platforms.inspect}")
+  def perform(extension_id, tags, compatible_platforms = [], release_infos_by_tag = {})
 
-    @extension = extension
+    logger.info("PERFORMING: #{extension_id}, #{tags.inspect}, #{compatible_platforms.inspect}")
+
+    @extension = Extension.find_by(id: extension_id)
     raise RuntimeError.new("#{I18n.t('nouns.extension')} not found.") unless @extension
 
     @extension.with_lock do
@@ -91,6 +92,7 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
           platform: build['platform'],
           arch: build['arch'],
           viable: build['viable'],
+          filter: Array.wrap(build['filter']),
           commit_sha: version.last_commit_sha,
           commit_at: version.last_commit_at,
           github_asset_sha: build['asset_sha'],
@@ -112,31 +114,34 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
 
       key = release_asset.destination_pathname
 
-      if @s3_bucket.object(key).exists?
-        puts "Already on S3: #{key}"
-        next
-      else
-        begin
+      object_exists = @s3_bucket.object(key).exists?
+      puts "Already on S3: #{key}" if object_exists
+     
+      begin
+        unless object_exists
           url.open do |file|
-            @s3_bucket.object(key).put(body: file)
+            @s3_bucket.object(key).put(body: file, acl: 'public-read')
           end
           puts "S3 success: #{key}"
-          s3_uri = URI(@s3_bucket.object(key).public_url)
-          s3_last_modified = @s3_bucket.object(key).last_modified
-        rescue OpenURI::HTTPError => error
-          status = error.io.status[0]
-          message = error.io.status[1]
-          puts "****** file read error: #{status} - #{message}"
-          next
-        rescue Aws::S3::Errors::ServiceError => error 
-          puts "****** S3 error: #{error.code} - #{error.message}"
-          next
         end
+        uri = URI(@s3_bucket.object(key).public_url)
+        last_modified = @s3_bucket.object(key).last_modified
+      rescue OpenURI::HTTPError => error
+        status = error.io.status[0]
+        message = error.io.status[1]
+        puts "****** file read error: #{status} - #{message}"
+        next
+      rescue Aws::S3::Errors::ServiceError => error 
+        puts "****** S3 error: #{error.code} - #{error.message}"
+        next
+      end
 
-        s3_uri.host = ENV['AWS_S3_VANITY_HOST']
-        release_asset.update_columns(s3_url: s3_uri.to_s, s3_last_modified: s3_last_modified)
+      if ENV['AWS_S3_VANITY_HOST'].present?
+        uri.host = ENV['AWS_S3_VANITY_HOST'] 
+        puts "******** Updating vanity_url: #{uri.host}"
+      end
+      release_asset.update_columns(vanity_url: uri.to_s, last_modified: last_modified)
 
-      end # object.exists?
     end # builds.each
   end # persist_assets
 

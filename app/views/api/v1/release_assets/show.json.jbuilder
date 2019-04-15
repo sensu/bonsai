@@ -10,9 +10,9 @@ json.metadata do
 end
 
 json.spec do
-  json.url     					@release_asset.github_asset_url
-  json.sha512  					@release_asset.github_asset_sha
-  json.s3_url  					@release_asset.s3_url
-  json.s3_last_modified @release_asset.s3_last_modified
-  #json.filters Array.wrap(@release_asset.filter)
+  json.url     				@release_asset.github_asset_url
+  json.sha512  				@release_asset.github_asset_sha
+  json.asset_url  		@release_asset.vanity_url
+  json.last_modified  @release_asset.last_modified
+  json.filters        @release_asset.filter
 end

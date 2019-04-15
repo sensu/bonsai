@@ -46,7 +46,7 @@ describe SyncExtensionContentsAtVersionsWorker do
       tags = ["0.0.1"]   # is semver-conformant
 
       expect {
-        subject.perform(extension, tags)
+        subject.perform(extension.id, tags)
       }.to change{ExtensionVersion.count}.by 1
     end
 
@@ -54,7 +54,7 @@ describe SyncExtensionContentsAtVersionsWorker do
       tags = ["v0.1A20180919"]  # is not semver-conformant
 
       expect {
-        subject.perform(extension, tags)
+        subject.perform(extension.id, tags)
       }.not_to change{ExtensionVersion.count}
     end
   end
@@ -65,7 +65,7 @@ describe SyncExtensionContentsAtVersionsWorker do
     let(:tags)                  { release_infos_by_tag.keys }
 
     it 'puts the release notes into the release notes field' do
-      subject.perform(extension, tags, [], release_infos_by_tag)
+      subject.perform(extension.id, tags, [], release_infos_by_tag)
       expect(extension.reload.extension_versions.last.release_notes).to eq body
     end
   end

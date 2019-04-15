@@ -25,7 +25,14 @@ namespace 'extension' do
 				worker.send(:persist_assets, version)
 			end
 		end
+	end
 
+	task :delete_release_assets => :environment do
+		# note that this doesn't delete the physical asset on S3
+		extension_ids = Extension.not_hosted.pluck(:id)
+		version_ids = ExtensionVersion.where(extension_id: extension_ids).pluck(:id)
+		assets = ReleaseAsset.where(extension_version_id: version_ids)
+		assets.delete_all
 	end
 	
 end

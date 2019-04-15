@@ -5,8 +5,8 @@ class PollExtensionReposWorker < ApplicationWorker
   # recurrence { daily }
 
   def perform
-    Extension.where("updated_at < ?", Time.now - 24.hours).pluck(:id).each do |eid|
-      CollectExtensionMetadataWorker.perform_async(eid)
+    Extension.where("updated_at < ?", Time.now - 24.hours).each do |extension|
+      CollectExtensionMetadataWorker.perform_async(extension)
     end
   end
 end

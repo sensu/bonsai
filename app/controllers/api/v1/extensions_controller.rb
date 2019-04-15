@@ -40,19 +40,17 @@ class Api::V1::ExtensionsController < Api::V1Controller
                     "platform": "linux",
                     "arch": "x86_64",
                     "version": "0.1.1-20181030",
-                    "asset_url": "https://github.com/demillir/maruku/releases/download/v0.1-20181022/test_asset-v0.1-20181030-linux-x86_64.tar.gz",
                     "asset_sha": "6f2121a6c8690f229e9cb962d8d71f60851684284755d4cdba4e77ef7ba20c03283795c4fccb9d6ac8308b248f2538bf7497d6467de0cf9e9f0814625b4c6f91",
-                    "s3_url": "http://srv2:3000/f60851684284755d4cdba4e77ef7ba2/test_asset-v0.1-20181030-linux-x86_64.tar.gz",
-                    "s3_last_modified": "2019-01-01 12:00:00"
+                    "asset_url": "http://srv2:3000/f60851684284755d4cdba4e77ef7ba2/test_asset-v0.1-20181030-linux-x86_64.tar.gz",
+                    "last_modified": "2019-01-01 12:00:00"
                   },
                   {
                     "platform": "alpine",
                     "arch": "x86_64",
                     "version": "v0.1-20181030",
-                    "asset_url": null,
                     "asset_sha": null,
-                    "s3_url": null,
-                    "s3_last_modified": null
+                    "asset_url": null,
+                    "last_modified": null
                   }
                 ]
               }
@@ -100,19 +98,17 @@ class Api::V1::ExtensionsController < Api::V1Controller
               "platform": "linux",
               "arch": "x86_64",
               "version": "0.1.1-20181022",
-              "asset_url": "https://github.com/demillir/maruku/releases/download/v0.1-20181022/test_asset-0.1.1-20181030-linux-x86_64.tar.gz",
               "asset_sha": "6f2121a6c8690f229e9cb962d8d71f60851684284755d4cdba4e77ef7ba20c03283795c4fccb9d6ac8308b248f2538bf7497d6467de0cf9e9f0814625b4c6f91",
-              "s3_url": "http://srv2:3000/api/v1/assets/demillir/maruku/0.1.1-20181030/linux/x86_64/release_asset",
-              "s3_last_modified": "2019-01-01 12:00:00"
+              "asset_url": "http://srv2:3000/api/v1/assets/demillir/maruku/0.1.1-20181030/linux/x86_64/release_asset",
+              "last_modified": "2019-01-01 12:00:00"
             },
             {
               "platform": "alpine",
               "arch": "x86_64",
               "version": "0.1.1-20181030",
-              "asset_url": null,
               "asset_sha": null,
-              "s3_url": null,
-              "s3_last_modified": null
+              "asset_url": null,
+              "last_modified": null
             }
           ]
         }

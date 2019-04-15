@@ -334,7 +334,7 @@ class ExtensionsController < ApplicationController
   #
   def webhook
     # TODO: Don't do a full update on watch event
-    CollectExtensionMetadataWorker.perform_async(@extension.id, [])
+    CollectExtensionMetadataWorker.perform_async(@extension, [])
     head :ok
   end
 
