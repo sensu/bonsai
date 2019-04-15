@@ -114,7 +114,7 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
 
       key = release_asset.destination_pathname
 
-      object_exists = @s3_bucket.object(key).exists?
+      object_exists = false # @s3_bucket.object(key).exists?
       puts "Already on S3: #{key}" if object_exists
      
       begin
