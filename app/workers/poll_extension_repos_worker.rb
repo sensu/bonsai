@@ -6,7 +6,7 @@ class PollExtensionReposWorker < ApplicationWorker
 
   def perform
     Extension.where("updated_at < ?", Time.now - 24.hours).each do |extension|
-      CollectExtensionMetadataWorker.perform_async(extension)
+      CollectExtensionMetadataWorker.perform_async(extension.id)
     end
   end
 end
