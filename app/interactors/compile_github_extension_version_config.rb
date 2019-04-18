@@ -93,13 +93,13 @@ class CompileGithubExtensionVersionConfig
     asset_filename    = File.basename(compiled_asset_filename)
     file_download_url = github_download_url(compiled_asset_filename, github_asset_data_hashes_lut)
 
-    sha = read_sha_file(compiled_sha_filename, asset_filename, github_asset_data_hashes_lut)
-
+    sha_result = read_sha_file(compiled_sha_filename, asset_filename, github_asset_data_hashes_lut)
+    
     return {
       'viable'        => file_download_url.present?,
       'asset_url'     => file_download_url,
       'base_filename' => asset_filename,
-      'asset_sha'     => sha
+      'asset_sha'     => sha_result.sha
     }
   end
 

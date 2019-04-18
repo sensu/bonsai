@@ -115,7 +115,7 @@ module ApplicationHelper
                           .map(&:to_a)
                           .flatten(1)
                           .uniq
-
+    
     pairs_of_interest
       .group_by(&:first)
       .transform_values { |arrs|

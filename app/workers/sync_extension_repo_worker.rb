@@ -2,7 +2,7 @@ class SyncExtensionRepoWorker < ApplicationWorker
 
   def perform(extension_id, compatible_platforms = [])
     @extension = Extension.find_by(id: extension_id)
-    raise RuntimeError.new("#{I18n.t('nouns.extension')} not found.") unless @extension
+    raise RuntimeError.new("#{I18n.t('nouns.extension')} ID: #{extension_id} not found.") unless @extension
     releases = @extension.octokit.releases(@extension.github_repo)
 
     @extension.with_lock do

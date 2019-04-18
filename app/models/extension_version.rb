@@ -1,6 +1,6 @@
 class ExtensionVersion < ApplicationRecord
   include SeriousErrors
-
+  
   # Associations
   # --------------------
   has_many :extension_version_platforms

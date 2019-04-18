@@ -8,10 +8,10 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
 
   def perform(extension_id, tags, compatible_platforms = [], release_infos_by_tag = {})
 
-    logger.info("PERFORMING: #{extension_id}, #{tags.inspect}, #{compatible_platforms.inspect}")
-
     @extension = Extension.find_by(id: extension_id)
-    raise RuntimeError.new("#{I18n.t('nouns.extension')} not found.") unless @extension
+    raise RuntimeError.new("#{I18n.t('nouns.extension')} ID: #{extension_id.inspect} not found.") unless @extension
+
+    logger.info("PERFORMING: #{@extension.inspect}, #{tags.inspect}, #{compatible_platforms.inspect}")
 
     @extension.with_lock do
       @tags = tags
@@ -49,7 +49,7 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
 
   def perform_next
     if @tags.any?
-      self.class.perform_async(@extension, @tags, @compatible_platforms, @release_infos_by_tag)
+      self.class.perform_async(@extension.id, @tags, @compatible_platforms, @release_infos_by_tag)
     end
   end
 
@@ -183,10 +183,12 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
 
   def scan_config_yml_file(version)
     compilation_result = CompileGithubExtensionVersionConfig.call(version: version, system_command_runner: @run)
-    if compilation_result.success?
+    if compilation_result.success? && compilation_result.data_hash.present? && compilation_result.data_hash.is_a?(Hash)
       version.update_columns(config: compilation_result.data_hash, compilation_error: nil)
-    else
+    elsif compilation_result.error.present?
       version.update_column(:compilation_error, compilation_result.error)
+    else
+      version.update_column(:compilation_error, "Compile Github Extension Version ID #{version.id} Config failed.")
     end
   end
 
