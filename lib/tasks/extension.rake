@@ -26,7 +26,7 @@ namespace 'extension' do
 		end
 	end
 
-	task :update_hosted_verson_last_commit => :environment do
+	task :update_hosted_version_last_commit => :environment do
 		Extension.hosted.each do |extension|
 			puts "Updating versions for #{extension.name}"
 			extension.extension_versions.each do |version|
