@@ -128,7 +128,8 @@ class ExtensionVersion < ApplicationRecord
       compilation_error: metadata[:compilation_error],
     )
 
-    WarmUpReleaseAssetCacheJob.perform_later self
+    PersistAssetsWorker.perform_async(self.id)
+    #WarmUpReleaseAssetCacheJob.perform_later self
   end
 
   private

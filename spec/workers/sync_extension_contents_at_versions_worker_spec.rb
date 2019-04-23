@@ -72,13 +72,4 @@ describe SyncExtensionContentsAtVersionsWorker do
     end
   end
 
-  describe 'persist_assets' do
-    let (:version) { create :extension_version_with_config }
-
-    it 'creates release assets' do
-      expect {
-        subject.send(:persist_assets, version)
-      }.to change{version.release_assets.count}.by(2)
-    end
-  end
 end

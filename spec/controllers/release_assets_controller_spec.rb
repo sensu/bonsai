@@ -27,11 +27,11 @@ describe ReleaseAssetsController do
         platform: build['platform'],
         arch: build['arch'],
         viable: build['viable'],
-        github_asset_sha: build['asset_sha'],
-        github_asset_url: build['asset_url'],
-        github_sha_filename: build['sha_filename'],
-        github_base_filename: build['base_filename'],
-        github_asset_filename: build['asset_filename']
+        source_asset_sha: build['asset_sha'],
+        source_asset_url: build['asset_url'],
+        source_sha_filename: build['sha_filename'],
+        source_base_filename: build['base_filename'],
+        source_asset_filename: build['asset_filename']
       )
     end
   end

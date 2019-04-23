@@ -27,11 +27,11 @@ class ReleaseAssetsController < ApplicationController
   end
 
   def asset_file
-    send_file_content(:github_asset_filename)
+    send_file_content(:source_asset_filename)
   end
 
   def sha_file
-    send_file_content(:github_sha_filename)
+    send_file_content(:source_sha_filename)
   end
 
   private
@@ -50,6 +50,6 @@ class ReleaseAssetsController < ApplicationController
     content = result.content
     raise ActiveRecord::RecordNotFound if content.nil?
 
-    send_data content, filename: release_asset.github_base_filename
+    send_data content, filename: release_asset.source_base_filename
   end
 end

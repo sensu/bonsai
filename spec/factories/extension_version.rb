@@ -53,4 +53,36 @@ FactoryBot.define do
     }
   end
 
+  factory :extension_version_with_hosted_config, class: ExtensionVersion, parent: :extension_version do
+    config {
+      { builds: [
+        { arch: 'amd64',
+          viable: true,
+          filter: [
+            "entity.system.os == 'linux'",
+            "entity.system.arch == 'amd64'",
+          ],
+          platform: 'linux',
+          asset_sha: 'a7d4fa585758289ba0aaacd768426e6e80063d8a026f5a7f6fed9a9981baf6e8af32d5b9101bea22810b7965f7e2348b65bcdc28cc5b9087e4e7a51a5fd7561c',
+          asset_url: 'https://bonsai.sensu.io/release_assets/sensu/sensu-relay-handler/0.0.7/linux/amd64/asset_file',
+          sha_filename: '#{repo}_#{version}_sha512-checksums.txt',
+          base_filename: 'sensu-relay-handler_0.0.7_linux_amd64.tar.gz',
+          asset_filename: '#{repo}_#{version}_linux_amd64.tar.gz',
+        },
+        { arch: '386',
+          viable: true,
+          filter: [
+            "entity.system.os == 'linux'",
+            "entity.system.arch == '386'",
+          ],
+          platform: 'linux',
+          asset_sha: '27c5da943d2ffc9da28d25f189e6cd950fc7466746e53b8e9b4458142bbdb2d3b1e2868a5d868f58387176a260d52f8547ff1d50bec7a473eb0dfa454d2c7037',
+          asset_url: 'https://bonsai.sensu.io/release_assets/sensu/sensu-relay-handler/0.0.7/linux/386/asset_file',
+          sha_filename: '#{repo}_#{version}_sha512-checksums.txt',
+          base_filename: 'sensu-relay-handler_0.0.7_linux_386.tar.gz',
+          asset_filename: '#{repo}_#{version}_linux_386.tar.gz'
+        }
+      ]}
+    }
+  end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_15_200611) do
+ActiveRecord::Schema.define(version: 2019_04_20_155334) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -425,16 +425,17 @@ ActiveRecord::Schema.define(version: 2019_04_15_200611) do
     t.boolean "viable"
     t.string "commit_sha"
     t.datetime "commit_at"
-    t.string "github_asset_sha"
-    t.string "github_asset_url"
-    t.string "github_sha_filename"
-    t.string "github_base_filename"
-    t.string "github_asset_filename"
+    t.string "source_asset_sha"
+    t.string "source_asset_url"
+    t.string "source_sha_filename"
+    t.string "source_base_filename"
+    t.string "source_asset_filename"
     t.string "vanity_url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "last_modified"
     t.text "filter"
+    t.text "annotations"
     t.index ["arch"], name: "index_release_assets_on_arch"
     t.index ["commit_sha"], name: "index_release_assets_on_commit_sha"
     t.index ["extension_version_id"], name: "index_release_assets_on_extension_version_id"

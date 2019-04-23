@@ -1,7 +1,5 @@
 class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
 
-  include ReleaseAssetWrapper
-
   def logger
     @logger ||= Logger.new("log/scan.log")
   end
@@ -43,7 +41,7 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
     set_commit_count(version)
     scan_files(version)
     sync_release_info(version, release_info)
-    persist_assets(version)
+    PersistAssets.call(version: version)
     version.save
   end
 

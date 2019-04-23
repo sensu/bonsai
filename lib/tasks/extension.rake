@@ -18,21 +18,33 @@ namespace 'extension' do
 	end
 
 	task :update_s3_store => :environment do
-		worker = SyncExtensionContentsAtVersionsWorker.new
-		Extension.not_hosted.each do |extension|
+		Extension.all.each do |extension|
 			puts "Copying assets for #{extension.name}"
 			extension.extension_versions.each do |version|
-				worker.send(:persist_assets, version)
+				PersistAssets.call(version: version)
+			end
+		end
+	end
+
+	task :update_hosted_verson_last_commit => :environment do
+		Extension.hosted.each do |extension|
+			puts "Updating versions for #{extension.name}"
+			extension.extension_versions.each do |version|
+				if version.source_file.attached?
+					last_commit_sha = version.source_file.blob.checksum
+					puts "Updating last commit for #{version.version}"
+	      	version.update_columns(last_commit_sha:  last_commit_sha, last_commit_at: DateTime.now)
+	      end
 			end
 		end
 	end
 
 	task :delete_release_assets => :environment do
+		# do not delete release assets not associated with version
 		# note that this doesn't delete the physical asset on S3
-		extension_ids = Extension.not_hosted.pluck(:id)
-		version_ids = ExtensionVersion.where(extension_id: extension_ids).pluck(:id)
-		assets = ReleaseAsset.where(extension_version_id: version_ids)
-		assets.delete_all
+		version_ids = ExtensionVersion.all.each do |version|
+			version.release_assets.delete_all
+		end
 	end
 	
 end

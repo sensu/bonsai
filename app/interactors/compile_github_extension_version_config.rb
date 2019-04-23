@@ -23,9 +23,9 @@ class CompileGithubExtensionVersionConfig
     config_hash['builds'] = compile_builds(version, config_hash['builds'])
 
     context.data_hash = config_hash
-  rescue => boom
-    raise if Interactor::Failure === boom   # Don't trap context.fail! calls
-    context.fail!(error: "could not compile the Bonsai configuration file: #{boom}")
+  rescue => error
+    raise if Interactor::Failure === error   # Don't trap context.fail! calls
+    context.fail!(error: "could not compile the Bonsai configuration file: #{error}")
   end
 
   private
@@ -44,8 +44,8 @@ class CompileGithubExtensionVersionConfig
     body = cmd_runner.cmd("cat '#{path}'")
     begin
       config_hash = YAML.load(body.to_s)
-    rescue => boom
-      context.fail!(error: "cannot parse the Bonsai configuration file: #{boom.message}")
+    rescue => error
+      context.fail!(error: "cannot parse the Bonsai configuration file: #{error.message}")
     end
 
     context.fail!(error: "Bonsai configuration is invalid") unless config_hash.is_a?(Hash)
