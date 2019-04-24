@@ -1,9 +1,11 @@
 require 'spec_helper'
 
 describe 'api/v1/release_assets/show' do
-  let(:version)  { create :extension_version_with_config }
+  let(:extension) { create :extension }
+  let(:version)  { create :extension_version_with_config, extension: extension }
   
   before do
+    extension.tags << Tag.new(name: 'label')
     version.config['builds'].each do |build|
       version.release_assets << build(:release_asset,
         platform: build['platform'],
@@ -39,5 +41,13 @@ describe 'api/v1/release_assets/show' do
 
   it "serializes the namespace" do
     expect(json_body['metadata']['namespace']).to eql(@asset.extension_namespace)
+  end
+
+  it "includes extension labels" do
+    expect(json_body['metadata']['labels']).to eql(@asset.extension.tags.map(&:name))
+  end
+
+  it "includes annotations" do
+    expect(json_body['metadata']['annotations']).to eq({})
   end
 end

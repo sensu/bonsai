@@ -26,8 +26,16 @@ describe ReleaseAsset do
       
       let(:asset) {version.release_assets.first}
 
-      it 'includes a licensing message' do
-        expect( asset.annotations.keys ).to include('bonsai.sensu.io.message')
+      it 'responds to destination pathname' do
+        expect(asset.destination_pathname).to include(asset.source_asset_filename)
+      end
+
+      it 'responds to viable?' do
+        expect(asset.viable?).to be_truthy
+      end
+
+      it 'responds to labels' do 
+        expect(asset.labels).to eq([])
       end
     end
   end

@@ -11,8 +11,6 @@ class ReleaseAsset < ApplicationRecord
   delegate :owner_name,          to: :extension_version, allow_nil: true
   delegate :version,             to: :extension_version, allow_nil: true
 
-  before_validation :update_annotations
-
   def viable?
     viable
   end
@@ -21,12 +19,8 @@ class ReleaseAsset < ApplicationRecord
     "#{commit_sha}/#{source_asset_filename}"
   end
 
-  private 
-
-  def update_annotations
-    if extension && extension.hosted? && self.annotations['bonsai.sensu.io.message'].blank?
-      self.annotations['bonsai.sensu.io.message'] = "This asset is for users with a valid Enterprise license"
-    end
+  def labels
+    extension.tags.map(&:name)
   end
 
 end

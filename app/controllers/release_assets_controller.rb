@@ -1,14 +1,19 @@
 class ReleaseAssetsController < ApplicationController
 
+  include Annotations
+
   def download
     extension = Extension.with_owner_and_lowercase_name(owner_name: params[:username], lowercase_name: params[:extension_id])
     version = extension.extension_versions.find_by!(version: params[:version])
     @release_asset = version.release_assets.find_by(platform: params[:platform], arch: params[:arch])
 
-    raise ActiveRecord::RecordNotFound unless @release_asset
-    raise ActiveRecord::RecordNotFound unless @release_asset.viable?
+    if !@release_asset || !@release_asset.viable?
+      raise ActiveRecord::RecordNotFound 
+    end
 
     raise ActiveRecord::RecordNotFound if extension.hosted? && !params[:acknowledge]
+
+    @release_asset.annotations.merge!( common_annotations(extension, version, @release_asset) )
 
     filename = [
       extension.namespace,
