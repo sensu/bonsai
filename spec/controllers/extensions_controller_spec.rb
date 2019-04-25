@@ -111,4 +111,25 @@ describe ExtensionsController do
       put :sync_repo, params: params
     end
   end
+
+  describe "deprecate" do
+    context "with a replacement" do
+      let(:extension) { create :extension }
+      let(:replacement_extension) { create :extension }
+      let(:params){{
+        id:       extension.lowercase_name,
+        username: extension.owner_name,
+        extension: {
+          replacement:  "#{replacement_extension.owner_name},#{replacement_extension.lowercase_name}"
+        }
+      }}
+
+      it "succeeds" do
+        put :deprecate, params: params
+        expect(response.redirect?).to be_truthy
+        expect(response.status).to eq(302)
+      end
+    end
+  end
+
 end
