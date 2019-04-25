@@ -440,7 +440,7 @@ class Extension < ApplicationRecord
   # @return [Array<Extension> the +Extension+ search results
   #
   def deprecate_search(query)
-    Extension.search(query).where(deprecated: false).where.not(id: id)
+    Extension.where("extensions.lowercase_name ILIKE '#{query}%'").where(deprecated: false).where.not(id: self.id).order(:lowercase_name, :owner_name)
   end
 
   #

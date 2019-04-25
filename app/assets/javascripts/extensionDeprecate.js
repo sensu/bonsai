@@ -17,13 +17,13 @@ $(document).on('opened', '[data-reveal]', function () {
       },
     },
     id: function(object) {
-      return object.extension_name;
+      return [object.extension_owner, object.extension_name];
     },
     formatSelection: function(object, container) {
-      return object.extension_name;
+      return [object.extension_owner, object.extension_name].join('/');
     },
     formatResult: function(object, container) {
-      return object.extension_name;
+      return [object.extension_owner, object.extension_name].join('/');
     }
   }
 

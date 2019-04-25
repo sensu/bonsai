@@ -192,18 +192,18 @@ class ExtensionsController < ApplicationController
   #
   def deprecate
     authorize! @extension
-
-    replacement_extension = Extension.with_owner_and_lowercase_name(owner_name: params[:username], lowercase_name: extension_deprecation_params[:replacement])
+    replacement = extension_deprecation_params[:replacement].split(',')
+    owner_name, lowercase_name = replacement[0].strip, replacement[1].strip
+    replacement_extension = Extension.with_owner_and_lowercase_name(owner_name: owner_name, lowercase_name: lowercase_name )
 
     if @extension.deprecate(replacement_extension)
       ExtensionDeprecatedNotifier.perform_async(@extension.id)
-
       redirect_to(
         owner_scoped_extension_url(@extension),
         notice: t(
           'extension.deprecated',
-          extension: @extension.name,
-          replacement_extension: replacement_extension.name
+          extension: "#{@extension.owner_name}/#{@extension.name}",
+          replacement_extension: "#{replacement_extension.owner_name}/#{replacement_extension.name}"
         )
       )
     else
