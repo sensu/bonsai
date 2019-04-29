@@ -14,7 +14,7 @@ class ExtensionMailer < ApplicationMailer
     @email_preference = user.email_preference_for('New extension version')
     @to = user.email
 
-    mail(to: @to, subject: "A new version of the #{@extension_version.name} #{I18n.t('nouns.extension')} has been released")
+    mail(to: @to, subject: "A new version of the #{@extension_version.name} #{I18n.t('nouns.extension')} has been released") unless @to.blank?
   end
 
   #
@@ -29,7 +29,7 @@ class ExtensionMailer < ApplicationMailer
     @email_preference = user.email_preference_for('Extension deleted')
     @to = user.email
 
-    mail(to: @to, subject: "The #{name} #{I18n.t('nouns.extension')} has been deleted")
+    mail(to: @to, subject: "The #{name} #{I18n.t('nouns.extension')} has been deleted") unless @to.blank?
   end
 
   #
@@ -52,7 +52,7 @@ class ExtensionMailer < ApplicationMailer
       of the #{@replacement_extension.name} #{I18n.t('nouns.extension')}
     ).squish
 
-    mail(to: @to, subject: subject)
+    mail(to: @to, subject: subject) unless @to.blank?
   end
 
   #
@@ -89,7 +89,7 @@ class ExtensionMailer < ApplicationMailer
 
     @subject = %(New #{I18n.t('nouns.extension')} "#{@extension.name}" has been added to the Bonsai Asset Index)
 
-    mail(to: @moderator.email, subject: @subject)
+    mail(to: @moderator.email, subject: @subject) unless @moderator.email.blank?
   end
 
   #
@@ -107,6 +107,6 @@ class ExtensionMailer < ApplicationMailer
 
     @subject = %(#{I18n.t('nouns.extension').capitalize} "#{@extension.name}" reported)
 
-    mail(to: @moderator.email, subject: @subject)
+    mail(to: @moderator.email, subject: @subject) unless @moderator.email.blank?
   end
 end
