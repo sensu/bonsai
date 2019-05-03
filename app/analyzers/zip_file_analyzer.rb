@@ -37,6 +37,6 @@ class ZipFileAnalyzer < ActiveStorage::Analyzer
 
   def zipped_file_reader(files, file_path)
     entry = files.find_entry(file_path)
-    entry.get_input_stream.read.encode('utf-8', invalid: :replace, undef: :replace, replace: '_')
+    entry.get_input_stream.read
   end
 end
