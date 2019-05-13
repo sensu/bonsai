@@ -7,6 +7,13 @@ class ExtensionAuthorizer < Authorizer::Base
   end
 
   #
+  # Owners of an extension and admins can update an extension.
+  #
+  def update?
+    owner_or_admin?
+  end
+
+  #
   # Owners of an extension can destroy an extension.
   #
   def destroy?

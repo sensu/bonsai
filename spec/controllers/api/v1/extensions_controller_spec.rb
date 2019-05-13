@@ -58,4 +58,45 @@ describe Api::V1::ExtensionsController do
       expect(data['versions'][0]['assets'].length).to eql(2)
     end
   end
+
+  describe 'PUT #update' do
+    let!(:user) { create(:admin) }
+
+    context 'when a user is not authorized' do
+      subject do
+        request.headers.merge!({'X-Ops-Userid' => 'unauthorized'})
+        put :update,
+          params: {id:       extension,
+                   username: extension.owner_name},
+          format: :json
+      end
+
+      it 'responds with a 401' do
+        subject
+        expect(response.status.to_i).to eql(401)
+        expect(response.body).to include("Could not find user")
+      end
+    end
+
+    context 'when a user is authorized' do
+      subject do
+        request.headers.merge!({'X-Ops-Userid' => user.username})
+        put :update,
+          params: {id:       extension,
+                   username: extension.owner_name,
+                    extension: {
+                      tag_tokens: 'larry, moe, curly',
+                    }
+                  },
+          format: :json
+      end
+      it 'succeeds' do
+        subject
+        expect(response).to be_successful
+        extension.reload
+        expect(extension.tags.map(&:name)).to include('curly')
+      end
+    end
+
+  end
 end

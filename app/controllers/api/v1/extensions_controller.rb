@@ -1,6 +1,10 @@
 class Api::V1::ExtensionsController < Api::V1Controller
   before_action :init_params, only: [:index]
 
+  before_action :authenticate_user!, only: [:update]
+
+  attr_reader :current_user
+
   resource_description do
     name 'Assets'
   end
@@ -118,5 +122,36 @@ class Api::V1::ExtensionsController < Api::V1Controller
   def show
     @extension = Extension.with_owner_and_lowercase_name(owner_name: params[:username], lowercase_name: params[:id])
   end
-  
+
+  api! <<~EOD
+    Update data for a single #{I18n.t('nouns.extension')}, identified by a username and repo ID.  
+
+    Currently limited to just updating tags.
+
+    The authentication headers consists of the following params:
+
+    'X-Ops-Userid' => "username" where username is the owner of the #{I18n.t('nouns.extension')} or the site admin.  This is required as authentication for each request.
+
+    Authentication headers example:
+      "X-Ops-Userid": "username",
+
+  EOD
+  error 401, I18n.t('api.error_messages.unauthorized_update_error')
+  param :username, String, required: true, desc: "Bonsai Asset Index user name of the asset owner"
+  param :id,       String, required: true, desc: "Bonsai Asset Index asset name"
+  param :extension, Hash, required: true do 
+    param :tag_tokens, String, 'String of comma seperated tags'
+  end
+  example "PUT https://#{ENV['HOST']}/api/v1/assets/demillir/maruku"
+  def update
+    @extension = Extension.with_owner_and_lowercase_name(owner_name: params[:username], lowercase_name: params[:id])
+    begin
+      authorize! @extension
+    rescue
+      render_not_authorized([t('api.error_messages.unauthorized_update_error')])
+    else
+      eparams = params.require(:extension).permit(:tag_tokens)
+      @extension.update_attributes(eparams)
+    end
+  end
 end
