@@ -61,7 +61,7 @@ describe TarBallAnalyzer do
       end
 
       it 'metadata is empty' do
-        expect(metadata).to eq({})
+        expect(metadata).to eq({readme_extension: "md"})
       end
     end
 
