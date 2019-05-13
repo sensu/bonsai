@@ -14,6 +14,7 @@ class Account < ApplicationRecord
   # Scope
   # --------------------
   scope :for, ->(id) { where(provider: id) }
+  scope :for_provider, ->{ where(provider: ENV['OAUTH_ACCOUNT_PROVIDER']) }
   scope :with_username, ->(username) { where(username: username) }
 
   private
