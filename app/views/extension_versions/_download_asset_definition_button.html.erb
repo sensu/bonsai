@@ -1,0 +1,27 @@
+<% if platform && arch && (!extension.hosted? || acknowledge) %>
+  <%= link_to "Download Asset Definition",
+              release_asset_download_path(
+                  extension,
+                  version,
+                  username: extension.owner_name,
+                  platform: platform,
+                  arch:     arch,
+                  acknowledge: acknowledge),
+              class: 'button primary tiny radius button_download_extension' %>
+<% else %>
+  <% msg = case
+           when !platform
+             "Please select a platform"
+           when !arch
+             "Please select an arch"
+           when extension.hosted? && !acknowledge
+             "Please acknowledge"
+           else
+             "Please select a platform and an arch"
+           end
+  %>
+  <%= link_to "Download Asset Definition",
+              "#",
+              onclick: "alert(\"#{msg}\")",
+              class:   'button primary tiny radius button_download_extension' %>
+<% end %>
