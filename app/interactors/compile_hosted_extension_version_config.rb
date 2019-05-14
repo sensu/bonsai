@@ -93,6 +93,13 @@ class CompileHostedExtensionVersionConfig
     file_download_url = hosted_download_url(build_config, num, version)
 
     expected_sha = read_sha_file(compiled_sha_filename, asset_filename, file_finder)
+    actual_sha   = begin
+      asset_file = file_finder.find(file_path: compiled_asset_filename)
+      Digest::SHA2.new(512).hexdigest(asset_file.read)
+    rescue
+      context.fail!(error: "build ##{num} asset file value cannot be read")
+    end
+    context.fail!(error: "build ##{num} asset file content does not match expected SHA-512") unless actual_sha == expected_sha
 
     return {
       'viable'        => file_download_url.present?,
