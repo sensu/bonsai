@@ -148,7 +148,7 @@ class Api::V1::ExtensionsController < Api::V1Controller
     rescue
       render_not_authorized([t('api.error_messages.unauthorized_recompile_error')])
     else
-      SyncExtensionRepoWorker.perform_async(extension.id)
+      CompileExtension.call(extension: extension)
       render json: {message: t("extension.syncing_in_progress")}, status: 202
     end
   end

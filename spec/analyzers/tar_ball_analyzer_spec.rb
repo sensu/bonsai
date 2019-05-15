@@ -60,9 +60,10 @@ describe TarBallAnalyzer do
         expect(metadata.keys).to_not include :readme
       end
 
-      it 'includes the extension' do
-        expect(metadata[:readme_extension]).to eq 'md'
-      end
+      #it 'metadata is empty' do
+      #  expect(metadata).to eq({})
+      #end
+
     end
 
     context 'tar ball is corrupted' do
