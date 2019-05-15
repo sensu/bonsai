@@ -27,7 +27,7 @@ describe SetUpHostedExtension do
       orig_owner_name = extension.owner_name
       subject
       extension.reload
-      expect(extension.owner_name).to be_present
+      expect(extension.owner_name).to     be_present
       expect(extension.owner_name).to_not eql orig_owner_name
     end
 

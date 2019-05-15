@@ -3,7 +3,7 @@ FactoryBot.define do
     association :category
     association :owner, factory: :user
     sequence(:name) { |n| "redis-#{n}" }
-    owner_name { owner.username }
+    sequence(:owner_name) { |n| "owner#{n}" }
     description { 'Wow, what a description!' }
     source_url { 'http://example.com' }
     issues_url { 'http://example.com/issues' }
