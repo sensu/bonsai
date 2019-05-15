@@ -14,10 +14,15 @@ class CompileGithubExtensionVersionConfig
 
   def call
     config_hash = fetch_bonsai_config(system_command_runner)
+
     if config_hash['builds'].present?
       version.update_column(:config, config_hash)
     else
       context.fail!(error: "Bonsai configuration has no 'builds' section")
+    end
+
+    if config_hash['annotations'].present?
+      version.update_column(:annotations, config_hash['annotations'])
     end
  
     config_hash['builds'] = compile_builds(version, config_hash['builds'])

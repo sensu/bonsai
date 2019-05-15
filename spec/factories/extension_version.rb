@@ -20,7 +20,11 @@ FactoryBot.define do
 
   factory :extension_version_with_config, class: ExtensionVersion, parent: :extension_version do
     config {
-      { builds: [
+      { annotations: {
+          suggested_asset_url: '/suggested/asset',
+          suggested_asset_message: 'Suggested Asset Message'
+        },
+        builds: [
         { arch: 'amd64',
           viable: true,
           filter: [

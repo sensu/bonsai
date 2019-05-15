@@ -12,6 +12,8 @@ class ExtensionVersion < ApplicationRecord
 
   has_one_attached :source_file
 
+  serialize :annotations, Hash
+
   # Validations
   # --------------------
   validates :version, presence: true, uniqueness: { scope: :extension }
@@ -40,6 +42,8 @@ class ExtensionVersion < ApplicationRecord
   delegate :owner_name,     to: :extension, allow_nil: true
   delegate :github_repo,    to: :extension
   delegate :octokit,        to: :extension
+
+  ANNOTATION_PREFIX = 'sensu.bonsai.io'
 
   def self.pick_blob_analyzer(blob)
     case
@@ -130,6 +134,10 @@ class ExtensionVersion < ApplicationRecord
 
     PersistAssetsWorker.perform_async(self.id)
     #WarmUpReleaseAssetCacheJob.perform_later self
+  end
+
+  def annotation(key)
+    annotations["#{ANNOTATION_PREFIX}.#{key}"]
   end
 
   private

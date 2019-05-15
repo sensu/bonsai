@@ -6,6 +6,12 @@
     <%= render "extensions/manage_extension", extension: extension, version: version %>
   <% end %>
 
+  <% if version.annotation('suggested_asset_url').present? %>
+    <div class="suggested_asset">
+      <%= link_to_suggested_asset(version) %>
+    </div>
+  <% end %>
+
   <%= link_to "Download", "#", class: 'button primary small radius expand button_download_extension', rel: 'download_asset_or_definition', 'data-reveal-id': 'download_asset_or_definition' %>
 
   <div class="extension-details">

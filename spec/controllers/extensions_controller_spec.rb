@@ -97,6 +97,24 @@ describe ExtensionsController do
         end
       end
     end
+
+    describe 'suggested asset url' do
+      render_views
+      let(:extension_version) { create :extension_version, config: config }
+      let!(:extension)        { extension_version.extension }
+      it 'displays a link' do
+
+        extension_version.update_attribute(:annotations, 
+          {'sensu.bonsai.io.suggested_asset_url' => '/suggested/asset', 
+            'sensu.bonsai.io.suggested_message' => 'Suggested Message' }
+        )
+        extension.reload
+        get :show, params: {username: extension.owner_name, id: extension.lowercase_name}
+        expect(response).to be_successful
+        expect(response.body).to match /Suggested Message/im
+      end
+    end
+
   end
 
   describe "sync_repo" do

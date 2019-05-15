@@ -16,8 +16,8 @@ class Api::V1::ReleaseAssetsController < Api::V1Controller
     extension = Extension.with_owner_and_lowercase_name(owner_name: params[:username], lowercase_name: params[:id])
     version = extension.extension_versions.find_by!(version: params[:version])
     @release_asset = version.release_assets.find_by(platform: params[:platform], arch: params[:arch])
-    @release_asset.annotations.merge!( common_annotations(extension, version, @release_asset) )
     raise ActiveRecord::RecordNotFound unless @release_asset
+    version.annotations.merge!( common_annotations(extension, version, @release_asset) )
   end
 
 end

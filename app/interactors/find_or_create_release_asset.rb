@@ -32,7 +32,6 @@ class FindOrCreateReleaseAsset
       arch: build['arch'],
       viable: build['viable'],
       filter: Array.wrap(build['filter']),
-      annotations: build['annotations'],
       commit_sha: version.last_commit_sha,
       commit_at: version.last_commit_at,
       source_asset_sha: build['asset_sha'],

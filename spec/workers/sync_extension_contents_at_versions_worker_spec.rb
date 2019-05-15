@@ -10,7 +10,7 @@ describe SyncExtensionContentsAtVersionsWorker do
   let(:asset_hash2)  { {name: "my_repo-1.2.2-linux-x86_64.sha512.txt",
                         browser_download_url: "https://example.com/sha_download"} }
   let(:release_data) { {tag_name: version.version, assets: [asset_hash1, asset_hash2]} }
-  let!(:version)     { create :extension_version }
+  let!(:version)     { create :extension_version_with_config }
   let(:extension)    { version.extension }
   
   subject            { SyncExtensionContentsAtVersionsWorker.new }
@@ -65,6 +65,7 @@ describe SyncExtensionContentsAtVersionsWorker do
     let(:body)                  { "this is my body" }
     let(:release_infos_by_tag)  { {"0.33" => {"body" => body}} }
     let(:tags)                  { release_infos_by_tag.keys }
+
 
     it 'puts the release notes into the release notes field' do
       subject.perform(extension.id, tags, [], release_infos_by_tag)

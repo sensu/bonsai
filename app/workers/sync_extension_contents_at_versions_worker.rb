@@ -179,10 +179,13 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
     end
   end
 
-  def scan_config_yml_file(version)
-    compilation_result = CompileGithubExtensionVersionConfig.call(version: version, system_command_runner: @run)
+  def scan_config_yml_file(version, system_command_runner=@run)
+    compilation_result = CompileGithubExtensionVersionConfig.call(version: version, system_command_runner: system_command_runner)
     if compilation_result.success? && compilation_result.data_hash.present? && compilation_result.data_hash.is_a?(Hash)
-      version.update_columns(config: compilation_result.data_hash, compilation_error: nil)
+      version.update_columns(
+        config: compilation_result.data_hash,
+        compilation_error: nil
+      )
     elsif compilation_result.error.present?
       version.update_column(:compilation_error, compilation_result.error)
     else

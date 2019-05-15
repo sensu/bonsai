@@ -6,7 +6,7 @@ json.metadata do
   json.namespace    @release_asset.extension_namespace
   json.labels       @release_asset.labels
   json.version      @release_asset.version
-  json.annotations  @release_asset.annotations
+  json.annotations  @release_asset.extension_version.annotations
 end
 
 json.spec do
