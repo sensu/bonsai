@@ -337,10 +337,17 @@
 }
 
 .reveal-modal {
+  .button_download_extension {
+    font-size: 0.7rem !important;
+    font-weight: bold !important;
+    margin-left: 10px;
+  }
+
   .close-reveal-modal.button {
     position: static !important;
     color: white;
-    font-size: 16px;
+    font-size: 0.7rem;
+    padding: 0.35rem 1rem;
   }
 
   .close-reveal-modal-x {

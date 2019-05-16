@@ -25,6 +25,12 @@
     <% end %>
     <div style="margin-top: 24px;" class="text-center">
       <a class="button secondary radius tiny close-reveal-modal">Cancel</a>
+      <%= render partial: 'extension_versions/download_asset_definition_button',
+                   locals: {extension: extension,
+                            version:   version,
+                            platform:  nil,
+                            arch:      nil,
+                            acknowledge: false} %>
     </div>
   <% else %>
     <% if version.release_assets.none?(&:viable?)%>
@@ -47,7 +53,14 @@
 
       <div style="margin-top: 24px;" class="text-center">
         <a class="button secondary radius tiny close-reveal-modal">Cancel</a>
+        <%= render partial: 'extension_versions/download_asset_definition_button',
+                   locals: {extension: extension,
+                            version:   version,
+                            platform:  nil,
+                            arch:      nil,
+                            acknowledge: false} %>
       </div>
     <% end %>
   <% end %>
 </div>
+
