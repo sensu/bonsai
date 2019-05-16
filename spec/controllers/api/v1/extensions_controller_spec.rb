@@ -106,13 +106,13 @@ describe Api::V1::ExtensionsController do
   describe 'GET #sync_repo' do
     subject do
       get :sync_repo,
-          params: {id:       extension,
+          params: {id:       extension.lowercase_name,
                    username: extension.owner_name},
           format: :json
     end
 
     it 'succeeds' do
-      request.headers['X-Ops-Userid'] = owner.username
+      request.headers.merge!({ 'X-Ops-Userid' => owner.username })
       subject
       data = JSON.parse(response.body)
       expect(response).to be_successful
@@ -120,21 +120,21 @@ describe Api::V1::ExtensionsController do
     end
 
     it 'succeeds when admin' do 
-      request.headers['X-Ops-Userid'] = admin.username
+      request.headers.merge!({ 'X-Ops-Userid' => admin.username })
       subject
       data = JSON.parse(response.body)
       expect(response).to be_successful
     end
 
     it 'fails authentication' do
-      request.headers['X-Ops-Userid'] = user.username
+      request.headers.merge!({ 'X-Ops-Userid' => user.username })
       subject
       data = JSON.parse(response.body)
       expect(data['error_code']).to eql("UNAUTHORIZED")
     end
 
     it 'fails if not found' do 
-      request.headers['X-Ops-Userid'] = admin.username
+      request.headers.merge!({ 'X-Ops-Userid' => admin.username })
       get :sync_repo,
           params: {id:       '',
                    username: extension.owner_name},
@@ -144,5 +144,45 @@ describe Api::V1::ExtensionsController do
     end
 
   end
-end
 
+  describe 'PUT #update' do
+    let!(:user) { create(:admin) }
+
+    context 'when a user is not authorized' do
+      subject do
+        request.headers.merge!({'X-Ops-Userid' => 'unauthorized'})
+        put :update,
+          params: {id:       extension,
+                   username: extension.owner_name},
+          format: :json
+      end
+
+      it 'responds with a 401' do
+        subject
+        expect(response.status.to_i).to eql(401)
+        expect(response.body).to include("Could not find user")
+      end
+    end
+
+    context 'when a user is authorized' do
+      subject do
+        request.headers.merge!({'X-Ops-Userid' => user.username})
+        put :update,
+          params: {id:       extension,
+                   username: extension.owner_name,
+                    extension: {
+                      tag_tokens: 'larry, moe, curly',
+                    }
+                  },
+          format: :json
+      end
+      it 'succeeds' do
+        subject
+        expect(response).to be_successful
+        extension.reload
+        expect(extension.tags.map(&:name)).to include('curly')
+      end
+    end
+
+  end
+end

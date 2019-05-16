@@ -1,10 +1,6 @@
 class Api::V1::ExtensionsController < Api::V1Controller
   before_action :init_params, only: [:index]
-  before_action :authenticate_user!, only: [:sync_repo]
-
-  attr_reader :current_user
-
-  before_action :authenticate_user!, only: [:update]
+  before_action :authenticate_user!, only: [:update, :sync_repo]
 
   attr_reader :current_user
 
@@ -138,17 +134,17 @@ class Api::V1::ExtensionsController < Api::V1Controller
   example "{'message'=>'Please wait a minute or so for the repository releases to be recompiled, then refresh this page to see the updates.'}"
 
   def sync_repo
-    extension = Extension.with_owner_and_lowercase_name(owner_name: params[:username], lowercase_name: params[:id])
-    if extension.blank?
+    @extension = Extension.with_owner_and_lowercase_name(owner_name: params[:username], lowercase_name: params[:id])
+    if @extension.blank?
       render json: {error_code: I18n.t('api.error_codes.not_found'), error_messages: [I18n.t('api.error_messages.not_found')] }, status: 404
       return
     end
     begin
-      authorize! extension unless current_user.is?(:admin)
+      authorize! @extension
     rescue
       render_not_authorized([t('api.error_messages.unauthorized_recompile_error')])
     else
-      CompileExtension.call(extension: extension)
+      CompileExtension.call(extension: @extension)
       render json: {message: t("extension.syncing_in_progress")}, status: 202
     end
   end
