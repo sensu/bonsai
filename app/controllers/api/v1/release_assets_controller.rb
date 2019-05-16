@@ -3,7 +3,7 @@ class Api::V1::ReleaseAssetsController < Api::V1Controller
   include Annotations
   
   api! <<~EOD
-    Retrieve #{I18n.t('indefinite_articles.extension')} #{I18n.t('nouns.extension')}'s build-specific details, suitable for consumption by the sensuctl tool.
+    Retrieve #{I18n.t('indefinite_articles.extension')} #{I18n.t('nouns.extension')}'s build-specific details, suitable for consumption by the sensu tool.
   EOD
   param :username, String, required: true, desc: "Bonsai Asset Index user name of the asset owner"
   param :id,       String, required: true, desc: "Bonsai Asset Index asset name"
