@@ -34,4 +34,5 @@ $(function() {
     spotRadius: 0,
     tooltipFormat: $.spformat('{{prefix}}{{y}}{{suffix}}<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>', 'sparkline-tooltip-class')
   }).addClass("loaded");
+
 });

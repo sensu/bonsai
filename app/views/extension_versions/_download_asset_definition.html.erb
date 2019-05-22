@@ -23,12 +23,13 @@
 
 <% if extension.hosted? %>
   <label>
-    <%= check_box_tag 'acknowledge',
-                      '1',
-                      acknowledge,
-                      data: {remote: true,
-                             url: extension_version_download_asset_definition_path(extension, version, username: extension.owner_name),
-                             params: {arch: arch, platform: platform}.to_param} %>
-    I acknowledge that this asset is only for enterprise license holders
+    <%= check_box_tag 'acknowledge', '1', acknowledge,
+        data: {
+          remote: true,
+          url: extension_version_download_asset_definition_path(extension, version, username: extension.owner_name),
+          params: {arch: arch, platform: platform}.to_param
+        } 
+    %>
+    <span>I acknowledge that this asset is only for enterprise license holders</span>
   </label>
 <% end %>

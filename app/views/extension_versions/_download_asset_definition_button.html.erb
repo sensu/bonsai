@@ -1,13 +1,13 @@
 <% if platform && arch && (!extension.hosted? || acknowledge) %>
   <%= link_to "Download Asset Definition",
-              release_asset_download_path(
-                  extension,
-                  version,
-                  username: extension.owner_name,
-                  platform: platform,
-                  arch:     arch,
-                  acknowledge: acknowledge),
-              class: 'button primary tiny radius button_download_extension' %>
+      release_asset_download_path(
+          username: extension.owner_name,
+          extension_id: extension.lowercase_name,
+          version: version,
+          platform: platform,
+          arch: arch,
+          acknowledge: acknowledge),
+      class: 'button primary tiny radius button_download_extension' %>
 <% else %>
   <% msg = case
            when !platform
