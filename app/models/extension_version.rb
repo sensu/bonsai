@@ -142,8 +142,8 @@ class ExtensionVersion < ApplicationRecord
 
   def self.assemble_clauses(vals, config_index)
     builds = Arel::Nodes::InfixOperation.new('->',
-                                             ExtensionVersion.arel_table[:config],
-                                             Arel::Nodes.build_quoted('builds'))
+       ExtensionVersion.arel_table[:config],
+       Arel::Nodes.build_quoted('builds'))
     vals.map { |val|
       criteria = {
         :viable      => true,
