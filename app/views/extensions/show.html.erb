@@ -1,19 +1,19 @@
 <%= provide(:title, "#{@extension.name} #{t('nouns.extension').titleize}") %>
 
-<% if @latest_version && extension_version_analyzed?(@latest_version) %>
-  <%= provide(:description, "#{@extension.name} #{t('nouns.extension').titleize} (#{@latest_version.try(:version)}) #{@extension.try(:supported_platforms).map(&:name).join(', ')}".strip) %>
+<% if @default_version && extension_version_analyzed?(@default_version) %>
+  <%= provide(:description, "#{@extension.name} #{t('nouns.extension').titleize} (#{@default_version.try(:version)}) #{@extension.try(:supported_platforms).map(&:name).join(', ')}".strip) %>
 
   <div class="page resource extension_show" data-equalizer itemscope itemtype="http://schema.org/Code">
 
     <div id='main-header-container'>
-      <%= render 'extensions/main_header', extension: @extension, version: @latest_version, extension_versions: @extension_versions %>
+      <%= render 'extensions/main_header', extension: @extension, version: @default_version, extension_versions: @extension_versions %>
     </div>
 
     <div id='main-container'>
-      <%= render 'extensions/main', extension: @extension, version: @latest_version, extension_versions: @extension_versions %>
+      <%= render 'extensions/main', extension: @extension, version: @default_version, extension_versions: @extension_versions %>
     </div>
 
-    <%= render 'extensions/sidebar', extension: @extension, version: @latest_version, supported_platforms: @supported_platforms, collaborators: @collaborators %>
+    <%= render 'extensions/sidebar', extension: @extension, version: @default_version, supported_platforms: @supported_platforms, collaborators: @collaborators %>
 
   </div>
 <% else %>

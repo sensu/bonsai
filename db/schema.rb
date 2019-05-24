@@ -10,9 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_05_182158) do
+ActiveRecord::Schema.define(version: 2019_05_23_224012) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
 
@@ -51,6 +52,7 @@ ActiveRecord::Schema.define(version: 2019_04_05_182158) do
     t.bigint "byte_size", null: false
     t.string "checksum", null: false
     t.datetime "created_at", null: false
+    t.string "service_name"
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
@@ -303,6 +305,7 @@ ActiveRecord::Schema.define(version: 2019_04_05_182158) do
     t.text "release_notes"
     t.jsonb "config", default: {}
     t.string "compilation_error"
+    t.text "annotations"
     t.index ["config"], name: "index_extension_versions_on_config", using: :gin
     t.index ["legacy_id"], name: "index_extension_versions_on_legacy_id", unique: true
     t.index ["version", "extension_id"], name: "index_extension_versions_on_version_and_extension_id", unique: true
@@ -334,6 +337,7 @@ ActiveRecord::Schema.define(version: 2019_04_05_182158) do
     t.integer "github_organization_id"
     t.string "owner_name"
     t.bigint "tier_id"
+    t.bigint "selected_version_id"
     t.index ["enabled"], name: "index_extensions_on_enabled"
     t.index ["github_organization_id"], name: "index_extensions_on_github_organization_id"
     t.index ["name"], name: "index_extensions_on_name"
@@ -414,6 +418,29 @@ ActiveRecord::Schema.define(version: 2019_04_05_182158) do
     t.index ["extension_id"], name: "index_ownership_transfer_requests_on_extension_id"
     t.index ["recipient_id"], name: "index_ownership_transfer_requests_on_recipient_id"
     t.index ["token"], name: "index_ownership_transfer_requests_on_token", unique: true
+  end
+
+  create_table "release_assets", force: :cascade do |t|
+    t.bigint "extension_version_id"
+    t.string "platform"
+    t.string "arch"
+    t.boolean "viable"
+    t.string "commit_sha"
+    t.datetime "commit_at"
+    t.string "source_asset_sha"
+    t.string "source_asset_url"
+    t.string "source_sha_filename"
+    t.string "source_base_filename"
+    t.string "source_asset_filename"
+    t.string "vanity_url"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "last_modified"
+    t.text "filter"
+    t.index ["arch"], name: "index_release_assets_on_arch"
+    t.index ["commit_sha"], name: "index_release_assets_on_commit_sha"
+    t.index ["extension_version_id"], name: "index_release_assets_on_extension_version_id"
+    t.index ["platform"], name: "index_release_assets_on_platform"
   end
 
   create_table "supported_platforms", id: :serial, force: :cascade do |t|

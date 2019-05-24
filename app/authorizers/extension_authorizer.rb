@@ -116,6 +116,10 @@ class ExtensionAuthorizer < Authorizer::Base
     owner_or_collaborator? || admin?
   end
 
+  def select_default_version?
+    owner_or_admin?
+  end
+
   private
 
   def admin?
