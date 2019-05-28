@@ -133,7 +133,7 @@
         <p>Selecting the default version will set the Bonsai Asset Index to use the selected version as as the default for this <%= t('nouns.extension') %>. Selecting 'None' will set the Bonsai Asset Index to use the latest version as as the default.</p>
 
         <div class="small-offset-4 small-4 columns">
-          <%= select_tag :extension_version_id, options_for_select( extension.extension_versions.map { |v| [v.version, v.id] }, extension.selected_version_id), {include_blank: 'none'} %>
+          <%= select_tag :extension_version_id, options_for_select( extension.sorted_extension_versions.map { |v| [v.version, v.id] }, extension.selected_version_id), {include_blank: 'none'} %>
         </div>
 
         <div style="margin-top: 24px;" class="small-12 columns text-center">
