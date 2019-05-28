@@ -16,6 +16,21 @@ describe Extension do
     end
   end
 
+  describe 'latest_version' do 
+    let(:extension) { create(:extension) }
+    let(:version) { create(:extension_version, extension: extension) }
+    it 'returns latest version' do
+      version = extension.extension_versions.last.version
+      expect(extension.latest_version.version).to eq(version)
+    end
+    it 'does not return pre-release versions' do
+      version = extension.extension_versions.last.version
+      pre_release = create(:extension_version, extension: extension)
+      pre_release.update_column(:version, "#{pre_release.version}-pre")
+      expect(extension.latest_version.version).to eq(version)
+    end
+  end
+
   describe ".in_namespace" do
     let(:owner_name) { "me"}
 

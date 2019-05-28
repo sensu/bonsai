@@ -15,6 +15,7 @@ class Extension < ApplicationRecord
   belongs_to :github_organization, required: false
   belongs_to :replacement, class_name: 'Extension', foreign_key: :replacement_id, required: false
   belongs_to :raw_tier, class_name: "Tier", foreign_key: "tier_id", required: false
+  belongs_to :selected_version, class_name: "ExtensionVersion", foreign_key: :selected_version_id, required: false
   has_one :github_account, through: :owner
   has_one :newest_extension_version, -> { order("created_at DESC") }, class_name: "ExtensionVersion"
   has_many :all_supported_platforms, through: :extension_versions, class_name: 'SupportedPlatform', source: :supported_platforms
@@ -164,11 +165,7 @@ class Extension < ApplicationRecord
   # @return [Array<ExtensionVersion>] the sorted ExtensionVersion records
   #
   def sorted_extension_versions
-    @sorted_extension_versions ||= extension_versions.
-      reject { |v| v.version == "master" }.
-      sort_by { |v| Semverse::Version.new(SemverNormalizer.call(v.version)) }.
-      reverse.
-      concat(extension_versions.select { |v| v.version == "master" })
+    @sorted_extension_versions ||= extension_versions.order(version: :desc)
   end
 
   #
@@ -216,8 +213,13 @@ class Extension < ApplicationRecord
   # @return [ExtensionVersion] the most recent ExtensionVersion
   #
   def latest_extension_version
-    @latest_extension_version ||= sorted_extension_versions.first
+    @latest_extension_version ||= 
+      sorted_extension_versions.reject { |v| 
+        Semverse::Version.new(SemverNormalizer.call(v.version)).pre_release? 
+      }.first
   end
+  alias_method :latest_version, :latest_extension_version
+
 
   #
   # Return all of the extension errors as well as full error messages for any of
