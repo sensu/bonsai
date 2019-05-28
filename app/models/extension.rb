@@ -214,8 +214,13 @@ class Extension < ApplicationRecord
   #
   def latest_extension_version
     @latest_extension_version ||= 
-      sorted_extension_versions.reject { |v| 
-        Semverse::Version.new(SemverNormalizer.call(v.version)).pre_release? 
+      sorted_extension_versions.reject { |v|
+        begin
+          Semverse::Version.new(SemverNormalizer.call(v.version)).pre_release?
+        rescue
+          # do not include master or version that doesn't pass semvar
+          true
+        end
       }.first
   end
   alias_method :latest_version, :latest_extension_version
