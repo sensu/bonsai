@@ -96,12 +96,53 @@
   <% end %>
 
   <% if policy(extension).toggle_featured? %>
+    <% if false %>
     <li>
       <%= link_to toggle_featured_extension_path(extension, username: extension.owner_name), method: 'put', rel: 'toggle_featured' do %>
         <i class="fa fa-star"></i>
         <%= extension.featured? ? 'Unfeature' : 'Feature' %>
       <% end %>
     </li>
+    <% end %>
+  <% end %>
+
+  <% if policy(extension).select_default_version? %>
+    <% if extension.selected_version.blank? %>
+      <% title = '' %>
+      <% message = "Selecting the default version will set the Bonsai Asset Index to use the selected
+        version as as the default for this #{ t('nouns.extension') }." %>
+      <% button = 'Select' %>
+    <% else %>
+      <% title = 'Release Default Version' %>
+      <% message = "Releasing the default version will set the Bonsai Asset Index to use the latest version as as the default for this #{ t('nouns.extension') }." %>
+      <% button = 'Release' %>
+    <% end %>
+    <li style='white-space: nowrap;'>
+      <%= link_to '#', class: 'default-version', rel: 'default-version', 'data-reveal-id' => 'default-version' do %>
+        <i class="fa fa-check-square-o"></i>
+        <span>Select Default Version</span>
+      <% end %>
+    </li>
+    
+    <div id="default-version" class="reveal-modal small" data-reveal>
+      <h1>Select Default Version</h1>
+      <a class="close-reveal-modal">&#215;</a>
+
+      <%= form_for extension, url: select_default_version_extension_path(extension, username: extension.owner_name), method: :put do |f| %>
+
+        <p>Selecting the default version will set the Bonsai Asset Index to use the selected version as as the default for this <%= t('nouns.extension') %>. Selecting 'None' will set the Bonsai Asset Index to use the latest version as as the default.</p>
+
+        <div class="small-offset-4 small-4 columns">
+          <%= select_tag :extension_version_id, options_for_select( extension.extension_versions.map { |v| [v.version, v.id] }, extension.selected_version_id), {include_blank: 'none'} %>
+        </div>
+
+        <div style="margin-top: 24px;" class="small-12 columns text-center">
+          <%= f.submit 'Select', class: "button primary radius tiny" %>
+          <a class="button secondary radius tiny close-reveal-modal">Cancel</a>
+        </div>
+      <% end %>
+    </div>
+    
   <% end %>
 
   <% if policy(extension).disable? %>

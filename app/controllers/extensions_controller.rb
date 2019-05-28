@@ -104,11 +104,11 @@ class ExtensionsController < ApplicationController
   # Displays an extension.
   #
   def show
-    @latest_version = @extension.latest_extension_version
+    @default_version = @extension.selected_version || @extension.latest_extension_version
     @extension_versions = @extension.sorted_extension_versions
     @collaborators = @extension.collaborators
     @supported_platforms = @extension.supported_platforms
-    @downloads = DailyMetric.counts_since(@latest_version.download_daily_metric_key, Date.today - 1.month) if @latest_version
+    @downloads = DailyMetric.counts_since(@default_version.download_daily_metric_key, Date.today - 1.month) if @default_version
     @commits = DailyMetric.counts_since(@extension.commit_daily_metric_key, Date.today - 1.year)
 
     respond_to do |format|
@@ -336,6 +336,13 @@ class ExtensionsController < ApplicationController
     # TODO: Don't do a full update on watch event
     CollectExtensionMetadataWorker.perform_async(@extension.id, [])
     head :ok
+  end
+
+  def select_default_version
+    version = @extension.extension_versions.find_by(id: params[:extension_version_id])
+    version_id = version.present? ? version.id : nil
+    @extension.update_column(:selected_version_id, version_id) 
+    redirect_to owner_scoped_extension_url(@extension), notice: t("extension.default_version_selected")
   end
 
   private

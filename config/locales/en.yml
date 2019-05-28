@@ -28,6 +28,7 @@ en:
       invite_accepted: "You are the new owner of %{extension}."
       invite_declined: "You have declined ownership of %{extension}."
     deprecated: "%{extension} deprecated in favor of %{replacement_extension}."
+    default_version_selected: "Default Version Selected."
     undeprecated: "%{extension} is no longer deprecated."
     featured: "%{extension} is now %{state}."
     disabled: "%{extension} is now disabled."

@@ -59,6 +59,7 @@ Rails.application.routes.draw do
         put :enable
         put :report
         put :sync_repo
+        put :select_default_version
       end
     end
 
