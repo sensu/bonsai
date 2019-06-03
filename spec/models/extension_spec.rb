@@ -19,16 +19,27 @@ describe Extension do
   describe 'latest_version' do 
     let(:extension) { create(:extension) }
     let(:version) { create(:extension_version, extension: extension) }
+
     it 'returns latest version' do
       version = extension.extension_versions.last.version
       expect(extension.latest_version.version).to eq(version)
     end
+
     it 'does not return pre-release versions' do
-      version = extension.extension_versions.last.version
+      version = extension.sorted_extension_versions.first.version
+      master = create(:extension_version, extension: extension, version: 'master')
       pre_release = create(:extension_version, extension: extension)
       pre_release.update_column(:version, "#{pre_release.version}-pre")
       expect(extension.latest_version.version).to eq(version)
     end
+
+    it 'returns pre-release version if no other' do
+      master = extension.extension_versions.first.update_column(:version, 'master')
+      pre_release = extension.extension_versions.second
+      pre_release.update_column(:version, "#{pre_release.version}-pre")
+      expect(extension.latest_version.version).to eq(pre_release.version)
+    end
+
   end
 
   describe ".in_namespace" do

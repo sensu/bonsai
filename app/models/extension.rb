@@ -211,19 +211,37 @@ class Extension < ApplicationRecord
   # The most recent ExtensionVersion, based on the semantic version number
   #
   # @return [ExtensionVersion] the most recent ExtensionVersion
+  # exclude master and any non-semvar compliant versions
+  # only use pre-release versions if no others
   #
   def latest_extension_version
-    @latest_extension_version ||= 
-      sorted_extension_versions.reject { |v|
-        begin
-          Semverse::Version.new(SemverNormalizer.call(v.version)).pre_release?
-        rescue
-          # do not include master or version that doesn't pass semvar
-          true
-        end
-      }.first
+    versions = remove_non_semvar_versions
+    versions = remove_pre_release_versions(versions)
+    if versions.blank?
+      # include pre-release versions
+      versions = remove_non_semvar_versions
+    end
+    if versions.blank?
+      # use the non-compliant versions as last resort
+      versions = sorted_extension_versions
+    end
+    versions.first
   end
   alias_method :latest_version, :latest_extension_version
+
+  def remove_pre_release_versions(versions=nil)
+    versions ||= sorted_extension_versions
+    versions.reject { |v|
+      Semverse::Version.new(SemverNormalizer.call(v.version)).pre_release?
+    }
+  end
+
+  def remove_non_semvar_versions(versions=nil)
+    versions ||= sorted_extension_versions
+    versions.select { |v|
+      Semverse::Version.new(SemverNormalizer.call(v.version)) rescue false
+    }
+  end
 
 
   #
