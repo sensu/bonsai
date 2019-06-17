@@ -4,8 +4,12 @@ class CmdAtPath
   end
 
   def cmd(a_cmd)
-  	Dir.chdir(@path) do 
-  		`#{a_cmd}`
-  	end
+  	begin
+	  	Dir.chdir(@path) do 
+	  		`#{a_cmd}`
+	  	end
+	  rescue Errno::ENOENT => e
+	  	puts e.message
+	  end
   end
 end
