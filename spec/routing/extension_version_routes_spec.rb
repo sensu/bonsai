@@ -43,5 +43,17 @@ describe 'extension version routes' do
         )
     end
 
+    it 'routes /release_assets/sensu/sensu-ruby-runtime/0.0.6/alpine3.8/amd64/download' do 
+      expect(get: "/release_assets/sensu/sensu-ruby-runtime/0.0.6/alpine3.8/amd64/download").to route_to(
+          :controller => "release_assets",
+          :action => "download",
+          :username => "sensu",
+          :extension_id => "sensu-ruby-runtime",
+          :version => "0.0.6",
+          :platform => "alpine3.8",
+          :arch => "amd64"
+        )
+    end
+
   end
 end
