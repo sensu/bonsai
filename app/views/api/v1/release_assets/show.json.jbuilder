@@ -13,7 +13,7 @@ json.metadata do
 end
 
 json.spec do
-  json.url     				@release_asset.source_asset_url
+  json.url     				@release_asset.vanity_url
   json.sha512  				@release_asset.source_asset_sha
   json.filters        @release_asset.filter
 end
