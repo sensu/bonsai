@@ -68,7 +68,7 @@ describe 'api/v1/release_assets/show' do
 
   it "serializes the url" do
     render
-    expect(json_body['spec']['url']).to eql(@asset.source_asset_url)
+    expect(json_body['spec']['url']).to eql(@asset.vanity_url)
   end
 
   it "serializes the sha" do
