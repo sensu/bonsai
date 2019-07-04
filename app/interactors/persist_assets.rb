@@ -70,6 +70,7 @@ class PersistAssets
         # remove the bucket from the path if returned in that format
         # note that this does not change the host
         uri.path.gsub!(/staging.assets.bonsai.sensu.io\//, '')
+        uri.path.gsub!(/assets.bonsai.sensu.io\//, '')
         puts "******** Updating vanity_url: #{uri.to_s}"
       end
       release_asset.update_columns(vanity_url: uri.to_s, last_modified: last_modified)
