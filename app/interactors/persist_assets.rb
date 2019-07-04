@@ -69,8 +69,11 @@ class PersistAssets
         uri.host = ENV['AWS_S3_VANITY_HOST']
         # remove the bucket from the path if returned in that format
         # note that this does not change the host
-        uri.path.gsub!(/staging.assets.bonsai.sensu.io\//, '')
-        uri.path.gsub!(/assets.bonsai.sensu.io\//, '')
+        if Rails.env.production?
+          uri.path.gsub!(/assets.bonsai.sensu.io\//, '')
+        else
+          uri.path.gsub!(/staging.assets.bonsai.sensu.io\//, '')
+        end
         puts "******** Updating vanity_url: #{uri.to_s}"
       end
       release_asset.update_columns(vanity_url: uri.to_s, last_modified: last_modified)
