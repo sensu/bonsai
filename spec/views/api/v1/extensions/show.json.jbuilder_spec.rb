@@ -18,7 +18,4 @@ describe 'api/v1/extensions/show' do
     expect(json_body['description']).to eql(extension.description)
   end
 
-  it "includes an array of builds" do
-    expect(json_body['builds']).to be_a(Array)
-  end
 end

@@ -1,15 +1,18 @@
 class ExtensionVersion < ApplicationRecord
   include SeriousErrors
-
+  
   # Associations
   # --------------------
   has_many :extension_version_platforms
   has_many :supported_platforms, through: :extension_version_platforms
   has_many :extension_dependencies, dependent: :destroy
   has_many :extension_version_content_items, dependent: :destroy
+  has_many :release_assets # do not dependent: :destroy
   belongs_to :extension, required: false
 
   has_one_attached :source_file
+
+  serialize :annotations, Hash
 
   # Validations
   # --------------------
@@ -31,14 +34,16 @@ class ExtensionVersion < ApplicationRecord
 
   # Delegations
   # --------------------
-  delegate :name, :owner, to: :extension
-  delegate :name,         to: :extension, allow_nil: true, prefix: true
-  delegate :hosted?,      to: :extension, allow_nil: true
-  delegate :lowercase_name,to: :extension, allow_nil: true, prefix: true
-  delegate :namespace,    to: :extension, allow_nil: true, prefix: true
-  delegate :owner_name,   to: :extension, allow_nil: true
-  delegate :github_repo,  to: :extension
-  delegate :octokit,      to: :extension
+  delegate :name, :owner,   to: :extension
+  delegate :name,           to: :extension, allow_nil: true, prefix: true
+  delegate :hosted?,        to: :extension, allow_nil: true
+  delegate :lowercase_name, to: :extension, allow_nil: true, prefix: true
+  delegate :namespace,      to: :extension, allow_nil: true, prefix: true
+  delegate :owner_name,     to: :extension, allow_nil: true
+  delegate :github_repo,    to: :extension
+  delegate :octokit,        to: :extension
+
+  ANNOTATION_PREFIX = 'sensu.bonsai.io'
 
   def self.pick_blob_analyzer(blob)
     case
@@ -91,14 +96,6 @@ class ExtensionVersion < ApplicationRecord
     (source_file.attached? ? source_file.metadata : nil).to_h
   end
 
-  def release_assets
-    Array.wrap(config['builds'])
-      .map { |h|
-        attributes = h.merge(version: self)
-        ReleaseAsset.new(attributes)
-      }
-  end
-
   # Converts any instances of '#{var-name}' in the given string to the corresponding value from
   # this +Version+ object.
   # E.g. the string 'test_asset-#{version}-linux-x86_64.tar.gz' and a version with the name "10.3.4"
@@ -135,7 +132,12 @@ class ExtensionVersion < ApplicationRecord
       compilation_error: metadata[:compilation_error],
     )
 
-    WarmUpReleaseAssetCacheJob.perform_later self
+    PersistAssetsWorker.perform_async(self.id)
+    #WarmUpReleaseAssetCacheJob.perform_later self
+  end
+
+  def annotation(key)
+    annotations["#{ANNOTATION_PREFIX}.#{key}"]
   end
 
   private

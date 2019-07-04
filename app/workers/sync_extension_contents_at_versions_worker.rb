@@ -5,10 +5,12 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
   end
 
   def perform(extension_id, tags, compatible_platforms = [], release_infos_by_tag = {})
-    logger.info("PERFORMING: #{extension_id}, #{tags.inspect}, #{compatible_platforms.inspect}")
 
     @extension = Extension.find_by(id: extension_id)
-    raise RuntimeError.new("#{I18n.t('nouns.extension')} not found.") unless @extension
+    raise RuntimeError.new("#{I18n.t('nouns.extension')} ID: #{extension_id.inspect} not found.") unless @extension
+
+    logger.info("PERFORMING: #{@extension.inspect}, #{tags.inspect}, #{compatible_platforms.inspect}")
+
     @extension.with_lock do
       @tags = tags
       @tag = @tags.shift
@@ -39,7 +41,7 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
     set_commit_count(version)
     scan_files(version)
     sync_release_info(version, release_info)
-
+    PersistAssets.call(version: version)
     version.save
   end
 
@@ -124,7 +126,6 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
     message = message.gsub("\n", " ").strip
     sha = sha.gsub("commit ", "")
     date = Time.parse(date.gsub("Date:", "").strip)
-
     version.last_commit_sha = sha
     version.last_commit_at = date
     version.last_commit_string = message
@@ -178,12 +179,17 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
     end
   end
 
-  def scan_config_yml_file(version)
-    compilation_result = CompileGithubExtensionVersionConfig.call(version: version, system_command_runner: @run)
-    if compilation_result.success?
-      version.update_columns(config: compilation_result.data_hash, compilation_error: nil)
-    else
+  def scan_config_yml_file(version, system_command_runner=@run)
+    compilation_result = CompileGithubExtensionVersionConfig.call(version: version, system_command_runner: system_command_runner)
+    if compilation_result.success? && compilation_result.data_hash.present? && compilation_result.data_hash.is_a?(Hash)
+      version.update_columns(
+        config: compilation_result.data_hash,
+        compilation_error: nil
+      )
+    elsif compilation_result.error.present?
       version.update_column(:compilation_error, compilation_result.error)
+    else
+      version.update_column(:compilation_error, "Compile Github Extension Version ID #{version.id} Config failed.")
     end
   end
 

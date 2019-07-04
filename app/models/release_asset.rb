@@ -1,24 +1,25 @@
-class ReleaseAsset < OpenStruct
-  include ActiveModel::Conversion   # Needed for JBuilder serialization
+class ReleaseAsset < ApplicationRecord
 
-  delegate :extension,           to: :version, allow_nil: true
-  delegate :extension_name,      to: :version, allow_nil: true
-  delegate :extension_namespace, to: :version, allow_nil: true
-  delegate :owner_name,          to: :version, allow_nil: true
+  belongs_to :extension_version, required: false # asset should remain even if version is destroyed
 
-  def version_name
-    version&.version
-  end
+  serialize :filter
+
+  delegate :extension,           to: :extension_version, allow_nil: true
+  delegate :extension_name,      to: :extension_version, allow_nil: true
+  delegate :extension_namespace, to: :extension_version, allow_nil: true
+  delegate :owner_name,          to: :extension_version, allow_nil: true
+  delegate :version,             to: :extension_version, allow_nil: true
 
   def viable?
     viable
   end
 
-  def annotations
-    {}.tap do |results|
-      if version.hosted?
-        results['bonsai.sensu.io.message'] = "This asset is for users with a valid Enterprise license"
-      end
-    end
+  def destination_pathname
+    "#{commit_sha}/#{source_asset_filename}"
   end
+
+  def labels
+    extension.tags.map(&:name)
+  end
+
 end

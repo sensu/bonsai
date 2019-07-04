@@ -15,8 +15,7 @@ class ActiveStorageCacheStore < ActiveSupport::Cache::Store
       cache_item.file.purge
     end
 
-    cache_item.file.attach(io:       StringIO.new(Marshal.dump(entry)),
-                           filename: 'n/a')
+    cache_item.file.attach(io: StringIO.new(Marshal.dump(entry)), filename: 'n/a')
     cache_item.save
   end
 

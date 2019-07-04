@@ -6,6 +6,12 @@
     <%= render "extensions/manage_extension", extension: extension, version: version %>
   <% end %>
 
+  <% if version.annotation('suggested_asset_url').present? %>
+    <div class="suggested_asset">
+      <%= link_to_suggested_asset(version) %>
+    </div>
+  <% end %>
+
   <%= link_to "Download", "#", class: 'button primary small radius expand button_download_extension', rel: 'download_asset_or_definition', 'data-reveal-id': 'download_asset_or_definition' %>
 
   <div class="extension-details">
@@ -147,17 +153,18 @@
 
   <%= render 'extensions/compilation_error', version: version %>
 
-  <%- release_assets = gather_viable_release_assets(version) %>
-  <%- if release_assets.any? %>
+  <%- if version.release_assets.order(:platform, :arch).any? %>
     <div class="github-release-assets">
       <h4>
-        <i class="fa fa-folder-open-o"></i> Release Assets
+        <i class="fa fa-folder-open-o"></i> <span>Release Assets</span>
       </h4>
 
       <dl>
-        <% release_assets.each do |release_asset| %>
-          <dt><%= link_to release_asset.asset_url, release_asset.asset_url %></dt>
-          <dd class="sha">SHA: <%= release_asset.asset_sha.presence || 'Unknown' %></dd>
+        <% version.release_assets.each do |release_asset| %>
+          <dt class='assetPlatform'><%= release_asset.platform %> <%= release_asset.arch %></dt>
+          <dd class="assetLink"><%= link_to release_asset.vanity_url, release_asset.vanity_url %></dd>
+          <dd class="assetSha">SHA: <%= release_asset.source_asset_sha.presence || 'Unknown' %></dd>
+          <dd class="assetLastModified">Last Modified: <%= l(release_asset.last_modified.to_date, format: :default) rescue '' %>
         <% end %>
       </dl>
     </div>

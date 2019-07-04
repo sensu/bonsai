@@ -86,25 +86,14 @@ module ExtensionVersionsHelper
   end
 
   def gather_viable_release_assets(extension_version)
-    extension_version.release_assets
-      .find_all(&:viable?)
-      .sort_by(&:asset_url)
+    extension_version.release_assets.where(viable: true).order(:source_asset_url)
   end
 
-  def determine_viable_platforms_and_archs(version, selected_platform, selected_arch)
-    
-    viable_release_assets = version.release_assets.find_all(&:viable?)
+  def determine_viable_platforms_and_archs(version, selected_platform='', selected_arch='')
+    release_assets = version.release_assets.where(viable: true)
 
-    platforms = viable_release_assets
-                  .map(&:platform)
-                  .compact
-                  .uniq
-                  .sort_by(&:downcase)
-    archs     = viable_release_assets
-                  .map(&:arch)
-                  .compact
-                  .uniq
-                  .sort_by(&:downcase)
+    platforms = release_assets.distinct.pluck(:platform).sort_by(&:downcase)
+    archs     = release_assets.distinct.pluck(:arch).sort_by(&:downcase)
 
     return platforms, archs
   end

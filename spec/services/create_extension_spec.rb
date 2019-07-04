@@ -155,7 +155,7 @@ describe CreateExtension do
 
       it 'defaults the version to v0.0.1' do
         new_extension = subject.process!
-        expect(new_extension.latest_extension_version.version).to eq 'v0.0.1'
+        expect(new_extension.latest_extension_version.version).to eq '0.0.1'
       end
     end
   end

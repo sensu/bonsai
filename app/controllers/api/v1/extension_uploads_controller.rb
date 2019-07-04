@@ -1,5 +1,4 @@
 require 'extension_upload'
-require 'mixlib/authentication/signatureverification'
 
 class Api::V1::ExtensionUploadsController < Api::V1Controller
   before_action :require_upload_params, only: :create
@@ -156,50 +155,4 @@ class Api::V1::ExtensionUploadsController < Api::V1Controller
 
   alias_method :require_upload_params, :upload_params
 
-  #
-  # Finds a user specified in the request header or renders an error if
-  # the user doesn't exist. Then attempts to authorize the signed request
-  # against the users public key or renders an error if it fails.
-  #
-  def authenticate_user!
-    username = request.headers['X-Ops-Userid']
-    user = Account.for('chef_oauth2').where(username: username).first.try(:user)
-
-    unless user
-      return error(
-        {
-          error_code: t('api.error_codes.authentication_failed'),
-          error_messages: [t('api.error_messages.invalid_username', username: username)]
-        },
-        401
-      )
-    end
-
-    if user.public_key.nil?
-      return error(
-        {
-          error_code: t('api.error_codes.authentication_failed'),
-          error_messages: [t('api.error_messages.missing_public_key_error', current_host: request.base_url)]
-        },
-        401
-      )
-    end
-
-    auth = Mixlib::Authentication::SignatureVerification.new.authenticate_user_request(
-      request,
-      OpenSSL::PKey::RSA.new(user.public_key)
-    )
-
-    if auth
-      @current_user = user
-    else
-      error(
-        {
-          error_code: t('api.error_codes.authentication_failed'),
-          error_messages: [t('api.error_messages.authentication_key_error')]
-        },
-        401
-      )
-    end
-  end
 end

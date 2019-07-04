@@ -23,6 +23,14 @@ describe SetUpHostedExtension do
 
   describe '.call' do
 
+    it "sets the extension's owner name" do
+      orig_owner_name = extension.owner_name
+      subject
+      extension.reload
+      expect(extension.owner_name).to     be_present
+      #expect(extension.owner_name).to_not eql orig_owner_name
+    end
+
     it "transfers the source file attachment to the new version child" do
       expect(extension.tmp_source_file).to     be_attached
 

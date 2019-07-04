@@ -110,7 +110,6 @@ class ExtensionsController < ApplicationController
     @supported_platforms = @extension.supported_platforms
     @downloads = DailyMetric.counts_since(@default_version.download_daily_metric_key, Date.today - 1.month) if @default_version
     @commits = DailyMetric.counts_since(@extension.commit_daily_metric_key, Date.today - 1.year)
-
     respond_to do |format|
       format.atom
       format.html
@@ -304,7 +303,6 @@ class ExtensionsController < ApplicationController
   def sync_repo
     extension = Extension.with_owner_and_lowercase_name(owner_name: params[:username], lowercase_name: params[:id])
     authorize! extension
-
     CompileExtension.call(extension: extension)
     redirect_to owner_scoped_extension_url(@extension), notice: t("extension.syncing_in_progress")
   end

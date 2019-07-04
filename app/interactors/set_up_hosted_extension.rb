@@ -15,6 +15,13 @@ class SetUpHostedExtension
     if extension.tmp_source_file.attached?
       # Transfer the temporarily-staged attachment to the extension_version.
       extension_version.source_file.attach(extension.tmp_source_file.blob)
+      
+
+      # ActiveStorage blob checksum is a base64-encoded MD5 digest of the blob’s data
+      # and is unique.  A new blob is created when a file is updated.
+      last_commit_sha = extension_version.source_file.blob.checksum
+      extension_version.update_columns(last_commit_sha:  last_commit_sha, last_commit_at: DateTime.now)
+
       extension.tmp_source_file.detach
 
       attachment = extension_version.source_file.attachment

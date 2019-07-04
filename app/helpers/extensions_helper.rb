@@ -201,5 +201,18 @@ module ExtensionsHelper
     end
     html.html_safe
   end
+
+  # Resolves the host
+  # Selects the message
+  # @param extension_version [active record]
+  def link_to_suggested_asset(version)
+    message = version.annotation('suggested_message')
+    message ||= 'Preference should be given to this upstream asset.'
+    url = URI(version.annotation('suggested_asset_url'))
+    # force local only.
+    url.scheme = request.scheme 
+    url.host = request.host
+    link_to message, url.to_s, target: '_blank'
+  end
 end
 

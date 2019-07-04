@@ -110,7 +110,7 @@ class Extension < ApplicationRecord
       extension_versions: [:description]
     },
     using: {
-      tsearch: {prefix: true}
+      tsearch: {prefix: true, any_word: true}
     }
   )
 

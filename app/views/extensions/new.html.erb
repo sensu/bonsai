@@ -37,7 +37,7 @@
           <small class="error">Description is required.</small>
         </div>
         <div class="tag_tokens-field">
-          <%= f.text_field :tag_tokens, placeholder: "Tags", title: "Tags", class: "tokenfield", data: { autofill: Tag::DEFAULT_TAGS } %>
+          <%= f.text_field :tag_tokens, placeholder: "Tags", title: "Tags", class: "tokenfield", data: { autofill: Tag.all_tags } %>
         </div>
 
         <% if false # remove for Sensu %>

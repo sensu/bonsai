@@ -1,3 +1,5 @@
+require 'mixlib/authentication/signatureverification'
+
 class Api::V1Controller < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :render_404
   skip_before_action :verify_authenticity_token
@@ -72,4 +74,59 @@ class Api::V1Controller < ApplicationController
 
     @order = params.fetch(:order, 'name ASC').to_s
   end
+
+  private 
+
+  #
+  # Finds a user specified in the request header or renders an error if
+  # the user doesn't exist. Then attempts to authorize the signed request
+  # against the users public key or renders an error if it fails.
+  #
+  def authenticate_user!
+    username = request.headers['X-Ops-Userid']
+    user = Account.for(ENV['OAUTH_ACCOUNT_PROVIDER']).where(username: username).first.try(:user)
+
+    unless user
+      return error(
+        {
+          error_code: t('api.error_codes.authentication_failed'),
+          error_messages: [t('api.error_messages.invalid_username', username: username)]
+        },
+        401
+      )
+    end
+
+    if user.public_key.nil?
+      return error(
+        {
+          error_code: t('api.error_codes.authentication_failed'),
+          error_messages: [t('api.error_messages.missing_public_key_error', current_host: request.base_url)]
+        },
+        401
+      )
+    end
+
+    # hack pending integration of non-chef oauth
+    if ENV['OAUTH_ACCOUNT_PROVIDER'] == 'chef_oauth2'
+      auth = Mixlib::Authentication::SignatureVerification.new.authenticate_user_request(
+        request,
+        OpenSSL::PKey::RSA.new(user.public_key)
+      )
+    else 
+      auth = true
+    end
+
+    if auth
+      @current_user = user
+    else
+      error(
+        {
+          error_code: t('api.error_codes.authentication_failed'),
+          error_messages: [t('api.error_messages.authentication_key_error')]
+        },
+        401
+      )
+    end
+  end
+
 end

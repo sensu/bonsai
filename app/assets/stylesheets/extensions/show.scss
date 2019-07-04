@@ -137,8 +137,23 @@
       }
     }
 
-    .sha {
+    .assetPlatform {
+      margin-bottom: 0;
+      font-weight: '600';
+      font-size: small;
+    }
+
+    .assetLink {
       word-wrap: break-word;
+      margin-bottom: 0;
+    }
+
+    .assetSha {
+      word-wrap: break-word;
+      margin-bottom: 0;
+    }
+
+    .assetLastModified {
       border-bottom: rem-calc(1) solid $secondary_gray;
       padding-bottom: rem-calc(7);
     }

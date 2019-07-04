@@ -14,18 +14,23 @@ class CompileGithubExtensionVersionConfig
 
   def call
     config_hash = fetch_bonsai_config(system_command_runner)
+
     if config_hash['builds'].present?
       version.update_column(:config, config_hash)
     else
       context.fail!(error: "Bonsai configuration has no 'builds' section")
     end
+
+    if config_hash['annotations'].present?
+      version.update_column(:annotations, config_hash['annotations'])
+    end
  
     config_hash['builds'] = compile_builds(version, config_hash['builds'])
 
     context.data_hash = config_hash
-  rescue => boom
-    raise if Interactor::Failure === boom   # Don't trap context.fail! calls
-    context.fail!(error: "could not compile the Bonsai configuration file: #{boom}")
+  rescue => error
+    raise if Interactor::Failure === error   # Don't trap context.fail! calls
+    context.fail!(error: "could not compile the Bonsai configuration file: #{error}")
   end
 
   private
@@ -44,8 +49,8 @@ class CompileGithubExtensionVersionConfig
     body = cmd_runner.cmd("cat '#{path}'")
     begin
       config_hash = YAML.load(body.to_s)
-    rescue => boom
-      context.fail!(error: "cannot parse the Bonsai configuration file: #{boom.message}")
+    rescue => error
+      context.fail!(error: "cannot parse the Bonsai configuration file: #{error.message}")
     end
 
     context.fail!(error: "Bonsai configuration is invalid") unless config_hash.is_a?(Hash)
@@ -93,13 +98,13 @@ class CompileGithubExtensionVersionConfig
     asset_filename    = File.basename(compiled_asset_filename)
     file_download_url = github_download_url(compiled_asset_filename, github_asset_data_hashes_lut)
 
-    sha = read_sha_file(compiled_sha_filename, asset_filename, github_asset_data_hashes_lut)
-
+    sha_result = read_sha_file(compiled_sha_filename, asset_filename, github_asset_data_hashes_lut)
+    
     return {
       'viable'        => file_download_url.present?,
       'asset_url'     => file_download_url,
       'base_filename' => asset_filename,
-      'asset_sha'     => sha
+      'asset_sha'     => sha_result.sha
     }
   end
 
@@ -110,12 +115,9 @@ class CompileGithubExtensionVersionConfig
       sha_download_url: sha_download_url,
       asset_filename:   asset_filename
     )
-    unless result.sha.present?
-      context.fail!(error: "no SHA found in checksums file for #{asset_filename}")
-      return
-    end
-    result.sha.tap do |sha_result|
-      context.fail!(error: "cannot extract the SHA for #{asset_filename}") unless sha_result.present?
+
+    result.tap do |sha_result|
+      context.fail!(error: "cannot extract the SHA for #{asset_filename}") unless sha_result.sha.present?
     end
   end
 

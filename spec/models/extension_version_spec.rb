@@ -209,4 +209,17 @@ describe ExtensionVersion do
       expect(subject.config          ).not_to eql orig_config
     end
   end
+
+  describe 'annotations' do
+    context 'annotation keys' do
+      subject { create :extension_version }
+      it 'responds to annotation method' do 
+        expect(subject.annotations).to eq({})
+      end
+      it 'responds with appropriate data' do 
+        subject.update_attribute(:annotations, {'sensu.bonsai.io.annotation_key' => 'annotation data'})
+        expect(subject.annotation('annotation_key')).to eq('annotation data')
+      end
+    end
+  end
 end
