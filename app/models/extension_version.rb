@@ -133,7 +133,6 @@ class ExtensionVersion < ApplicationRecord
     )
 
     PersistAssetsWorker.perform_async(self.id)
-    #WarmUpReleaseAssetCacheJob.perform_later self
   end
 
   def annotation(key)
