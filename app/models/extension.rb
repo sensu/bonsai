@@ -165,7 +165,9 @@ class Extension < ApplicationRecord
   # @return [Array<ExtensionVersion>] the sorted ExtensionVersion records
   #
   def sorted_extension_versions
-    @sorted_extension_versions ||= extension_versions.order(version: :desc)
+    # ignore preceding 'V' and ignore 'master' so it sorts to end
+    # convert version to array of integers so 10.0.0 comes after 9.0.0
+    @sorted_extension_versions ||= extension_versions.order("STRING_TO_ARRAY( REGEXP_REPLACE(extension_versions.version, E'V|v|master', ''), '.') DESC")
   end
 
   #
