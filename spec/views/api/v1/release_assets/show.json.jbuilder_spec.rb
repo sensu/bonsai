@@ -39,21 +39,16 @@ describe 'api/v1/release_assets/show' do
     expect(json_body['metadata']['name']).to eql(version.extension.name)
   end
 
-  it 'sets the namespace' do
-    render
-    expect(json_body['metadata']['namespace']).to eql('default')
-  end
-
   it "returns null if no extension labels" do
     render
     expect(json_body['metadata']['labels']).to eql(nil)
   end
 
-  it "includes extension labels when present" do
-    extension.tags << Tag.new(name: 'label')
-    render
-    expect(json_body['metadata']['labels']).to eql(@asset.extension.tags.map(&:name).join(', '))
-  end
+  #it "includes extension labels when present" do
+  #  extension.tags << Tag.new(name: 'label')
+  #  render
+  #  expect(json_body['metadata']['labels']).to eql(@asset.extension.tags.map(&:name).join(', '))
+  #end
 
   it "includes default annotations" do
     extension.tags << Tag.new(name: 'label')

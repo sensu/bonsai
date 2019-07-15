@@ -14,7 +14,7 @@ class ReleaseAssetsController < ApplicationController
 
     raise ActiveRecord::RecordNotFound if extension.hosted? && !params[:acknowledge]
 
-    version.annotations.merge!( common_annotations(extension, version, @release_asset) )
+    @annotations = common_annotations(extension, version, @release_asset)
 
     filename = [
       extension.namespace,

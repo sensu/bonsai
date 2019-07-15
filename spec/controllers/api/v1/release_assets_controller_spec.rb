@@ -46,9 +46,9 @@ describe Api::V1::ReleaseAssetsController do
         expect(@data['spec']).to be_a(Hash)
       end
 
-      it 'includes labels' do
-        expect(@data['metadata']['labels']).to include('label')
-      end
+      #it 'includes labels' do
+      #  expect(@data['metadata']['labels']).to include('label')
+      #end
 
       it 'includes common annotations' do 
         expect(@data['metadata']['annotations'].keys).to include('sensio.io.bonsai.url')

@@ -149,7 +149,6 @@ class Api::V1::ExtensionsController < Api::V1Controller
     end
   end
 
-
   api! <<~EOD
     Update data for a single #{I18n.t('nouns.extension')}, identified by a username and repo ID.  
     Currently limited to just updating tags.
