@@ -3,7 +3,6 @@ json.api_version "core/v2"
 
 json.metadata do
   json.name         @release_asset.extension_name
-  json.namespace    "default"
   if @release_asset.labels.present?
     json.labels     @release_asset.labels.join(', ')
   else
