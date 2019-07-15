@@ -2,7 +2,7 @@ json.type        "Asset"
 json.api_version "core/v2"
 
 json.metadata do
-  json.name         @release_asset.extension_name
+  json.name         "#{@release_asset.platform} #{@release_asset.arch} - #{@release_asset.extension_name}"
   json.labels       nil
   json.annotations  @annotations
 end
