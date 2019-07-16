@@ -36,7 +36,7 @@ describe 'api/v1/release_assets/show' do
 
   it "serializes the extension name" do
     render
-    expect(json_body['metadata']['name']).to eql(version.extension.name)
+    expect(json_body['metadata']['name']).to eql("#{@asset.extension_name}_#{@asset.platform}_#{@asset.arch}")
   end
 
   it "returns null if no extension labels" do
