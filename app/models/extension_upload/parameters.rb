@@ -193,7 +193,7 @@ class ExtensionUpload
         path = archive.find(%r{(\.\/)?#{file_extension}\/readme(\.\w+)?}i).first
         if path
           readme = Document.new(
-            contents: archive.read(path),
+            contents: archive.read(path).encode(Encoding.find('UTF-8'), {invalid: :replace, undef: :replace, replace: ''}),
             file_extension: File.extname(path)[1..-1].to_s
           )
 
