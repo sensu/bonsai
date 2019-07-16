@@ -24,6 +24,7 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
         tally_commits if @tag == "master"
       end
     end
+    ExtractExtensionCollaboratorsWorker.perform_async(@extension.id)
     # update license in case it has changed
     ExtractExtensionLicenseWorker.perform_async(@extension.id)
     perform_next

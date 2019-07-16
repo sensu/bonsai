@@ -4,7 +4,9 @@ class ExtractExtensionCollaboratorWorker < ApplicationWorker
     @extension = Extension.find(extension_id)
     @collaborator = octokit.user(github_login)
 
-    AddExtensionCollaborator.new(@extension, @collaborator).process!
+    unless @extension.collaborators.include?(@collaborator)
+    	AddExtensionCollaborator.new(@extension, @collaborator).process!
+    end
   end
 
   private
