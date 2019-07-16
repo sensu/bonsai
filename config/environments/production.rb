@@ -94,7 +94,7 @@ Rails.application.configure do
 
   # cache store in production.
   config.cache_store = :redis_cache_store, {
-    url: "redis://#{ENV['REDIS_HOST']}/0", 
+    url: "#{ENV['REDIS_URL']}/0", 
     network_timeout: 1,
     namespace: "cache",
   }
