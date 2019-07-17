@@ -56,7 +56,7 @@ class CompileHostedExtensionVersionConfig
     file         = file_finder.find(file_path: files_regexp)
     context.fail!(error: 'cannot find a Bonsai configuration file') unless file
 
-    body = file.read
+    body = file.read.encode(Encoding.find('UTF-8'), {invalid: :replace, undef: :replace, replace: ''})
     begin
       config_hash = YAML.load(body.to_s)
     rescue => error

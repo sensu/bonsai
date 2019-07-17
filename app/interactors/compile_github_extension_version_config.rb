@@ -46,7 +46,7 @@ class CompileGithubExtensionVersionConfig
              .first
     context.fail!(error: 'cannot find a Bonsai configuration file') unless path.present?
 
-    body = cmd_runner.cmd("cat '#{path}'")
+    body = cmd_runner.cmd("cat '#{path}'").encode(Encoding.find('UTF-8'), {invalid: :replace, undef: :replace, replace: ''})
     begin
       config_hash = YAML.load(body.to_s)
     rescue => error

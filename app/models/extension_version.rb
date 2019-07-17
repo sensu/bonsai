@@ -169,5 +169,13 @@ class ExtensionVersion < ApplicationRecord
       errors.add(:version, 'is formatted incorrectly')
     end
   end
+
+  #
+  # Delete attached release assets if deleting version
+  #
+  def  delete_release_assets
+    DestroyAssetsWorker.perform_async(self.id)
+  end 
+
 end
 
