@@ -115,6 +115,10 @@ class ExtensionAuthorizer < Authorizer::Base
     add_hosted_extension_version?
   end
 
+  def download_hosted_extension_version_source?
+    owner_or_admin?
+  end 
+
   def change_tier?
     admin?
   end

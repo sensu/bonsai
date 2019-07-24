@@ -10,6 +10,15 @@
     </li>
   <%- end %>
 
+  <%- if extension.hosted? && policy(extension).download_hosted_extension_version_source? && version.source_file.attached? %>
+    <li>
+      <%= link_to rails_blob_path(version.source_file, disposition: "attachment") do %>
+        <i class="fa fa-file-code-o"></i>
+        <span>Download source <%= version.version %></span>
+      <% end %>
+    </li>
+  <%- end %>
+
   <%- if extension.hosted? && policy(extension).delete_hosted_extension_version? && extension.extension_versions.many? %>
     <li>
       <%= link_to delete_extension_version_path(extension, username: extension.owner_name, version: version),
@@ -208,4 +217,5 @@
       </div>
     </div>
   <% end %>
+
 </ul>
