@@ -12,7 +12,7 @@ class SetupExtensionWebHooksWorker < ApplicationWorker
           content_type: "json"
         },
         {
-          events: ["release", "watch"],
+          events: ["release", "watch", "member"],
           active: true
         }
       )

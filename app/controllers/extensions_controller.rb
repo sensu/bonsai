@@ -331,8 +331,18 @@ class ExtensionsController < ApplicationController
   # Receive updates from GitHub's webhook API about an extension's repo.
   #
   def webhook
-    # TODO: Don't do a full update on watch event
-    CollectExtensionMetadataWorker.perform_async(@extension.id, [])
+    event_type = request.headers["X-GitHub-Event"]
+    # payload    = request.body
+    case event_type
+      when "release"
+        CollectExtensionMetadataWorker.perform_async(@extension.id, [])
+      when "watch"
+        ExtractExtensionStargazersWorker.perform_async(@extension.id)
+      when "member"
+        ExtractExtensionCollaboratorsWorker.perform_async(@extension.id)
+      else
+        Rails.logger.info '*** Github Error: unidentified event type'
+    end
     head :ok
   end
 
@@ -347,7 +357,8 @@ class ExtensionsController < ApplicationController
 
   def qualify_scope(scope, params)
     if params[:q].present?
-      scope = scope.search(params[:q])
+      # separate words so the results are based on word score
+      scope = scope.search(params[:q].gsub('-', ' '))
     end
 
     if params[:featured].present?
