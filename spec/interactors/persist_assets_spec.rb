@@ -52,9 +52,11 @@ describe PersistAssets do
 
   def stub_aws
     Aws::S3::Resource.any_instance.stub_chain(:bucket, :exists?).and_return(true)
+    Aws::S3::Resource.any_instance.stub_chain(:bucket, :object, :delete).and_return(true)
     Aws::S3::Resource.any_instance.stub_chain(:bucket, :object, :exists?).and_return(true)
     Aws::S3::Resource.any_instance.stub_chain(:bucket, :object, :public_url).and_return('https://s3.us-west-2.amazonaws.com/bucket/example.com')
     Aws::S3::Resource.any_instance.stub_chain(:bucket, :object, :last_modified).and_return(DateTime.now.to_s(:db))
+    Aws::S3::Resource.any_instance.stub_chain(:bucket, :object, :put).and_return(true)
   end
   
 end
