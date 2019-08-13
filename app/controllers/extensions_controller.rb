@@ -332,10 +332,13 @@ class ExtensionsController < ApplicationController
   #
   def webhook
     event_type = request.headers["X-GitHub-Event"]
-    # payload    = request.body
+    payload    = JSON.parse(request.body.read)
+
     case event_type
       when "release"
-        CollectExtensionMetadataWorker.perform_async(@extension.id, [])
+        unless payload['release']['draft']
+          CollectExtensionMetadataWorker.perform_async(@extension.id, [])
+        end
       when "watch"
         ExtractExtensionStargazersWorker.perform_async(@extension.id)
       when "member"
