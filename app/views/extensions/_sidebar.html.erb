@@ -170,5 +170,9 @@
     </div>
   <% end %>
 
-  <div style="margin-top: 2rem;"><%= link_to "Flag #{t('nouns.extension').titleize}", "#", data: { :"reveal-id" => "report-extension" } %></div>
+  <div style="margin-top: 2rem;">
+    <% reveal_id = signed_in? ? 'report-extension' : 'report-extension-sign-in' %>
+    <%= link_to "Flag #{t('nouns.extension').titleize}", "#", data: { :"reveal-id" => reveal_id } %>
+  </div>
+
 </div>
