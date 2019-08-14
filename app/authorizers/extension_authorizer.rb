@@ -123,10 +123,6 @@ class ExtensionAuthorizer < Authorizer::Base
     admin?
   end
 
-  def report?
-    user?
-  end 
-
   def sync_repo?
     owner_or_collaborator? || admin?
   end
@@ -153,7 +149,4 @@ class ExtensionAuthorizer < Authorizer::Base
     owner? || admin?
   end
 
-  def user?
-    user.present?
-  end
 end
