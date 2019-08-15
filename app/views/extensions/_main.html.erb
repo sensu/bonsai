@@ -63,3 +63,9 @@
     </div>
   <% end %>
 </div>
+
+<div class="reveal-modal" id="report-extension-sign-in" data-reveal>
+  <h1>You must be signed in to report this <%= t('nouns.extension') %>.</h1>
+  
+  <%= link_to 'Sign In with Github', sign_in_path, rel: 'sign_in' %>
+</div>
