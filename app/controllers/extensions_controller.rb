@@ -394,6 +394,11 @@ class ExtensionsController < ApplicationController
       scope = scope.where(id: Extension.for_platforms(Array.wrap(params[:platforms])))
     end
 
+    if params[:owner_name]
+      owner_name = params[:owner_name].gsub(/\s+/, "")
+      scope = scope.where("owner_name ILIKE '%#{owner_name}%'")
+    end
+
     return scope
   end
 

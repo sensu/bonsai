@@ -367,6 +367,16 @@ input[type="search"].extension_search_textfield {
   }
 }
 
+.advanced_search_user_name {
+  @include grid-column($columns: 6, $collapse: true);
+  white-space: nowrap;
+  margin:0;
+  padding-left: 4.375rem;
+  position: relative;
+  top: rem-calc(-2);
+  vertical-align: middle;
+}
+
 @media #{$small-only} {
   .advanced_search_platforms, .advanced_search_architectures {
     @include grid-column($columns: 12, $collapse: true);

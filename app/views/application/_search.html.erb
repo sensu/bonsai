@@ -26,7 +26,7 @@
         <% supported_platforms.each do |platform| %>
           <div class="advanced_search_platform">
             <label>
-              <%=check_box_tag 'platforms[]', platform, params[:platforms] ? params[:platforms].include?(platform) : false %>
+              <%= check_box_tag 'platforms[]', platform, params[:platforms] ? params[:platforms].include?(platform) : false %>
               <span><%= platform %></span>
             </label>
           </div>
@@ -40,7 +40,7 @@
         <% supported_architectures.each do |arch| %>
           <div class="advanced_search_architecture">
             <label>
-              <%=check_box_tag 'archs[]', arch, params[:archs] ? params[:archs].include?(arch) : false %>
+              <%= check_box_tag 'archs[]', arch, params[:archs] ? params[:archs].include?(arch) : false %>
               <%= arch %>
             </label>
           </div>
@@ -54,7 +54,7 @@
         <% supported_tiers.each do |tier| %>
           <div class="advanced_search_architecture">
             <label>
-              <%=check_box_tag 'tiers[]', tier.id, params[:tiers] ? params[:tiers].include?(tier) : false %>
+              <%= check_box_tag 'tiers[]', tier.id, params[:tiers] ? params[:tiers].include?(tier) : false %>
               <%= tier.name %>
             </label>
           </div>
@@ -62,5 +62,10 @@
       </div>
     <% end %>
 
+    <h4> Github Name </h4>
+    <div class = "advanced_search_user_name">
+      <label>Name like: </label><%= text_field_tag 'owner_name' %>
+    </div>
+    
   </div>
 <% end %>
