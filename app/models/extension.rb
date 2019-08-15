@@ -103,14 +103,19 @@ class Extension < ApplicationRecord
   # --------------------
   pg_search_scope(
     :search,
-    against: [:name],
+    against: {lowercase_name: 'A', owner_name: 'B'},
     associated_against: {
       tags: [:name],
       github_account: [:username],
       extension_versions: [:description]
     },
+    ranked_by: 'extensions.deprecated, :tsearch',
     using: {
-      tsearch: {prefix: true, any_word: true}
+      tsearch: {
+        prefix: true, 
+        any_word: false, 
+        normalization: 16,
+      }
     }
   )
 
