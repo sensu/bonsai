@@ -148,4 +148,5 @@ class ExtensionAuthorizer < Authorizer::Base
   def owner_or_admin?
     owner? || admin?
   end
+
 end

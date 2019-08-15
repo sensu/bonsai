@@ -61,6 +61,19 @@ module ApplicationHelper
     end
   end
 
+  def tier_description(tier)
+    case tier
+      when 'Community'
+        'Open-source assets shared by the Sensu Community. Collaborate, share, and star your favorites with Bonsai.'
+      when 'Supported'
+        'Open-source assets supported by Sensu Inc., including supported Slack, PagerDuty, and InfluxDB handlers.'
+      when 'Enterprise'
+        'Hosted assets unlocked with a Sensu enterprise license. See the Sensu docs for more information about managing your Sensu license.'
+      else
+        ''
+    end
+  end
+
   private
 
   # Returns a +Hash+ that looks like:
