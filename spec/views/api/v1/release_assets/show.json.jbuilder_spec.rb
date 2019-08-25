@@ -44,23 +44,6 @@ describe 'api/v1/release_assets/show' do
     expect(json_body['metadata']['labels']).to eql(nil)
   end
 
-  #it "includes extension labels when present" do
-  #  extension.tags << Tag.new(name: 'label')
-  #  render
-  #  expect(json_body['metadata']['labels']).to eql(@asset.extension.tags.map(&:name).join(', '))
-  #end
-
-  it "includes default annotations" do
-    extension.tags << Tag.new(name: 'label')
-    @annotations = common_annotations(extension, version, @asset)
-    render
-    annotations = json_body['metadata']['annotations']
-    expect(annotations['sensio.io.bonsai.url']).to eq(@asset.vanity_url)
-    expect(annotations['sensio.io.bonsai.tier']).to eq(extension.tier_name)
-    expect(annotations['sensio.io.bonsai.version']).to eq(version.version)
-    expect(annotations['sensio.io.bonsai.tags']).to eq(@asset.labels.join(', '))
-  end
-
   it "serializes the url" do
     render
     expect(json_body['spec']['url']).to eql(@asset.vanity_url)

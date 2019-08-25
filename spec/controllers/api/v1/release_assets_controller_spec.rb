@@ -51,7 +51,7 @@ describe Api::V1::ReleaseAssetsController do
       #end
 
       it 'includes common annotations' do 
-        expect(@data['metadata']['annotations'].keys).to include('sensio.io.bonsai.url')
+        expect(@data['metadata']['annotations'].keys).to include('io.sensio.bonsai.url')
       end
     end
 
@@ -91,7 +91,7 @@ describe Api::V1::ReleaseAssetsController do
       end
 
       it 'includes hosted annotation' do 
-        expect(@data['metadata']['annotations'].keys).to include('sensio.io.bonsai.message')
+        expect(@data['metadata']['annotations'].keys).to include('io.sensio.bonsai.message')
       end
       
     end
