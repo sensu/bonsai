@@ -11,6 +11,7 @@ class ApplicationController < ActionController::Base
   include BonsaiAssetIndex::Authorization
   include BonsaiAssetIndex::Authentication
   include BonsaiAssetIndex::LocationStorage
+  include UrlHelpers
 
   rescue_from(
     NotAuthorizedError,
@@ -26,22 +27,6 @@ class ApplicationController < ActionController::Base
   end
 
   protected
-
-  def owner_scoped_extension_url(extension)
-    if extension.hosted?
-      extension_url(extension, username: "#{ENV['HOST_ORGANIZATION']}")
-    else
-      extension_url(extension, username: extension.owner_name)
-    end
-  end
-
-  def owner_scoped_release_asset_builds_api_v1_url(extension, version)
-    if extension.hosted?
-      api_v1_release_asset_builds_url(username: "#{ENV['HOST_ORGANIZATION']}", version: version.version)
-    else
-      api_v1_release_asset_builds_url(username: extension.owner_name, version: version.version)
-    end
-  end 
 
   def not_found!(error = nil)
     raise error if error && Rails.env.development?
