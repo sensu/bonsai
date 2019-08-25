@@ -35,6 +35,14 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def owner_scoped_release_asset_builds_api_v1_url(extension, version)
+    if extension.hosted?
+      api_v1_release_asset_builds_url(username: "#{ENV['HOST_ORGANIZATION']}", version: version.version)
+    else
+      api_v1_release_asset_builds_url(username: extension.owner_name, version: version.version)
+    end
+  end 
+
   def not_found!(error = nil)
     raise error if error && Rails.env.development?
 

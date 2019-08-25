@@ -20,6 +20,7 @@ Rails.application.routes.draw do
       get 'assets/:username/:extension/versions/:version/download' => 'extension_versions#download', as: :extension_version_download, constraints: { version: VERSION_PATTERN }
       delete 'assets/:username/:extension/versions/:version' => 'extension_uploads#destroy_version', constraints: { version: VERSION_PATTERN }
       get 'users/:user' => 'users#show', as: :user
+      get 'assets/:username/:id/:version/release_asset_builds' => 'release_assets#index', as: :release_asset_builds, constraints: {version: VERSION_PATTERN}
       get 'assets/:username/:id/:version/:platform/:arch/release_asset' => 'release_assets#show', as: :release_asset, constraints: {version: VERSION_PATTERN}
 
       resources :tags, only: [:index]
