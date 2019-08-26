@@ -10,7 +10,7 @@
 <div class="changelog">
   <% if @extension_version.changelog.present? %>
     <h2 class="title">Changelog</h2>
-    <%= HTML_Truncator.truncate(render_document(@extension_version.changelog, @extension_version.changelog_extension), 30, ellipsis: '').html_safe %>
+    <%= HTML_Truncator.truncate(render_document(@extension_version.changelog, @extension_version.changelog_extension, repo: @extension_version.github_repo, version: @extension_version.version), 30, ellipsis: '').html_safe %>
 
     <%= link_to 'View Full Changelog',
                 extension_version_url(

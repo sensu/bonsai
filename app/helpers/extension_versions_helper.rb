@@ -3,6 +3,23 @@ require 'commonmarker'
 module ExtensionVersionsHelper
   include MarkdownHelper
 
+  def github_flavor_markdown_pipeline
+    ctx = {
+      gfm: true,
+      base_url: "/",
+      users_path: users_path,
+      gfm: true,
+    }
+    @markdown_pipeline ||= HTML::Pipeline.new([
+      HTML::Pipeline::MarkdownFilter,
+      HTML::Pipeline::LinkifyGitHubFilter,
+      HTML::Pipeline::SanitizationFilter,
+      HtmlPipeline::GithubIssueFilter,
+      HtmlPipeline::MentionFilter,
+      HtmlPipeline::SyntaxHighlightFilter,
+    ], ctx)
+  end
+
   #
   # Encapsulates the logic required to return an updated_at timestamp for an
   # Atom feed, while handling possibly empty collections
@@ -32,7 +49,10 @@ module ExtensionVersionsHelper
   def extension_atom_content(extension_version)
     if extension_version.changelog.present?
       changelog = render_document(
-        extension_version.changelog, extension_version.changelog_extension
+        extension_version.changelog,
+        extension_version.changelog_extension,
+        repo: extension_version.github_repo,
+        version: extension_version.version,
       )
       changelog_link = link_to(
         'View Full Changelog',
@@ -52,6 +72,7 @@ module ExtensionVersionsHelper
       extension_version.description
     end
   end
+
   #
   # Returns the given README +content+ as it should be rendered. If the given
   # +extension+ indicates the README is formatted as Markdown, the +content+ is
@@ -62,18 +83,20 @@ module ExtensionVersionsHelper
   #
   # @return [String] the Document content ready to be rendered
   #
-  def render_document(content, extension, repo_loc = "", version = "", hard_wrap: false)
+  def render_document(content, extension, repo: "", version: "")
     document = begin
       if %w(md mdown markdown).include?(extension.downcase)
-        # use commonmarker instead of redcarpet for markdown
-        #render_markdown(content, hard_wrap: hard_wrap)
-        CommonMarker.render_html(content, :DEFAULT, [:table])
+        result = github_flavor_markdown_pipeline.call(content, {
+          asset_repo: repo,
+          asset_version: version,
+        })
+        result[:output].to_s
       else
         content
       end
     end
     # exlude (?!.*) any domains which we should call directly
-    document.gsub!(/src="(?!.*travis.ci)(?!http)(.+)"/, %(src="https://github.com/#{repo_loc}/raw/#{version}/\\1"))
+    document.gsub!(/src="(?!.*travis.ci)(?!http)(.+)"/, %(src="https://github.com/#{repo}/raw/#{version}/\\1"))
     document.html_safe
   end
 

@@ -4,6 +4,42 @@ describe ExtensionVersionsHelper do
   let(:config)            { {} }
   let(:extension_version) { build_stubbed :extension_version, config: config }
 
+  describe "render_markdown" do
+    it 'returns HTML for given markdown' do
+      input = <<-CODE
+# README
+
+@calebhailey and @amdprophet bring the overwhelming power of Perl to Sensu.
+
+<script type="text/javascript">alert("haxx")</script>
+
+Closes #91.
+
+Pending https://www.github.com/sensu/bonsai/issues/91.
+
+```yaml
+---
+spec: idk
+```
+
+      CODE
+
+      output = <<-CODE
+<h1>README</h1>
+<p><a href="/users/calebhailey" class="user-mention">@calebhailey</a> and <a href="/users/amdprophet" class="user-mention">@amdprophet</a> bring the overwhelming power of Perl to Sensu.</p>
+
+<p>Closes <a href="https://www.github.com/my/repo/issues/91">#91</a>.</p>
+<p>Pending <a href="https://www.github.com/sensu/bonsai/issues/91">sensu/bonsai#91</a>.</p>
+<pre lang="yaml" class="highlight-yaml"><span style="color: #f4bf75">---</span>
+<span style="color: #6a9fb5">spec</span><span style="color: #d0d0d0">:</span> <span style="color: #90a959">idk</span>
+</pre>
+      CODE
+      output.chomp!
+
+      expect(helper.render_document(input, "md", repo: "my/repo")).to eq(output.html_safe)
+    end
+  end
+
   describe "download_url_for" do
     it 'returns a GitHub URL' do
       expect(helper.download_url_for(extension_version)).to include "github.com"
@@ -22,7 +58,7 @@ describe ExtensionVersionsHelper do
         extension_version.config = {"builds" => [{"viable"=>true, "asset_url" => "http://url.com"}]}
       end
 
-      before do 
+      before do
         extension_version.config['builds'].each do |build|
           extension_version.release_assets << build(:release_asset,
             platform: build['platform'],
@@ -87,7 +123,7 @@ describe ExtensionVersionsHelper do
         expect(extension_version.config).to be_present
       end
 
-      before do 
+      before do
         extension_version.config['builds'].each do |build|
           extension_version.release_assets << build(:release_asset,
             platform: build['platform'],

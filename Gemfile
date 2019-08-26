@@ -50,8 +50,12 @@ gem 'omniauth-github'
 gem 'mixlib-authentication'
 gem 'pundit'
 
-gem 'redcarpet' # markdown parsing
-gem 'commonmarker' # markdown parsing used by Github
+gem 'redcarpet'     # markdown parsing
+gem 'html-pipeline' # pre-processing of markdown
+gem 'commonmarker'  # parse Github Flavoured Markdown
+gem 'rouge'         # syntax highlighting of code blocks
+gem 'sanitize'      # omit unwanted tags & attributes from markdown (eg. script tags or style attributes.)
+gem 'html-pipeline-linkify_github' # format Github links
 gem 'safe_yaml', :require => false
 
 gem 'octokit'
