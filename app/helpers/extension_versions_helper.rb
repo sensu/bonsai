@@ -5,8 +5,7 @@ module ExtensionVersionsHelper
 
   def github_flavor_markdown_pipeline
     ctx = {
-      gfm: true,
-      base_url: "/",
+      base_url: root_path,
       users_path: users_path,
       gfm: true,
     }
