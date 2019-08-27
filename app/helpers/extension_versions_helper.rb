@@ -14,6 +14,7 @@ module ExtensionVersionsHelper
       HTML::Pipeline::LinkifyGitHubFilter,
       HTML::Pipeline::SanitizationFilter,
       HtmlPipeline::GithubIssueFilter,
+      HtmlPipeline::GithubShaFilter,
       HtmlPipeline::MentionFilter,
       HtmlPipeline::SyntaxHighlightFilter,
     ], ctx)

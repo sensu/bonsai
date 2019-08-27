@@ -17,6 +17,9 @@ Closes #91.
 
 Pending https://www.github.com/sensu/bonsai/issues/91.
 
+abcdef0 updates the thing.
+0123abc updates to match reference implementation, see: sensu/sensu@abc123f!
+
 ```yaml
 ---
 spec: idk
@@ -30,6 +33,8 @@ spec: idk
 
 <p>Closes <a href="https://www.github.com/my/repo/issues/91">#91</a>.</p>
 <p>Pending <a href="https://www.github.com/sensu/bonsai/issues/91">sensu/bonsai#91</a>.</p>
+<p><a href="https://www.github.com/my/repo/commit/abcdef0"><tt>abcdef0</tt></a> updates the thing.<br>
+<a href="https://www.github.com/my/repo/commit/0123abc"><tt>0123abc</tt></a> updates to match reference implementation, see: <a href="https://www.github.com/sensu/sensu/commit/abc123f">sensu/sensu@<tt>abc123f</tt></a>!</p>
 <pre lang="yaml" class="highlight-yaml"><span style="color: #f4bf75">---</span>
 <span style="color: #6a9fb5">spec</span><span style="color: #d0d0d0">:</span> <span style="color: #90a959">idk</span>
 </pre>
