@@ -14,8 +14,12 @@ class HtmlPipeline::GithubShaFilter < HTML::Pipeline::Filter
     # Don't look for mentions in text nodes that are children of these elements
     IGNORE_PARENTS = %w(pre code a style script).to_set
 
+    # Conveniently there are no words in the english language that are 7-8
+    # characters long and only contain the letters 'a' through 'f'. As a result
+    # we can safely match any isolated 7-8 character long string using
+    # [a-f0-9]{7,8}.
     PATTERN = /
-      (?![\@])(^|\W)                           # non-word or amdpersand
+      (?![\@])(^|\W)                             # non-word or amdpersand,
       (?:([\w\-]+\/[\w\-]+)\@)?                  # match org and repo,
       ([a-f0-9]{7,8}|[a-f0-9]{40})               # match a 7, 8 or 40 char SHA,
       (?!\/)(?=\.+[ \t\W]|\.+$|[^0-9a-zA-Z_.]|$) # trailing characters
