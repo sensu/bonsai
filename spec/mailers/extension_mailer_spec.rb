@@ -5,6 +5,19 @@ describe ExtensionMailer do
   let(:user)      { create :user }
   let(:reporter)  { create :user }
 
+  describe "follower_notification_email" do
+    let(:version) { create(:extension_version, extension: extension) }
+    let(:mail) { ExtensionMailer.follower_notification_email(version, user) }
+    let(:system_email) { create :system_email, name: 'New extension version' }
+
+    before do
+      create :email_preference, user: user, system_email: system_email
+    end
+
+    it {expect(mail.to).to include user.email}
+    it {mail.parts.each {|part| expect(part.body).to match /New version of redis-2 released/i}}
+  end
+
   describe "notify_moderator_of_new" do
     let(:mail) { ExtensionMailer.notify_moderator_of_new(extension.id, user.id) }
 
