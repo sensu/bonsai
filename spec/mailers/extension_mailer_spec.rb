@@ -15,7 +15,7 @@ describe ExtensionMailer do
     end
 
     it {expect(mail.to).to include user.email}
-    it {mail.parts.each {|part| expect(part.body).to match /New version of redis-2 released/i}}
+    it {mail.parts.each {|part| expect(part.body).to match /New version of redis-\d+ released/i}}
   end
 
   describe "notify_moderator_of_new" do
