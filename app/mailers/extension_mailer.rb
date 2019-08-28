@@ -14,7 +14,7 @@ class ExtensionMailer < ApplicationMailer
     @email_preference = user.email_preference_for('New extension version')
     @to = user.email
 
-    mail(to: @to, subject: "A new version of the #{@extension_version.name} #{I18n.t('nouns.extension')} has been released") unless @to.blank?
+    mail(to: @to, subject: "A new version of #{@extension_version.owner_name}: #{@extension_version.name} #{I18n.t('nouns.extension')} has been released") unless @to.blank?
   end
 
   #
@@ -87,7 +87,7 @@ class ExtensionMailer < ApplicationMailer
     @extension = Extension.find(extension_id)
     @moderator = User.find(user_id)
 
-    @subject = %(New #{I18n.t('nouns.extension')} "#{@extension.name}" has been added to the Bonsai Asset Index)
+    @subject = %(A New #{I18n.t('nouns.extension')} "#{@extension.owner_name}: #{@extension.name}" has been added to the Bonsai Asset Index)
 
     mail(to: @moderator.email, subject: @subject) unless @moderator.email.blank?
   end
