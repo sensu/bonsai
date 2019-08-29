@@ -23,7 +23,7 @@
     
     <h4> Select Supported Platforms </h4>
     <div class="advanced_search_platforms" >
-      <% %w(Linux Centos Debian Windows Alpine OsX).each do |platform| %>
+      <% %w(linux centos debian Windows alpine OSX).each do |platform| %>
         <div class="advanced_search_platform">
           <label>
             <%= check_box_tag 'platforms[]', platform, params[:platforms] ? params[:platforms].include?(platform) : false %>
