@@ -1,1 +1,1 @@
-<%= render_document(version.release_notes.presence || "No release notes are available.", "md", hard_wrap: true) %>
+<%= render_document(version.try(:release_notes) || "No release notes are available.", "md", version.version, hard_wrap: true) %>
