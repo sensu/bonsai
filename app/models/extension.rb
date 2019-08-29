@@ -172,7 +172,7 @@ class Extension < ApplicationRecord
   def sorted_extension_versions
     # ignore preceding 'V' and ignore 'master' so it sorts to end
     # convert version to array of integers so 10.0.0 comes after 9.0.0
-    @sorted_extension_versions ||= extension_versions.order(Arel.sql("STRING_TO_ARRAY( REGEXP_REPLACE(extension_versions.version, E'V|v|master', ''), '.')::int[] DESC"))
+    @sorted_extension_versions ||= extension_versions.order(Arel.sql("STRING_TO_ARRAY( REGEXP_REPLACE(extension_versions.version, E'V|v|master|-(.*)', ''), '.')::int[] DESC"))
   end
 
   #
