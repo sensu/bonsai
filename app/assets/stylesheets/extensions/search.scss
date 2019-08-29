@@ -367,11 +367,10 @@ input[type="search"].extension_search_textfield {
   }
 }
 
-.advanced_search_user_name {
+.advanced_search_user_name, .advanced_search_other_platform {
   @include grid-column($columns: 6, $collapse: true);
   white-space: nowrap;
   margin:0;
-  padding-left: 4.375rem;
   position: relative;
   top: rem-calc(-2);
   vertical-align: middle;

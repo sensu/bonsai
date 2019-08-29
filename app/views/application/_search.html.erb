@@ -20,23 +20,26 @@
   </div>
 
   <div class="advanced_search_body">
-    <% if supported_platforms.any? %>
-      <h4> Select Supported Platforms </h4>
-      <div class = "advanced_search_platforms" >
-        <% supported_platforms.each do |platform| %>
-          <div class="advanced_search_platform">
-            <label>
-              <%= check_box_tag 'platforms[]', platform, params[:platforms] ? params[:platforms].include?(platform) : false %>
-              <span><%= platform %></span>
-            </label>
-          </div>
-        <% end %>
+    
+    <h4> Select Supported Platforms </h4>
+    <div class="advanced_search_platforms" >
+      <% %w(Linux Centos Debian Windows Alpine OsX).each do |platform| %>
+        <div class="advanced_search_platform">
+          <label>
+            <%= check_box_tag 'platforms[]', platform, params[:platforms] ? params[:platforms].include?(platform) : false %>
+            <span><%= platform %></span>
+          </label>
+        </div>
+      <% end %>
+      <div class = "advanced_search_other_platform">
+        <label>Other Platform: </label><%= text_field_tag 'platforms[]' %>
       </div>
-    <% end %>
+    </div>
+    
 
     <% if supported_architectures.any? %>
       <h4> Select Supported Architectures </h4>
-      <div class = "advanced_search_architectures" >
+      <div class="advanced_search_architectures" >
         <% supported_architectures.each do |arch| %>
           <div class="advanced_search_architecture">
             <label>
@@ -50,7 +53,7 @@
 
     <% if supported_tiers.any? %>
       <h4> Select Tier </h4>
-      <div class = "advanced_search_architectures" >
+      <div class="advanced_search_architectures" >
         <% supported_tiers.each do |tier| %>
           <div class="advanced_search_architecture">
             <label>
@@ -63,9 +66,10 @@
     <% end %>
 
     <h4> Github Name </h4>
-    <div class = "advanced_search_user_name">
+    <div class="advanced_search_user_name"  style='padding-left: 4.375rem;'>
       <label>Name like: </label><%= text_field_tag 'owner_name' %>
     </div>
+    <br style="clear:left;"/>
     
   </div>
 <% end %>
