@@ -22,6 +22,7 @@ class ExtensionsController < ApplicationController
   #   GET /extensions?order=recently_updated
   #
   def index
+    params['platforms'].reject!(&:blank?)
     @extensions = qualify_scope(Extension, params)
                     .includes(:extension_versions)
 
