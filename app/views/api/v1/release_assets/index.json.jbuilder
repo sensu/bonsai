@@ -8,12 +8,10 @@ json.metadata do
   json.annotations  @annotations
 end
 
-headers = {headers: {'Authorization': 'Bearer $TOKEN', 'X-Forwarded-For': '$CLIENT'}}
 json.spec do
 	json.builds @version.release_assets do |asset|
 	  json.url            asset.vanity_url # url for base link to asset on bonsai
 	  json.sha512         asset.source_asset_sha
 	  json.filters        asset.filter
-	  json.merge! 				headers
 	end
 end
