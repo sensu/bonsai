@@ -112,8 +112,8 @@ class Extension < ApplicationRecord
     ranked_by: 'extensions.deprecated, :tsearch',
     using: {
       tsearch: {
-        prefix: true, 
-        any_word: false, 
+        prefix: true,
+        any_word: false,
         normalization: 16,
       }
     }
@@ -524,6 +524,10 @@ class Extension < ApplicationRecord
     owner_name
   end
 
+  def name_with_namespace
+    "#{owner_name}/#{name}"
+  end
+
   private
 
   #
@@ -558,4 +562,5 @@ class Extension < ApplicationRecord
     end
     true
   end
+
 end

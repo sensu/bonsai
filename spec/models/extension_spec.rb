@@ -16,7 +16,7 @@ describe Extension do
     end
   end
 
-  describe 'latest_version' do 
+  describe 'latest_version' do
     let(:extension) { create(:extension) }
     let(:version) { create(:extension_version, extension: extension) }
 
@@ -167,6 +167,10 @@ describe Extension do
   describe '#hosted?' do
     it {expect(create(:extension, :hosted).hosted?).to be_truthy}
     it {expect(create(:extension         ).hosted?).to be_falsey}
+  end
+
+  describe '#name_with_namespace' do
+    it {expect(create(:extension, name: 'my-extension', owner_name: 'my-org').name_with_namespace).to eq("my-org/my-extension")}
   end
 
   describe '#tier' do

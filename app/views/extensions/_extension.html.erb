@@ -7,7 +7,7 @@
         </span>
       </div>
       <div class="small-4 columns title">
-        <%= link_to owner_scoped_extension_url(extension), rel: 'extension', itemprop: 'name' do %><%= extension.name %><% end %>
+        <%= link_to owner_scoped_extension_url(extension), rel: 'extension', itemprop: 'name' do %><%= extension.name_with_namespace %><% end %>
         <% if !extension.enabled? %>
           <i class="fa fa-times"></i>
           <small>Disabled</small>
@@ -23,7 +23,7 @@
         <span><%= extension.tier_name %> tier</span>
       </span>
       <span class="small-2 columns title date-modified end">
-        <span>Updated</span> 
+        <span>Updated</span>
         <span itemprop="dateModified"><%= extension.updated_at.to_s(:longish) %></span>
       </span>
 
@@ -31,7 +31,7 @@
         <span class="small-12 title">
           <%- replacement_extension = extension.replacement %>
           <% if replacement_extension.present? %>
-            <i class="fa fa-exclamation-triangle"></i> 
+            <i class="fa fa-exclamation-triangle"></i>
               <span>Deprecated in favor of <%= link_to replacement_extension.name, owner_scoped_extension_url(replacement_extension) %></span>
           <% else %>
             <i class="fa fa-exclamation-triangle"></i> <span>Deprecated</span>
@@ -39,7 +39,7 @@
         </span>
       <% end %>
 
-     
+
     </div>
   </div>
   <div class="body">
