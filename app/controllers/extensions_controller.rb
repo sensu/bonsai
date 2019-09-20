@@ -353,7 +353,7 @@ class ExtensionsController < ApplicationController
   def select_default_version
     version = @extension.extension_versions.find_by(id: params[:extension_version_id])
     version_id = version.present? ? version.id : nil
-    @extension.update_column(:selected_version_id, version_id) 
+    @extension.update_column(:selected_version_id, version_id)
     redirect_to owner_scoped_extension_url(@extension), notice: t("extension.default_version_selected")
   end
 
@@ -380,7 +380,7 @@ class ExtensionsController < ApplicationController
     end
 
     if params[:order].blank? && params[:q].blank?
-      scope = scope.order(:name)
+      scope = scope.order(deprecated: :asc, name: :asc)
     end
 
     if params[:supported_platform_id].present?
