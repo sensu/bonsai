@@ -52,6 +52,8 @@ gem 'pundit'
 
 gem 'redcarpet' # markdown parsing
 gem 'commonmarker' # markdown parsing used by Github
+gem 'html-pipeline' # Github HTML processing filters and utilities
+
 gem 'safe_yaml', :require => false
 
 gem 'octokit'

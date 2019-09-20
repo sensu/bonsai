@@ -138,6 +138,9 @@ GEM
       activesupport (>= 4.2.0)
     hashdiff (0.3.8)
     hashie (3.6.0)
+    html-pipeline (2.12.0)
+      activesupport (>= 2)
+      nokogiri (>= 1.4)
     html_truncator (0.4.2)
       nokogiri (~> 1.5)
     htmlentities (4.3.4)
@@ -423,6 +426,7 @@ DEPENDENCIES
   factory_bot_rails
   faraday_middleware
   file_validators
+  html-pipeline
   html_truncator
   interactor
   jbuilder (~> 2.5)
@@ -476,4 +480,4 @@ RUBY VERSION
    ruby 2.5.1p57
 
 BUNDLED WITH
-   1.17.2
+   1.17.3

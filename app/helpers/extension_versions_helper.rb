@@ -1,4 +1,4 @@
-require 'commonmarker'
+require 'html/pipeline'
 
 module ExtensionVersionsHelper
   include MarkdownHelper
@@ -65,9 +65,8 @@ module ExtensionVersionsHelper
   def render_document(content, extension, repo_loc = "", version = "", hard_wrap: false)
     document = begin
       if %w(md mdown markdown).include?(extension.downcase)
-        # use commonmarker instead of redcarpet for markdown
-        #render_markdown(content, hard_wrap: hard_wrap)
-        CommonMarker.render_html(content, :DEFAULT, [:table])
+        filter = HTML::Pipeline::MarkdownFilter.new(content)
+        filter.call
       else
         content
       end
