@@ -109,7 +109,8 @@ class Extension < ApplicationRecord
       github_account: [:username],
       extension_versions: [:description]
     },
-    ranked_by: 'extensions.deprecated, :tsearch',
+    ranked_by: '((CAST(NOT extensions.deprecated as INT) * 100) + :tsearch)', # ensure deprecated extensions are always listed last.
+    order_within_rank: 'extensions.owner_name, extensions.name',
     using: {
       tsearch: {
         prefix: true,
