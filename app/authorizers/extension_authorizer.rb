@@ -100,7 +100,7 @@ class ExtensionAuthorizer < Authorizer::Base
   # @return [Boolean]
   #
   def disable?
-    admin?
+    owner_or_collaborator? || admin?
   end
 
   def make_hosted_extension?

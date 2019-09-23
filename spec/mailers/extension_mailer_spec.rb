@@ -31,4 +31,17 @@ describe ExtensionMailer do
     it {expect(mail.to).to include user.email}
     it {mail.parts.each {|part| expect(part.body).to match /has been deprecated/i}}
   end
+
+  describe "extension_disabled_email" do
+    let(:mail)         { ExtensionMailer.extension_disabled_email(extension, user) }
+    let(:system_email) { create :system_email, name: 'Extension disabled' }
+
+    before do
+      create :email_preference, user: user, system_email: system_email
+    end
+
+    it {expect(mail.to).to include user.email}
+    it {mail.parts.each {|part| expect(part.body).to match /has been disabled/i}}
+  end
+
 end

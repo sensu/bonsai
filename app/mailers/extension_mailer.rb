@@ -32,6 +32,21 @@ class ExtensionMailer < ApplicationMailer
     mail(to: @to, subject: "The #{name} #{I18n.t('nouns.extension')} has been deleted") unless @to.blank?
   end
 
+#
+  # Create notification email to an extension's owner, collaborators and followers
+  # explaining that the extension has been disabled
+  #
+  # @param extension [String] the name of the extension
+  # @param user [User] the user to notify
+  #
+  def extension_disabled_email(extension, user)
+    @extension = extension
+    @email_preference = user.email_preference_for('Extension disabled')
+    @to = user.email
+
+    mail(to: @to, subject: "The #{@extension.owner_name}/#{@extension.name} #{I18n.t('nouns.extension')} has been disabled") unless @to.blank?
+  end
+
   #
   # Sends notification email to an extension's collaborators and followers
   # explaining that the extension has been deprecated in favor of another
