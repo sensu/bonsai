@@ -22,12 +22,12 @@ class SetUpGithubExtension
     org       = repo_info[:organization]
 
     github_organization = if org
-                            GithubOrganization.where(github_id: org[:id]).first_or_create!(
-                              name:       org[:login],
-                              avatar_url: org[:avatar_url]
-                            )
-                          end
-    owner_name          = org ? org[:login] : owner.username
+      GithubOrganization.where(github_id: org[:id]).first_or_create!(
+        name:       org[:login],
+        avatar_url: org[:avatar_url]
+      )
+    end
+    owner_name = org ? org[:login] : owner.username
     return github_organization, owner_name
   end
 
