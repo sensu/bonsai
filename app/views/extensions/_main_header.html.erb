@@ -1,5 +1,5 @@
 <div class="main-header">
-  <%= render 'extensions/compilation_error', version: version %>
+  <%= render 'extensions/compilation_errors', extension: extension, version: version %>
 
   <% if extension.deprecated? %>
     <div class="deprecation-notice">
@@ -29,7 +29,7 @@
   <% end %>
 
   <h1 class="heading">
-    <span itemprop="name"><%= extension.name %></span>
+    <span itemprop="name"><%= extension.owner_name %>/<%= extension.name %></span>
     <% if extension_versions.count > 0 %>
       <small class="version_dropdown">
         <%= link_to '#', 'data-dropdown' => 'versions', class: 'button radius tiny dropdown secondary', rel: 'extension_versions' do %>
@@ -95,11 +95,14 @@
 
   <p class="description" itemprop="description"><%= extension.description %></p>
 
+  
   <div class="row">
-    <div class="small-4 columns ">
-      <span class='downloads-commits'>Downloads in last month</span>
-      <div class="sparkline"><%= @downloads.join(",") %></div>
-    </div>
+    <%- if @downloads.present? %>
+      <div class="small-4 columns ">
+        <span class='downloads-commits'>Downloads in last month</span>
+        <div class="sparkline"><%= @downloads.join(",") %></div>
+      </div>
+    <% end %>
     <%- if is_commitable?(@extension) %>
       <div class="small-4 column end">
         <span class='downloads-commits'>Commits in last year</span>

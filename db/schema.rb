@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_23_224012) do
+ActiveRecord::Schema.define(version: 2019_09_25_185826) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -338,11 +338,17 @@ ActiveRecord::Schema.define(version: 2019_05_23_224012) do
     t.string "owner_name"
     t.bigint "tier_id"
     t.bigint "selected_version_id"
+    t.bigint "parent_id"
+    t.string "parent_name"
+    t.string "parent_owner_name"
+    t.string "compilation_error"
     t.index ["enabled"], name: "index_extensions_on_enabled"
     t.index ["github_organization_id"], name: "index_extensions_on_github_organization_id"
     t.index ["name"], name: "index_extensions_on_name"
     t.index ["owner_name", "lowercase_name"], name: "index_extensions_on_owner_name_and_lowercase_name", unique: true
     t.index ["owner_name"], name: "index_extensions_on_owner_name"
+    t.index ["parent_id"], name: "index_extensions_on_parent_id"
+    t.index ["parent_owner_name", "parent_name"], name: "index_extensions_on_parent_owner_name_and_parent_name"
     t.index ["tier_id"], name: "index_extensions_on_tier_id"
     t.index ["user_id"], name: "index_extensions_on_user_id"
   end
