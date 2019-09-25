@@ -24,8 +24,9 @@ class SyncExtensionRepoWorker < ApplicationWorker
   end
 
   def extract_tags_from_releases(releases)
-    tags = releases.map { |r| r[:tag_name] }
-    ["master", *tags]
+    #tags = 
+    releases.map { |r| r[:tag_name] }
+    #["master", *tags]
   end
 
   def destroy_unreleased_versions

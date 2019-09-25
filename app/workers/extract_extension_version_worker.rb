@@ -29,14 +29,13 @@ class ExtractExtensionVersionWorker < ApplicationWorker
   private
 
   def semver?(tag)
-    return true if tag == "master"
-
+    #return true if tag == "master"
     begin
       Semverse::Version.new(SemverNormalizer.call(tag))
-      return true
     rescue Semverse::InvalidVersionFormat
       return false
     end
+    true
   end
 
   def fetch_readme
