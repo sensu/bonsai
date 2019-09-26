@@ -24,12 +24,12 @@ class ExtensionMailer < ApplicationMailer
   # @param name [String] the name of the extension
   # @param user [User] the user to notify
   #
-  def extension_deleted_email(name, user)
-    @name = name
+  def extension_deleted_email(extension, user)
+    @extension = extension
     @email_preference = user.email_preference_for('Extension deleted')
     @to = user.email
 
-    mail(to: @to, subject: "The #{name} #{I18n.t('nouns.extension')} has been deleted") unless @to.blank?
+    mail(to: @to, subject: "#{@extension.owner_name}/#{@extension.name} #{I18n.t('nouns.extension')} has been deleted") unless @to.blank?
   end
 
   #
@@ -48,8 +48,8 @@ class ExtensionMailer < ApplicationMailer
     @to = user.email
 
     subject = %(
-      The #{@extension.name} #{I18n.t('nouns.extension')} has been deprecated in favor
-      of the #{@replacement_extension.name} #{I18n.t('nouns.extension')}
+      #{@extension.owner_name}/#{@extension.name} #{I18n.t('nouns.extension')} has been deprecated in favor
+      of #{@replacement_extension.owner_name}/#{@replacement_extension.name} #{I18n.t('nouns.extension')}
     ).squish
 
     mail(to: @to, subject: subject) unless @to.blank?
@@ -66,10 +66,10 @@ class ExtensionMailer < ApplicationMailer
   def transfer_ownership_email(transfer_request)
     @transfer_request = transfer_request
     @sender = transfer_request.sender.name
-    @extension = transfer_request.extension.name
+    @extension = transfer_request.extension
 
     subject = %(
-      #{@sender} wants to transfer ownership of the #{@extension} #{I18n.t('nouns.extension')} to
+      #{@sender} wants to transfer ownership of the #{@extension.owner_name}/#{@extension.name} #{I18n.t('nouns.extension')} to
       you.
     ).squish
 
@@ -87,7 +87,7 @@ class ExtensionMailer < ApplicationMailer
     @extension = Extension.find(extension_id)
     @moderator = User.find(user_id)
 
-    @subject = %(A New #{I18n.t('nouns.extension')} "#{@extension.owner_name}: #{@extension.name}" has been added to the Bonsai Asset Index)
+    @subject = %(A New #{I18n.t('nouns.extension')} "#{@extension.owner_name}/#{@extension.name}" has been added to the Bonsai Asset Index)
 
     mail(to: @moderator.email, subject: @subject) unless @moderator.email.blank?
   end
@@ -105,7 +105,7 @@ class ExtensionMailer < ApplicationMailer
     @description = report_description
     @reported_by = User.where(id: reported_by_id).first
 
-    @subject = %(#{I18n.t('nouns.extension').capitalize} "#{@extension.name}" reported)
+    @subject = %(#{I18n.t('nouns.extension').capitalize} "#{@extension.owner_name}/#{@extension.name}" reported)
 
     mail(to: @moderator.email, subject: @subject) unless @moderator.email.blank?
   end

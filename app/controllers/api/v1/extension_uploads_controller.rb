@@ -93,7 +93,7 @@ class Api::V1::ExtensionUploadsController < Api::V1Controller
       @extension.destroy
 
       if @extension.destroyed?
-        ExtensionDeletionWorker.perform_async(@extension.as_json)
+        ExtensionDeletionWorker.perform_async(@extension.id)
         BonsaiAssetIndex::Metrics.increment 'extension.deleted'
         UniverseCache.flush
       end
