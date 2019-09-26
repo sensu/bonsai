@@ -1,6 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    RedCloth (4.3.2)
     actioncable (5.2.2)
       actionpack (= 5.2.2)
       nio4r (~> 2.0)
@@ -118,8 +119,10 @@ GEM
     dotenv-rails (2.7.1)
       dotenv (= 2.7.1)
       railties (>= 3.2, < 6.1)
+    email_reply_parser (0.5.10)
     equalizer (0.0.11)
     erubi (1.8.0)
+    escape_utils (1.2.1)
     execjs (2.7.0)
     factory_bot (5.0.2)
       activesupport (>= 4.2.0)
@@ -134,6 +137,7 @@ GEM
     file_validators (2.3.0)
       activemodel (>= 3.2)
       mime-types (>= 1.0)
+    gemoji (3.0.1)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
     hashdiff (0.3.8)
@@ -198,6 +202,8 @@ GEM
     nio4r (2.3.1)
     nokogiri (1.10.1)
       mini_portile2 (~> 2.4.0)
+    nokogumbo (2.0.1)
+      nokogiri (~> 1.8, >= 1.8.4)
     oauth2 (1.4.1)
       faraday (>= 0.8, < 0.16.0)
       jwt (>= 1.0, < 3.0)
@@ -288,6 +294,7 @@ GEM
       railties (>= 4.2.0, < 6.0)
     rinku (2.0.5)
     rollout (2.4.3)
+    rouge (3.11.0)
     rspec-core (3.8.0)
       rspec-support (~> 3.8.0)
     rspec-expectations (3.8.2)
@@ -323,6 +330,10 @@ GEM
     ruby_http_client (3.3.0)
     rubyzip (1.2.2)
     safe_yaml (1.0.5)
+    sanitize (5.1.0)
+      crass (~> 1.0.2)
+      nokogiri (>= 1.8.0)
+      nokogumbo (~> 2.0)
     sass (3.7.3)
       sass-listen (~> 4.0.0)
     sass-listen (4.0.0)
@@ -411,6 +422,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  RedCloth
   airbrake
   and_feathers
   and_feathers-gzipped_tarball
@@ -423,9 +435,12 @@ DEPENDENCIES
   commonmarker
   database_cleaner
   dotenv-rails
+  email_reply_parser
+  escape_utils
   factory_bot_rails
   faraday_middleware
   file_validators
+  gemoji
   html-pipeline
   html_truncator
   interactor
@@ -451,11 +466,13 @@ DEPENDENCIES
   responders
   rinku
   rollout
+  rouge
   rspec-rails
   rubocop
   rubocop-rspec
   rubyzip
   safe_yaml
+  sanitize
   sass-rails (~> 5.0)
   selenium-webdriver
   semverse

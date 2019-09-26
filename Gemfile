@@ -51,8 +51,16 @@ gem 'mixlib-authentication'
 gem 'pundit'
 
 gem 'redcarpet' # markdown parsing
-gem 'commonmarker' # markdown parsing used by Github
+
 gem 'html-pipeline' # Github HTML processing filters and utilities
+# html-pipeline dependancies
+gem 'commonmarker' # markdown parsing used by Github
+gem 'rouge'
+gem 'escape_utils'
+gem 'email_reply_parser'
+gem 'gemoji'
+gem 'sanitize'
+gem 'RedCloth'
 
 gem 'safe_yaml', :require => false
 
