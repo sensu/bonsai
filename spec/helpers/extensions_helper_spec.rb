@@ -74,7 +74,11 @@ describe ExtensionsHelper do
       it 'returns an array of string' do
         extension.update_column(:compilation_error, compilation_error)
         version.update_column(:compilation_error, compilation_error)
-        version_2 = create(:extension_version, extension: extension, version: '5.2.2')
+        version_2 = create(:extension_version, 
+          extension: extension, 
+          version: '5.2.2', 
+          compilation_error: compilation_error
+        )
         extension.reload
         result = helper.compilation_errors(extension, version_2)
         expect(result.length).to eq(2)
