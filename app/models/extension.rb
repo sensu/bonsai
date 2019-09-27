@@ -111,7 +111,7 @@ class Extension < ApplicationRecord
       github_account: [:username],
       extension_versions: [:description]
     },
-    ranked_by: '((CAST(NOT extensions.deprecated as INT) * 100) + :tsearch)', # ensure deprecated extensions are always listed last.
+    ranked_by: "((CAST(NOT extensions.deprecated AS INT) * 10), (CAST(extensions.owner_name IN (#{ENV['HOST_PREFERRED_OWNER_NAMES']}) AS INT) * 10) + :tsearch)", # ensure deprecated extensions are always listed last and preferred owner_names first.
     order_within_rank: 'extensions.owner_name, extensions.name',
     using: {
       tsearch: {
