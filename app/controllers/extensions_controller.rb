@@ -275,15 +275,16 @@ class ExtensionsController < ApplicationController
   # Allows an admin to disable an extension, hiding it from view.
   #
   def disable
-    authorize! @extension
+    authorize! @extension, :disable?
     @extension.update_attribute(:enabled, false)
+    ExtensionDisabledNotifier.perform_async(@extension.id)
     redirect_to "/", notice: t("extension.disabled", extension: @extension.name)
   end
 
   #
   # PUT /extensions/:extension/enable
   #
-  # Allows an admin to enable an extension, hiding it from view.
+  # Allows an admin to enable an extension.
   #
   def enable
     authorize! @extension, :disable?
