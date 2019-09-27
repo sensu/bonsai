@@ -102,7 +102,7 @@ class ExtensionMailer < ApplicationMailer
     @extension = Extension.find(extension_id)
     @moderator = User.find(user_id)
 
-    @subject = %(A New #{I18n.t('nouns.extension')} "#{@extension.owner_name}: #{@extension.name}" has been added to the Bonsai Asset Index)
+    @subject = %(A New #{I18n.t('nouns.extension')} "#{@extension.owner_name}/#{@extension.name}" has been added to the Bonsai Asset Index)
 
     mail(to: @moderator.email, subject: @subject) unless @moderator.email.blank?
   end
@@ -120,7 +120,7 @@ class ExtensionMailer < ApplicationMailer
     @description = report_description
     @reported_by = User.where(id: reported_by_id).first
 
-    @subject = %(#{I18n.t('nouns.extension').capitalize} "#{@extension.name}" reported)
+    @subject = %(#{I18n.t('nouns.extension').capitalize} "#{@extension.owner_name}/#{@extension.name}" reported)
 
     mail(to: @moderator.email, subject: @subject) unless @moderator.email.blank?
   end

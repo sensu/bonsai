@@ -13,6 +13,7 @@ class Extension < ApplicationRecord
   belongs_to :category, required: false
   belongs_to :owner, class_name: 'User', foreign_key: :user_id, required: false
   belongs_to :github_organization, required: false
+  belongs_to :parent, class_name: 'Extension', foreign_key: :parent_id, required: false
   belongs_to :replacement, class_name: 'Extension', foreign_key: :replacement_id, required: false
   belongs_to :raw_tier, class_name: "Tier", foreign_key: "tier_id", required: false
   belongs_to :selected_version, class_name: "ExtensionVersion", foreign_key: :selected_version_id, required: false
@@ -26,6 +27,7 @@ class Extension < ApplicationRecord
   has_many :followers, through: :extension_followers, source: :user
   has_many :taggings, as: :taggable, dependent: :destroy
   has_many :tags, through: :taggings
+  has_many :forks, class_name: 'Extension', foreign_key: :parent_id
 
   # HACK: +Extension+ objects don't really have a source_file attachment or version attribute.
   # Instead, the children extension_versions each has their own individual +source_file+ attachment and version attribute.
