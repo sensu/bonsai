@@ -1,4 +1,4 @@
-<%= @sender %> wants to transfer ownership of the <%= @extension %> <%= t('nouns.extension') %> to you.
+<%= @sender %> wants to transfer ownership of <%= @extension.owner_name %>/<%= @extension.name %> <%= t('nouns.extension') %> to you.
 
 To accept, click here: <%= accept_transfer_url(@transfer_request) %>
 To decline, click here: <%= decline_transfer_url(@transfer_request) %>

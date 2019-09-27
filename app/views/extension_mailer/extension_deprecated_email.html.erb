@@ -1,7 +1,5 @@
 <p>
-  The <%= link_to @extension.name, extension_url(@extension, username: @extension.owner_name) %>
-  <%= t('nouns.extension') %> has been deprecated in favor of the
-  <%= link_to @replacement_extension.name, extension_url(@replacement_extension, username: @replacement_extension.owner_name) %>
+  <%= link_to "#{@extension.owner_name}/#{@extension.name}", extension_url(@extension, username: @extension.owner_name) %> <%= t('nouns.extension') %> has been deprecated in favor of <%= link_to "#{@replacement_extension.owner_name}/#{@replacement_extension.name}", extension_url(@replacement_extension, username: @replacement_extension.owner_name) %>
   <%= t('nouns.extension') %>.
 </p>
 
