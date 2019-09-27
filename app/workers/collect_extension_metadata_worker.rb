@@ -2,6 +2,7 @@ class CollectExtensionMetadataWorker < ApplicationWorker
 
   def perform(extension_id, compatible_platforms = [])
     ExtractExtensionBasicMetadataWorker.new.perform(extension_id)
+    ExtractExtensionParentWorker.perform_async(extension_id)
     ExtractExtensionLicenseWorker.perform_async(extension_id)
     ExtractExtensionCollaboratorsWorker.perform_async(extension_id)
     ExtractExtensionStargazersWorker.perform_async(extension_id)

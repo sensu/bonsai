@@ -6,7 +6,7 @@
       <h2 class="deprecation-copy">
         <%- replacement_extension = extension.replacement %>
         <% if replacement_extension.present? %>
-          <i class="fa fa-exclamation-triangle"></i> <%= extension.name %> has been deprecated in favor of <%= link_to "#{replacement_extension.owner_name}/#{replacement_extension.name}", owner_scoped_extension_url(replacement_extension) %>
+          <i class="fa fa-exclamation-triangle"></i> <%= extension.owner_name %>/<%= extension.name %> has been deprecated in favor of <%= link_to "#{replacement_extension.owner_name}/#{replacement_extension.name}", owner_scoped_extension_url(replacement_extension) %>
         <% else %>
           <i class="fa fa-exclamation-triangle"></i> <%= extension.name %> has been deprecated
         <% end %>
@@ -92,6 +92,19 @@
       </small>
     <% end %>
   </h1>
+
+  <% if extension.parent_name.present? && extension.parent_owner_name.present? %>
+    <p class="small-12 title">
+      <%- parent_extension = extension.parent %>
+      <i class="fa fa-exclamation-triangle"></i> 
+      <span>Forked from:</span>
+      <% if parent_extension.present? %>
+        <%= link_to "#{extension.parent_owner_name}/#{extension.parent_name}", owner_scoped_extension_url(parent_extension) %>
+      <% else %>
+        <span><%= extension.parent_owner_name %>/<%= extension.parent_name %></span>
+      <% end %>
+    </p>
+  <% end %>
 
   <p class="description" itemprop="description"><%= extension.description %></p>
 

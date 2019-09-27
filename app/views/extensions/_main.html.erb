@@ -17,17 +17,15 @@
   </dl>
 
   <div class="tabs-content">
-    <div class="content active">
-      <% if version.present? %>
-        <%=
-          case params[:tab]
-          when 'release-notes'
-            render 'extensions/release_notes', version: version
-          else
-            render 'extensions/readme', extension: extension, version: version
-          end
-        %>
-      <% end %>
+    <div class="content markdown-body active">
+      <%=
+        case params[:tab]
+        when 'release-notes'
+          render 'extensions/release_notes', version: version
+        else
+          render 'extensions/readme', extension: extension, version: version
+        end
+      %>
     </div>
   </div>
   
