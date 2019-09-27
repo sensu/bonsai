@@ -1,4 +1,4 @@
-require 'commonmarker'
+require 'html/pipeline'
 
 module ExtensionVersionsHelper
   include MarkdownHelper
@@ -65,15 +65,21 @@ module ExtensionVersionsHelper
   def render_document(content, extension, repo_loc = "", version = "", hard_wrap: false)
     document = begin
       if %w(md mdown markdown).include?(extension.downcase)
-        # use commonmarker instead of redcarpet for markdown
-        #render_markdown(content, hard_wrap: hard_wrap)
-        CommonMarker.render_html(content, :DEFAULT, [:table])
+        filter = HTML::Pipeline.new [
+          HTML::Pipeline::MarkdownFilter,
+          HTML::Pipeline::AutolinkFilter,
+          HTML::Pipeline::MentionFilter,
+          HTML::Pipeline::TeamMentionFilter,
+          HTML::Pipeline::SyntaxHighlightFilter
+        ], {gfm: true}
+        result = filter.call(content)
+        result[:output].to_s
       else
         content
       end
     end
     # exlude (?!.*) any domains which we should call directly
-    document.gsub!(/src="(?!.*travis.ci)(?!http)(.+)"/, %(src="https://github.com/#{repo_loc}/raw/#{version}/\\1"))
+    #document.gsub!(/src="(?!.*travis.ci)(?!http)(.+)"/, %(src="https://github.com/#{repo_loc}/raw/#{version}/\\1"))
     document.html_safe
   end
 
