@@ -155,19 +155,17 @@ module ExtensionsHelper
     end
   end
 
-  def compilation_errors(extension)
-    pairs = extension
-              .extension_versions
-              .map {|version| [version, compilation_error(version)]}
-              .find_all {|_, error| error.present?}
-    pairs.map {|version, error| "Version #{version.version}: #{error}"}
-  end
-
-  def compilation_error(version)
-    return unless version.compilation_error.present?
-    return if !version.hosted? && version.version == 'master'
-
-    version.compilation_error
+  def compilation_errors(extension, version=nil)
+    errors = []
+    if extension.compilation_error.present?
+      errors << "Extension: #{extension.compilation_error}"
+    end
+    versions = extension.extension_versions.select(:id, :version, :compilation_error).where.not(compilation_error: nil)
+    versions = versions.where(id: version.id) if version.present?
+    versions.each do |version|
+      errors << "Version #{version.version}: #{version.compilation_error}"
+    end
+    errors
   end
 
   #

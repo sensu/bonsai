@@ -174,7 +174,7 @@
     <% end %>
   <% end %>
 
-  <% if policy(version).show_config? %>
+  <% if version.present? && policy(version).show_config? %>
     <li>
       <%= link_to '#', class: 'config', rel: 'config', 'data-reveal-id' => 'config' do %>
         <i class="fa fa-file-code-o"></i>

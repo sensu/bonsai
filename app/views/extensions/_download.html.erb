@@ -11,33 +11,36 @@
 
   <% if extension.hosted? %>
     <h3 class="download-choice">This asset is enterprise only and requires an <a src='https://docs.sensu.io/sensu-go/latest/getting-started/enterprise/' target='_blank' title='Enterprise License'>enterprise license.</a> By clicking download, you agree to the <a src="https://sensu.io/sensu-terms-and-conditions" target="_blank" title="Terms and Conditions">Sensu terms and conditions</a> and <a src="https://sensu.io/sensu-license" target="_blank" title="License Agreement">license agreement.</a></h3>
-    <% if version.release_assets.none?(&:viable?)%>
-      <h3 class="download-choice">There are no asset definitions for this version.</h3>
-    <% else %>
-      <div id="download-asset-definition">
-        <%= render partial: 'extension_versions/download_asset_definition',
-                   locals: {extension: extension,
-                            version:   version,
-                            platform:  nil,
-                            arch:      nil,
-                            acknowledge: false} %>
-      </div>
-    <% end %>
-    <div style="margin-top: 24px;" class="text-center">
-      <a class="button secondary radius tiny close-reveal-modal">Cancel</a>
-      <% unless version.release_assets.none?(&:viable?)%>
-        <span id="download-asset-definition-button">
-          <%= render partial: 'extension_versions/download_asset_definition_button',
+    <% if version.present? %>
+      <% if version.release_assets.none?(&:viable?)%>
+        <h3 class="download-choice">There are no asset definitions for this version.</h3>
+      <% else %>
+        <div id="download-asset-definition">
+          <%= render partial: 'extension_versions/download_asset_definition',
                      locals: {extension: extension,
                               version:   version,
                               platform:  nil,
                               arch:      nil,
                               acknowledge: false} %>
-        </span>
+        </div>
+      <% end %>
+      <div style="margin-top: 24px;" class="text-center">
+        <a class="button secondary radius tiny close-reveal-modal">Cancel</a>
+        <% unless version.release_assets.none?(&:viable?)%>
+          <span id="download-asset-definition-button">
+            <%= render partial: 'extension_versions/download_asset_definition_button',
+                       locals: {extension: extension,
+                                version:   version,
+                                platform:  nil,
+                                arch:      nil,
+                                acknowledge: false} %>
+          </span>
+        <% end %>
       <% end %>
     </div>
   <% else %>
-    <% if version.release_assets.none?(&:viable?)%>
+    
+    <% if version.blank? || version.release_assets.none?(&:viable?) %>
       <h3 class="download-choice">There are no asset definitions for this version, only source code:</h3>
       <%= render partial: 'extensions/download_source', locals: {extension: extension} %>
       <a class="button secondary radius large close-reveal-modal">Cancel</a>
@@ -68,5 +71,6 @@
       </div>
     <% end %>
   <% end %>
+
 </div>
 

@@ -6,7 +6,7 @@
     <%= render "extensions/manage_extension", extension: extension, version: version %>
   <% end %>
 
-  <% if version.annotation('suggested_asset_url').present? %>
+  <% if version.present? && version.annotation('suggested_asset_url').present? %>
     <div class="suggested_asset">
       <%= link_to_suggested_asset(version) %>
     </div>
@@ -17,16 +17,18 @@
   <div class="extension-details">
     <h5>Stats</h5>
     <div class="extension-urls">
-      <% item_types = version.extension_version_content_items.select("distinct item_type").map(&:item_type).sort %>
-      <% if item_types.present? %>
-        <ul>
-          <% item_types.each do |item_type| %>
-            <% count = version.extension_version_content_items.where(item_type: item_type).count %>
-            <% if count > 0 %>
-              <li><%= pluralize(count, item_type) %></li>
+      <% if version.present? %>
+        <% item_types = version.extension_version_content_items.select("distinct item_type").map(&:item_type).sort %>
+        <% if item_types.present? %>
+          <ul>
+            <% item_types.each do |item_type| %>
+              <% count = version.extension_version_content_items.where(item_type: item_type).count %>
+              <% if count > 0 %>
+                <li><%= pluralize(count, item_type) %></li>
+              <% end %>
             <% end %>
-          <% end %>
-        </ul>
+          </ul>
+        <% end %>
       <% end %>
 
       <% if extension.issues_url.present? %>
@@ -151,21 +153,25 @@
     <% end %>
   </div>
 
-  <%= render 'extensions/compilation_error', version: version %>
+  <%= render 'extensions/compilation_errors', extension: @extension, version: version %>
 
   <% if signed_in? %>
     <h4 rel="extension-support">
       <% if @extension.tier_name == 'Enterprise' %>
         <a href="https://account.sensu.io" target='_blank'>Report an Issue</a>
       <% else %>
-        <% url = version.annotation('report_issues_url') || "https://github.com/sensu/bonsai-asset-index/issues" %>
+        <% if version.blank? || version.annotation('report_issues_url').blank? %>
+          <% url = "https://github.com/sensu/bonsai-asset-index/issues" %>
+        <% else %>
+          <% url = version.annotation('report_issues_url') || "https://github.com/sensu/bonsai-asset-index/issues" %>
+        <% end %>
         <a href='<%= url %>' target='_blank'>Report an Issue</a>
       <% end %>
     </h4>
   <% end %>
 
 
-  <%- if version.release_assets.order(:platform, :arch).any? %>
+  <%- if version.present? && version.release_assets.order(:platform, :arch).any? %>
     <div class="github-release-assets">
       <h4>
         <i class="fa fa-folder-open-o"></i> <span>Release Assets</span>

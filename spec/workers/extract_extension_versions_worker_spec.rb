@@ -25,7 +25,7 @@ describe ExtractExtensionVersionsWorker do
 
     expect(ExtractExtensionVersionWorker).to receive(:perform_async).with(123, "1.0", compatible_platforms)
     expect(ExtractExtensionVersionWorker).to receive(:perform_async).with(123, "1.2", compatible_platforms)
-    expect(ExtractExtensionVersionWorker).to receive(:perform_async).with(123, "master", compatible_platforms)
+    #expect(ExtractExtensionVersionWorker).to receive(:perform_async).with(123, "master", compatible_platforms)
 
     subject.perform(extension_id, compatible_platforms)
   end
