@@ -4,11 +4,12 @@ class ReleaseAsset < ApplicationRecord
 
   serialize :filter
 
-  delegate :extension,           to: :extension_version, allow_nil: true
-  delegate :extension_name,      to: :extension_version, allow_nil: true
-  delegate :extension_namespace, to: :extension_version, allow_nil: true
-  delegate :owner_name,          to: :extension_version, allow_nil: true
-  delegate :version,             to: :extension_version, allow_nil: true
+  delegate :extension,                to: :extension_version, allow_nil: true
+  delegate :extension_name,           to: :extension_version, allow_nil: true
+  delegate :extension_lowercase_name, to: :extension_version, allow_nil: true
+  delegate :extension_namespace,      to: :extension_version, allow_nil: true
+  delegate :owner_name,               to: :extension_version, allow_nil: true
+  delegate :version,                  to: :extension_version, allow_nil: true
 
   def viable?
     viable
