@@ -1,16 +1,16 @@
-# Bonsai Asset Index
+# Bonsai
 
-Bonsai Asset Index is Sensu's community repository for assets, currently
+Bonsai is Sensu's community repository for assets, currently
 hosted at [bonsai.sensu.io](bonsai.sensu.io). 
 
-This is an opens source project, with a Ruby on Rails framework. The code is designed to be easy for you to understand and facilitate your contributions. To that end, the goal of this README is to introduce you to the project and get you up and running. 
+This is an open source project, with a Ruby on Rails framework. The code is designed to be easy for you to understand and facilitate your contributions. To that end, the goal of this README is to introduce you to the project and get you up and running. 
 
 If you want to contribute to Bonsai Asset Index, read the [contributor's
-workflow](https://github.com/sensu/bonsai-asset-index/blob/master/CONTRIBUTING.md)
+workflow](https://github.com/sensu/bonsai/blob/update_readme/CONTRIBUTING.md)
 for license information and helpful tips to get you started. 
 
 If you have questions, feature ideas, or other suggestions, please [open a
-GitHub Issue](https://github.com/sensu/bonsai-asset-index/issues/new).
+GitHub Issue](https://github.com/sensu/bonsai/issues/new).
 
 ## Requirements
 
@@ -34,25 +34,26 @@ GitHub Issue](https://github.com/sensu/bonsai-asset-index/issues/new).
 11. (Optional) To run tests; docker-compose run -e "RAILS_ENV=test" web rspec
 
 ### ENV Variable Descriptions
-The ENV allows you to customize your environmental variables.  Most work by default, but those that require information to function properly are: 
-1. SENDGRID_API_KEY
-2. AIRBRAKE project id and api key
-3. AWS_S3	 key id, access key, region and bucket
-4. GITHUB client id, client secret and access token
+The ENV file allows you to customize your environmental variables.  Most work by default, but there are several that require information to function properly.  You should copy the env.example file to a file named env and change the variables with your information. The required variables are indicted in the env.example file.
 
 ### Setting up Admin
 1. In the rails console find your user record `user = User.find_by(email: "your@email.address")`
 2. Add Admin authority `user.roles(:admin)`
 
-### Rollout Gem Options
 
-### API Docs
+## Production
 
-### 'Exotic Gems'
+### Setup on Heroku
+You can create the Heroku application via the Heroku CLI or use the app.example.json file in the root to generate it.  You must copy the app.example.json file to app.json and add your ENV variable values before using it.
 
-### Production Environment Setup
+## API Documents
+Once you have set up the environment and have the application running, you will find the API Docs at [/apidoc](http://localhost:3000/apidoc).
 
-### Miscellanous
+## Example Bonsai Asset on Github
+An example of a github asset with annotated bonsai.yml file can be found at [https://github.com/sensu/sensu-slack-handler](https://github.com/sensu/sensu-slack-handler)
+
+## Example of the file structure for hosted assets
+TBD
 
 # License
 
