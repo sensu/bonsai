@@ -1,5 +1,7 @@
 cache: bundler
 
+dist: trusty
+
 services:
   - docker
 
