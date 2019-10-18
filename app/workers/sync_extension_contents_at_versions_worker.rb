@@ -43,6 +43,7 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
     scan_files(version)
     sync_release_info(version, release_info)
     PersistAssets.call(version: version)
+    update_annotations(version)
     version.save
   end
 
@@ -219,5 +220,18 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
       end
     end
   end
+
+  def update_annotations(version)
+    if version.config['annotations'].present?
+      annotations = {}
+      prefix = ExtensionVersion::ANNOTATION_PREFIX
+      version.config['annotations'].each do |key, value|
+        key = "#{prefix}.#{key}" unless key.start_with?(prefix)
+        annotations[key] = value
+      end
+      version.update_column(:annotations, annotations)
+    end
+  end
+  
 end
 

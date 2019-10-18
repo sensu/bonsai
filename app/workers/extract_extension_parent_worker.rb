@@ -8,12 +8,14 @@ class ExtractExtensionParentWorker < ApplicationWorker
     if repo_parent.present?
       parent_name = repo_parent[:name]
       parent_owner_name = repo_parent[:owner][:login]
-      parent = Extension.with_owner_and_lowercase_name(owner_name: parent_owner_name, lowercase_name: parent_name)
-      @extension.update_attributes(
-        parent: parent, 
-        parent_name: parent_name, 
-        parent_owner_name: parent_owner_name
-      )
+      parent = Extension.find_by(owner_name: parent_owner_name, lowercase_name: parent_name)
+      if parent.present?
+        @extension.update_attributes(
+          parent: parent, 
+          parent_name: parent_name, 
+          parent_owner_name: parent_owner_name
+        )
+      end
     end
     
   end

@@ -1,1 +1,1 @@
-<%= render_document(version.try(:readme) || "", version.try(:readme_extension) || "", version.try(:extension).github_repo, version.try(:version)) %>
+<%= render_document(version.try(:readme) || "", version.try(:readme_extension) || "", version.try(:extension).try(:github_repo), version.try(:version)) %>

@@ -10,7 +10,11 @@ describe CompileGithubExtensionVersionConfig do
                                "(System.Arch == x86_64) || (System.Arch == amd64)"],
                             "platform"=>"linux",
                             "sha_filename"=>"\#{repo}-\#{version}-linux-x86_64.sha512.txt",
-                            "asset_filename"=>"\#{repo}-\#{version}-linux-x86_64.tar.gz"}]} }
+                            "asset_filename"=>"\#{repo}-\#{version}-linux-x86_64.tar.gz"}],
+                        "labels"=> {"example"=> "custom"},
+                        "annotations"=> {"io.sensu.bonsai.test"=> "test value"},
+                        "description"=> "test asset"
+                     } }
   let(:extension)    { create :extension, extension_versions_count: 0, github_url: "https://github.com/owner/#{repo_name}" }
   let(:version)      { create :extension_version, extension: extension, config: config, version: version_name }
   let(:cmd_runner)   { double("command runner", :cmd => config.to_yaml) }

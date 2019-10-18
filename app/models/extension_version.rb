@@ -43,7 +43,7 @@ class ExtensionVersion < ApplicationRecord
   delegate :github_repo,    to: :extension
   delegate :octokit,        to: :extension
 
-  ANNOTATION_PREFIX = 'sensu.bonsai.io'
+  ANNOTATION_PREFIX = 'io.sensu.bonsai'
 
   def self.pick_blob_analyzer(blob)
     case

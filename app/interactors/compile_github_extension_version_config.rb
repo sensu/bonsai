@@ -20,10 +20,6 @@ class CompileGithubExtensionVersionConfig
     else
       context.fail!(error: "Bonsai configuration has no 'builds' section")
     end
-
-    if config_hash['annotations'].present?
-      version.update_column(:annotations, config_hash['annotations'])
-    end
  
     config_hash['builds'] = compile_builds(version, config_hash['builds'])
 
@@ -44,6 +40,7 @@ class CompileGithubExtensionVersionConfig
              .cmd(find_command)
              .split("\n")
              .first
+
     context.fail!(error: 'cannot find a Bonsai configuration file') unless path.present?
 
     body = cmd_runner.cmd("cat '#{path}'").encode(Encoding.find('UTF-8'), {invalid: :replace, undef: :replace, replace: ''})
