@@ -105,8 +105,8 @@ describe ExtensionsController do
       it 'displays a link' do
 
         extension_version.update_attribute(:annotations, 
-          {'sensu.bonsai.io.suggested_asset_url' => '/suggested/asset', 
-            'sensu.bonsai.io.suggested_message' => 'Suggested Message' }
+          {'io.sensu.bonsai.suggested_asset_url' => '/suggested/asset', 
+            'io.sensu.bonsai.suggested_message' => 'Suggested Message' }
         )
         extension.reload
         get :show, params: {username: extension.owner_name, id: extension.lowercase_name}

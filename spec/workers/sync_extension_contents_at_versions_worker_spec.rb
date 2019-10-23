@@ -73,4 +73,34 @@ describe SyncExtensionContentsAtVersionsWorker do
     end
   end
 
+  describe 'annotations' do
+    let(:config_hash) { version.config }
+    let(:tags) { [version.version] }
+
+    it 'adds prefix to config annotations' do
+      config_hash['annotations'] = {
+        'suggested_asset_url' => '/suggested/asset', 
+        'suggested_asset_message' => 'Suggested Asset Messaage'
+      }
+      version.update_column(:config, config_hash)
+      subject.perform(extension.id, tags)
+      version.reload
+      annotations = version.config['annotations']
+      expect(annotations.keys).to include('io.sensu.bonsai.suggested_asset_url')
+    end
+
+    it 'puts annotations in annotations field' do
+      config_hash['annotations'] = {
+        suggested_asset_url: '/suggested/asset', 
+        suggested_asset_message: 'Suggested Asset Messaage'
+      }
+      version.update_column(:config, config_hash)
+      subject.perform(extension.id, tags)
+      version.reload
+      annotations = version.annotations
+      expect(annotations.map{|k,v| k.to_s}).to include('io.sensu.bonsai.suggested_asset_url')
+    end
+
+  end
+
 end

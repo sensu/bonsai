@@ -5,7 +5,7 @@ json.metadata do
   json.name         "#{@release_asset.extension_name}_#{@release_asset.platform}_#{@release_asset.arch}"
   # tags appear in the annotations section
   json.labels       nil
-  json.annotations  @annotations
+  json.annotations  common_annotations(@release_asset.extension_version.extension, @release_asset.extension_version, @release_asset)
 end
 
 json.spec do

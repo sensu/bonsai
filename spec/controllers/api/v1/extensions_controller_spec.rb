@@ -11,8 +11,7 @@ describe Api::V1::ExtensionsController do
   
   describe 'GET #index' do
     subject do
-      get :index,
-          format: :json
+      get :index, format: :json
     end
 
     it 'succeeds' do
@@ -58,7 +57,11 @@ describe Api::V1::ExtensionsController do
     it 'returns the proper data' do
       subject
       data = JSON.parse(response.body)
+      
       expect(data['versions'][0]['assets'].length).to eql(2)
+      annotations = data['versions'][0]['assets'][0]['annotations'].keys
+      expect( annotations ).to include('io.sensu.bonsai.url')
+      expect( annotations ).to include('io.sensu.bonsai.suggested_asset_url')
     end
   end
 

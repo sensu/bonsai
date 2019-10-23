@@ -5,7 +5,7 @@ json.metadata do
   json.name         @version.name
   # tags appear in the annotations section
   json.labels       nil
-  json.annotations  @annotations
+  json.annotations  common_annotations(@version.extension, @version)
 end
 
 json.spec do

@@ -222,14 +222,17 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
   end
 
   def update_annotations(version)
-    if version.config['annotations'].present?
-      annotations = {}
+    config_hash = version.config
+    if config_hash['annotations'].present?
       prefix = ExtensionVersion::ANNOTATION_PREFIX
-      version.config['annotations'].each do |key, value|
+      updated_annotations = {}
+      config_hash['annotations'].each do |key, value|
         key = "#{prefix}.#{key}" unless key.start_with?(prefix)
-        annotations[key] = value
+        updated_annotations[key] = value
       end
-      version.update_column(:annotations, annotations)
+      config_hash['annotations'] = updated_annotations
+      version.update_column(:config, config_hash)
+      version.update_column(:annotations, updated_annotations)
     end
   end
   

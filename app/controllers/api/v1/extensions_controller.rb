@@ -1,4 +1,7 @@
 class Api::V1::ExtensionsController < Api::V1Controller
+
+  include Annotations
+  
   before_action :init_params, only: [:index]
   before_action :authenticate_user!, only: [:update, :sync_repo]
 

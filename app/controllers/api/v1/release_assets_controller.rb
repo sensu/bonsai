@@ -12,7 +12,6 @@ class Api::V1::ReleaseAssetsController < Api::V1Controller
   def index
     extension = Extension.with_owner_and_lowercase_name(owner_name: params[:username], lowercase_name: params[:id])
     @version = extension.extension_versions.find_by!(version: params[:version])
-    @annotations = common_annotations(extension, @version)
   end
   
   api! <<~EOD
@@ -30,7 +29,6 @@ class Api::V1::ReleaseAssetsController < Api::V1Controller
     version = extension.extension_versions.find_by!(version: params[:version])
     @release_asset = version.release_assets.find_by(platform: params[:platform], arch: params[:arch])
     raise ActiveRecord::RecordNotFound unless @release_asset
-    @annotations = common_annotations(extension, version, @release_asset)
   end
 
 end

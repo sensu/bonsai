@@ -1,5 +1,11 @@
+include UrlHelpers
+
 module Annotations 
 	extend ActiveSupport::Concern
+
+  included do 
+    helper_method :common_annotations
+  end
 
 	def common_annotations(extension, version, asset=nil)
     tags = if asset.present? && asset.labels.present? 
@@ -19,10 +25,12 @@ module Annotations
       'io.sensu.bonsai.name' => extension.lowercase_name,
       'io.sensu.bonsai.tags' => tags,
     }
+
     if extension.hosted?
       annotations['io.sensu.bonsai.message'] = "This asset is for users with a valid Enterprise license"
     end
-    annotations
+    
+    annotations.merge(version.annotations)
   end 
 
 end
