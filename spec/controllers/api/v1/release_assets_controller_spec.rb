@@ -51,7 +51,9 @@ describe Api::V1::ReleaseAssetsController do
       #end
 
       it 'includes common annotations' do 
-        expect(@data['metadata']['annotations'].keys).to include('io.sensu.bonsai.url')
+        annotations = @data['metadata']['annotations'].keys
+        expect(annotations).to include('io.sensu.bonsai.url')
+        expect(annotations).to include('io.sensu.bonsai.suggested_asset_url')
       end
     end
 

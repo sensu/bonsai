@@ -1,7 +1,9 @@
 require 'spec_helper'
+include ActionController::Helpers
 include Annotations
 
 describe 'api/v1/release_assets/show' do
+  
   let(:extension) { create :extension }
   let(:version)  { create :extension_version_with_config, extension: extension }
   
