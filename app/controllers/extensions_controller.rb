@@ -1,5 +1,5 @@
 class ExtensionsController < ApplicationController
-  before_action :assign_extension, except: [:index, :directory, :new, :create]
+  before_action :assign_extension, except: [:index, :directory, :collections, :new, :create]
   before_action :store_location_then_authenticate_user!, only: [:follow, :unfollow, :adoption]
   before_action :authenticate_user!, only: [:new, :create]
 
@@ -95,8 +95,19 @@ class ExtensionsController < ApplicationController
         map(&:tag_id)
     ).sort_by(&:name)
 
+    @top_collections = Collection.rank(:row_order).limit(10)
+
     @extension_count = Extension.count
     @user_count = User.count
+  end
+
+  #
+  # GET /extensions/directory
+  #
+  # Return the three most recently updated and created extensions.
+  #
+  def collections
+    @collections = Collection.rank(:row_order)
   end
 
   #
@@ -356,6 +367,18 @@ class ExtensionsController < ApplicationController
     version_id = version.present? ? version.id : nil
     @extension.update_column(:selected_version_id, version_id)
     redirect_to owner_scoped_extension_url(@extension), notice: t("extension.default_version_selected")
+  end
+
+  def update_collection
+    collection = Collection.find_by(id: params[:collection_id])
+    if collection.present?
+      if params[:update] == 'add'
+        @extension.collections << collection 
+      elsif params[:update] == 'remove'
+        @extension.collections.delete(collection)
+      end
+    end
+    head :ok
   end
 
   private

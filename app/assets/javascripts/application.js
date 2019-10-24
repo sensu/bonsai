@@ -27,7 +27,7 @@
 //= require organizationRoles
 //= require announcementBanner
 //= require flash
-//= require select2.min
+//= require select2
 //= require collaborators
 //= require extensionDeprecate
 //= require extensionInstallTabs
@@ -37,7 +37,6 @@
 //= require vendor/bootstrap-tokenfield
 //= require vendor/twitter-typeahead
 //= require vendor/twitter-bloodhound
-
 
 // Hack to resolve bug with Foundation. Resolved in master
 // here: https://github.com/zurb/foundation/issues/4684 so

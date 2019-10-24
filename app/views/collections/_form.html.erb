@@ -1,0 +1,17 @@
+<%= render "application/form_errors", record: f.object %>
+
+<fieldset>
+  <div class="description-field">
+    <%= f.text_field :title, placeholder: "Title", title: "Title", required: true, id: "collection-title-field" %>
+  </div>
+
+  <div class="description-field">
+    <%= f.text_field :slug, placeholder: "Slug", title: "Slug", id: "collection-slug-field" %>
+    <p class="hint-block">Enter a slug as a short name or leave blank to generate from title.</p>
+  </div>
+
+  <div class="description-field">
+    <%= f.text_area :description, placeholder: "Description", title: "Description", rows: '5', id: "collection-description-field" %>
+  </div>
+  
+</fieldset>
