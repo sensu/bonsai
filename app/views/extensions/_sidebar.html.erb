@@ -141,24 +141,26 @@
     <% end %>
   </div>
 
-  <h4>
-    <i class="fa fa-list"></i> Collections
-  </h4>
+  <% if extension.collections.present? %>
+    <h4>
+      <i class="fa fa-list"></i> Collections
+    </h4>
 
-  <% if policy(Collection).manage? %>
-    <div id='collections-select-container'>
-      <% collection_ids = extension.collections.map(&:id) %>
-      <%= select_tag :collections, 
-        options_from_collection_for_select(Collection.rank(:row_order), :id, :title, collection_ids), 
-        id: 'collections-select', 
-        multiple: "multiple" %>
-    </div>
-  <% else %>
-    <p class="toggle-tags-edit">
-      <% extension.collections.each do |collection| %>
-        <%= link_to(collection.title, extensions_collections_path) %>
-      <% end %>
-    </p>
+    <% if policy(Collection).manage? %>
+      <div id='collections-select-container'>
+        <% collection_ids = extension.collections.map(&:id) %>
+        <%= select_tag :collections, 
+          options_from_collection_for_select(Collection.rank(:row_order), :id, :title, collection_ids), 
+          id: 'collections-select', 
+          multiple: "multiple" %>
+      </div>
+    <% else %>
+      <p class="toggle-tags-edit">
+        <% extension.collections.each do |collection| %>
+          <%= link_to(collection.title, extensions_collections_path) %>
+        <% end %>
+      </p>
+    <% end %>
   <% end %>
 
   <div class="toggle-details-edit toggle-details-hidden">
