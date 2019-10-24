@@ -117,6 +117,16 @@ describe ExtensionsController do
 
   end
 
+  describe "collections" do
+    let(:collection) {create(:collection)}
+    let(:extension) {create(:extension)}
+    it 'succeeds' do
+      extension.collections << collection
+      get :collections
+      expect(response.status).to eq(200)
+    end
+  end
+
   describe "sync_repo" do
     it 'redirects to the extension page' do
       put :sync_repo, params: params

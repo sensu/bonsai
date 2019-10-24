@@ -28,6 +28,7 @@ Rails.application.routes.draw do
   end
 
   get 'assets-directory' => 'extensions#directory', as: 'extensions_directory'
+  get "assets-collections" => 'extensions#collections', as: 'extensions_collections'
   get 'universe' => 'api/v1/universe#index', defaults: { format: :json }
   get 'status' => 'api/v1/health#show', defaults: { format: :json }
   get 'unsubscribe/:token' => 'email_preferences#unsubscribe', as: :unsubscribe
@@ -64,6 +65,7 @@ Rails.application.routes.draw do
         put :report
         put :sync_repo
         put :select_default_version
+        put :update_collection
       end
     end
 
@@ -93,6 +95,8 @@ Rails.application.routes.draw do
       put :transfer
     end
   end
+
+  resources :collections
 
   get '/users', to: redirect('/contributors')
   resources :users, only: [:show] do

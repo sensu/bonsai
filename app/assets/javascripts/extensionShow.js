@@ -27,6 +27,12 @@ $(function() {
     event.preventDefault();
   });
 
+  $("a.toggle-collections-edit").click(function(event) {
+    $(".toggle-collections-edit").toggle();
+    //$("#collections-select-container").css('display', 'block');
+    event.preventDefault();
+  });
+
   $(".sparkline").sparkline("html", {
     width: "100%",
     height: "25px",

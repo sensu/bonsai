@@ -1,0 +1,13 @@
+<%= provide(:title, "Add a Collection") %>
+
+<div class="page resource collection_show" data-equalizer>
+  <div class="main" data-equalizer-watch>
+    <h1 class="heading">Add a Collection</h1>
+
+    <%= form_with(model: @collection, local: true) do |f| %>
+      <%= render 'form', f: f %>
+
+      <%= f.submit "Add Collection", class: "button primary radius" %>
+    <% end %>
+  </div>
+</div>

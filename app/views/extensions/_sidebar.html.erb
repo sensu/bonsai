@@ -127,7 +127,9 @@
   </h4>
 
   <p class="toggle-tags-edit">
-    <%= extension.tags.map { |t| link_to(t.name, controller: "extensions", action: "index", q: t.name).html_safe }.join(", ").html_safe %>
+    <% extension.tags.each do |tag| %>
+      <%= link_to(tag.name, controller: "extensions", action: "index", q: tag.name) %>
+    <% end %>
   </p>
 
   <div class="toggle-tags-edit toggle-tags-hidden">
@@ -138,6 +140,26 @@
       <%= submit_tag "Save", class: "button primary small" %>
     <% end %>
   </div>
+
+  <h4>
+    <i class="fa fa-list"></i> Collections
+  </h4>
+
+  <% if policy(Collection).manage? %>
+    <div id='collections-select-container'>
+      <% collection_ids = extension.collections.map(&:id) %>
+      <%= select_tag :collections, 
+        options_from_collection_for_select(Collection.rank(:row_order), :id, :title, collection_ids), 
+        id: 'collections-select', 
+        multiple: "multiple" %>
+    </div>
+  <% else %>
+    <p class="toggle-tags-edit">
+      <% extension.collections.each do |collection| %>
+        <%= link_to(collection.title, extensions_collections_path) %>
+      <% end %>
+    </p>
+  <% end %>
 
   <div class="toggle-details-edit toggle-details-hidden">
     <%= form_for @extension, url: extension_path(@extension, username: @extension.owner_name) do |f| %>
@@ -194,3 +216,34 @@
   </div>
 
 </div>
+
+<% content_for :script do %>
+
+  <script>
+
+    $("#collections-select").select2();
+
+    $("#collections-select").on('select2:select', function (e) {
+      const collection_id = e.params.data.id;
+      update_collection(collection_id, 'add')
+    });
+
+    $("#collections-select").on('select2:unselect', function (e) {
+      const collection_id = e.params.data.id;
+      update_collection(collection_id, 'remove')
+    });
+
+    function update_collection(collection_id, update) {
+      $.ajax({
+        url: '<%= update_collection_extension_path(id: version.extension.lowercase_name, username: version.extension.owner_name) %>',
+        type: 'PUT',
+        data: {
+          update: update,
+          collection_id: collection_id,
+        },
+      });
+    };
+
+  </script>
+
+<% end %>

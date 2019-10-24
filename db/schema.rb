@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_25_185826) do
+ActiveRecord::Schema.define(version: 2019_10_23_155343) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -128,6 +128,17 @@ ActiveRecord::Schema.define(version: 2019_09_25_185826) do
     t.index ["user_id", "resourceable_type", "resourceable_id"], name: "index_cookbook_collaborators_on_user_id_and_resourceable", unique: true
   end
 
+  create_table "collections", force: :cascade do |t|
+    t.bigint "user_id"
+    t.integer "row_order"
+    t.string "title"
+    t.string "slug"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_collections_on_user_id"
+  end
+
   create_table "commit_shas", id: :serial, force: :cascade do |t|
     t.string "sha", null: false
     t.datetime "created_at"
@@ -232,6 +243,17 @@ ActiveRecord::Schema.define(version: 2019_09_25_185826) do
     t.datetime "updated_at"
     t.index ["token"], name: "index_email_preferences_on_token", unique: true
     t.index ["user_id", "system_email_id"], name: "index_email_preferences_on_user_id_and_system_email_id", unique: true
+  end
+
+  create_table "extension_collections", force: :cascade do |t|
+    t.bigint "extension_id"
+    t.bigint "collection_id"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["collection_id"], name: "index_extension_collections_on_collection_id"
+    t.index ["extension_id"], name: "index_extension_collections_on_extension_id"
+    t.index ["user_id"], name: "index_extension_collections_on_user_id"
   end
 
   create_table "extension_dependencies", id: :serial, force: :cascade do |t|

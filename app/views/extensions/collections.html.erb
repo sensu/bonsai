@@ -1,0 +1,16 @@
+<%= provide(:title, "#{t('nouns.extension').pluralize.titleize} Collections") %>
+
+<div class="page nobg">
+  <div class="row extensions-features bottom-space standard-typography">
+
+    <% @collections.each do |collection| %>
+
+      <div class="medium-4 columns">
+        <header><%= collection.title %></header>
+        <%= render "featured", extensions: collection.extensions %>
+      </div>
+
+    <% end %>
+
+  </div>
+</div>
