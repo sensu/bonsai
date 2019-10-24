@@ -64,6 +64,8 @@ gem 'RedCloth'
 
 gem 'safe_yaml', :require => false
 
+gem "select2-rails"
+
 gem 'octokit'
 gem 'aws-sdk-s3', '~> 1'
 

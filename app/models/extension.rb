@@ -28,6 +28,8 @@ class Extension < ApplicationRecord
   has_many :taggings, as: :taggable, dependent: :destroy
   has_many :tags, through: :taggings
   has_many :forks, class_name: 'Extension', foreign_key: :parent_id
+  has_many :extension_collections, dependent: :destroy 
+  has_many :collections, through: :extension_collections
 
   # HACK: +Extension+ objects don't really have a source_file attachment or version attribute.
   # Instead, the children extension_versions each has their own individual +source_file+ attachment and version attribute.

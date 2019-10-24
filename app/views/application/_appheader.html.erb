@@ -7,6 +7,9 @@
     <% if policy(Tier).manage? %>
       <li><%= link_to 'Tiers List', tiers_path, 'data-hover' => 'Tiers', :rel => 'tiers' %></li>
     <% end %>
+    <% if policy(Collection).manage? %>
+      <li><%= link_to 'Collections List', collections_path, 'data-hover' => 'Collections', :rel => 'collections' %></li>
+    <% end %>
     <% if !signed_in? %>
       <li class="sign_in_create_account"><%= link_to 'Sign In with Github', sign_in_path, rel: 'sign_in' %></li>
     <% end %>
