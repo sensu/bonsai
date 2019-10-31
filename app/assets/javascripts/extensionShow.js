@@ -41,4 +41,30 @@ $(function() {
     tooltipFormat: $.spformat('{{prefix}}{{y}}{{suffix}}<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>', 'sparkline-tooltip-class')
   }).addClass("loaded");
 
+  $("#collections-select").select2();
+
+  $("#collections-select").on('select2:select', function (e) {
+    const url = $(this).data('url');
+    const collection_id = e.params.data.id;
+    update_collection(url, collection_id, 'add')
+  });
+
+  $("#collections-select").on('select2:unselect', function (e) {
+    const url = $(this).data('url');
+    const collection_id = e.params.data.id;
+    update_collection(url, collection_id, 'remove')
+  });
+
+  function update_collection(url, collection_id, update) {
+
+    $.ajax({
+      url,
+      type: 'PUT',
+      data: {
+        update: update,
+        collection_id: collection_id,
+      },
+    });
+  };
+
 });

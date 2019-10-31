@@ -27,7 +27,7 @@
 //= require organizationRoles
 //= require announcementBanner
 //= require flash
-//= require select2
+//= require select2-full
 //= require collaborators
 //= require extensionDeprecate
 //= require extensionInstallTabs
