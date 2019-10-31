@@ -7,7 +7,7 @@
     <% if policy(Tier).manage? %>
       <li><%= link_to 'Tiers List', tiers_path, 'data-hover' => 'Tiers', :rel => 'tiers' %></li>
     <% end %>
-    <% if policy(Collection).manage? %>
+    <% if false # policy(Collection).manage? %>
       <li><%= link_to 'Collections List', collections_path, 'data-hover' => 'Collections', :rel => 'collections' %></li>
     <% end %>
     <% if !signed_in? %>
