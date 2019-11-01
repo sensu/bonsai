@@ -42,6 +42,22 @@ describe Extension do
 
   end
 
+  describe "sorted_extension_versions" do
+    let(:extension) { create(:extension, extension_versions_count: 4) }
+    let(:versions) { extension.extension_versions }
+    it 'returns sorted versions' do
+      expect(versions.first.version).to be < versions.second.version
+    end
+    it 'sorts semvar versions with prerelease last' do
+      version_1 = versions.first.update(version: '0.0.1-1+jef.1')
+      version_2 = versions.second.update(version: '1.0.0-alpha+001')
+      version_3 = versions.third.update(version: '1.0.0-beta+exp.sha.5114f85')
+      version_4 = versions.fourth
+      versions.reload
+      expect(versions.first.version).to eq(version_4.version)
+    end
+  end
+
   describe ".in_namespace" do
     let(:owner_name) { "me"}
 
