@@ -177,13 +177,26 @@ class Extension < ApplicationRecord
   def sorted_extension_versions
     # ignore preceding 'V' and ignore 'master' so it sorts to end
     # convert version to array of integers so 10.0.0 comes after 9.0.0
-    # TODO: temporary rescue for regex issue on postgres - plux sign not escaping properly
-    @sorted_extension_versions ||= 
-    begin
-      extension_versions.order(Arel.sql("STRING_TO_ARRAY( REGEXP_REPLACE(extension_versions.version, E'V|v|master|[\+]|-(.*)', ''), '.')::int[] DESC"))
-    rescue 
-      extension_versions.order(Arel.sql("STRING_TO_ARRAY(extension_versions.version, '.') DESC"))
-    end
+
+    # Hack for regex issue on postgres - plus sign not escaping properly
+    @sorted_extension_versions = extension_versions.order(Arel.sql(
+      "STRING_TO_ARRAY(
+        REGEXP_REPLACE(
+          REGEXP_REPLACE(
+            REGEXP_REPLACE(
+              extension_versions.version, 
+              E'[-](.*)', ''
+            ), 
+           E'[\+](.*)', ''
+          ),
+          E'V|v|master', ''
+         )
+      , '.')::bigint[] DESC "))
+
+    @sorted_extension_versions.limit(1).map(&:id) # executes query to test postgres regex
+    @sorted_extension_versions
+    rescue ActiveRecord::StatementInvalid => error
+      @sorted_extension_versions = extension_versions.order(Arel.sql("STRING_TO_ARRAY(extension_versions.version, '.') DESC"))
   end
 
   #

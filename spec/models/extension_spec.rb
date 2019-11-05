@@ -43,18 +43,23 @@ describe Extension do
   end
 
   describe "sorted_extension_versions" do
-    let(:extension) { create(:extension, extension_versions_count: 4) }
-    let(:versions) { extension.extension_versions }
+    let(:extension) { create(:extension, extension_versions_count: 6) }
+    let(:versions ) { extension.extension_versions }
+    let(:sorted_versions) { extension.sorted_extension_versions }
+    
     it 'returns sorted versions' do
-      expect(versions.first.version).to be < versions.second.version
+      expect(sorted_versions.first.version).to be > sorted_versions.second.version
     end
     it 'sorts semvar versions with prerelease last' do
-      version_1 = versions.first.update(version: '0.0.1-1+jef.1')
-      version_2 = versions.second.update(version: '1.0.0-alpha+001')
-      version_3 = versions.third.update(version: '1.0.0-beta+exp.sha.5114f85')
-      version_4 = versions.fourth
-      versions.reload
-      expect(versions.first.version).to eq(version_4.version)
+      versions[0].update(version: '0.0.1-1+jef.1')
+      versions[1].update(version: '1.0.0-alpha+001')
+      versions[2].update(version: '1.0.0-beta+exp.sha.5114f85')
+      versions[3].update(version: '1.0.0+20130313144700')
+      versions[4].update(version: 'master')
+      version_5 = versions[5].version
+      sorted_versions.reload
+      puts sorted_versions.map(&:version) #{|v| v.version.gsub(/V|v|master|\+(.*)|-(.*)/, '')}
+      expect(sorted_versions.first.version).to eq(version_5)
     end
   end
 
