@@ -177,7 +177,13 @@ class Extension < ApplicationRecord
   def sorted_extension_versions
     # ignore preceding 'V' and ignore 'master' so it sorts to end
     # convert version to array of integers so 10.0.0 comes after 9.0.0
-    @sorted_extension_versions ||= extension_versions.order(Arel.sql("STRING_TO_ARRAY( REGEXP_REPLACE(extension_versions.version, E'V|v|master|-(.*)', ''), '.')::int[] DESC"))
+    # TODO: temporary rescue for regex issue on postgres - plux sign not escaping properly
+    @sorted_extension_versions ||= 
+    begin
+      extension_versions.order(Arel.sql("STRING_TO_ARRAY( REGEXP_REPLACE(extension_versions.version, E'V|v|master|[\+]|-(.*)', ''), '.')::int[] DESC"))
+    rescue 
+      extension_versions.order(Arel.sql("STRING_TO_ARRAY(extension_versions.version, '.') DESC"))
+    end
   end
 
   #
@@ -254,7 +260,6 @@ class Extension < ApplicationRecord
       Semverse::Version.new(SemverNormalizer.call(v.version)) rescue false
     }
   end
-
 
   #
   # Return all of the extension errors as well as full error messages for any of
