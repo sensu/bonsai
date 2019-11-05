@@ -191,7 +191,7 @@ class Extension < ApplicationRecord
           ),
           E'V|v|master', ''
          )
-      , '.') DESC "))
+      , '.')::bigint[] DESC "))
 
     @sorted_extension_versions.limit(1).map(&:id) # executes query to test postgres regex
     @sorted_extension_versions
