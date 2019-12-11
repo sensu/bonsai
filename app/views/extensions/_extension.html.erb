@@ -35,7 +35,7 @@
           <% if parent_extension.present? %>
             <%= link_to "#{extension.parent_owner_name}/#{extension.parent_name}", owner_scoped_extension_url(parent_extension) %>
           <% else %>
-            <span><%= extension.parent_owner_name %>/<%= extension.parent_name %></span>
+            <span><%= link_to extension.parent_html_url %> but does not yet have a Bonsai asset.</span>
           <% end %>
         </span>
 

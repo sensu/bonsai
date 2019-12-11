@@ -4,37 +4,48 @@ describe ExtractExtensionParentWorker do
 
   let(:parent_name ) {"sensu-plugins-http"}
   let(:parent_owner_name) {"sensu-plugins"}
+  let(:parent_html_url) {"https://github.com/sensu-plugins/sensu-plugins-http"}
 
   let(:parent_extension) { create :extension }
 
   let(:name) {"sensu-plugins-http"}
   let(:owner_name) {"jspaleta"}
 
-  let(:extension) { create :extension }
+  let(:extension) { create :extension, name: name, lowercase_name: name, owner_name: owner_name }
 
   subject { ExtractExtensionParentWorker.new }
 
   before do
     allow(subject).to receive_message_chain(:octokit, :repo).and_return(repo_json)
-    # factory seems to override lowercase_name
-    parent_extension.update(
-      name: parent_name, 
-      lowercase_name: parent_name, 
-      owner_name: parent_owner_name
-    )
-    extension.update(
-      name: name, 
-      lowercase_name: name, 
-      owner_name: owner_name
-    )
   end
 
-  it "updates the extension with the parent if one is present" do
-    subject.perform( extension.id )
-    extension.reload
-    expect( extension.parent_id ).to eq( parent_extension.id )
-    expect( extension.parent_name ).to eq( parent_name )
-    expect( extension.parent_owner_name ).to eq( parent_owner_name )
+  describe 'no parent present on local' do
+
+    it "updates the extension with the parent info if present in repo" do
+      subject.perform( extension.id )
+      extension.reload
+      expect( extension.parent_id ).to eq( nil )
+      expect( extension.parent_name ).to eq( parent_name )
+      expect( extension.parent_owner_name ).to eq( parent_owner_name )
+      expect( extension.parent_html_url).to eq( parent_html_url )
+    end
+
+  end
+
+  describe 'parent present on local ' do 
+    before do 
+      parent_extension.update(
+        name: parent_name, 
+        lowercase_name: parent_name, 
+        owner_name: parent_owner_name
+      )
+    end
+
+    it "updates the extension with the parent if one is present" do
+      subject.perform( extension.id )
+      extension.reload
+      expect( extension.parent_id ).to eq( parent_extension.id )
+    end
   end
 
 end
@@ -66,6 +77,8 @@ def repo_json
         "id": 10713628,
         "node_id": "MDEyOk9yZ2FuaXphdGlvbjEwNzEzNjI4",
       },
+      "html_url": "https://github.com/sensu-plugins/sensu-plugins-http",
     },
+
   }
 end
