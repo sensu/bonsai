@@ -17,7 +17,7 @@ ActiveRecord::Schema.define(version: 2019_12_11_193119) do
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
 
-  create_table "accounts", id: :integer, default: nil, force: :cascade do |t|
+  create_table "accounts", id: :serial, force: :cascade do |t|
     t.integer "user_id"
     t.string "uid"
     t.string "username"
@@ -63,7 +63,7 @@ ActiveRecord::Schema.define(version: 2019_12_11_193119) do
     t.index ["key"], name: "index_active_storage_cache_items_on_key"
   end
 
-  create_table "categories", id: :integer, default: nil, force: :cascade do |t|
+  create_table "categories", id: :serial, force: :cascade do |t|
     t.string "name"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -71,7 +71,7 @@ ActiveRecord::Schema.define(version: 2019_12_11_193119) do
     t.index ["slug"], name: "index_categories_on_slug"
   end
 
-  create_table "ccla_signatures", id: :integer, default: nil, force: :cascade do |t|
+  create_table "ccla_signatures", id: :serial, force: :cascade do |t|
     t.integer "user_id"
     t.integer "organization_id"
     t.integer "ccla_id"
@@ -97,7 +97,7 @@ ActiveRecord::Schema.define(version: 2019_12_11_193119) do
     t.index ["user_id"], name: "index_ccla_signatures_on_user_id"
   end
 
-  create_table "cclas", id: :integer, default: nil, force: :cascade do |t|
+  create_table "cclas", id: :serial, force: :cascade do |t|
     t.string "version"
     t.text "head"
     t.text "body"
@@ -106,7 +106,7 @@ ActiveRecord::Schema.define(version: 2019_12_11_193119) do
     t.index ["version"], name: "index_cclas_on_version"
   end
 
-  create_table "cla_reports", id: :integer, default: nil, force: :cascade do |t|
+  create_table "cla_reports", id: :serial, force: :cascade do |t|
     t.integer "first_ccla_id"
     t.integer "last_ccla_id"
     t.integer "first_icla_id"
@@ -119,7 +119,7 @@ ActiveRecord::Schema.define(version: 2019_12_11_193119) do
     t.datetime "updated_at"
   end
 
-  create_table "collaborators", id: :integer, default: nil, force: :cascade do |t|
+  create_table "collaborators", id: :serial, force: :cascade do |t|
     t.integer "resourceable_id"
     t.integer "user_id"
     t.datetime "created_at"
@@ -139,14 +139,14 @@ ActiveRecord::Schema.define(version: 2019_12_11_193119) do
     t.index ["user_id"], name: "index_collections_on_user_id"
   end
 
-  create_table "commit_shas", id: :integer, default: nil, force: :cascade do |t|
+  create_table "commit_shas", id: :serial, force: :cascade do |t|
     t.string "sha", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["sha"], name: "index_commit_shas_on_sha", unique: true
   end
 
-  create_table "contributor_request_responses", id: :integer, default: nil, force: :cascade do |t|
+  create_table "contributor_request_responses", id: :serial, force: :cascade do |t|
     t.integer "contributor_request_id", null: false
     t.string "decision", null: false
     t.datetime "created_at"
@@ -154,7 +154,7 @@ ActiveRecord::Schema.define(version: 2019_12_11_193119) do
     t.index ["contributor_request_id"], name: "index_contributor_request_responses_on_contributor_request_id", unique: true
   end
 
-  create_table "contributor_requests", id: :integer, default: nil, force: :cascade do |t|
+  create_table "contributor_requests", id: :serial, force: :cascade do |t|
     t.integer "organization_id", null: false
     t.integer "user_id", null: false
     t.datetime "created_at"
@@ -163,7 +163,7 @@ ActiveRecord::Schema.define(version: 2019_12_11_193119) do
     t.index ["organization_id", "user_id"], name: "index_contributor_requests_on_organization_id_and_user_id", unique: true
   end
 
-  create_table "contributors", id: :integer, default: nil, force: :cascade do |t|
+  create_table "contributors", id: :serial, force: :cascade do |t|
     t.integer "user_id"
     t.integer "organization_id"
     t.boolean "admin"
@@ -174,7 +174,7 @@ ActiveRecord::Schema.define(version: 2019_12_11_193119) do
     t.index ["user_id"], name: "index_contributors_on_user_id"
   end
 
-  create_table "curry_commit_authors", id: :integer, default: nil, force: :cascade do |t|
+  create_table "curry_commit_authors", id: :serial, force: :cascade do |t|
     t.string "login"
     t.string "email"
     t.datetime "created_at"
@@ -184,7 +184,7 @@ ActiveRecord::Schema.define(version: 2019_12_11_193119) do
     t.index ["login"], name: "index_curry_commit_authors_on_login", unique: true
   end
 
-  create_table "curry_pull_request_comments", id: :integer, default: nil, force: :cascade do |t|
+  create_table "curry_pull_request_comments", id: :serial, force: :cascade do |t|
     t.integer "github_id", null: false
     t.integer "pull_request_id", null: false
     t.datetime "created_at"
@@ -194,7 +194,7 @@ ActiveRecord::Schema.define(version: 2019_12_11_193119) do
     t.index ["pull_request_id"], name: "index_curry_pull_request_comments_on_pull_request_id"
   end
 
-  create_table "curry_pull_request_commit_authors", id: :integer, default: nil, force: :cascade do |t|
+  create_table "curry_pull_request_commit_authors", id: :serial, force: :cascade do |t|
     t.integer "pull_request_id", null: false
     t.integer "commit_author_id", null: false
     t.index ["commit_author_id", "pull_request_id"], name: "curry_pr_commit_author_ids", unique: true
@@ -202,14 +202,14 @@ ActiveRecord::Schema.define(version: 2019_12_11_193119) do
     t.index ["pull_request_id"], name: "idx_cuprc_pull_request_id"
   end
 
-  create_table "curry_pull_request_updates", id: :integer, default: nil, force: :cascade do |t|
+  create_table "curry_pull_request_updates", id: :serial, force: :cascade do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string "action"
     t.integer "pull_request_id", null: false
   end
 
-  create_table "curry_pull_requests", id: :integer, default: nil, force: :cascade do |t|
+  create_table "curry_pull_requests", id: :serial, force: :cascade do |t|
     t.string "number", null: false
     t.integer "repository_id", null: false
     t.datetime "created_at"
@@ -218,7 +218,7 @@ ActiveRecord::Schema.define(version: 2019_12_11_193119) do
     t.index ["repository_id"], name: "index_curry_pull_requests_on_repository_id"
   end
 
-  create_table "curry_repositories", id: :integer, default: nil, force: :cascade do |t|
+  create_table "curry_repositories", id: :serial, force: :cascade do |t|
     t.string "owner", null: false
     t.string "name", null: false
     t.datetime "created_at"
@@ -226,7 +226,7 @@ ActiveRecord::Schema.define(version: 2019_12_11_193119) do
     t.string "callback_url", null: false
   end
 
-  create_table "daily_metrics", id: :integer, default: nil, force: :cascade do |t|
+  create_table "daily_metrics", id: :serial, force: :cascade do |t|
     t.string "key", null: false
     t.integer "count", default: 0, null: false
     t.date "day", null: false
@@ -235,7 +235,7 @@ ActiveRecord::Schema.define(version: 2019_12_11_193119) do
     t.index ["key", "day"], name: "index_daily_metrics_on_key_and_day"
   end
 
-  create_table "email_preferences", id: :integer, default: nil, force: :cascade do |t|
+  create_table "email_preferences", id: :serial, force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "system_email_id", null: false
     t.string "token", null: false
@@ -256,7 +256,7 @@ ActiveRecord::Schema.define(version: 2019_12_11_193119) do
     t.index ["user_id"], name: "index_extension_collections_on_user_id"
   end
 
-  create_table "extension_dependencies", id: :integer, default: nil, force: :cascade do |t|
+  create_table "extension_dependencies", id: :serial, force: :cascade do |t|
     t.string "name", null: false
     t.string "version_constraint", default: ">= 0.0.0", null: false
     t.integer "extension_version_id", null: false
@@ -268,7 +268,7 @@ ActiveRecord::Schema.define(version: 2019_12_11_193119) do
     t.index ["extension_version_id"], name: "index_extension_dependencies_on_extension_version_id"
   end
 
-  create_table "extension_followers", id: :integer, default: nil, force: :cascade do |t|
+  create_table "extension_followers", id: :serial, force: :cascade do |t|
     t.integer "extension_id", null: false
     t.integer "user_id", null: false
     t.datetime "created_at"
@@ -276,7 +276,7 @@ ActiveRecord::Schema.define(version: 2019_12_11_193119) do
     t.index ["extension_id", "user_id"], name: "index_extension_followers_on_extension_id_and_user_id", unique: true
   end
 
-  create_table "extension_version_content_items", id: :integer, default: nil, force: :cascade do |t|
+  create_table "extension_version_content_items", id: :serial, force: :cascade do |t|
     t.integer "extension_version_id", null: false
     t.string "name", null: false
     t.string "path", null: false
@@ -288,7 +288,7 @@ ActiveRecord::Schema.define(version: 2019_12_11_193119) do
     t.index ["extension_version_id"], name: "index_extension_version_content_items_on_extension_version_id"
   end
 
-  create_table "extension_version_platforms", id: :integer, default: nil, force: :cascade do |t|
+  create_table "extension_version_platforms", id: :serial, force: :cascade do |t|
     t.integer "extension_version_id"
     t.integer "supported_platform_id"
     t.datetime "created_at"
@@ -296,7 +296,7 @@ ActiveRecord::Schema.define(version: 2019_12_11_193119) do
     t.index ["extension_version_id", "supported_platform_id"], name: "index_cvp_on_cvi_and_spi", unique: true
   end
 
-  create_table "extension_versions", id: :integer, default: nil, force: :cascade do |t|
+  create_table "extension_versions", id: :serial, force: :cascade do |t|
     t.integer "extension_id"
     t.string "license"
     t.string "version"
@@ -334,7 +334,7 @@ ActiveRecord::Schema.define(version: 2019_12_11_193119) do
     t.index ["version"], name: "index_extension_versions_on_version"
   end
 
-  create_table "extensions", id: :integer, default: nil, force: :cascade do |t|
+  create_table "extensions", id: :serial, force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -376,7 +376,7 @@ ActiveRecord::Schema.define(version: 2019_12_11_193119) do
     t.index ["user_id"], name: "index_extensions_on_user_id"
   end
 
-  create_table "github_organizations", id: :integer, default: nil, force: :cascade do |t|
+  create_table "github_organizations", id: :serial, force: :cascade do |t|
     t.integer "github_id", null: false
     t.string "name", null: false
     t.string "avatar_url", null: false
@@ -384,13 +384,13 @@ ActiveRecord::Schema.define(version: 2019_12_11_193119) do
     t.datetime "updated_at"
   end
 
-  create_table "hits", id: :integer, default: nil, force: :cascade do |t|
+  create_table "hits", id: :serial, force: :cascade do |t|
     t.string "label", null: false
     t.integer "total", default: 0, null: false
     t.index ["label"], name: "index_hits_on_label", unique: true
   end
 
-  create_table "icla_signatures", id: :integer, default: nil, force: :cascade do |t|
+  create_table "icla_signatures", id: :serial, force: :cascade do |t|
     t.integer "user_id"
     t.datetime "signed_at"
     t.string "prefix"
@@ -411,7 +411,7 @@ ActiveRecord::Schema.define(version: 2019_12_11_193119) do
     t.index ["user_id"], name: "index_icla_signatures_on_user_id"
   end
 
-  create_table "iclas", id: :integer, default: nil, force: :cascade do |t|
+  create_table "iclas", id: :serial, force: :cascade do |t|
     t.string "version"
     t.text "head"
     t.text "body"
@@ -420,7 +420,7 @@ ActiveRecord::Schema.define(version: 2019_12_11_193119) do
     t.index ["version"], name: "index_iclas_on_version"
   end
 
-  create_table "invitations", id: :integer, default: nil, force: :cascade do |t|
+  create_table "invitations", id: :serial, force: :cascade do |t|
     t.integer "organization_id"
     t.string "email"
     t.string "token"
@@ -431,12 +431,12 @@ ActiveRecord::Schema.define(version: 2019_12_11_193119) do
     t.index ["organization_id"], name: "index_invitations_on_organization_id"
   end
 
-  create_table "organizations", id: :integer, default: nil, force: :cascade do |t|
+  create_table "organizations", id: :serial, force: :cascade do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "ownership_transfer_requests", id: :integer, default: nil, force: :cascade do |t|
+  create_table "ownership_transfer_requests", id: :serial, force: :cascade do |t|
     t.integer "extension_id", null: false
     t.integer "recipient_id", null: false
     t.integer "sender_id", null: false
@@ -472,20 +472,20 @@ ActiveRecord::Schema.define(version: 2019_12_11_193119) do
     t.index ["platform"], name: "index_release_assets_on_platform"
   end
 
-  create_table "supported_platforms", id: :integer, default: nil, force: :cascade do |t|
+  create_table "supported_platforms", id: :serial, force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.date "released_on", null: false
   end
 
-  create_table "system_emails", id: :integer, default: nil, force: :cascade do |t|
+  create_table "system_emails", id: :serial, force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "taggings", id: :integer, default: nil, force: :cascade do |t|
+  create_table "taggings", id: :serial, force: :cascade do |t|
     t.string "taggable_type"
     t.integer "taggable_id"
     t.integer "tag_id"
@@ -496,7 +496,7 @@ ActiveRecord::Schema.define(version: 2019_12_11_193119) do
     t.index ["taggable_type", "taggable_id"], name: "index_taggings_on_taggable_type_and_taggable_id"
   end
 
-  create_table "tags", id: :integer, default: nil, force: :cascade do |t|
+  create_table "tags", id: :serial, force: :cascade do |t|
     t.string "name"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -512,7 +512,7 @@ ActiveRecord::Schema.define(version: 2019_12_11_193119) do
     t.index ["rank"], name: "index_tiers_on_rank"
   end
 
-  create_table "tools", id: :integer, default: nil, force: :cascade do |t|
+  create_table "tools", id: :serial, force: :cascade do |t|
     t.integer "user_id"
     t.string "name"
     t.string "type"
@@ -529,7 +529,7 @@ ActiveRecord::Schema.define(version: 2019_12_11_193119) do
     t.index ["user_id"], name: "index_tools_on_user_id"
   end
 
-  create_table "users", id: :integer, default: nil, force: :cascade do |t|
+  create_table "users", id: :serial, force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
     t.datetime "created_at"

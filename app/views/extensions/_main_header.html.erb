@@ -102,7 +102,7 @@
         <%= link_to "#{extension.parent_owner_name}/#{extension.parent_name}", owner_scoped_extension_url(parent_extension) %>
       <% else %>
         <span><%= extension.parent_owner_name %>/<%= extension.parent_name %></span>
-        <p>This asset is forked from an upstream project at <%= link_to extension.parent_html_url %> but does not yet have a Bonsai asset.  Please contact <%= extension.parent_owner_name %> and see if they need help getting assets listed here</p>
+        <p>This asset is forked from an upstream project at <%= link_to extension.parent_html_url, extension.parent_html_url, target: '_blank' %> but does not yet have a Bonsai asset.  Please contact <%= extension.parent_owner_name %> and see if they need help getting assets listed here</p>
       <% end %>
     </p>
   <% end %>
