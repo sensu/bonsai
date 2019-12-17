@@ -71,10 +71,11 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
   end
 
   def fetch_readme
-    filename = @run.cmd("ls README*").split("\n")
+    filename = @run.cmd("ls README*")
     logger.info filename.inspect
 
-    if filename = filename.first
+    if filename.present? 
+      filename = filename.split("\n").first
       ext = extract_readme_file_extension(filename)
       body = @run.cmd("cat '#{filename}'")
       body = body.encode(Encoding.find('UTF-8'), {invalid: :replace, undef: :replace, replace: ''})
