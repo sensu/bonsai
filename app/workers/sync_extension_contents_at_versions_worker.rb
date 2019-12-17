@@ -1,7 +1,11 @@
 class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
 
   def logger
-    @logger ||= Logger.new("log/scan.log")
+    if Rails.env.production?
+      @logger ||=Logger.new(STDOUT)
+    else 
+      @logger ||= Logger.new("log/scan.log")
+    end
   end
 
   def perform(extension_id, tags, compatible_platforms = [], release_infos_by_tag = {})

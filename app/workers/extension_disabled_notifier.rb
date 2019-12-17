@@ -10,7 +10,8 @@ class ExtensionDisabledNotifier < ApplicationWorker
   # @param extension_id [Fixnum] Identifies a +Extension+
   #
   def perform(extension_id)
-    extension = Extension.find(extension_id)
+    extension = Extension.find_by(id: extension_id)
+    return if extension.blank?
     users_to_email(extension).each do |user|
       ExtensionMailer.extension_disabled_email(extension, user).deliver
     end
