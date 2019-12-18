@@ -2,7 +2,7 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
 
   def logger
     if Rails.env.production?
-      @logger ||=Logger.new(STDOUT)
+      @logger ||= Logger.new(STDOUT)
     else 
       @logger ||= Logger.new("log/scan.log")
     end
@@ -13,6 +13,7 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
     @extension = Extension.find_by(id: extension_id)
     raise RuntimeError.new("#{I18n.t('nouns.extension')} ID: #{extension_id.inspect} not found.") unless @extension
 
+    puts "PERFORMING #{@extension.name}: #{tags.join(', ')}"
     logger.info("PERFORMING: #{@extension.inspect}, #{tags.inspect}, #{compatible_platforms.inspect}")
 
     @extension.with_lock do
@@ -63,8 +64,11 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
     begin
       Semverse::Version.new(SemverNormalizer.call(@tag))
       return true
-    rescue Semverse::InvalidVersionFormat
-      logger.info "#{@extension.lowercase_name} release #{@tag} is invalid."
+    rescue Semverse::InvalidVersionFormat => error
+      compilation_error = [@extension.compilation_error, error.message]
+      @extension.update_column(:compilation_error, compilation_error.reject(&:empty?).join('; '))
+      message = "#{@extension.lowercase_name} release is invalid: #{error.message}"
+      logger.info message
       return false
     end
   end

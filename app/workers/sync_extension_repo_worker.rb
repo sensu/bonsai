@@ -11,6 +11,8 @@ class SyncExtensionRepoWorker < ApplicationWorker
       destroy_unreleased_versions
     end
 
+    puts "Tags: #{@tags}"
+
     error_message = @tags.blank? ? 'Compile Github Extension failed as no releases were found.' : ''
     @extension.update_column(:compilation_error, error_message)
     
