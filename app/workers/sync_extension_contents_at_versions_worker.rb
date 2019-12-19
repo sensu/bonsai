@@ -1,19 +1,12 @@
 class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
-
-  def logger
-    if Rails.env.production?
-      @logger ||= Logger.new(STDOUT)
-    else 
-      @logger ||= Logger.new("log/scan.log")
-    end
-  end
+  include Sidekiq::Status::Worker # enables job status tracking
 
   def perform(extension_id, tags, compatible_platforms = [], release_infos_by_tag = {})
 
     @extension = Extension.find_by(id: extension_id)
     raise RuntimeError.new("#{I18n.t('nouns.extension')} ID: #{extension_id.inspect} not found.") unless @extension
 
-    puts "PERFORMING #{@extension.name}: #{tags.join(', ')}"
+    # puts "PERFORMING #{@extension.name}: #{tags.join(', ')}"
     logger.info("PERFORMING: #{@extension.inspect}, #{tags.inspect}, #{compatible_platforms.inspect}")
 
     @errored_tags = []
@@ -35,6 +28,14 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
     # update license in case it has changed
     ExtractExtensionLicenseWorker.perform_async(@extension.id)
     perform_next
+  end
+
+  def logger
+    if Rails.env.production?
+      @logger ||= Logger.new(STDOUT)
+    else 
+      @logger ||= Logger.new("log/scan.log")
+    end
   end
 
   private
@@ -65,7 +66,7 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
 
     begin
       tag = SemverNormalizer.call(@tag)
-      puts "Normalized Tag: #{tag}"
+      # puts "Normalized Tag: #{tag}"
       Semverse::Version.new(tag)
       return true
     rescue Semverse::InvalidVersionFormat => error
