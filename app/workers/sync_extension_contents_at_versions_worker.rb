@@ -16,6 +16,8 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
     puts "PERFORMING #{@extension.name}: #{tags.join(', ')}"
     logger.info("PERFORMING: #{@extension.inspect}, #{tags.inspect}, #{compatible_platforms.inspect}")
 
+    @errored_tags = []
+
     @extension.with_lock do
       @tags = tags
       @tag = @tags.shift
@@ -67,10 +69,13 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
       Semverse::Version.new(tag)
       return true
     rescue Semverse::InvalidVersionFormat => error
-      compilation_error = [@extension.compilation_error, error.message]
-      @extension.update_column(:compilation_error, compilation_error.reject(&:empty?).join('; '))
-      message = "#{@extension.lowercase_name} release is invalid: #{error.message}"
-      logger.info message
+      unless @errored_tags.include?(@tag)
+        @errored_tags << @tag
+        compilation_error = [@extension.compilation_error, error.message]
+        @extension.update_column(:compilation_error, compilation_error.reject(&:empty?).join('; '))
+        message = "#{@extension.lowercase_name} release is invalid: #{error.message}"
+        logger.info message
+      end
       return false
     end
   end
@@ -248,4 +253,3 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
   end
   
 end
-
