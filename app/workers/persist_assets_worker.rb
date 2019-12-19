@@ -1,4 +1,5 @@
 class PersistAssetsWorker < ApplicationWorker
+	include Sidekiq::Status::Worker # enables job status tracking
 
   def perform(version_id)
     @version = ExtensionVersion.find_by(id: version_id)

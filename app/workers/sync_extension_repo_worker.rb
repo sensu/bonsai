@@ -1,4 +1,5 @@
 class SyncExtensionRepoWorker < ApplicationWorker
+  include Sidekiq::Status::Worker # enables job status tracking
 
   def perform(extension_id, compatible_platforms = [])
     @extension = Extension.find_by(id: extension_id)
