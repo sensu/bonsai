@@ -62,7 +62,9 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
     return true if @tag == "master"
 
     begin
-      Semverse::Version.new(SemverNormalizer.call(@tag))
+      tag = SemverNormalizer.call(@tag)
+      puts "Normalized Tag: #{tag}"
+      Semverse::Version.new(tag)
       return true
     rescue Semverse::InvalidVersionFormat => error
       compilation_error = [@extension.compilation_error, error.message]
