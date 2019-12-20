@@ -1,4 +1,5 @@
 class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
+  include MarkdownHelper
 
   def logger
     if Rails.env.production?
@@ -110,29 +111,61 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
   end
 
   def override_readme(version, readme_url)
+
+    message = []
+
     begin
       url = URI.parse(readme_url)
     rescue URI::Error => error
       logger.info "URI error: #{readme_url} - #{error.message}"
       return
     end
+
+    readme_ext = File.extname(url.path).gsub(".", "")
+    unless ExtensionVersion::MARKDOWN_EXTENSIONS.include?(readme_ext)
+      message << "#{version.version} override readme_url is not a valid markdown file."
+    end
+
     # get file contents
     begin
       file = url.open
     rescue OpenURI::HTTPError => error
       status = error.io.status
-      logger.info "****** file read error: #{status[0]} - #{status[1]}"
+      message << "#{version.version} #{url.path} file read error: #{status[0]} - #{status[1]}"
+      logger.info message.compact.join('; ')
+      compilation_error = [version.compilation_error] + message
+      version.update_column(:compilation_error, compilation_error.compact.join('; '))
       return
     end
-    #readme_ext = File.extname(url.path).gsub(".", "")
-    readme = file.read
-    #readme = readme.encode(Encoding.find('UTF-8'), {invalid: :replace, undef: :replace, replace: ''})
     
-    version.update(
-      readme: readme,
-      readme_extension: 'html'
-    )
-    logger.info "OVERRIDE README: #{url.path}"
+    readme = file.read
+
+    if readme.include?('!DOCTYPE html')
+      message << "#{version.version} override readme is not valid markdown."
+    end
+
+    begin
+      filter = HTML::Pipeline.new [
+          HTML::Pipeline::MarkdownFilter,
+        ], {gfm: true}
+      filter.call(readme)
+    rescue
+      message << "#{version.version} override readme is not valid markdown."
+    end
+
+    if message.present?
+      compilation_error = [version.compilation_error] + message
+      version.update_column(:compilation_error, compilation_error.compact.join('; '))
+    else
+
+      readme = readme.encode(Encoding.find('UTF-8'), {invalid: :replace, undef: :replace, replace: ''})
+      
+      version.update(
+        readme: readme,
+        readme_extension: readme_ext
+      )
+      logger.info "OVERRIDE README: #{url.path}"
+    end
   end
 
   def extract_readme_file_extension(filename)
