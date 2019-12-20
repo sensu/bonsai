@@ -2,8 +2,6 @@ require "spec_helper"
 
 describe FindOrCreateReleaseAsset do
 
-	
-
 	describe ".call" do
 
 		context "when valid version and build" do
