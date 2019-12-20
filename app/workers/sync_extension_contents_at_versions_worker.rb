@@ -13,7 +13,7 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
     @extension = Extension.find_by(id: extension_id)
     raise RuntimeError.new("#{I18n.t('nouns.extension')} ID: #{extension_id.inspect} not found.") unless @extension
 
-    puts "PERFORMING #{@extension.name}: #{tags.join(', ')}"
+    #puts "PERFORMING #{@extension.name}: #{tags.join(', ')}"
     logger.info("PERFORMING: #{@extension.inspect}, #{tags.inspect}, #{compatible_platforms.inspect}")
 
     @errored_tags = []
@@ -103,8 +103,8 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
 
   def check_for_overrides(version)
     return if version.blank? || version.config["overrides"].nil?
-    overrides = version.config["overrides"]
-    unless overrides["readme_url"].nil?
+    overrides = version.config["overrides"][0]
+    if overrides["readme_url"].present?
       override_readme(version, overrides["readme_url"])
     end
   end
@@ -124,12 +124,13 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
       logger.info "****** file read error: #{status[0]} - #{status[1]}"
       return
     end
-    readme_ext = File.extname(url.path).gsub(".", "")
+    #readme_ext = File.extname(url.path).gsub(".", "")
     readme = file.read
-    readme = readme.encode(Encoding.find('UTF-8'), {invalid: :replace, undef: :replace, replace: ''})
+    #readme = readme.encode(Encoding.find('UTF-8'), {invalid: :replace, undef: :replace, replace: ''})
+    
     version.update(
       readme: readme,
-      readme_extension: readme_ext
+      readme_extension: 'html'
     )
     logger.info "OVERRIDE README: #{url.path}"
   end
