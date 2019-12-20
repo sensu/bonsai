@@ -102,9 +102,10 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
   end
 
   def check_for_overrides(version)
-    return if (overrides = version.config['overrides']).blank?
-    if (readme_url = overrides[:readme_url]).present?
-      override_readme(version, readme_url)
+    return if version.blank? || version.config["overrides"].nil?
+    overrides = version.config["overrides"]
+    unless overrides["readme_url"].nil?
+      override_readme(version, overrides["readme_url"])
     end
   end
 
