@@ -1,5 +1,4 @@
 class ExtensionDeletionWorker < ApplicationWorker
-
   #
   # Notify anyone that was a follower or a collaborator on this extension that
   # it has been deleted. This will only email users with email notifications

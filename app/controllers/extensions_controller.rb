@@ -1,5 +1,5 @@
 class ExtensionsController < ApplicationController
-  before_action :assign_extension, except: [:index, :directory, :collections, :new, :create]
+  before_action :assign_extension, except: [:index, :directory, :collections, :new, :create, :sync_status]
   before_action :store_location_then_authenticate_user!, only: [:follow, :unfollow, :adoption]
   before_action :authenticate_user!, only: [:new, :create]
 
@@ -318,6 +318,17 @@ class ExtensionsController < ApplicationController
     authorize! extension
     CompileExtension.call(extension: extension)
     redirect_to owner_scoped_extension_url(@extension), notice: t("extension.syncing_in_progress")
+  end
+
+  def sync_status
+    @extension = Extension.find_by(id: params[:id])
+    redis_pool.with do |redis|
+      @job_ids = JSON.parse( redis.get("compile.extension;#{params[:id]};status") || "{}" )
+    end
+
+    respond_to do |format|
+      format.js
+    end
   end
 
   #

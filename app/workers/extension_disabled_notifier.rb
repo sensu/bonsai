@@ -3,7 +3,6 @@
 # has been deprecated.
 #
 class ExtensionDisabledNotifier < ApplicationWorker
-
   #
   # Queues an email to each follower and/or collaborator of the extension
   #

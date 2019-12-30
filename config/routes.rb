@@ -65,6 +65,7 @@ Rails.application.routes.draw do
         put :enable
         put :report
         put :sync_repo
+        get :sync_status
         put :select_default_version
         put :update_collection
       end
