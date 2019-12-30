@@ -179,19 +179,22 @@ class Extension < ApplicationRecord
     # convert version to array of integers so 10.0.0 comes after 9.0.0
 
     # Hack for regex issue on postgres - plus sign not escaping properly
-    @sorted_extension_versions = extension_versions.order(Arel.sql(
-      "STRING_TO_ARRAY(
-        REGEXP_REPLACE(
+    @sorted_extension_versions = extension_versions.order(
+      Arel.sql(
+        "STRING_TO_ARRAY(
           REGEXP_REPLACE(
             REGEXP_REPLACE(
-              extension_versions.version, 
-              E'[-](.*)', ''
-            ), 
-           E'[\+](.*)', ''
-          ),
-          E'V|v|master', ''
-         )
-      , '.')::bigint[] DESC "))
+              REGEXP_REPLACE(
+                extension_versions.version, 
+                E'[-](.*)', ''
+              ), 
+             E'[\+](.*)', ''
+            ),
+            E'V|v|master', ''
+           )
+        , '.')::bigint[] DESC ".gsub(/\s+/, " ")
+      )
+    )
 
     @sorted_extension_versions.limit(1).map(&:id) # executes query to test postgres regex
     @sorted_extension_versions

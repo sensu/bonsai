@@ -1,6 +1,5 @@
 class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
-  include Sidekiq::Status::Worker # enables job status tracking
-
+  
   def perform(extension_id, tags, compatible_platforms = [], release_infos_by_tag = {})
 
     @extension = Extension.find_by(id: extension_id)
@@ -24,9 +23,17 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
         tally_commits if @tag == "master"
       end
     end
-    ExtractExtensionCollaboratorsWorker.perform_async(@extension.id)
+    CompileExtensionStatus.call(
+      extension: @extension, 
+      worker: 'ExtractExtensionCollaboratorsWorker', 
+      job_id: ExtractExtensionCollaboratorsWorker.perform_async(@extension.id)
+    )
     # update license in case it has changed
-    ExtractExtensionLicenseWorker.perform_async(@extension.id)
+    CompileExtensionStatus.call(
+      extension: @extension, 
+      worker: 'ExtractExtensionLicenseWorker', 
+      job_id: ExtractExtensionLicenseWorker.perform_async(@extension.id)
+    )
     perform_next
   end
 

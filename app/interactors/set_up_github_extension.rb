@@ -12,9 +12,21 @@ class SetUpGithubExtension
 
   def call
     platforms = compatible_platforms.select { |p| !p.strip.blank? }
-    CollectExtensionMetadataWorker.perform_async(extension.id, platforms)
-    SetupExtensionWebHooksWorker.perform_async(extension.id)
-    NotifyModeratorsOfNewExtensionWorker.perform_async(extension.id)
+    CompileExtensionStatus.call(
+      extension: extension, 
+      worker: 'CollectExtensionMetadataWorker', 
+      job_id: CollectExtensionMetadataWorker.perform_async(extension.id, platforms)
+    )
+    CompileExtensionStatus.call(
+      extension: extension, 
+      worker: 'SetupExtensionWebHooksWorker', 
+      job_id: SetupExtensionWebHooksWorker.perform_async(extension.id)
+    )
+    CompileExtensionStatus.call(
+      extension: extension, 
+      worker: 'NotifyModeratorsOfNewExtensionWorker', 
+      job_id: NotifyModeratorsOfNewExtensionWorker.perform_async(extension.id)
+    )
   end
 
   def self.gather_github_info(extension, octokit, owner)

@@ -25,7 +25,11 @@ class ExtractExtensionCollaboratorsWorker < ApplicationWorker
 
   def process_contributors
     @contributors.each do |c|
-      ExtractExtensionCollaboratorWorker.perform_async(@extension.id, c[:login])
+      CompileExtensionStatus.call(
+      extension: @extension, 
+      worker: 'ExtractExtensionCollaboratorWorker', 
+      job_id: ExtractExtensionCollaboratorWorker.perform_async(@extension.id, c[:login])
+    )
     end
   end
 end
