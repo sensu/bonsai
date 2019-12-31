@@ -41,6 +41,7 @@ en:
     github_url_format_error: "must be a valid repo on which you are a collaborator."
     missing_config_file: "must have a top-level %{allowed_config_file_names} file."
     created: "Your asset was added successfully!"
+    privacy_changed: "You successfully changed the privacy setting."
   contributor:
     removed: "Contributor removed."
   contributor_requests:

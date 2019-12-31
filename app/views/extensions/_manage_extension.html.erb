@@ -115,6 +115,26 @@
     <% end %>
   <% end %>
 
+  <% if policy(extension).manage? %>
+    <% if extension.privacy? %>
+      <% confirmation = "Are you sure you want to make #{extension.name} #{t('nouns.extension')} public?" %>
+      <% link = 'Set as Public' %>
+      <% icon = 'fa-eye' %>
+    <% else %>
+      <% confirmation = "Are you sure you want to make #{extension.name} #{t('nouns.extension')} private?" %>
+      <% link = 'Set as Private' %>
+      <% icon = 'fa-eye-slash' %>
+    <% end %>
+    <li>
+      <%= link_to privacy_extension_path(extension, username: extension.owner_name),
+                  method: 'put',
+                  data: {confirm: confirmation} do %>
+        <i class="fa <%= icon %>"></i>
+        <span><%= link %></span>
+      <% end %>
+    </li>
+  <% end %>
+
   <% if policy(extension).select_default_version? %>
     <% if extension.selected_version.blank? %>
       <% title = '' %>
@@ -152,26 +172,6 @@
       <% end %>
     </div>
     
-  <% end %>
-
-  <% if policy(extension).disable? %>
-    <% if extension.enabled? %>
-      <li>
-        <%= link_to disable_extension_path(extension, username: extension.owner_name),
-                    method: 'put',
-                    rel: 'delete',
-                    data: {confirm: "Are you sure you want to delete the #{extension.name} #{t('nouns.extension')}?"} do %>
-          <i class="fa fa-times"></i>
-          Delete <%= t('nouns.extension') %>
-        <% end %>
-      </li>
-    <% else %>
-      <li>
-        <%= link_to enable_extension_path(extension, username: extension.owner_name), method: 'put', rel: 'enable' do %>
-          <i class="fa fa-circle"></i> Enable
-        <% end %>
-      </li>
-    <% end %>
   <% end %>
 
   <% if version.present? && policy(version).show_config? %>
@@ -216,6 +216,26 @@
         <a class="button secondary radius tiny close-reveal-modal">Cancel</a>
       </div>
     </div>
+
+    <% if policy(extension).disable? %>
+    <% if extension.enabled? %>
+      <li>
+        <%= link_to disable_extension_path(extension, username: extension.owner_name),
+                    method: 'put',
+                    rel: 'delete',
+                    data: {confirm: "Are you sure you want to delete the #{extension.name} #{t('nouns.extension')}?"} do %>
+          <i class="fa fa-times"></i>
+          Delete <%= t('nouns.extension') %>
+        <% end %>
+      </li>
+    <% else %>
+      <li>
+        <%= link_to enable_extension_path(extension, username: extension.owner_name), method: 'put', rel: 'enable' do %>
+          <i class="fa fa-circle"></i> Enable
+        <% end %>
+      </li>
+    <% end %>
+  <% end %>
   <% end %>
 
 </ul>
