@@ -70,7 +70,8 @@ module ExtensionVersionsHelper
           HTML::Pipeline::AutolinkFilter,
           HTML::Pipeline::MentionFilter,
           HTML::Pipeline::TeamMentionFilter,
-          HTML::Pipeline::SyntaxHighlightFilter
+          HTML::Pipeline::SyntaxHighlightFilter,
+          HTML::Pipeline::TableOfContentsFilter
         ], {gfm: true}
         result = filter.call(content)
         result[:output].to_s
