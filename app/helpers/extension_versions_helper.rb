@@ -64,8 +64,9 @@ module ExtensionVersionsHelper
   #
   def render_document(content, extension, repo_loc = "", version = "", hard_wrap: false)
     document = begin
-      if %w(md mdown markdown).include?(extension.downcase)
+      if ExtensionVersion::MARKDOWN_EXTENSIONS.include?(extension.downcase)
         filter = HTML::Pipeline.new [
+          HTML::Pipeline::PlainTextInputFilter,
           HTML::Pipeline::MarkdownFilter,
           HTML::Pipeline::AutolinkFilter,
           HTML::Pipeline::MentionFilter,
