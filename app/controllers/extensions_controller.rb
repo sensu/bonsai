@@ -136,9 +136,19 @@ class ExtensionsController < ApplicationController
   def download
     extension = Extension.with_owner_and_lowercase_name(owner_name: params[:username], lowercase_name: params[:id])
     latest_version = extension.latest_extension_version
-    BonsaiAssetIndex::Metrics.increment('extension.downloads.web')
-    DailyMetric.increment(latest_version.download_daily_metric_key)
-    redirect_to extension_version_download_url(extension, latest_version, username: params[:username])
+    if latest_version.present?
+      BonsaiAssetIndex::Metrics.increment('extension.downloads.web')
+      DailyMetric.increment(latest_version.download_daily_metric_key)
+      redirect_to extension_version_download_url(extension, latest_version, username: params[:username])
+    else
+      redirect_to(
+        owner_scoped_extension_url(extension),
+        notice: t(
+          'download.not_found',
+          extension_or_tool: extension.name
+        )
+      )
+    end
   end
 
   #
