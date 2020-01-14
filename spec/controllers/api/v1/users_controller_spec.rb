@@ -15,7 +15,7 @@ describe Api::V1::UsersController do
   let!(:apples) { create(:extension, name: 'apples') }
   let!(:postgres) { create(:extension, name: 'postgres') }
   let!(:ruby) { create(:extension, name: 'ruby') }
-  let!(:berkshelf) { create(:tool, name: 'berkshelf', owner: user) }
+  let!(:berkshelf) { create(:tool, owner: user) }
   let!(:knife_supermarket) { create(:tool, name: 'knife_supermarket', owner: user) }
   let!(:dull_knife) { create(:tool, name: 'dull_knife') }
   let!(:xanadu) { create(:tool, name: 'xanadu') }
