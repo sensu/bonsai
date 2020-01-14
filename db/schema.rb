@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_11_193119) do
+ActiveRecord::Schema.define(version: 2020_01_13_232729) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -350,7 +350,7 @@ ActiveRecord::Schema.define(version: 2019_12_11_193119) do
     t.integer "api_download_count", default: 0
     t.boolean "featured", default: false
     t.boolean "up_for_adoption"
-    t.boolean "privacy"
+    t.boolean "privacy", default: false
     t.string "description"
     t.string "github_url"
     t.string "license_name", default: ""
@@ -365,6 +365,7 @@ ActiveRecord::Schema.define(version: 2019_12_11_193119) do
     t.string "parent_owner_name"
     t.string "compilation_error"
     t.string "parent_html_url"
+    t.text "config_overrides"
     t.index ["enabled"], name: "index_extensions_on_enabled"
     t.index ["github_organization_id"], name: "index_extensions_on_github_organization_id"
     t.index ["name"], name: "index_extensions_on_name"
@@ -372,6 +373,7 @@ ActiveRecord::Schema.define(version: 2019_12_11_193119) do
     t.index ["owner_name"], name: "index_extensions_on_owner_name"
     t.index ["parent_id"], name: "index_extensions_on_parent_id"
     t.index ["parent_owner_name", "parent_name"], name: "index_extensions_on_parent_owner_name_and_parent_name"
+    t.index ["privacy"], name: "index_extensions_on_privacy"
     t.index ["tier_id"], name: "index_extensions_on_tier_id"
     t.index ["user_id"], name: "index_extensions_on_user_id"
   end

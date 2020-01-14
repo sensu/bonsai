@@ -381,6 +381,18 @@ class ExtensionsController < ApplicationController
     head :ok
   end
 
+  def update_config_overrides
+    config_overrides = {}
+    params[:configs].each do |config|
+      config.each do |input|
+        next if input['key'].blank?
+        config_overrides[ input['key'] ] = input['value']
+      end
+    end
+    config_overrides.sort.to_h
+    @extension.update(config_overrides: config_overrides)
+  end
+
   private
 
   def qualify_scope(scope, params)

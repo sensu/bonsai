@@ -66,6 +66,7 @@ Rails.application.routes.draw do
         put :sync_repo
         put :select_default_version
         put :update_collection
+        put :update_config_overrides
       end
     end
 

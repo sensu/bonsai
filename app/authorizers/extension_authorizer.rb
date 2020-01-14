@@ -131,6 +131,10 @@ class ExtensionAuthorizer < Authorizer::Base
     owner_or_admin?
   end
 
+  def edit_extension_config_overrides?
+    owner_or_admin?
+  end
+
   private
 
   def admin?

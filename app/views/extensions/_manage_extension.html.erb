@@ -154,6 +154,39 @@
     
   <% end %>
 
+  <% if policy(extension).edit_extension_config_overrides? %>
+
+    <li style='white-space: nowrap;'>
+      <%= link_to '#', class: 'default-version', rel: 'extension-config-overrides', 'data-reveal-id' => 'extension-config-overrides' do %>
+        <i class="fa fa-check-square-o"></i>
+        <span><%= t('nouns.extension').titleize %> Overrides</span>
+      <% end %>
+    </li>
+
+
+    <div id="extension-config-overrides" class="reveal-modal" data-reveal>
+      <h1><%= t('nouns.extension').titleize %> Overrides</h1>
+      <a class="close-reveal-modal">&#215;</a>
+
+      <%= form_for extension, url: update_config_overrides_extension_path(extension, username: extension.owner_name), method: :put, remote: true do |f| %>
+
+        <div id='config-container'>
+          <%= render 'extensions/config_overrides', extension: extension %>
+        </div>
+        <hr/>
+        <h4>New Override</h4>
+        <div id='config-new-container'>
+          <%= render 'extensions/config_overrides_new' %>
+        </div>
+
+        <div style="margin-top: 24px;" class="small-12 columns text-center">
+          <%= f.submit 'Set', class: "button primary radius tiny" %>
+          <a class="button secondary radius tiny close-reveal-modal">Cancel</a>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
   <% if policy(extension).disable? %>
     <% if extension.enabled? %>
       <li>
