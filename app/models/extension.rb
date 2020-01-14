@@ -40,6 +40,8 @@ class Extension < ApplicationRecord
   has_one_attached :tmp_source_file
   attr_accessor :version
 
+  serialize :config_overrides, Hash
+
   default_scope { where(enabled: true) }
 
   #
