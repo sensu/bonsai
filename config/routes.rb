@@ -69,7 +69,10 @@ Rails.application.routes.draw do
         put :select_default_version
         put :update_collection
         put :privacy
+<<<<<<< HEAD
         put :update_config_overrides
+=======
+>>>>>>> issue_253
       end
     end
 

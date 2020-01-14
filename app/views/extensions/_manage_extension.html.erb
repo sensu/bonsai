@@ -174,6 +174,7 @@
     
   <% end %>
 
+<<<<<<< HEAD
   <% if policy(extension).edit_extension_config_overrides? %>
 
     <li style='white-space: nowrap;'>
@@ -227,6 +228,8 @@
     <% end %>
   <% end %>
 
+=======
+>>>>>>> issue_253
   <% if version.present? && policy(version).show_config? %>
     <li>
       <%= link_to '#', class: 'config', rel: 'config', 'data-reveal-id' => 'config' do %>
