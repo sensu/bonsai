@@ -66,8 +66,13 @@ module ExtensionVersionsHelper
     document = begin
       if ExtensionVersion::MARKDOWN_EXTENSIONS.include?(extension.downcase)
         filter = HTML::Pipeline.new [
-          HTML::Pipeline::PlainTextInputFilter,
+          #HTML::Pipeline::PlainTextInputFilter,
           HTML::Pipeline::MarkdownFilter,
+          HTML::Pipeline::SanitizationFilter,
+          #HTML::Pipeline::CamoFilter,
+          HTML::Pipeline::ImageMaxWidthFilter,
+          #HTML::Pipeline::HttpsFilter,
+          #HTML::Pipeline::EmojiFilter,
           HTML::Pipeline::AutolinkFilter,
           HTML::Pipeline::MentionFilter,
           HTML::Pipeline::TeamMentionFilter,
