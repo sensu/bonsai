@@ -135,7 +135,15 @@ class ExtensionAuthorizer < Authorizer::Base
     owner_or_admin?
   end
 
+  def report?
+    signed_in?
+  end
+
   private
+
+  def signed_in?
+    user.present?
+  end
 
   def admin?
     user.is?(:admin)

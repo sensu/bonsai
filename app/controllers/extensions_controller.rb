@@ -311,6 +311,7 @@ class ExtensionsController < ApplicationController
   # Notifies moderators to check an extension for inappropriate content.
   #
   def report
+    authorize! @extension, :report?
     NotifyModeratorsOfReportedExtensionWorker.perform_async(@extension.id, params[:report][:description], current_user.try(:id))
     redirect_to owner_scoped_extension_url(@extension), notice: t("extension.reported", extension: @extension.name)
   end
