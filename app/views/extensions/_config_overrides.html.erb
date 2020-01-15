@@ -1,8 +1,10 @@
 <div class='small-12 columns'>
   <% index = 1 %>
-  <% extension.config_overrides.each do |key, value| %>
-    <div class='small-4 columns'><%= text_field_tag "configs[config_#{index}[key]]", key %></div>
-    <div class='small-8 columns'><%= text_field_tag "configs[config_#{index}[value]]", value %></div>
-    <% index += 1 %>
-  <% end %>
+  <% if extension.config_overrides.is_a?(Hash) %>
+	  <% extension.config_overrides.each do |key, value| %>
+	    <div class='small-4 columns'><%= text_field_tag "configs[config_#{index}[key]]", key %></div>
+	    <div class='small-8 columns'><%= text_field_tag "configs[config_#{index}[value]]", value %></div>
+	    <% index += 1 %>
+	  <% end %>
+	<% end %>
 </div>
