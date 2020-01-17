@@ -64,13 +64,20 @@ module ExtensionVersionsHelper
   #
   def render_document(content, extension, repo_loc = "", version = "", hard_wrap: false)
     document = begin
-      if %w(md mdown markdown).include?(extension.downcase)
+      if ExtensionVersion::MARKDOWN_EXTENSIONS.include?(extension.downcase)
         filter = HTML::Pipeline.new [
+          #HTML::Pipeline::PlainTextInputFilter,
           HTML::Pipeline::MarkdownFilter,
+          HTML::Pipeline::SanitizationFilter,
+          #HTML::Pipeline::CamoFilter,
+          HTML::Pipeline::ImageMaxWidthFilter,
+          #HTML::Pipeline::HttpsFilter,
+          #HTML::Pipeline::EmojiFilter,
           HTML::Pipeline::AutolinkFilter,
           HTML::Pipeline::MentionFilter,
           HTML::Pipeline::TeamMentionFilter,
-          HTML::Pipeline::SyntaxHighlightFilter
+          HTML::Pipeline::SyntaxHighlightFilter,
+          HTML::Pipeline::TableOfContentsFilter
         ], {gfm: true}
         result = filter.call(content)
         result[:output].to_s

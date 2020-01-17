@@ -1,11 +1,13 @@
 class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
-  
+  include MarkdownHelper
+
   def perform(extension_id, tags, compatible_platforms = [], release_infos_by_tag = {})
 
     @extension = Extension.find_by(id: extension_id)
     raise RuntimeError.new("#{I18n.t('nouns.extension')} ID: #{extension_id.inspect} not found.") unless @extension
 
     # puts "PERFORMING #{@extension.name}: #{tags.join(', ')}"
+
     logger.info("PERFORMING: #{@extension.inspect}, #{tags.inspect}, #{compatible_platforms.inspect}")
 
     @errored_tags = []
@@ -57,6 +59,7 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
     set_commit_count(version)
     scan_files(version)
     sync_release_info(version, release_info)
+    check_for_overrides(version)
     PersistAssets.call(version: version)
     update_annotations(version)
     version.save
@@ -80,7 +83,7 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
       unless @errored_tags.include?(@tag)
         @errored_tags << @tag
         compilation_error = [@extension.compilation_error, error.message]
-        @extension.update_column(:compilation_error, compilation_error.reject(&:empty?).join('; '))
+        @extension.update_column(:compilation_error, compilation_error.compact.join('; '))
         message = "#{@extension.lowercase_name} release is invalid: #{error.message}"
         logger.info message
       end
@@ -105,6 +108,72 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
       return body, ext
     else
       return "There is no README file for this #{I18n.t('nouns.extension')}.", "txt"
+    end
+  end
+
+  def check_for_overrides(version)
+    return if version.blank? || version.config["overrides"].nil?
+    overrides = version.config["overrides"][0]
+    if overrides["readme_url"].present?
+      override_readme(version, overrides["readme_url"])
+    end
+  end
+
+  def override_readme(version, readme_url)
+
+    message = []
+
+    begin
+      url = URI.parse(readme_url)
+    rescue URI::Error => error
+      logger.info "URI error: #{readme_url} - #{error.message}"
+      return
+    end
+
+    readme_ext = File.extname(url.path).gsub(".", "")
+    unless ExtensionVersion::MARKDOWN_EXTENSIONS.include?(readme_ext)
+      message << "#{version.version} override readme_url is not a valid markdown file."
+    end
+
+    # get file contents
+    begin
+      file = url.open
+    rescue OpenURI::HTTPError => error
+      status = error.io.status
+      message << "#{version.version} #{url.path} file read error: #{status[0]} - #{status[1]}"
+      logger.info message.compact.join('; ')
+      compilation_error = [version.compilation_error] + message
+      version.update_column(:compilation_error, compilation_error.compact.join('; '))
+      return
+    end
+    
+    readme = file.read
+
+    if readme.include?('!DOCTYPE html')
+      message << "#{version.version} override readme is not valid markdown."
+    end
+
+    begin
+      filter = HTML::Pipeline.new [
+          HTML::Pipeline::MarkdownFilter,
+        ], {gfm: true}
+      filter.call(readme)
+    rescue
+      message << "#{version.version} override readme is not valid markdown."
+    end
+
+    if message.present?
+      compilation_error = [version.compilation_error] + message
+      version.update_column(:compilation_error, compilation_error.compact.join('; '))
+    else
+
+      readme = readme.encode(Encoding.find('UTF-8'), {invalid: :replace, undef: :replace, replace: ''})
+      
+      version.update(
+        readme: readme,
+        readme_extension: readme_ext
+      )
+      logger.info "OVERRIDE README: #{url.path}"
     end
   end
 

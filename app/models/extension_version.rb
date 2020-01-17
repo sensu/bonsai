@@ -1,5 +1,7 @@
 class ExtensionVersion < ApplicationRecord
   include SeriousErrors
+
+  MARKDOWN_EXTENSIONS = %w(markdown mdown mkdn mkd md)
   
   # Associations
   # --------------------

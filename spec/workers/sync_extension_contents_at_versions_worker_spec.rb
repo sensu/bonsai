@@ -28,11 +28,11 @@ describe SyncExtensionContentsAtVersionsWorker do
     @s3_bucket = s3.bucket(ENV['AWS_S3_ASSETS_BUCKET'])
 
     # trap incorrect ENV variables (Travis) or no network connection
-    begin
-      stub_aws unless @s3_bucket.exists?
-    rescue
+    #begin
+    #  stub_aws unless @s3_bucket.exists?
+    #rescue
       stub_aws
-    end
+    #end
     
   end
 
@@ -41,6 +41,8 @@ describe SyncExtensionContentsAtVersionsWorker do
     Aws::S3::Resource.any_instance.stub_chain(:bucket, :object, :exists?).and_return(true)
     Aws::S3::Resource.any_instance.stub_chain(:bucket, :object, :public_url).and_return('https://s3.us-west-2.amazonaws.com/bucket/example.com')
     Aws::S3::Resource.any_instance.stub_chain(:bucket, :object, :last_modified).and_return(DateTime.now.to_s(:db))
+    Aws::S3::Resource.any_instance.stub_chain(:bucket, :object, :delete).and_return(true)
+    Aws::S3::Resource.any_instance.stub_chain(:bucket, :object, :put).and_return(true)
   end
 
   describe 'tag checking' do
@@ -92,7 +94,7 @@ describe SyncExtensionContentsAtVersionsWorker do
     it 'puts annotations in annotations field' do
       config_hash['annotations'] = {
         suggested_asset_url: '/suggested/asset', 
-        suggested_asset_message: 'Suggested Asset Messaage'
+        suggested_asset_message: 'Suggested Asset Message'
       }
       version.update_column(:config, config_hash)
       subject.perform(extension.id, tags)
@@ -102,5 +104,22 @@ describe SyncExtensionContentsAtVersionsWorker do
     end
 
   end
+
+  describe 'overrides' do 
+    let(:config_hash) { version.config }
+    let(:tags) { [version.version] }
+      
+    it 'loads an alternate readme file' do
+      config_hash["overrides"] = {
+        "readme_url"=>"https://github.com/sensu/bonsai/blob/master/README.md"
+      }
+      version.update_column(:config, config_hash)
+      subject.perform(extension.id, tags)
+      version.reload 
+      expect(version.readme).to include('bonsai.sensu.io')
+    end
+
+  end
+
 
 end

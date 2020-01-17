@@ -60,7 +60,7 @@ describe 'users/followed_activity.atom.builder' do
 
       expect(activity['title']).to match(/#{test_extension.name}/)
       expect(activity['content']).to match(/this extension is so rad/)
-      expect(activity['content']).to match(/we added so much stuff/)
+      #expect(activity['content']).to match(/we added so much stuff/)
       expect(activity['author']['name']).to eql(test_extension.maintainer)
       expect(activity['author']['uri']).to eql(user_url(test_extension.owner))
       expect(activity['link']['href']).

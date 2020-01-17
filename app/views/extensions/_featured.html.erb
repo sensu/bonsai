@@ -4,6 +4,12 @@
       <%= link_to_gravatar(extension) %>
     </div>
     <div class="small-10 columns">
+      <% if extension.privacy? %>
+        <p class="small-12">
+          <i class="fa fa-eye-slash"></i>
+          <span>Private</span>
+        </p>
+      <% end %>
       <header>
         <%= link_to extension.name, owner_scoped_extension_url(extension) %>
         <div class="tier-declaration">
@@ -12,6 +18,7 @@
           <span><%= extension.tier_name %> tier</span>
         </div>
       </header>
+      
       <p class='truncate lines-3'><%= extension.description %></p>
       <p class="tags">
         <% extension.tags.each do |tag| %>

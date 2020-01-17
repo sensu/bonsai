@@ -30,8 +30,11 @@ module UsersHelper
       avatar_url = ActionController::Base.helpers.asset_url("#{ENV['HOST_LOGO']}")
     else
       gravatar_id = Digest::MD5.hexdigest(user.try(:email).try(:downcase) || "")
-      avatar_url = "#{user.avatar_url}&size=#{size}"
-      avatar_url = "https://secure.gravatar.com/avatar/#{gravatar_id}?s=#{size}" if user.avatar_url.nil?
+      if user.blank? || user.avatar_url.blank?
+        avatar_url = "https://secure.gravatar.com/avatar/#{gravatar_id}?s=#{size}"
+      else
+        avatar_url = "#{user.avatar_url}&size=#{size}"
+      end
     end
     image_tag(avatar_url, style: "max-height: #{size}px; max-width: #{size}px", alt: user.name, class: 'gravatar')
   end
