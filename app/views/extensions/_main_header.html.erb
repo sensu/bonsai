@@ -107,6 +107,13 @@
     </p>
   <% end %>
 
+  <% if extension.privacy? %>
+    <p class="small-12 title">
+      <i class="fa fa-eye-slash"></i>
+      <span>This asset is marked as private.</span>
+    </p>
+  <% end %>
+
   <p class="description" itemprop="description"><%= extension.description %></p>
 
   

@@ -25,7 +25,7 @@ class ExtensionsController < ApplicationController
     params['platforms'].reject!(&:blank?) if params['platforms'].present?
     @extensions = qualify_scope(Extension, params)
                     .includes(:extension_versions)
-
+    @extensions = @extensions.filter_private(current_user)
     @number_of_extensions = @extensions.count(:all)
     @extensions = @extensions.page(params[:page]).per(20)
 
@@ -45,7 +45,7 @@ class ExtensionsController < ApplicationController
       @repo_names = Marshal.load(@repo_names)
     else
       FetchAccessibleReposWorker.perform_async(current_user.id)
-      puts '******* FetchAccessibleReposWorker *********'
+      # puts '******* FetchAccessibleReposWorker *********'
     end
 
     @extension = Extension.new
@@ -76,12 +76,14 @@ class ExtensionsController < ApplicationController
   #
   def directory
     @recently_updated_extensions = Extension.
+      filter_private(current_user).
       includes(:extension_versions).
       where.not(owner: nil).
       where("extension_versions.version != 'master'").
       order("extension_versions.created_at DESC").
       limit(5)
     @most_downloaded_extensions = Extension.
+      filter_private(current_user).
       includes(:extension_versions).
       where.not(owner: nil).
       ordered_by('most_downloaded').
@@ -380,6 +382,11 @@ class ExtensionsController < ApplicationController
       end
     end
     head :ok
+  end
+
+  def privacy
+    @extension.update(privacy: !@extension.privacy)
+    redirect_to owner_scoped_extension_url(@extension), notice: t("extension.privacy_changed")
   end
 
   private

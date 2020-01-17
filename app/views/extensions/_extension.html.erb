@@ -8,9 +8,13 @@
       </div>
       <div class="small-4 columns title">
         <%= link_to owner_scoped_extension_url(extension), rel: 'extension', itemprop: 'name' do %><%= extension.name_with_namespace %><% end %>
-        <% if !extension.enabled? %>
+        <% unless extension.enabled? %>
           <i class="fa fa-times"></i>
           <small>Disabled</small>
+        <% end %>
+        <% if extension.privacy? %>
+          <i class="fa fa-eye-slash"></i>
+          <span>Private</span>
         <% end %>
       </div>
 
