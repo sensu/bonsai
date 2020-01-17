@@ -68,6 +68,7 @@ Rails.application.routes.draw do
         get :sync_status
         put :select_default_version
         put :update_collection
+        put :update_config_overrides
         put :privacy
       end
     end

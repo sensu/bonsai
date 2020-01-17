@@ -112,10 +112,13 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
   end
 
   def check_for_overrides(version)
-    return if version.blank? || version.config["overrides"].nil?
-    overrides = version.config["overrides"][0]
-    if overrides["readme_url"].present?
-      override_readme(version, overrides["readme_url"])
+    return if version.blank?
+    version_overrides = version.config["overrides"].nil? ? {} : version.config["overrides"][0]
+    extension_overrides = version.extension.config_overrides
+    if version_overrides.present?  && version_overrides["readme_url"].present?
+      override_readme(version, version_overrides["readme_url"])
+    elsif extension_overrides["readme_url"].present?
+      override_readme(version, extension_overrides["readme_url"])
     end
   end
 
@@ -133,6 +136,16 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
     readme_ext = File.extname(url.path).gsub(".", "")
     unless ExtensionVersion::MARKDOWN_EXTENSIONS.include?(readme_ext)
       message << "#{version.version} override readme_url is not a valid markdown file."
+    end
+
+    # resconstruct Github url to get file, not html
+    # https://github.com/jspaleta/sensu-plugins-redis/blob/master/README.md 
+    # should translate to 
+    # https://raw.githubusercontent.com/jspaleta/sensu-plugins-redis/master/README.md
+ 
+    if ['github.com', 'www.github.com'].include?(url.host)
+      url.host = "raw.githubusercontent.com"
+      url.path.gsub!('/blob', '')
     end
 
     # get file contents

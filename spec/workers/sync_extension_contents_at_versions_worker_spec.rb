@@ -37,12 +37,19 @@ describe SyncExtensionContentsAtVersionsWorker do
   end
 
   def stub_aws
-    Aws::S3::Resource.any_instance.stub_chain(:bucket, :exists?).and_return(true)
-    Aws::S3::Resource.any_instance.stub_chain(:bucket, :object, :exists?).and_return(true)
-    Aws::S3::Resource.any_instance.stub_chain(:bucket, :object, :public_url).and_return('https://s3.us-west-2.amazonaws.com/bucket/example.com')
-    Aws::S3::Resource.any_instance.stub_chain(:bucket, :object, :last_modified).and_return(DateTime.now.to_s(:db))
-    Aws::S3::Resource.any_instance.stub_chain(:bucket, :object, :delete).and_return(true)
-    Aws::S3::Resource.any_instance.stub_chain(:bucket, :object, :put).and_return(true)
+    allow_any_instance_of(Aws::S3::Resource).to receive_message_chain('bucket.exists?') {true}
+    allow_any_instance_of(Aws::S3::Resource).to receive_message_chain('bucket.object.exists?') {true}
+    allow_any_instance_of(Aws::S3::Resource).to receive_message_chain('bucket.object.public_url') {'https://s3.us-west-2.amazonaws.com/bucket/example.com'}
+    allow_any_instance_of(Aws::S3::Resource).to receive_message_chain('bucket.object.last_modified') {DateTime.now.to_s(:db)}
+    allow_any_instance_of(Aws::S3::Resource).to receive_message_chain('bucket.object.delete') {true}
+    allow_any_instance_of(Aws::S3::Resource).to receive_message_chain('bucket.object.put') {true}
+    
+    #Aws::S3::Resource.any_instance.stub_chain(:bucket, :exists?).and_return(true)
+    #Aws::S3::Resource.any_instance.stub_chain(:bucket, :object, :exists?).and_return(true)
+    #Aws::S3::Resource.any_instance.stub_chain(:bucket, :object, :public_url).and_return('https://s3.us-west-2.amazonaws.com/bucket/example.com')
+    #Aws::S3::Resource.any_instance.stub_chain(:bucket, :object, :last_modified).and_return(DateTime.now.to_s(:db))
+    #Aws::S3::Resource.any_instance.stub_chain(:bucket, :object, :delete).and_return(true)
+    #Aws::S3::Resource.any_instance.stub_chain(:bucket, :object, :put).and_return(true)
   end
 
   describe 'tag checking' do
@@ -108,18 +115,37 @@ describe SyncExtensionContentsAtVersionsWorker do
   describe 'overrides' do 
     let(:config_hash) { version.config }
     let(:tags) { [version.version] }
-      
+
     it 'loads an alternate readme file' do
-      config_hash["overrides"] = {
+      config_hash["overrides"] = [{
+        "readme_url"=>"https://raw.githubusercontent.com/sensu/bonsai/master/README.md"
+      }]
+      version.update_column(:config, config_hash)
+      subject.perform(extension.id, tags)
+      version.reload 
+      expect(version.readme).to include('bonsai.sensu.io')
+    end
+      
+    it 'corrects link to github to load readme file as markdown' do
+      config_hash["overrides"] = [{
         "readme_url"=>"https://github.com/sensu/bonsai/blob/master/README.md"
-      }
+      }]
       version.update_column(:config, config_hash)
       subject.perform(extension.id, tags)
       version.reload 
       expect(version.readme).to include('bonsai.sensu.io')
     end
 
-  end
+    it 'loads an alternate readme file based on extension override' do
+      config_overrides = {
+        "readme_url"=>"https://raw.githubusercontent.com/sensu/bonsai/master/README.md"
+      }
+      extension.update_column(:config_overrides, config_overrides)
+      subject.perform(extension.id, tags)
+      version.reload 
+      expect(version.readme).to include('bonsai.sensu.io')
+    end
 
+  end
 
 end
