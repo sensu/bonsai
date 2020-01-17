@@ -21,6 +21,8 @@ en:
   collaborator:
     added: 'Collaborator added.'
     owner_changed: 'You successfully transferred ownership of %{resource} to %{user}.'
+  downloand:
+    not_found: 'Latest version for %{extension_or_tool} not found.'
   extension:
     ownership_transfer:
       done: "%{extension} transferred to %{user}."
