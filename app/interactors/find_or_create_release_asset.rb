@@ -18,15 +18,16 @@ class FindOrCreateReleaseAsset
                           platform: build['platform'],
                           arch: build['arch'])
 
-  	context.release_asset = release_asset || create_release_asset(version, build)
+    context.release_asset = if release_asset.present?
+      update_release_asset(release_asset, version, build)
+    else
+      create_release_asset(version, build)
+    end
   end
 
   private
 
   def create_release_asset(version, build)
-    source_asset_filename = version.interpolate_variables( build['asset_filename'] )
-    source_sha_filename = version.interpolate_variables( build['sha_filename'] )
-
     release_asset = ReleaseAsset.create(
       platform: build['platform'],
       arch: build['arch'],
@@ -36,13 +37,38 @@ class FindOrCreateReleaseAsset
       commit_at: version.last_commit_at,
       source_asset_sha: build['asset_sha'],
       source_asset_url: build['asset_url'],
-      source_sha_filename: source_sha_filename,
+      source_sha_filename: source_sha_filename(version, build),
       source_base_filename: build['base_filename'],
-      source_asset_filename: source_asset_filename
+      source_asset_filename: source_asset_filename(version, build)
     )
 
     version.release_assets << release_asset
     release_asset
+  end
+
+  def update_release_asset(release_asset, version, build)
+    #puts "******************** UPDATE RELEASE ASSET #{build['asset_sha']}"
+    #puts "******************** ASSET URL #{build['asset_url']}"
+    release_asset.update(
+      viable: build['viable'],
+      filter: Array.wrap(build['filter']),
+      commit_sha: version.last_commit_sha,
+      commit_at: version.last_commit_at,
+      source_asset_sha: build['asset_sha'],
+      source_asset_url: build['asset_url'],
+      source_sha_filename: source_sha_filename(version, build),
+      source_base_filename: build['base_filename'],
+      source_asset_filename: source_asset_filename(version, build)
+    )
+    release_asset
+  end
+
+  def source_asset_filename(version, build)
+    version.interpolate_variables( build['asset_filename'] )
+  end
+
+  def source_sha_filename(version, build)
+    version.interpolate_variables( build['sha_filename'] )
   end
 
 end

@@ -26,6 +26,7 @@ class PersistAssets
       release_asset = result.release_asset
 
       begin
+        #puts "******** URI #{release_asset.source_asset_url}"
         url = URI(release_asset.source_asset_url)
       rescue URI::Error => error
         puts "******** URI error: #{release_asset.source_asset_url} - #{error.message}"

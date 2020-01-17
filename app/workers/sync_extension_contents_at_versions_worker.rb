@@ -197,7 +197,7 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
     unless version.supported_platforms.any?
       version.supported_platform_ids = @compatible_platforms
     end
-  rescue PG::UniqueViolation
+    rescue PG::UniqueViolation
   end
 
   def set_last_commit(version)
