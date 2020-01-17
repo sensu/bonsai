@@ -185,7 +185,7 @@ module ExtensionsHelper
           jobs_retrying << job 
         when :complete
           complete += 1
-          puts status
+          # puts status
         when :failed, :interrupted
           failed += 1
           jobs_failed << job
