@@ -29,7 +29,12 @@ class SetUpHostedExtension
         extension_version.after_attachment_analysis(attachment, attachment.metadata)
       else
         #:nocov:
-        attachment.analyze_later
+        CompileExtensionStatus.call(
+          extension: extension, 
+          worker: 'ActiveStorageAnalyzeBlob', 
+          job_id: attachment.analyze_later
+        )
+        
         #:nocov:
       end
     end

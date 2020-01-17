@@ -1,5 +1,5 @@
 class ExtensionsController < ApplicationController
-  before_action :assign_extension, except: [:index, :directory, :collections, :new, :create]
+  before_action :assign_extension, except: [:index, :directory, :collections, :new, :create, :sync_status]
   before_action :store_location_then_authenticate_user!, only: [:follow, :unfollow, :adoption]
   before_action :authenticate_user!, only: [:new, :create]
 
@@ -25,7 +25,7 @@ class ExtensionsController < ApplicationController
     params['platforms'].reject!(&:blank?) if params['platforms'].present?
     @extensions = qualify_scope(Extension, params)
                     .includes(:extension_versions)
-
+    @extensions = @extensions.filter_private(current_user)
     @number_of_extensions = @extensions.count(:all)
     @extensions = @extensions.page(params[:page]).per(20)
 
@@ -45,7 +45,7 @@ class ExtensionsController < ApplicationController
       @repo_names = Marshal.load(@repo_names)
     else
       FetchAccessibleReposWorker.perform_async(current_user.id)
-      puts '******* FetchAccessibleReposWorker *********'
+      # puts '******* FetchAccessibleReposWorker *********'
     end
 
     @extension = Extension.new
@@ -76,12 +76,14 @@ class ExtensionsController < ApplicationController
   #
   def directory
     @recently_updated_extensions = Extension.
+      filter_private(current_user).
       includes(:extension_versions).
       where.not(owner: nil).
       where("extension_versions.version != 'master'").
       order("extension_versions.created_at DESC").
       limit(5)
     @most_downloaded_extensions = Extension.
+      filter_private(current_user).
       includes(:extension_versions).
       where.not(owner: nil).
       ordered_by('most_downloaded').
@@ -136,9 +138,19 @@ class ExtensionsController < ApplicationController
   def download
     extension = Extension.with_owner_and_lowercase_name(owner_name: params[:username], lowercase_name: params[:id])
     latest_version = extension.latest_extension_version
-    BonsaiAssetIndex::Metrics.increment('extension.downloads.web')
-    DailyMetric.increment(latest_version.download_daily_metric_key)
-    redirect_to extension_version_download_url(extension, latest_version, username: params[:username])
+    if latest_version.present?
+      BonsaiAssetIndex::Metrics.increment('extension.downloads.web')
+      DailyMetric.increment(latest_version.download_daily_metric_key)
+      redirect_to extension_version_download_url(extension, latest_version, username: params[:username])
+    else
+      redirect_to(
+        owner_scoped_extension_url(extension),
+        notice: t(
+          'download.not_found',
+          extension_or_tool: extension.name
+        )
+      )
+    end
   end
 
   #
@@ -309,6 +321,7 @@ class ExtensionsController < ApplicationController
   # Notifies moderators to check an extension for inappropriate content.
   #
   def report
+    authorize! @extension, :report?
     NotifyModeratorsOfReportedExtensionWorker.perform_async(@extension.id, params[:report][:description], current_user.try(:id))
     redirect_to owner_scoped_extension_url(@extension), notice: t("extension.reported", extension: @extension.name)
   end
@@ -318,6 +331,17 @@ class ExtensionsController < ApplicationController
     authorize! extension
     CompileExtension.call(extension: extension)
     redirect_to owner_scoped_extension_url(@extension), notice: t("extension.syncing_in_progress")
+  end
+
+  def sync_status
+    @extension = Extension.find_by(id: params[:id])
+    redis_pool.with do |redis|
+      @job_ids = JSON.parse( redis.get("compile.extension;#{params[:id]};status") || "{}" )
+    end
+
+    respond_to do |format|
+      format.js
+    end
   end
 
   #
@@ -391,6 +415,11 @@ class ExtensionsController < ApplicationController
     end
     config_overrides.sort.to_h
     @extension.update(config_overrides: config_overrides)
+  end
+
+  def privacy
+    @extension.update(privacy: !@extension.privacy)
+    redirect_to owner_scoped_extension_url(@extension), notice: t("extension.privacy_changed")
   end
 
   private

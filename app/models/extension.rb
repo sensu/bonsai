@@ -158,18 +158,31 @@ class Extension < ApplicationRecord
     message: ': upload file must be a compressed archive type'
   }, if: ->(record) { record.tmp_source_file&.attachment }
 
-  def self.with_owner_and_lowercase_name(owner_name:, lowercase_name:)
-    Extension.find_by!(owner_name: owner_name, lowercase_name: lowercase_name)
-  end
+  class << self 
 
-  #
-  # The total number of times an extension has been downloaded from this application
-  #
-  # @return [Fixnum]
-  #
-  def self.total_download_count
-    sum(:api_download_count) + sum(:web_download_count)
-  end
+    def with_owner_and_lowercase_name(owner_name:, lowercase_name:)
+      Extension.find_by!(owner_name: owner_name, lowercase_name: lowercase_name)
+    end
+
+    def filter_private(current_user)
+      if current_user.present?
+        user_names = current_user.accounts.for(:github).map(&:username)
+        where("COALESCE(extensions.privacy, false) = false OR extensions.owner_name = ?", user_names)
+      else
+        where("COALESCE(extensions.privacy, false) = false")
+      end
+    end
+
+    #
+    # The total number of times an extension has been downloaded from this application
+    #
+    # @return [Fixnum]
+    #
+    def total_download_count
+      sum(:api_download_count) + sum(:web_download_count)
+    end
+
+  end # class << self
 
   #
   # Sorts extension versions according to their semantic version
@@ -181,19 +194,22 @@ class Extension < ApplicationRecord
     # convert version to array of integers so 10.0.0 comes after 9.0.0
 
     # Hack for regex issue on postgres - plus sign not escaping properly
-    @sorted_extension_versions = extension_versions.order(Arel.sql(
-      "STRING_TO_ARRAY(
-        REGEXP_REPLACE(
+    @sorted_extension_versions = extension_versions.order(
+      Arel.sql(
+        "STRING_TO_ARRAY(
           REGEXP_REPLACE(
             REGEXP_REPLACE(
-              extension_versions.version, 
-              E'[-](.*)', ''
-            ), 
-           E'[\+](.*)', ''
-          ),
-          E'V|v|master', ''
-         )
-      , '.')::bigint[] DESC "))
+              REGEXP_REPLACE(
+                extension_versions.version, 
+                E'[-](.*)', ''
+              ), 
+             E'[\+](.*)', ''
+            ),
+            E'V|v|master', ''
+           )
+        , '.')::bigint[] DESC ".gsub(/\s+/, " ")
+      )
+    )
 
     @sorted_extension_versions.limit(1).map(&:id) # executes query to test postgres regex
     @sorted_extension_versions
@@ -343,12 +359,12 @@ class Extension < ApplicationRecord
   def publish_version!(params)
     metadata = params.metadata
 
-    if metadata.privacy &&
-        ENV['ENFORCE_PRIVACY'].present? &&
-        ENV['ENFORCE_PRIVACY'] == 'true'
-      errors.add(:base, I18n.t('api.error_messages.privacy_violation'))
-      raise ActiveRecord::RecordInvalid.new(self)
-    end
+    #if metadata.privacy &&
+    #    ENV['ENFORCE_PRIVACY'].present? &&
+    #    ENV['ENFORCE_PRIVACY'] == 'true'
+    #  errors.add(:base, I18n.t('api.error_messages.privacy_violation'))
+    #  raise ActiveRecord::RecordInvalid.new(self)
+    #end
 
     tarball = params.tarball
     readme = params.readme
@@ -383,7 +399,7 @@ class Extension < ApplicationRecord
         end
       end
 
-      self.privacy = metadata.privacy
+      #self.privacy = metadata.privacy
       save!
 
       metadata.platforms.each do |name, version_constraint|

@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_action :define_search
 
-  helper_method :owner_scoped_extension_url
+  helper_method :owner_scoped_extension_url, :redis_pool
 
   include BonsaiAssetIndex::Authorization
   include BonsaiAssetIndex::Authentication
@@ -24,6 +24,10 @@ class ApplicationController < ActionController::Base
 
   def define_search
     @search = { path: extensions_path, name: 'Extensions' }
+  end
+
+  def redis_pool
+    REDIS_POOL
   end
 
   protected

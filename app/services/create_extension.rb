@@ -1,4 +1,5 @@
 class CreateExtension
+  
   def initialize(params, user)
     @params               = params
     @compatible_platforms = params[:compatible_platforms] || []
@@ -36,6 +37,7 @@ class CreateExtension
   private
 
   def postprocess(extension, octokit, compatible_platforms, version_name)
+    CompileExtensionStatusClear.call(extension: extension)
     if extension.hosted?
       SetUpHostedExtension.call(extension: extension, version_name: version_name)
     else

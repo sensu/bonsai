@@ -1,6 +1,4 @@
 class ExtensionNotifyWorker
-  include Sidekiq::Worker
-
   #
   # Notify all followers that a new version of the specified +Extension+ has been updated.
   # This will only email the follower if the user has email notifications turned on.

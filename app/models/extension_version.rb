@@ -134,7 +134,11 @@ class ExtensionVersion < ApplicationRecord
       compilation_error: metadata[:compilation_error],
     )
 
-    PersistAssetsWorker.perform_async(self.id)
+    CompileExtensionStatus.call(
+      extension: extension, 
+      worker: 'PersistAssetsWorker', 
+      job_id: PersistAssetsWorker.perform_async(self.id)
+    )
   end
 
   def annotation(key)
@@ -176,7 +180,11 @@ class ExtensionVersion < ApplicationRecord
   # Delete attached release assets if deleting version
   #
   def  delete_release_assets
-    DestroyAssetsWorker.perform_async(self.id)
+    CompileExtensionStatus.call(
+      extension: extension, 
+      worker: 'DestroyAssetsWorker', 
+      job_id: DestroyAssetsWorker.perform_async(self.id)
+    )
   end 
 
 end

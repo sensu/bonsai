@@ -168,6 +168,55 @@ module ExtensionsHelper
     errors
   end
 
+  def compilation_status(extension, job_ids)
+    job_count = @job_ids.length
+    pending, retrying, complete, failed = 0.0, 0.0, 0.0, 0.0
+    jobs_failed, jobs_retrying = [], []
+
+    @job_ids.each do |job, key|
+      
+      status = Sidekiq::Status::status(key)
+
+      case status 
+        when :queued, :working
+          pending += 1
+        when :retrying
+          retrying += 1
+          jobs_retrying << job 
+        when :complete
+          complete += 1
+          puts status
+        when :failed, :interrupted
+          failed += 1
+          jobs_failed << job
+        else 
+      end
+    end 
+
+    percent_complete = ((complete / job_count) * 100).round(2)
+
+    html = ''
+    klass = 'compilation-complete'
+    if failed > 0
+      html += content_tag("div", raw("<b>Compilations failed:</b> #{jobs_failed.join(', ')}"), class: 'compilation-notice')
+      klass = 'compilation-failed'
+    end
+    if retrying > 0
+      html += content_tag("div", raw("<b>Retrying Compilations:</b> #{jobs_retrying.join(', ')}"), class: 'compilation-notice')
+       klass = 'compilation-retry'
+    end
+    html += content_tag('div', raw("<b>Compiling Extension % #{percent_complete} Complete</b>"), class: 'compilation-notice')
+
+    if percent_complete == 100 
+      redis_pool.with do |redis|
+        redis.del("compile.extension;#{extension.id};status") 
+      end
+    end
+
+    content_tag('div', raw(html), class: klass )
+
+  end
+
   #
   # Selects the appropriate avatar 
   # only link if the avatar is that of the owner
