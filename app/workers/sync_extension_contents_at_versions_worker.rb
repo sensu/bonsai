@@ -177,7 +177,11 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
 
     if message.present?
       compilation_error = [version.compilation_error] + message
-      version.update_column(:compilation_error, compilation_error.compact.join('; '))
+      compilation_error.compact!
+      if compilation_error.present?
+        compilation_error = compilation_error.join('; ')
+        version.update_column(:compilation_error, compilation_error)
+      end
     else
 
       readme = readme.encode(Encoding.find('UTF-8'), {invalid: :replace, undef: :replace, replace: ''})
