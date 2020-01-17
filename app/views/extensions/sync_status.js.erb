@@ -1,0 +1,16 @@
+
+<% if @job_ids.length > 0 %>
+	<% html = compilation_status(@extension, @job_ids) %>
+	$("#extension-compilation-status").html("<%= escape_javascript html %>");
+<% else %>
+	// one more retry if first returns no job ids
+	resetMaxRetries(0);
+	if ( $('#no_reload').length ) {
+		// Compile status has not changed since initial request
+		// console.log('no reload')
+	} else {
+		window.location.reload();
+		$("#extension-compilation-status").html("");
+	}
+
+<% end %>

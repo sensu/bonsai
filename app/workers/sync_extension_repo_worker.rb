@@ -17,7 +17,11 @@ class SyncExtensionRepoWorker < ApplicationWorker
     @extension.update_column(:compilation_error, error_message)
     
     release_infos_by_tag = releases.group_by {|release| release[:tag_name]}.transform_values {|arr| arr.first.to_h}
-    SyncExtensionContentsAtVersionsWorker.perform_async(@extension.id, @tags, compatible_platforms, release_infos_by_tag)
+    CompileExtensionStatus.call(
+      extension: @extension, 
+      worker: 'SyncExtensionContentsAtVersionsWorker', 
+      job_id: SyncExtensionContentsAtVersionsWorker.perform_async(@extension.id, @tags, compatible_platforms, release_infos_by_tag)
+    )
   end
 
   private

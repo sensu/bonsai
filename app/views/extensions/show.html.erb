@@ -22,10 +22,52 @@
     <p class="text-center">
       <%= image_tag "spinner.gif" %>
       Scanning your <%= t('nouns.extension') %>...
+
     </p>
   </div>
 
   <script type="text/javascript">
-    setTimeout(function() { window.location.reload(1); }, 15000);
+    //setTimeout(function() { window.location.reload(1); }, 15000);
   </script>
+<% end %>
+
+
+<% content_for :script do %>
+
+  <script>
+
+    var max_retries = 20;
+    var retries = 0;
+
+    var getExtensionStatus = () => {
+      $.ajax({
+        url: '<%= sync_status_extension_path(id: @extension.id) %>',
+        method: 'GET',
+        dataType: 'script',
+      });
+    }
+
+    var queryGetExtensionStatus = () => {
+      if (retries < max_retries) {
+        setTimeout(getExtensionStatus, 10000);
+      } else {
+        //$("#loading-extensions").remove();
+        //$("#loading-extensions-failed").show();
+        clearTimeout(getExtensionStatus);
+      }
+      retries += 1
+    }
+
+    var resetMaxRetries = (n) => {
+      max_retries = n
+    }
+
+    $(document).ajaxComplete( () => {
+      queryGetExtensionStatus();
+    });
+
+    getExtensionStatus();
+  
+  </script>
+
 <% end %>

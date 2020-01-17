@@ -13,7 +13,11 @@ class ExtractExtensionStargazersWorker < ApplicationWorker
 
   def process_stargazers
     @stargazers.each do |s|
-      ExtractExtensionStargazerWorker.perform_async(@extension.id, s[:login])
+      CompileExtensionStatus.call(
+        extension: @extension, 
+        worker: 'ExtractExtensionStargazerWorker', 
+        job_id: ExtractExtensionStargazerWorker.perform_async(@extension.id, s[:login])
+      )
     end
   end
 end

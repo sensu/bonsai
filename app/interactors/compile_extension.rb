@@ -12,12 +12,27 @@ class CompileExtension
     if extension.hosted?
       compile_hosted_extension(extension)
     else
-      ExtractExtensionParentWorker.perform_async(extension.id)
-      SyncExtensionRepoWorker.perform_async(extension.id)
+      CompileExtensionStatusClear.call(extension: extension)
+      
+      CompileExtensionStatus.call(
+        extension: extension, 
+        worker: 'ExtractExtensionParentWorker', 
+        job_id: ExtractExtensionParentWorker.perform_async(extension.id)
+      )
+      
+      CompileExtensionStatus.call(
+        extension: extension, 
+        worker: 'SyncExtensionRepoWorker', 
+        job_id: SyncExtensionRepoWorker.perform_async(extension.id) 
+      )
     end
   end
 
   private
+
+  def redis_pool
+    REDIS_POOL
+  end
 
   def compile_hosted_extension(extension)
     extension.extension_versions.each do |version|

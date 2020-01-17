@@ -1,6 +1,10 @@
 <div class="main-header">
   <%= render 'extensions/compilation_errors', extension: extension, version: version %>
 
+  <div id='extension-compilation-status' class='compilation-status-container'>
+    <%= hidden_field_tag :no_reload %>
+  </div>
+
   <% if extension.deprecated? %>
     <div class="deprecation-notice">
       <h2 class="deprecation-copy">

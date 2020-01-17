@@ -1,5 +1,5 @@
 class ExtractExtensionParentWorker < ApplicationWorker
-
+  
   def perform(extension_id)
     @extension = Extension.find(extension_id)
     repo = octokit.repo(@extension.github_repo)

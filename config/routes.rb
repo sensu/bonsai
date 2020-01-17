@@ -1,4 +1,5 @@
 require "sidekiq/web"
+require "sidekiq-status/web"
 
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
@@ -64,6 +65,7 @@ Rails.application.routes.draw do
         put :enable
         put :report
         put :sync_repo
+        get :sync_status
         put :select_default_version
         put :update_collection
         put :privacy
