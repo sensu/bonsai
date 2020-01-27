@@ -84,7 +84,7 @@ class Extension < ApplicationRecord
   }
 
   scope :in_namespace, lambda { |namespace|
-    where(owner_name: namespace)
+    where(Extension.arel_table[:owner_name].matches(namespace))
   }
 
   scope :supported_platforms, lambda { |sp_ids|
@@ -161,13 +161,13 @@ class Extension < ApplicationRecord
   class << self 
 
     def with_owner_and_lowercase_name(owner_name:, lowercase_name:)
-      Extension.find_by!(owner_name: owner_name, lowercase_name: lowercase_name)
+      Extension.where(Extension.arel_table[:owner_name].matches(owner_name)).where(lowercase_name: lowercase_name).first!
     end
 
     def filter_private(current_user)
       if current_user.present?
         user_names = current_user.accounts.for(:github).map(&:username)
-        where("COALESCE(extensions.privacy, false) = false OR extensions.owner_name = ?", user_names)
+        where("COALESCE(extensions.privacy, false) = false OR extensions.owner_name ILIKE ?", user_names)
       else
         where("COALESCE(extensions.privacy, false) = false")
       end

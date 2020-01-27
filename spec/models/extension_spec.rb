@@ -42,6 +42,13 @@ describe Extension do
 
   end
 
+  describe "with_owner_and_lowercase_name" do
+    let(:extension) { create(:extension, owner_name: 'MiXeDcAsE')}
+    it 'returns_extension_case_insensitive' do 
+      expect(Extension.with_owner_and_lowercase_name(owner_name: 'mixedcase', lowercase_name: extension.lowercase_name)).to eq(extension)
+    end
+  end
+
   describe "sorted_extension_versions" do
     let(:extension) { create(:extension, extension_versions_count: 6) }
     let(:versions ) { extension.extension_versions }
