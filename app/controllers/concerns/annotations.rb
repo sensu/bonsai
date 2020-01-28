@@ -14,7 +14,7 @@ module Annotations
       version.release_assets.map{|a| a.labels}.flatten.reject(&:blank?).uniq.sort.join(', ')
     end
     tags ||= nil
-    owner_name = extension.hosted? ? ENV['HOST_ORGANIZATION'] : extension.owner_name
+    owner_name = extension.hosted? ? ENV['HOST_ORGANIZATION'] : extension.owner_name.downcase
 
     annotations = {
       'io.sensu.bonsai.url' => owner_scoped_extension_url(extension),
