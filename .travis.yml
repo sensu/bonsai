@@ -18,3 +18,8 @@ env:
 script:
   - docker-compose run web rails db:test:prepare
   - docker-compose run web rspec
+
+test:
+  testLogging:
+    - events "passed", "skipped", "failed"
+    - exceptionFormat "full"
