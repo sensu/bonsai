@@ -26,14 +26,14 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
       end
     end
     CompileExtensionStatus.call(
-      extension: @extension, 
-      worker: 'ExtractExtensionCollaboratorsWorker', 
+      extension: @extension,
+      worker: 'ExtractExtensionCollaboratorsWorker',
       job_id: ExtractExtensionCollaboratorsWorker.perform_async(@extension.id)
     )
     # update license in case it has changed
     CompileExtensionStatus.call(
-      extension: @extension, 
-      worker: 'ExtractExtensionLicenseWorker', 
+      extension: @extension,
+      worker: 'ExtractExtensionLicenseWorker',
       job_id: ExtractExtensionLicenseWorker.perform_async(@extension.id)
     )
     perform_next
@@ -42,7 +42,7 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
   def logger
     if Rails.env.production?
       @logger ||= Logger.new(STDOUT)
-    else 
+    else
       @logger ||= Logger.new("log/scan.log")
     end
   end
@@ -100,7 +100,7 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
     filename = @run.cmd("ls README*")
     logger.info filename.inspect
 
-    if filename.present? 
+    if filename.present?
       filename = filename.split("\n").first
       ext = extract_readme_file_extension(filename)
       body = @run.cmd("cat '#{filename}'")
@@ -139,10 +139,10 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
     end
 
     # resconstruct Github url to get file, not html
-    # https://github.com/jspaleta/sensu-plugins-redis/blob/master/README.md 
-    # should translate to 
+    # https://github.com/jspaleta/sensu-plugins-redis/blob/master/README.md
+    # should translate to
     # https://raw.githubusercontent.com/jspaleta/sensu-plugins-redis/master/README.md
- 
+
     if ['github.com', 'www.github.com'].include?(url.host)
       url.host = "raw.githubusercontent.com"
       url.path.gsub!('/blob', '')
@@ -159,7 +159,7 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
       version.update_column(:compilation_error, compilation_error.compact.join('; '))
       return
     end
-    
+
     readme = file.read
 
     if readme.include?('!DOCTYPE html')
@@ -185,7 +185,7 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
     else
 
       readme = readme.encode(Encoding.find('UTF-8'), {invalid: :replace, undef: :replace, replace: ''})
-      
+
       version.update(
         readme: readme,
         readme_extension: readme_ext
@@ -203,8 +203,8 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
   end
 
   def ensure_updated_version(readme_body, readme_ext)
-    yml_line_count = @run.cmd("find . -name '*.yml' -o -name '*.yaml' -print0 | xargs -0 wc -l").split("\n").last || ""
-    rb_line_count = @run.cmd("find . -name '*.rb' -print0 | xargs -0 wc -l").split("\n").last || ""
+    yml_line_count = @run.cmd("find . -name '*.yml' -o -name '*.yaml' -print0 | xargs -0 wc -l")&.split("\n")&.last || ""
+    rb_line_count = @run.cmd("find . -name '*.rb' -print0 | xargs -0 wc -l")&.split("\n")&.last || ""
 
     yml_line_count = yml_line_count.strip.to_i
     rb_line_count = rb_line_count.strip.to_i
@@ -345,5 +345,5 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
       version.update_column(:annotations, updated_annotations)
     end
   end
-  
+
 end
