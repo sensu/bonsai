@@ -1,10 +1,3 @@
-<h4 class="extension_show_sidebar_downloads">
-  <i class="fa fa-download"></i> 
-  <span itemprop="interactionCount"><%= number_with_delimiter(version.try(:download_count) || 0) %></span> 
-  <span>Downloads of Version <%= version.try(:version) %></span>
-  <small><%= number_with_delimiter(extension.download_count) %> Total Downloads</small>
-</h4>
-
 <div id="download_asset_or_definition" class="reveal-modal small" data-reveal>
   <h1>Download</h1>
   <a class="close-reveal-modal close-reveal-modal-x">&#215;</a>
