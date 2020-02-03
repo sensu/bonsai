@@ -120,20 +120,6 @@
 
   <p class="description" itemprop="description"><%= extension.description %></p>
 
-  
-  <div class="row">
-    <%- if @downloads.present? %>
-      <div class="small-4 columns ">
-        <span class='downloads-commits'>Downloads in last month</span>
-        <div class="sparkline"><%= @downloads.join(",") %></div>
-      </div>
-    <% end %>
-    <%- if is_commitable?(@extension) %>
-      <div class="small-4 column end">
-        <span class='downloads-commits'>Commits in last year</span>
-        <div class="sparkline"><%= @commits.join(",") %></div>
-      </div>
-    <% end %>
   </div>
 
 </div>
