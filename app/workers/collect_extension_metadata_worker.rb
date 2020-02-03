@@ -1,35 +1,35 @@
 class CollectExtensionMetadataWorker < ApplicationWorker
 
   def perform(extension_id, compatible_platforms = [])
-  	extension = Extension.find(:extension_id)
+  	extension = Extension.find(extension_id)
     CompileExtensionStatus.call(
-      extension: extension, 
-      worker: 'ExtractExtensionBasicMetadataWorker', 
+      extension: extension,
+      worker: 'ExtractExtensionBasicMetadataWorker',
       job_id: ExtractExtensionBasicMetadataWorker.new.perform(extension.id)
     )
     CompileExtensionStatus.call(
-      extension: extension, 
-      worker: 'ExtractExtensionParentWorker', 
+      extension: extension,
+      worker: 'ExtractExtensionParentWorker',
       job_id: ExtractExtensionParentWorker.perform_async(extension.id)
     )
     CompileExtensionStatus.call(
-      extension: extension, 
-      worker: 'ExtractExtensionLicenseWorker', 
+      extension: extension,
+      worker: 'ExtractExtensionLicenseWorker',
       job_id: ExtractExtensionLicenseWorker.perform_async(extension.id)
     )
     CompileExtensionStatus.call(
-      extension: extension, 
-      worker: 'ExtractExtensionCollaboratorsWorker', 
+      extension: extension,
+      worker: 'ExtractExtensionCollaboratorsWorker',
       job_id: ExtractExtensionCollaboratorsWorker.perform_async(extension.id)
     )
     CompileExtensionStatus.call(
-      extension: extension, 
-      worker: 'ExtractExtensionStargazersWorker', 
+      extension: extension,
+      worker: 'ExtractExtensionStargazersWorker',
       job_id: ExtractExtensionStargazersWorker.perform_async(extension.id)
     )
     CompileExtensionStatus.call(
-      extension: extension, 
-      worker: 'SyncExtensionRepoWorker', 
+      extension: extension,
+      worker: 'SyncExtensionRepoWorker',
       job_id: SyncExtensionRepoWorker.perform_async(extension.id, compatible_platforms)
     )
   end
