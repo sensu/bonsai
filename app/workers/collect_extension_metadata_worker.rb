@@ -5,7 +5,7 @@ class CollectExtensionMetadataWorker < ApplicationWorker
     CompileExtensionStatus.call(
       extension: extension,
       worker: 'ExtractExtensionBasicMetadataWorker',
-      job_id: ExtractExtensionBasicMetadataWorker.new.perform(extension.id)
+      job_id: ExtractExtensionBasicMetadataWorker.perform_async(extension.id)
     )
     CompileExtensionStatus.call(
       extension: extension,
