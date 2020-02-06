@@ -26,7 +26,9 @@ describe CompileGithubExtensionVersionConfig do
     let(:asset_hash2)        { {name: "my_repo-1.2.2-linux-x86_64.sha512.txt",
                                 browser_download_url: "https://example.com/sha_download"} }
     let(:release_data)       { {tag_name: version.version, assets: [asset_hash1, asset_hash2]} }
-    let(:expected_data_hash) { {"builds" =>
+    let(:expected_data_hash) { {"annotations"=>
+                                  {"io.sensu.bonsai.test"=>"test value"},
+                                "builds" =>
                                   [{"arch"           => "x86_64",
                                     "filter"         =>
                                       ["System.OS == linux",
@@ -37,12 +39,18 @@ describe CompileGithubExtensionVersionConfig do
                                     "viable"         => true,
                                     "asset_url"      => "https://example.com/download",
                                     "base_filename"  => "my_repo-1.2.2-linux-x86_64.tar.gz",
-                                    "asset_sha"      => "c1ec2f493f0ff9d83914c1ec2f493f0ff9d83914"}]} }
+                                    "asset_sha"      => "c1ec2f493f0ff9d83914c1ec2f493f0ff9d83914"}],
+                                  "description" => "test asset",
+                                  "labels" => {"example"=>"custom"}
+                              } }
 
     before do
-      allow_any_instance_of(Octokit::Client  ).to receive(:releases) { [release_data] }
-      allow_any_instance_of(Faraday::Response).to receive(:success?) { true }
-      allow_any_instance_of(Faraday::Response).to receive(:body)     { "c1ec2f493f0ff9d83914c1ec2f493f0ff9d83914" }
+
+      allow_any_instance_of(Octokit::Client).to receive(:releases) { [release_data] }
+      allow_any_instance_of(Faraday::Connection).to receive(:get) { Faraday.new }
+      allow_any_instance_of(Faraday::Connection).to receive(:success?) { true }
+      allow_any_instance_of(Faraday::Connection).to receive(:body)     { "c1ec2f493f0ff9d83914c1ec2f493f0ff9d83914" }
+
     end
 
     it "succeeds" do
@@ -51,7 +59,7 @@ describe CompileGithubExtensionVersionConfig do
 
     it "complies the configuration" do
       # not sure this is relevant anymore
-      #expect(context.data_hash).to eql(expected_data_hash)
+      expect(context.data_hash).to eql(expected_data_hash)
     end
   end
 end

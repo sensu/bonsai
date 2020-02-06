@@ -21,11 +21,13 @@ class FetchRemoteSha
   def read_remote_file(url)
     return nil unless url.present?
 
-    resp = Faraday.new(url) { |f|
-      f.use     FaradayMiddleware::FollowRedirects
+    faraday = Faraday.new { |f| 
+      f.use FaradayMiddleware::FollowRedirects
       f.adapter :net_http
-    }.get
+    }
 
-    resp.success? ? resp.body : nil
+    response = faraday.get(url)
+
+    response.success? ? response.body : nil
   end
 end
