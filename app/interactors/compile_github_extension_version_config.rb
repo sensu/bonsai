@@ -78,6 +78,7 @@ class CompileGithubExtensionVersionConfig
   end
 
   def compile_build_hash(build_config, num, github_asset_data_hashes_lut, version)
+
     context.fail!(error: "build ##{num} is malformed (perhaps missing indentation)") unless build_config.is_a?(Hash)
 
     src_sha_filename = build_config['sha_filename']
