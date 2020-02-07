@@ -71,6 +71,14 @@ pre {
   padding: rem-calc(8 20);
 }
 
+h3 {
+  font-size: 1.2rem;
+}
+
+h4 {
+  font-size: 1.10rem;
+}
+
 .full-height {
    min-height: 100vh;
 }
@@ -511,8 +519,9 @@ ul.off-canvas-list li a {
 }
 
 footer#subfooter {
+  background: rgb(43, 52, 88);
   .subfooter-communication {
-    color: #bbbbbb;
+    color: rgb(201, 204, 214);
     text-align: center;
     border-top: 1px solid $secondary_gray;
     font-size: 16px;
@@ -543,6 +552,7 @@ footer#subfooter {
 }
 
 footer#footer {
+  background: rgb(43, 52, 88);
 
   .copyright {
     color: $secondary_gray;
@@ -563,7 +573,7 @@ footer#footer {
 }
 
 .cta-banner {
-  background: #f5f5f5;
+  background: rgb(246, 246, 246);
   text-align: center;
   padding: 35px 0;
   font-size: 20px;
