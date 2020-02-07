@@ -5,8 +5,8 @@
 // @import "compass/css3/inline-block";
 
 // Basic structural elements
-html, body { 
-  height: 100%; 
+html, body {
+  height: 100%;
   min-height: 100%;
   font-family: $body-font-family;
 }
@@ -628,6 +628,27 @@ footer#footer {
   }
 }
 
+.tags-container {
+  max-width: 75ch;
+  text-align: center;
+  margin: 0 auto;
+
+  ul {
+    list-style: none;
+  }
+  li {
+    display: inline-block;
+    background-color: $primary_blue;
+
+    padding: rem-calc(8);
+    margin: rem-calc(4);
+
+    a {
+      color: $secondary_color;
+    }
+  }
+}
+
 .extensions-features {
   .featured-extension {
     margin-bottom: 16px;
@@ -698,15 +719,15 @@ footer#footer {
   min-height: 6em;
 }
 .truncate {
-  overflow: hidden; 
+  overflow: hidden;
   position: relative;
   line-height: 1.2em;
 }
 .truncate:after{
-    content:""; 
-    height: 1em; 
-    display: block; 
-    width: 100%; 
+    content:"";
+    height: 1em;
+    display: block;
+    width: 100%;
     position: absolute;
     background-color: white;
     bottom: -0.2em;
