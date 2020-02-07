@@ -523,7 +523,6 @@ footer#subfooter {
   .subfooter-communication {
     color: rgb(201, 204, 214);
     text-align: center;
-    border-top: 1px solid $secondary_gray;
     font-size: 16px;
 
     .fa {
@@ -593,7 +592,6 @@ footer#footer {
 }
 
 .share-cta-logo-container {
-  position: absolute;
   top: -9px;
   width: 100%;
   text-align: center;
