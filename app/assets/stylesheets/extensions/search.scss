@@ -267,13 +267,13 @@ input[type="search"].extension_search_textfield {
   cursor: pointer;
   text-align: left;
   margin-top: rem-calc(5);
-  color: white;
+  color: #4f657f;
 
   span {
-    color: white;
+    color: #4f657f;
     font: rem-calc(12) $accent_font;
     &:hover{
-      color: white;
+      color: #859ab3 !important;
     }
   }
 }

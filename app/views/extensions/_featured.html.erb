@@ -22,7 +22,7 @@
       <p class='truncate lines-3'><%= extension.description %></p>
       <p class="tags">
         <% extension.tags.each do |tag| %>
-          <%= link_to tag.name, extensions_path(q: tag.name) %>
+          <span class="extension_tag"><%= link_to tag.name, extensions_path(q: tag.name) %></span>
         <% end %>
       </p>
     </div>
