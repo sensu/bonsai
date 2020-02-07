@@ -103,7 +103,7 @@
 
 
   <p class="description" itemprop="description">
-    v<%= version.version %>
+    v<%= version&.version || "—" %>
     ·
     <span>
       <% if extension.privacy? %>
