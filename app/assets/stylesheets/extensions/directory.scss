@@ -4,6 +4,20 @@
 
 // Styles for the extensions directory
 
+.learn_about_assets {
+ background: #97C673;
+  h3, h4, p, li {
+    color: white !important;
+  }
+  h4 {
+    font-weight: bold;
+  };
+}
+
+.view_all {
+  text-align: center;
+}
+
 .extensions_columns {
   @include block-grid(3);
   margin: rem-calc(55 0);

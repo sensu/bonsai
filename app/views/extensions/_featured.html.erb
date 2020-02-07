@@ -1,9 +1,9 @@
 <% extensions.each do |extension| %>
-  <div class="row featured-extension">
-    <div class="small-2 columns">
+  <div class="small-6 columns">
+    <div class="small-1 columns">
       <%= link_to_gravatar(extension) %>
     </div>
-    <div class="small-10 columns">
+    <div class="small-11 columns">
       <% if extension.privacy? %>
         <p class="small-12">
           <i class="fa fa-eye-slash"></i>
@@ -18,7 +18,7 @@
           <span><%= extension.tier_name %> tier</span>
         </div>
       </header>
-      
+
       <p class='truncate lines-3'><%= extension.description %></p>
       <p class="tags">
         <% extension.tags.each do |tag| %>
@@ -28,8 +28,4 @@
     </div>
   </div>
 <% end %>
-<div class="row">
-  <div class="small-10 small-offset-2 columns">
-    <p><%= link_to "View All&hellip;".html_safe, extensions_path %></p>
-  </div>
-</div>
+
