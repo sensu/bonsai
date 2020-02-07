@@ -574,16 +574,10 @@ footer#footer {
 .cta-banner {
   background: rgb(246, 246, 246);
   text-align: center;
-  padding: 35px 0;
+  padding: 0 0 32px;
   font-size: 20px;
   font-weight: 600;
   line-height: 24px;
-  a {
-    color: $primary_green !important;
-  }
-  a:hover {
-    color: scale-color($primary_green, $lightness: 35%) !important;
-  }
 }
 
 .share-cta-container {

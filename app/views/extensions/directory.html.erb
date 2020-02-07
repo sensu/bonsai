@@ -1,7 +1,8 @@
 <%= provide(:title, "#{t('nouns.extension').pluralize.titleize} Directory") %>
 <%= provide(:description, "Browse and search Sensu #{t('nouns.extension').pluralize}. Learn how to use and create #{t('nouns.extension').pluralize} for configuring your infrastructure.") %>
 <%= provide(:cta) do %>
-  <span>Welcome to Bonsai, the Sensu asset index.<br/> Discover and <%= link_to "share", new_extension_path %> assets for all your monitoring needs.</span>
+  <h1 class="directory_title">Bonsai, the Sensu asset hub.</h1>
+  <span>Discover and <%= link_to "share", new_extension_path %> assets for all your monitoring needs.</span>
 <% end %>
 
 <div class="page">
