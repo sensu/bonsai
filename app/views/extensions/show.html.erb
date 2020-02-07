@@ -1,10 +1,7 @@
 <%= provide(:title, "#{@extension.name} #{t('nouns.extension').titleize}") %>
-
-
 <%= provide(:description, "#{@extension.name} #{t('nouns.extension').titleize} (#{@default_version.try(:version)}) #{@extension.try(:supported_platforms).map(&:name).join(', ')}".strip) %>
 
 <div class="page resource extension_show" data-equalizer itemscope itemtype="http://schema.org/Code">
-
   <div id='main-header-container'>
     <%= render 'extensions/main_header', extension: @extension, version: @default_version, extension_versions: @extension_versions %>
   </div>
@@ -14,7 +11,6 @@
   </div>
 
   <%= render 'extensions/sidebar', extension: @extension, version: @default_version, supported_platforms: @supported_platforms, collaborators: @collaborators %>
-
 </div>
 
 <% unless @extension.compilation_error.present? || (@default_version && extension_version_analyzed?(@default_version)) %>
@@ -25,10 +21,6 @@
 
     </p>
   </div>
-
-  <script type="text/javascript">
-    //setTimeout(function() { window.location.reload(1); }, 15000);
-  </script>
 <% end %>
 
 
@@ -67,7 +59,7 @@
     });
 
     getExtensionStatus();
-  
+
   </script>
 
 <% end %>

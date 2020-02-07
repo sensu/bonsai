@@ -29,7 +29,8 @@ class EnsureGithubUserAndAccount
       account.user ||= User.new(
         first_name: first_name,
         last_name: last_name,
-        email: @github_user[:email]
+        email: @github_user[:email],
+        avatar_url: @github_user[:avatar_url],
       )
       account.user.save(validate: false)
     end
@@ -39,4 +40,3 @@ class EnsureGithubUserAndAccount
     return account.user, account
   end
 end
-

@@ -155,6 +155,38 @@ module ExtensionsHelper
     end
   end
 
+  #
+  # Highlight given code
+  #
+  # @param src [String] the source code
+  # @param lang [String] language the code is written in
+  #
+  # @return [String] generated pre tag
+  #
+  def highlight_code(code, lang)
+    lexer = Rouge::Lexer.find(lang)
+    theme = Rouge::Themes::Github.new
+    highl = Rouge.highlight(code, lexer, Rouge::Formatters::HTMLInline.new(theme))
+    highl.html_safe
+  rescue Timeout::Error => _
+    nil
+  end
+
+  #
+  # Given asset version returns sensuctl compatible asset definition
+  #
+  # @param version [ExtensionVersion] version record of the extension
+  # @param format [String] format in either 'yaml' or 'json'
+  #
+  # @return [String] asset definition
+  #
+  def to_asset_definition(version, format: "yaml")
+    ctrl = @_controller
+    resp = ctrl.render_to_string(template: 'api/v1/release_assets/index.json.jbuilder', assigns: {version: version})
+    resp = YAML.dump(JSON.parse(resp)) if format == "yaml"
+    resp
+  end
+
   def compilation_errors(extension, version=nil)
     errors = []
     if extension.compilation_error.present?
@@ -174,24 +206,24 @@ module ExtensionsHelper
     jobs_failed, jobs_retrying = [], []
 
     @job_ids.each do |job, key|
-      
+
       status = Sidekiq::Status::status(key)
 
-      case status 
+      case status
         when :queued, :working
           pending += 1
         when :retrying
           retrying += 1
-          jobs_retrying << job 
+          jobs_retrying << job
         when :complete
           complete += 1
           # puts status
         when :failed, :interrupted
           failed += 1
           jobs_failed << job
-        else 
+        else
       end
-    end 
+    end
 
     percent_complete = ((complete / job_count) * 100).round(2)
 
@@ -207,9 +239,9 @@ module ExtensionsHelper
     end
     html += content_tag('div', raw("<b>Compiling Extension % #{percent_complete} Complete</b>"), class: 'compilation-notice')
 
-    if percent_complete == 100 
+    if percent_complete == 100
       redis_pool.with do |redis|
-        redis.del("compile.extension;#{extension.id};status") 
+        redis.del("compile.extension;#{extension.id};status")
       end
     end
 
@@ -218,7 +250,7 @@ module ExtensionsHelper
   end
 
   #
-  # Selects the appropriate avatar 
+  # Selects the appropriate avatar
   # only link if the avatar is that of the owner
   # only show organization avatar for hosted assets
   #
@@ -257,7 +289,7 @@ module ExtensionsHelper
     message ||= 'Preference should be given to this upstream asset.'
     url = URI(version.annotation('suggested_asset_url'))
     # force local only.
-    url.scheme = request.scheme 
+    url.scheme = request.scheme
     url.host = request.host
     link_to message, url.to_s, target: '_blank'
   end
