@@ -7,7 +7,7 @@
 <div class="page">
   <div class="extensions-features bottom-space standard-typography">
 
-    <div class="medium-12 columns">
+    <div class="medium-12 columns share-cta-container block_container">
       <header>Tags</header>
       <div class='categories-container'>
         <ul>
@@ -16,6 +16,7 @@
           <% end %>
         </ul>
       </div>
+    </div>
 
       <br/>
 
@@ -31,36 +32,31 @@
       </div>
     <% end %>
 
-    <div class="medium-12 columns share-cta-container">
-      <div class="share-cta-logo-container">
-        <%= image_tag 'logo-icon-sensu.svg', class: 'logoIcon filter-primary-blue share-cta-logo' %>
-      </div>
+    <div class="medium-12 columns share-cta-container block_container">
       <header>Most downloaded</header>
-      
       <div class="featured-extension">
         <%= render "featured", extensions: @most_downloaded_extensions %>
       </div>
+    </div>
 
-      <div class="row">
+    <div class="medium-12 columns share-cta-container block_container">
+      <header>Recently updated</header>
+      <div class="featured-extension">
+        <%= render "featured", extensions: @recently_updated_extensions %>
+      </div>
+    </div>
+
+    <div class="row">
         <div class="small-12 columns view_all">
-          <p><%= link_to "View All&hellip;".html_safe, extensions_path %></p>
+          <%= link_to "View All Assets&hellip;".html_safe, extensions_path, class: 'button secondary radius' %>
         </div>
       </div>
-    </div>
 
-    <div class="medium-12 columns share-cta-container">
-      <div class="share-cta-logo-container">
-        <%= image_tag 'logo-icon-sensu.svg', class: 'logoIcon filter-primary-blue share-cta-logo' %>
-      </div>
-      <header>Recently updated</header>
-      <%= render "featured", extensions: @recently_updated_extensions %>
-    </div>
-
-      </div>
+  </div>
 
   <div class="share-cta standard-typography">
-    <div class="medium-12 columns learn_about_assets">
-      <div class="small-3 columns">
+    <div class="medium-12 columns learn_about_assets block_container">
+      <div class="small-3 columns tree_graphic">
         <%= image_tag 'bonsai-tree.svg', class: 'filter-primary-blue' %>
       </div>
       <div class="small-9 columns share-cta-header end">

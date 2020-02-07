@@ -16,6 +16,19 @@
 
 .view_all {
   text-align: center;
+  .view_more {
+    background: none;
+    border: 1px solid grey;
+  }
+}
+
+.block_container {
+  padding: 32px 55px !important
+}
+
+.tree_graphic {
+  text-align: center;
+  padding-top: 25px;
 }
 
 .extensions_columns {
