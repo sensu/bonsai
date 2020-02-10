@@ -100,7 +100,7 @@
   <% if extension.parent_name.present? && extension.parent_owner_name.present? %>
     <p class="small-12 title">
       <%- parent_extension = extension.parent %>
-      <i class="fa fa-code-fork"></i> 
+      <i class="fa fa-code-branch"></i> 
       <span>Forked from:</span>
       <% if parent_extension.present? %>
         <%= link_to "#{extension.parent_owner_name}/#{extension.parent_name}", owner_scoped_extension_url(parent_extension) %>
