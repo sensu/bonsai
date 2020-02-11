@@ -62,48 +62,59 @@
 
     .install-asset {
       border: 1px solid #333;
-      border-radius: rem-calc(8);
+      border-radius: rem-calc(4);
       overflow: hidden;
       position: relative;
       transition: all 350ms ease-in-out;
 
-      pre, .li {
+      .pasteboard {
+        display: none;
+      }
+
+      .no-select {
         user-select: none;
-        cursor: pointer;
+      }
+
+      &.is-copyable {
+        &:hover {
+          background: lighten($notice_secondary_green, 25%);
+          border-color: darken($notice_secondary_green, 50%);
+
+          .pasteboard {
+            opacity: 1;
+          }
+        }
+
+        .pasteboard {
+          display: block;
+          opacity: 0;
+          background: rgba(255,255,255,0.87);
+          position: absolute;
+          top: 0;
+          right: 0;
+          left: auto;
+
+          @supports (backdrop-filter: blur(4px)) or (--webkit-backdrop-filter: blur(4px)) {
+            background-color: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(4px);
+            --webkit-backdrop-filter: blur(4px);
+          }
+
+          .fa {
+            color: rgb(32,32,32);
+          }
+        }
+
+        pre, .li {
+          user-select: none;
+          cursor: pointer;
+        }
       }
 
       pre {
         display: block;
         font-size: rem-calc(13);
         background-color: inherit;
-      }
-
-      .pasteboard {
-        opacity: 0;
-        background: rgba(255,255,255,0.87);
-        position: absolute;
-        top: 0;
-        right: 0;
-        left: auto;
-
-        @supports (backdrop-filter: blur(4px)) or (--webkit-backdrop-filter: blur(4px)) {
-          background-color: rgba(255, 255, 255, 0.25);
-          backdrop-filter: blur(4px);
-          --webkit-backdrop-filter: blur(4px);
-        }
-
-        .fa {
-          color: rgb(32,32,32);
-        }
-      }
-
-      &:hover {
-        background: lightgreen;
-        border-color: green;
-
-        .pasteboard {
-          opacity: 1;
-        }
       }
     }
 

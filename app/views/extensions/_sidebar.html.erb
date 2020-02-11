@@ -1,10 +1,10 @@
 <div class="sidebar">
   <div class="section">
     <h4>
-      <i class="fa fa-folder-open-o"></i>Install
+      <i class="fa fa-cloud-download"></i>Install
     </h4>
     <div class="install-asset">
-      <pre>> sensuctl asset add <%= extension.owner_name %>/<%= extension.name %></pre>
+      <pre><span class="no-select">> </span>sensuctl asset add <%= extension.owner_name %>/<%= extension.name %></pre>
       <div class="pasteboard">
         <pre><i class="fa fa-clipboard"></i></pre>
       </div>
@@ -77,20 +77,20 @@
 
   <div class="content">
     <h4>
-      <i class="fa fa-folder-open-o"></i>Owner
+      <i class="fa fa-user-crown"></i>Owner
     </h4>
     <%= render 'resources/owner', resource: extension %>
   </div>
 
   <div class="content">
     <h4>
-      <i class="fa fa-folder-open-o"></i>Collaborators
+      <i class="fa fa-users"></i>Collaborators
     </h4>
     <%= render 'resources/collaborators', collaborators: collaborators, resource: extension %>
   </div>
 
   <h4>
-    <i class="fa fa-folder-open-o"></i>Actions
+    <i class="fa fa-wrench"></i>Actions
   </h4>
 
   <% reveal_id = signed_in? ? 'report-extension' : 'report-extension-sign-in' %>
@@ -128,15 +128,34 @@
 
 <% content_for :script do %>
   <script>
+    var installEl = $(".install-asset");
+    var tooltipLib = Foundation.libs.tooltip;
 
-      $(".install-asset").click(ev => {
-        console.debug("copying asset to clipboard");
-        if (!navigator.clipboard) {
-          return;
-        }
-        navigator.clipboard.writeText('sensuctl asset add <%= extension.owner_name %>/<%= extension.name %>');
-        /* toggle success state */
-      });
+    /* Only enable on broswers with support for the clipboard. */
+    if (!!navigator.clipboard) {
+      installEl.addClass("is-copyable");
+    }
+
+    installEl.click(ev => {
+      if (!navigator.clipboard) {
+        return;
+      }
+
+      // Write to clipboard
+      navigator.clipboard.writeText('sensuctl asset add <%= extension.owner_name %>/<%= extension.name %>');
+
+      // Give user feedback
+      if (tooltipLib.getTip(installEl).size() > 0) {
+        return ;
+      }
+      installEl.attr("title", "Copied to clipboard")
+      tooltipLib.create(installEl);
+      tooltipLib.show(installEl);
+      setTimeout(() => {
+        tooltipLib.hide(installEl);
+        tooltipLib.off(installEl);
+      }, 2500);
+    });
 
   </script>
 <% end %>
