@@ -1,4 +1,6 @@
 class ExtensionVersionsController < ApplicationController
+  include Annotations
+
   before_action :set_extension_and_version, except: [:new, :create]
   before_action :authenticate_user!, only: [:update_platforms]
 

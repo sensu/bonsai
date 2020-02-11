@@ -1,12 +1,11 @@
-<div class="owner_avatar">
+<p class="owner_avatar">
   <% if resource.github_organization %>
-    <%= gravatar_for resource.github_organization, size: 40 %>
-    <span itemprop="author"><%= resource.github_organization.name %></span>
+    <%= link_to "https://github.com/#{resource.github_organization.name}" do %>
+      <span itemprop="author"><%= resource.github_organization.name %></span>
+    <% end %>
   <% else %>
     <%= link_to resource.owner do %>
-      <%= gravatar_for resource.owner, size: 40, hosted: resource.hosted? %>
       <span itemprop="author"><%= resource.maintainer %></span>
-      <small><%= resource.owner.name %></small>
     <% end %>
   <% end %>
-</div>
+</p>

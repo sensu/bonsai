@@ -29,11 +29,11 @@ module UsersHelper
     if hosted || (user.try(:company) && user.company == ENV['HOST_ORGANIZATION'])
       avatar_url = ActionController::Base.helpers.asset_url("#{ENV['HOST_LOGO']}")
     else
-      gravatar_id = Digest::MD5.hexdigest(user.try(:email).try(:downcase) || "")
       if user.blank? || user.avatar_url.blank?
-        avatar_url = "https://secure.gravatar.com/avatar/#{gravatar_id}?s=#{size}"
+        hash = Digest::MD5.hexdigest(user.try(:email).try(:downcase) || "")
+        avatar_url = "https://s.gravatar.com/avatar/#{hash}?s=#{size * 2}"
       else
-        avatar_url = "#{user.avatar_url}&size=#{size}"
+        avatar_url = "#{user.avatar_url}&size=#{size * 2}"
       end
     end
     image_tag(avatar_url, style: "max-height: #{size}px; max-width: #{size}px", alt: user.name, class: 'gravatar')

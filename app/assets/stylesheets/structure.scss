@@ -5,8 +5,8 @@
 // @import "compass/css3/inline-block";
 
 // Basic structural elements
-html, body { 
-  height: 100%; 
+html, body {
+  height: 100%;
   min-height: 100%;
   font-family: $body-font-family;
 }
@@ -201,7 +201,7 @@ pre {
 .sidebar {
   @include grid-column(4);
   background: $trinary_gray;
-  padding: rem-calc(55 25 55 25);
+  padding: rem-calc(16 25 16 25);
   margin-top: rem-calc(40);
 
   h3, h4, h5 {
@@ -690,15 +690,15 @@ footer#footer {
   min-height: 6em;
 }
 .truncate {
-  overflow: hidden; 
+  overflow: hidden;
   position: relative;
   line-height: 1.2em;
 }
 .truncate:after{
-    content:""; 
-    height: 1em; 
-    display: block; 
-    width: 100%; 
+    content:"";
+    height: 1em;
+    display: block;
+    width: 100%;
     position: absolute;
     background-color: white;
     bottom: -0.2em;

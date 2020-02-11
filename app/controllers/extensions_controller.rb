@@ -1,4 +1,6 @@
 class ExtensionsController < ApplicationController
+  include Annotations
+
   before_action :assign_extension, except: [:index, :directory, :collections, :new, :create, :sync_status]
   before_action :store_location_then_authenticate_user!, only: [:follow, :unfollow, :adoption]
   before_action :authenticate_user!, only: [:new, :create]
@@ -397,7 +399,7 @@ class ExtensionsController < ApplicationController
     collection = Collection.find_by(id: params[:collection_id])
     if collection.present?
       if params[:update] == 'add'
-        @extension.collections << collection 
+        @extension.collections << collection
       elsif params[:update] == 'remove'
         @extension.collections.delete(collection)
       end

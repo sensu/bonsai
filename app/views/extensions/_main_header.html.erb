@@ -18,53 +18,11 @@
     </div>
   <% end %>
 
-  <% if false # disable community links %>
-    <small class="rss">
-      <%= link_to extension_path(extension, username: extension.owner_name, format: 'atom'), class: 'rss_feed_link' do %>
-        <i class="fa fa-rss"></i> RSS
-      <% end %>
-    </small>
-
-    <div class="addthis_sharing_toolbox"></div>
-
-    <span id="follow-button-show">
-      <%= render 'extensions/follow_button_show', extension: extension %>
-    </span>
-  <% end %>
-
   <h1 class="heading">
     <span itemprop="name"><%= extension.owner_name %>/<%= extension.name %></span>
-    <% if extension_versions.count > 0 %>
-      <small class="version_dropdown">
-        <%= link_to '#', 'data-dropdown' => 'versions', class: 'button radius tiny dropdown secondary', rel: 'extension_versions' do %>
-          <span class="versions_count"><%= pluralize "(#{extension_versions.count})", 'Version' %></span>
-          <span><%= version.try(:version) %></span>
-        <% end %>
-        <ul id="versions" data-dropdown-content class="f-dropdown">
-          <li>
-            <ul>
-              <%- if extension.hosted? && policy(extension).add_hosted_extension_version? %>
-                <li>
-                  <%= link_to new_extension_version_path(extension, username: extension.owner_name), rel: 'add-version' do %>
-                    <i class="fa fa-cloud-upload"></i>
-                    <span>Add a version</span>
-                  <% end %>
-                </li>
-              <%- end %>
-              <% extension_versions.each do |extension_version| %>
-                <li>
-                  <%= link_to extension_version_path(extension, extension_version, username: extension.owner_name), rel: 'extension_version' do %>
-                    <span><%= extension_version.version %></span>
-                    <% if extension_version == version %>
-                      <i class="fa fa-check right"></i>
-                    <% end %>
-                  <% end %>
-                </li>
-              <% end %>
-            </ul>
-          </li>
-        </ul>
 
+    <small class="version_dropdown">
+      <% if extension_versions.count > 0 %>
         <%- if policy(extension).change_tier? %>
           <%= link_to '#', 'data-dropdown' => 'tiers', class: 'button radius tiny dropdown secondary', rel: 'extension_tiers' do %>
             <i class="fa fa-<%= @extension.try(:tier_icon_name) %>"></i>
@@ -93,14 +51,45 @@
             </span>
           <% end %>
         <% end %>
-      </small>
-    <% end %>
+        <%= link_to '#', 'data-dropdown' => 'versions', class: 'button radius tiny dropdown secondary', rel: 'extension_versions' do %>
+          <span class="versions_count"><%= pluralize "(#{extension_versions.count})", 'Version' %></span>
+          <span><%= version.try(:version) %></span>
+        <% end %>
+        <ul id="versions" data-dropdown-content class="f-dropdown">
+          <li>
+            <ul>
+              <%- if extension.hosted? && policy(extension).add_hosted_extension_version? %>
+                <li>
+                  <%= link_to new_extension_version_path(extension, username: extension.owner_name), rel: 'add-version' do %>
+                    <i class="fa fa-cloud-upload"></i>
+                    <span>Add a version</span>
+                  <% end %>
+                </li>
+              <%- end %>
+              <% extension_versions.each do |extension_version| %>
+                <li>
+                  <%= link_to extension_version_path(extension, extension_version, username: extension.owner_name), rel: 'extension_version' do %>
+                    <span><%= extension_version.version %></span>
+                    <% if extension_version == version %>
+                      <i class="fa fa-check right"></i>
+                    <% end %>
+                  <% end %>
+                </li>
+              <% end %>
+            </ul>
+          </li>
+        </ul>
+      <% end %>
+      <% if policy(extension).manage? || policy(extension).sync_repo? %>
+        <%= render "extensions/manage_extension", extension: extension, version: version %>
+      <% end %>
+    </small>
   </h1>
 
   <% if extension.parent_name.present? && extension.parent_owner_name.present? %>
     <p class="small-12 title">
       <%- parent_extension = extension.parent %>
-      <i class="fa fa-exclamation-triangle"></i> 
+      <i class="fa fa-exclamation-triangle"></i>
       <span>Forked from:</span>
       <% if parent_extension.present? %>
         <%= link_to "#{extension.parent_owner_name}/#{extension.parent_name}", owner_scoped_extension_url(parent_extension) %>
@@ -111,13 +100,23 @@
     </p>
   <% end %>
 
-  <% if extension.privacy? %>
-    <p class="small-12 title">
-      <i class="fa fa-eye-slash"></i>
-      <span>This asset is marked as private.</span>
-    </p>
-  <% end %>
-
-  <p class="description" itemprop="description"><%= extension.description %></p>
+  <p class="description" itemprop="description">
+    v<%= version&.version || "—" %>
+    ·
+    <span>
+      <% if extension.privacy? %>
+        <span class="ext-private">
+          <i class="fa fa-eye-slash"></i>
+          private
+        </span>
+      <% else %>
+        <span class="ext-public">
+          public
+        </span>
+      <% end %>
+    </span>
+    ·
+    Published <%= time_ago_in_words(version.updated_at) %> ago
+  </p>
 
 </div>

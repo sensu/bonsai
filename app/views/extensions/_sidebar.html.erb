@@ -1,136 +1,56 @@
 <div class="sidebar">
-  <%= render 'resources/owner', resource: extension %>
-  <%= render 'resources/collaborators', collaborators: collaborators, resource: extension %>
-
-  <% if policy(extension).manage? || policy(extension).sync_repo? %>
-    <%= render "extensions/manage_extension", extension: extension, version: version %>
-  <% end %>
-
-  <% if version.present? && version.annotation('suggested_asset_url').present? %>
-    <div class="suggested_asset">
-      <%= link_to_suggested_asset(version) %>
-    </div>
-  <% end %>
-
-  <%= link_to "Download", "#", class: 'button primary small radius expand button_download_extension', rel: 'download_asset_or_definition', 'data-reveal-id': 'download_asset_or_definition' %>
-
-  <div class="extension-details">
-    <h5>Stats</h5>
-    <div class="extension-urls">
-      <% if version.present? %>
-        <% item_types = version.extension_version_content_items.select("distinct item_type").map(&:item_type).sort %>
-        <% if item_types.present? %>
-          <ul>
-            <% item_types.each do |item_type| %>
-              <% count = version.extension_version_content_items.where(item_type: item_type).count %>
-              <% if count > 0 %>
-                <li><%= pluralize(count, item_type) %></li>
-              <% end %>
-            <% end %>
-          </ul>
-        <% end %>
-      <% end %>
-
-      <% if extension.issues_url.present? %>
-        <div class="small-bottom-space">
-          <%= link_to 'View Issues', extension.issues_url, itemprop: 'discussionUrl, target: "_blank"' %>
-        </div>
-      <% end %>
-    </div>
-
+  <div class="section">
     <h4>
-      <i class="fa fa-clock-o"></i> 
-      <span>Updated </span>
-      <span itemprop="datePublished"><%= (version.try(:updated_at) || extension.updated_at).to_s(:longish) %></span>
-      <small>Created on <span itemprop="dateModified"><%= extension.created_at.to_s(:longish) %></span></small>
+      <i class="fa fa-cloud-download"></i>Install
     </h4>
-
-    <% if false %>
-      <h4>
-        <i class="fa fa-desktop"></i> Compatible Bonsai Versions
-        <% if policy(extension).manage? %>
-          <a href="#" class="toggle-platforms-edit">edit</a>
-          <a href="#" class="toggle-platforms-edit toggle-platforms-hidden">cancel</a>
-        <% end %>
-      </h4>
-
-
-      <% if supported_platforms.present? %>
-        <ul class="extension_platforms toggle-platforms-edit">
-          <% supported_platforms.each do |platform| %>
-            <li title="<%= platform.name %>">
-              <span><%= platform.name %></span>
-            </li>
-          <% end %>
-        </ul>
-      <% else %>
-        <ul class="extension_platforms">
-          <li>Not specified</li>
-        </ul>
-      <% end %>
-
-      <%= form_tag({controller:   "extension_versions",
-                    action:       "update_platforms",
-                    username:     extension.owner_name,
-                    extension_id: extension.lowercase_name,
-                    version:      version.try(:version)
-                   },
-                   method: :put,
-                   class:  "toggle-platforms-edit toggle-platforms-hidden") do %>
-        <ul class="extension_platforms">
-          <% SupportedPlatform.all.each do |sp| %>
-            <li title="<%= sp.name %>">
-              <label>
-                <%= check_box_tag :"supported_platforms[]", sp.name, supported_platforms.include?(sp) %>
-                <span><%= sp.name %></span>
-              </label>
-            </li>
-          <% end %>
-
-          <%= submit_tag "Save", class: "button primary small" %>
-        </ul>
-      <% end %>
-    <% end %>
-
-    <h4><i class="fa fa-key"></i> License</h4>
-    <p><%= extension.license_name.present? ? extension.license_name : "Unknown" %></p>
-
-    <%= render 'extensions/download', extension: extension, version: version %>
-
+    <div class="install-asset">
+      <pre><span class="no-select">> </span>sensuctl asset add <%= extension.owner_name %>/<%= extension.name %></pre>
+      <div class="pasteboard">
+        <pre><i class="fa fa-clipboard"></i></pre>
+      </div>
+    </div>
   </div>
 
-  <% if extension.up_for_adoption? %>
-    <div>
-      <%= link_to 'Adopt me!', adoption_extension_path(extension, username: extension.owner_name), method: :post, class: 'button expand secondary radius tiny' %>
-    </div>
-  <% end %>
+  <div class="content">
+    <h4><i class="fa fa-key"></i>License</h4>
+    <p><%= extension.license_name.present? ? extension.license_name : "Unknown" %></p>
+  </div>
+
+  <div class="content">
+    <h4>
+      <i class="fa fa-clock-o"></i>
+      <span>Last publish</span>
+    </h4>
+    <p>
+      <span itemprop="datePublished"><%= (version.try(:updated_at) || extension.updated_at).to_s(:longish) %></span>
+    </p>
+  </div>
+
+  <div class="content">
+    <h4>
+      <i class="fa fa-tags"></i>Tags
+      <% if policy(extension).manage? %>
+        <a href="#" class="toggle-tags-edit">edit</a>
+        <a href="#" class="toggle-tags-edit toggle-tags-hidden">cancel</a>
+      <% end %>
+    </h4>
+    <p class="toggle-tags-edit">
+      <% extension.tags.each do |tag| %>
+        <%= link_to(tag.name, controller: "extensions", action: "index", q: tag.name) %>
+      <% end %>
+    </p>
+  </div>
 
   <% if extension.github_url.present? %>
-    <div class="small-bottom-space">
-      <%= link_to 'View Source', extension.github_url, itemprop: 'codeRepository', target: "_blank", class: 'button expand secondary radius tiny' %>
-      </div>
+    <div class="content">
+      <h4>
+        <i class="fa fa-link"></i>Repository
+      </h4>
+      <p>
+        <%= link_to extension.github_url, extension.github_url, itemprop: 'codeRepository', target: "_blank", class: 'secondary' %>
+      </p>
+    </div>
   <% end %>
-
-  <h4 rel="edit-extension-urls">
-    <% if policy(extension).manage? %>
-      <a href="#" class="toggle-details-edit">edit details</a>
-      <a href="#" class="toggle-details-edit toggle-details-hidden">cancel</a>
-    <% end %>
-  </h4>
-
-  <h4>
-    <i class="fa fa-tags"></i> Tags
-    <% if policy(extension).manage? %>
-      <a href="#" class="toggle-tags-edit">edit</a>
-      <a href="#" class="toggle-tags-edit toggle-tags-hidden">cancel</a>
-    <% end %>
-  </h4>
-
-  <p class="toggle-tags-edit">
-    <% extension.tags.each do |tag| %>
-      <%= link_to(tag.name, controller: "extensions", action: "index", q: tag.name) %>
-    <% end %>
-  </p>
 
   <div class="toggle-tags-edit toggle-tags-hidden">
     <%= form_for @extension, url: extension_path(@extension, username: @extension.owner_name) do |f| %>
@@ -140,28 +60,6 @@
       <%= submit_tag "Save", class: "button primary small" %>
     <% end %>
   </div>
-
-  <% if false # extension.collections.present? %>
-    <h4>
-      <i class="fa fa-list"></i> Collections
-    </h4>
-
-    <% if policy(Collection).manage? %>
-      <div id='collections-select-container'>
-        <% collection_ids = extension.collections.map(&:id) %>
-        <%= select_tag :collections, 
-          options_from_collection_for_select(Collection.rank(:row_order), :id, :title, collection_ids), 
-          id: 'collections-select', 
-          multiple: "multiple" %>
-      </div>
-    <% else %>
-      <p class="toggle-tags-edit">
-        <% extension.collections.each do |collection| %>
-          <%= link_to(collection.title, extensions_collections_path) %>
-        <% end %>
-      </p>
-    <% end %>
-  <% end %>
 
   <div class="toggle-details-edit toggle-details-hidden">
     <%= form_for @extension, url: extension_path(@extension, username: @extension.owner_name) do |f| %>
@@ -177,79 +75,118 @@
     <% end %>
   </div>
 
-  <%= render 'extensions/compilation_errors', extension: @extension, version: version %>
-
-  <% if signed_in? %>
-    <h4 rel="extension-support">
-      <% if @extension.tier_name == 'Enterprise' %>
-        <a href="https://account.sensu.io" target='_blank'>Report an Issue</a>
-      <% else %>
-        <% if version.blank? || version.annotation('report_issues_url').blank? %>
-          <% url = "https://github.com/sensu/bonsai-asset-index/issues" %>
-        <% else %>
-          <% url = version.annotation('report_issues_url') || "https://github.com/sensu/bonsai-asset-index/issues" %>
-        <% end %>
-        <a href='<%= url %>' target='_blank'>Report an Issue</a>
-      <% end %>
+  <div class="content">
+    <h4>
+      <i class="fa fa-user-crown"></i>Owner
     </h4>
-  <% end %>
-
-
-  <%- if version.present? && version.release_assets.order(:platform, :arch).any? %>
-    <div class="github-release-assets">
-      <h4>
-        <i class="fa fa-folder-open-o"></i> <span>Release Assets</span>
-      </h4>
-
-      <dl>
-        <% version.release_assets.order(:platform, :arch).each do |release_asset| %>
-          <dt class='assetPlatform'><%= release_asset.platform %> <%= release_asset.arch %></dt>
-          <dd class="assetLink"><%= link_to release_asset.vanity_url, release_asset.vanity_url %></dd>
-          <dd class="assetSha">SHA: <%= release_asset.source_asset_sha.presence || 'Unknown' %></dd>
-          <dd class="assetLastModified">Last Modified: <%= l(release_asset.last_modified.to_date, format: :default) rescue '' %>
-        <% end %>
-      </dl>
-    </div>
-  <% end %>
-
-  <div style="margin-top: 2rem;">
-    <% reveal_id = signed_in? ? 'report-extension' : 'report-extension-sign-in' %>
-    <%= link_to "Flag #{t('nouns.extension').titleize}", "#", data: { :"reveal-id" => reveal_id } %>
+    <%= render 'resources/owner', resource: extension %>
   </div>
 
+  <div class="content">
+    <h4>
+      <i class="fa fa-users"></i>Collaborators
+    </h4>
+    <%= render 'resources/collaborators', collaborators: collaborators, resource: extension %>
+  </div>
+
+  <h4>
+    <i class="fa fa-wrench"></i>Actions
+  </h4>
+
+  <% reveal_id = signed_in? ? 'report-extension' : 'report-extension-sign-in' %>
+  <ul>
+    <li><%= link_to "Flag #{t('nouns.extension').titleize}", "#", data: { :"reveal-id" => reveal_id } %></li>
+    <% if extension.up_for_adoption? %>
+      <li><%= link_to 'Adopt me!', adoption_extension_path(extension, username: extension.owner_name), method: :post, class: 'secondary' %></li>
+    <% end %>
+    <% if signed_in? %>
+      <li rel="extension-support">
+        <% if @extension.tier_name == 'Enterprise' %>
+          <a href="https://account.sensu.io" target='_blank'>Report an Issue</a>
+        <% else %>
+          <% if version.blank? || version.annotation('report_issues_url').blank? %>
+            <% url = "https://github.com/sensu/bonsai-asset-index/issues" %>
+          <% else %>
+            <% url = version.annotation('report_issues_url') || "https://github.com/sensu/bonsai-asset-index/issues" %>
+          <% end %>
+          <a href='<%= url %>' target='_blank'>Report an Issue</a>
+        <% end %>
+      </li>
+    <% end %>
+    <li rel="edit-extension-urls">
+      <% if policy(extension).manage? %>
+        <a href="#" class="toggle-details-edit">Edit details</a>
+        <a href="#" class="toggle-details-edit toggle-details-hidden">cancel</a>
+      <% end %>
+    </li>
+  </ul>
 </div>
 
-<% if false #version.present? && version.extension.present? %>
+<div class="extension-details">
+  <%= render 'extensions/download', extension: extension, version: version %>
+</div>
 
 <% content_for :script do %>
-
   <script>
+    var installEl = $(".install-asset");
+    var tooltipLib = Foundation.libs.tooltip;
 
-    $("#collections-select").select2();
+    /* Only enable on broswers with support for the clipboard. */
+    if (!!navigator.clipboard) {
+      installEl.addClass("is-copyable");
+    }
 
-    $("#collections-select").on('select2:select', function (e) {
-      const collection_id = e.params.data.id;
-      update_collection(collection_id, 'add')
+    installEl.click(ev => {
+      if (!navigator.clipboard) {
+        return;
+      }
+
+      // Write to clipboard
+      navigator.clipboard.writeText('sensuctl asset add <%= extension.owner_name %>/<%= extension.name %>');
+
+      // Give user feedback
+      if (tooltipLib.getTip(installEl).size() > 0) {
+        return ;
+      }
+      installEl.attr("title", "Copied to clipboard")
+      tooltipLib.create(installEl);
+      tooltipLib.show(installEl);
+      setTimeout(() => {
+        tooltipLib.hide(installEl);
+        tooltipLib.off(installEl);
+      }, 2500);
     });
-
-    $("#collections-select").on('select2:unselect', function (e) {
-      const collection_id = e.params.data.id;
-      update_collection(collection_id, 'remove')
-    });
-
-    function update_collection(collection_id, update) {
-      $.ajax({
-        url: '<%= update_collection_extension_path(id: version.extension.lowercase_name, username: version.extension.owner_name) %>',
-        type: 'PUT',
-        data: {
-          update: update,
-          collection_id: collection_id,
-        },
-      });
-    };
 
   </script>
-
 <% end %>
 
+<% if #version.present? && version.extension.present? %>
+  <% content_for :script do %>
+    <script>
+
+      $("#collections-select").select2();
+
+      $("#collections-select").on('select2:select', function (e) {
+        const collection_id = e.params.data.id;
+        update_collection(collection_id, 'add')
+      });
+
+      $("#collections-select").on('select2:unselect', function (e) {
+        const collection_id = e.params.data.id;
+        update_collection(collection_id, 'remove')
+      });
+
+      function update_collection(collection_id, update) {
+        $.ajax({
+          url: '<%= update_collection_extension_path(id: version.extension.lowercase_name, username: version.extension.owner_name) %>',
+          type: 'PUT',
+          data: {
+            update: update,
+            collection_id: collection_id,
+          },
+        });
+      };
+
+    </script>
+  <% end %>
 <% end %>

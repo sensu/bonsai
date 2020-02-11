@@ -1,6 +1,6 @@
 <div class="main" data-equalizer-watch>
 
-  
+
   <dl class="tabs">
     <dd class="tab-title <%= 'active' unless params[:tab] %>">
       <% if version.present? %>
@@ -9,9 +9,19 @@
         <div>README</div>
       <% end %>
     </dd>
+    <dd class="tab-title <%= 'active' if params[:tab] == 'definition' %>">
+      <% if version.present? %>
+        <%= link_to 'Asset Definition', extension_version_path(extension, version, username: extension.owner_name, tab: 'definition'), remote: true %>
+      <% end %>
+    </dd>
     <dd class="tab-title <%= 'active' if params[:tab] == 'release-notes' %>">
       <% if version.present? %>
         <%= link_to 'Release Notes', extension_version_path(extension, version, username: extension.owner_name, tab: 'release-notes'), remote: true %>
+      <% end %>
+    </dd>
+    <dd class="tab-title <%= 'active' if params[:tab] == 'release-assets' %>">
+      <% if version.present? %>
+        <%= link_to 'Release Assets', extension_version_path(extension, version, username: extension.owner_name, tab: 'release-assets'), remote: true %>
       <% end %>
     </dd>
   </dl>
@@ -22,13 +32,17 @@
         case params[:tab]
         when 'release-notes'
           render 'extensions/release_notes', version: version
+        when 'release-assets'
+          render 'extensions/release_assets', version: version
+        when 'definition'
+          render 'extensions/asset_definition', version: version
         else
           render 'extensions/readme', extension: extension, version: version
         end
       %>
     </div>
   </div>
-  
+
 
   <%# <% item_types = version.extension_version_content_items.select("distinct item_type").map(&:item_type).sort %1> %>
 
@@ -74,6 +88,6 @@
 
 <div class="reveal-modal" id="report-extension-sign-in" data-reveal>
   <h1>You must be signed in to report this <%= t('nouns.extension') %>.</h1>
-  
+
   <%= link_to 'Sign In with Github', sign_in_path, rel: 'sign_in' %>
 </div>

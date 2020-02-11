@@ -1,4 +1,4 @@
-<a href="#" data-dropdown="manage" class="button radius expand secondary tiny dropdown">Manage <%= t('nouns.extension').titleize %></a>
+<a href="#" data-dropdown="manage" class="button radius secondary tiny dropdown">Manage <%= t('nouns.extension').titleize %></a>
 
 <ul class="manage_extension f-dropdown" id="manage" data-dropdown-content>
   <%- if extension.hosted? && policy(extension).add_hosted_extension_version? %>
@@ -152,7 +152,7 @@
         <span>Select Default Version</span>
       <% end %>
     </li>
-    
+
     <div id="default-version" class="reveal-modal small" data-reveal>
       <h1>Select Default Version</h1>
       <a class="close-reveal-modal">&#215;</a>
@@ -171,7 +171,7 @@
         </div>
       <% end %>
     </div>
-    
+
   <% end %>
 
   <% if policy(extension).edit_extension_config_overrides? %>

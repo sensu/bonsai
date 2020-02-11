@@ -50,17 +50,78 @@
       margin: rem-calc(0 0 24 20);
     }
 
-
     .gravatar {
       height: rem-calc(72);
       margin: rem-calc(0 15 15 0);
       width: rem-calc(72);
     }
 
+    .section {
+      margin-bottom: rem-calc(24);
+    }
+
+    .install-asset {
+      border: 1px solid #333;
+      border-radius: rem-calc(4);
+      overflow: hidden;
+      position: relative;
+      transition: all 350ms ease-in-out;
+
+      .pasteboard {
+        display: none;
+      }
+
+      .no-select {
+        user-select: none;
+      }
+
+      &.is-copyable {
+        &:hover {
+          background: lighten($notice_secondary_green, 25%);
+          border-color: darken($notice_secondary_green, 50%);
+
+          .pasteboard {
+            opacity: 1;
+          }
+        }
+
+        .pasteboard {
+          display: block;
+          opacity: 0;
+          background: rgba(255,255,255,0.87);
+          position: absolute;
+          top: 0;
+          right: 0;
+          left: auto;
+
+          @supports (backdrop-filter: blur(4px)) or (--webkit-backdrop-filter: blur(4px)) {
+            background-color: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(4px);
+            --webkit-backdrop-filter: blur(4px);
+          }
+
+          .fa {
+            color: rgb(32,32,32);
+          }
+        }
+
+        pre, .li {
+          user-select: none;
+          cursor: pointer;
+        }
+      }
+
+      pre {
+        display: block;
+        font-size: rem-calc(13);
+        background-color: inherit;
+      }
+    }
+
     .collaborators_avatar {
       margin-bottom: rem-calc(10);
       font-size: 11px;
-      border-bottom: 1px solid #cccdef;
+
       ul li {
         list-style-type: none;
         margin-bottom: 0;
@@ -89,7 +150,7 @@
 
     .button.secondary{
       background-color: $secondary_gray;
-      border: 1px solid #333333;
+      border: 1px solid #333;
     }
 
     .button.primary {
@@ -105,28 +166,6 @@
         &:last-of-type {
           margin-bottom: rem-calc(30);
         }
-      }
-    }
-
-    .owner_avatar {
-      @include clearfix;
-      font: {
-        size: rem-calc(18);
-        weight: $bold;
-      }
-
-      .gravatar {
-        float: left;
-        margin-top: rem-calc(-15);
-      }
-
-      small {
-        display: block;
-        font: {
-          size: rem-calc(14);
-          weight: $normal;
-        }
-        margin-top: rem-calc(5);
       }
     }
 
