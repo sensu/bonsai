@@ -113,12 +113,12 @@
         <% end %>
       </li>
     <% end %>
-    <li rel="edit-extension-urls">
-      <% if policy(extension).manage? %>
+    <% if policy(extension).manage? %>
+      <li rel="edit-extension-urls">
         <a href="#" class="toggle-details-edit">Edit details</a>
         <a href="#" class="toggle-details-edit toggle-details-hidden">cancel</a>
-      <% end %>
-    </li>
+      </li>
+    <% end %>
   </ul>
 </div>
 

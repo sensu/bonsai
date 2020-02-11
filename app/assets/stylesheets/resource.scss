@@ -73,6 +73,7 @@
 
       .no-select {
         user-select: none;
+        -webkit-user-select: none;
       }
 
       &.is-copyable {
@@ -107,6 +108,7 @@
 
         pre, .li {
           user-select: none;
+          -webkit-user-select: none;
           cursor: pointer;
         }
       }
