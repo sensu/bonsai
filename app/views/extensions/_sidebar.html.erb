@@ -1,8 +1,6 @@
 <div class="sidebar">
   <div class="section">
-    <h4>
-      <i class="fa fa-cloud-download"></i>Install
-    </h4>
+    <h4><i class="fa fa-cloud-download"></i>Install</h4>
     <div class="install-asset">
       <pre><span class="no-select">> </span>sensuctl asset add <%= extension.owner_name %>/<%= extension.name %></pre>
       <div class="pasteboard">
@@ -20,14 +18,11 @@
 
   <div class="content">
     <h4><i class="fa fa-key"></i>License</h4>
-    <p><%= extension.license_name.present? ? extension.license_name : "Unknown" %></p>
+    <p><span itemprop="license"><%= extension.license_name.present? ? extension.license_name : "Unknown" %><span></p>
   </div>
 
   <div class="content">
-    <h4>
-      <i class="fa fa-clock-o"></i>
-      <span>Last publish</span>
-    </h4>
+    <h4><i class="fa fa-clock-o"></i>Last publish</h4>
     <p>
       <span itemprop="datePublished"><%= (version.try(:updated_at) || extension.updated_at).to_s(:longish) %></span>
     </p>
@@ -50,9 +45,7 @@
 
   <% if extension.github_url.present? %>
     <div class="content">
-      <h4>
-        <i class="fa fa-link"></i>Repository
-      </h4>
+      <h4><i class="fa fa-link"></i>Repository</h4>
       <p>
         <%= link_to extension.github_url, extension.github_url, itemprop: 'codeRepository', target: "_blank", class: 'secondary' %>
       </p>

@@ -21,7 +21,7 @@
   <h1 class="heading">
     <span itemprop="name"><%= extension.owner_name %>/<%= extension.name %></span>
 
-    <small class="version_dropdown">
+    <div class="header-actions">
       <% if extension_versions.count > 0 %>
         <%- if policy(extension).change_tier? %>
           <%= link_to '#', 'data-dropdown' => 'tiers', class: 'button radius tiny dropdown secondary', rel: 'extension_tiers' do %>
@@ -83,7 +83,7 @@
       <% if policy(extension).manage? || policy(extension).sync_repo? %>
         <%= render "extensions/manage_extension", extension: extension, version: version %>
       <% end %>
-    </small>
+    </div>
   </h1>
 
   <% if extension.parent_name.present? && extension.parent_owner_name.present? %>

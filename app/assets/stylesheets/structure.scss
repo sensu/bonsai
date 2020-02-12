@@ -11,17 +11,17 @@ html, body {
   font-family: $body-font-family;
 }
 
-@media #{$mobile-only} {
-  html, body, h1, h2, h3, h4, h5, h6, p, li, span, blockquote, a, pre, code { font-size: 88%; }
-}
+// @media #{$mobile-only} {
+//   html, body, h1, h2, h3, h4, h5, h6, p, li, span, blockquote, a, pre, code { font-size: 88%; }
+// }
 
-@media #{$small-only} {
-   html, body, h1, h2, h3, h4, h5, h6, p, li, span, blockquote, a, pre, code { font-size: 95%; }
-}
+// @media #{$small-only} {
+//    html, body, h1, h2, h3, h4, h5, h6, p, li, span, blockquote, a, pre, code { font-size: 95%; }
+// }
 
-@media #{$medium-only} {
-  html, body, h1, h2, h3, h4, h5, h6, p, li, span, blockquote, a, pre, code { font-size: 95%; }
-}
+// @media #{$medium-only} {
+//   html, body, h1, h2, h3, h4, h5, h6, p, li, span, blockquote, a, pre, code { font-size: 95%; }
+// }
 
 body {
   background: white;
@@ -606,9 +606,6 @@ footer#footer {
     padding-right: 10px;
     font-size: 18px;
     line-height: 20px;
-  }
-  a {
-    font-size: 18px !important;
   }
 }
 

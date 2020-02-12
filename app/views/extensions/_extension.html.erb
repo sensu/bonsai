@@ -71,10 +71,6 @@
   <div class="bottom">
     <div class="bottom-content">
       <ul class="extension_stats">
-        <li>
-          <span itemprop="interactionCount"><%= number_with_delimiter(extension.download_count) %></span>
-          <h5>Total Downloads</h5>
-        </li>
         <span id="<%= extension.lowercase_name %>-follow-button-list">
           <%= render 'extensions/follow_button_list', extension: extension %>
         </span>
