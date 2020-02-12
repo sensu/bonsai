@@ -195,6 +195,10 @@
         margin-top: rem-calc(5);
       }
     }
+
+    @media #{$mobile-only} {
+      margin-top: 0;
+    }
   }
 
   .heading {
@@ -219,7 +223,9 @@
 
   @media #{$mobile-only} {
     .heading {
-      margin-bottom: rem-calc(25);
+      font-size: rem-calc(24);
+      font-weight: $bold;
+      margin-bottom: rem-calc(4);
     }
   }
 

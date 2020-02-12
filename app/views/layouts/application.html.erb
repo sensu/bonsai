@@ -36,9 +36,7 @@
         <div class="inner_wrap">
           <div class="logo_and_nav_toggle">
             <%= link_to root_path do %>
-              <%= image_tag 'logo-wordmark-sensu.svg', class: 'logoWordmark' %>
-              <%= image_tag 'logo-icon-sensu.svg', class: 'logoIcon filter-primary-green' %>
-              <h2 class="logoText"><span>Sensu Asset Index</span></h2>
+              <%= image_tag 'sensu-logo-horizontal.png', class: 'logoWordmark' %>
             <% end %>
           </div>
           <%= render partial: 'appheader' %>
@@ -103,7 +101,7 @@
     </div>
 
     <%= yield :script %>
-    
+
   </body>
 </html>
 

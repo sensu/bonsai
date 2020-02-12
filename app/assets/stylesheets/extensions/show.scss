@@ -208,8 +208,12 @@
     }
   }
 
-  .version_dropdown {
+  .header-actions {
     float: right;
+
+    @media #{$mobile-only} {
+      display: none;
+    }
   }
 
   #versions li:hover {
