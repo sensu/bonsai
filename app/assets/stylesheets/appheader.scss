@@ -21,6 +21,7 @@
 
 @media #{$mobile-only} {
   .globalheader {
+    padding: rem-calc(0 18);
     position: relative;
   }
 }
@@ -67,11 +68,7 @@
 }
 
 .logoWordmark {
-  margin-top: 20px;
-} 
-
-.logoText {
-  display: none;
+  max-height: 44px;
 }
 
 // App-specific elements
@@ -166,8 +163,8 @@
 }
 
 @media #{$mobile-only} {
-  .usermenu {
-    margin: rem-calc(0 -30 0 0);
+  .usermenu .username {
+    display: none;
   }
 }
 

@@ -34,7 +34,7 @@
       <% if extension.parent_name.present? && extension.parent_owner_name.present? %>
         <span class="small-12 title">
           <%- parent_extension = extension.parent %>
-          <i class="fa fa-exclamation-triangle"></i> 
+          <i class="fa fa-exclamation-triangle"></i>
           <span>Forked from:</span>
           <% if parent_extension.present? %>
             <%= link_to "#{extension.parent_owner_name}/#{extension.parent_name}", owner_scoped_extension_url(parent_extension) %>
@@ -71,10 +71,6 @@
   <div class="bottom">
     <div class="bottom-content">
       <ul class="extension_stats">
-        <li>
-          <span itemprop="interactionCount"><%= number_with_delimiter(extension.download_count) %></span>
-          <h5>Total Downloads</h5>
-        </li>
         <span id="<%= extension.lowercase_name %>-follow-button-list">
           <%= render 'extensions/follow_button_list', extension: extension %>
         </span>

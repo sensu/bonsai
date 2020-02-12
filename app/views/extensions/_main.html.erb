@@ -1,7 +1,7 @@
 <div class="main" data-equalizer-watch>
 
 
-  <dl class="tabs">
+  <dl class="tabs vertical-mobile">
     <dd class="tab-title <%= 'active' unless params[:tab] %>">
       <% if version.present? %>
         <%= link_to 'README', extension_version_path(extension, version, username: extension.owner_name), remote: true %>

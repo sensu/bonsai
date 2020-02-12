@@ -48,13 +48,6 @@
     }
   }
 
-  @media #{$small-down} {
-    dd a {
-      font-size: 60%;
-      padding: rem-calc(8 7 0 7);
-    }
-  }
-
   @media #{$medium-only} {
     dd a {
       font-size: 80%;
@@ -66,6 +59,26 @@
     dd a {
       font-size: 80%;
       padding: rem-calc(14 12 10 12);
+    }
+  }
+}
+
+.tabs.vertical-mobile {
+  @media #{$mobile-only} {
+    dd {
+      position: inherit;
+      float: none;
+      display: block;
+      top: auto;
+
+      a {
+        padding: 0.87rem 0;
+      }
+
+      &.active a {
+        color: $clouds !important; // sigh...
+        background-color: $primary_blue;
+      }
     }
   }
 }
