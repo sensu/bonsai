@@ -90,12 +90,11 @@
     <p class="small-12 title">
       <%- parent_extension = extension.parent %>
       <% if parent_extension.present? %>
-        <%= link_to "#{extension.parent_owner_name}/#{extension.parent_name}", owner_scoped_extension_url(parent_extension) %>
+        <span><i class="fa fa-code-branch"></i> forked from <%= link_to "#{extension.parent_owner_name}/#{extension.parent_name}", owner_scoped_extension_url(parent_extension) %></span>
       <% else %>
-        <span><%= extension.parent_owner_name %>/<%= extension.parent_name %></span>
-        <span><i class="fa fa-code-branch"></i> Forked from: <%= link_to "#{extension.parent_owner_name}/#{extension.parent_name}", owner_scoped_extension_url(parent_extension) %></span>
+        <span><i class="fa fa-code-branch"></i> forked from <%= link_to extension.parent_html_url, extension.parent_html_url, target: '_blank' %></span>
         <p class="forked-notice">
-            <i class="fa fa-exclamation-triangle"></i> 
+            <i class="fa fa-exclamation-triangle"></i>
             This asset is forked from an upstream project at <%= link_to extension.parent_html_url, extension.parent_html_url, target: '_blank' %> that does not yet exist as a Bonsai asset.
         </p>
       <% end %>
