@@ -11,6 +11,13 @@
     </div>
   </div>
 
+  <% if version.present? && version.annotation('suggested_asset_url').present? %>
+    <div class="content">
+      <h4><i class="fa fa-exclaimation"></i>Note</h4>
+      <p><%= link_to_suggested_asset(version) %></p>
+    </div>
+  <% end %>
+
   <div class="content">
     <h4><i class="fa fa-key"></i>License</h4>
     <p><%= extension.license_name.present? ? extension.license_name : "Unknown" %></p>
@@ -160,7 +167,7 @@
   </script>
 <% end %>
 
-<% if #version.present? && version.extension.present? %>
+<% if version.present? && version.extension.present? %>
   <% content_for :script do %>
     <script>
 
