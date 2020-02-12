@@ -518,48 +518,13 @@ ul.off-canvas-list li a {
   border-bottom: 1px solid #132631;
 }
 
-footer#subfooter {
+.app-footer {
   background: rgb(43, 52, 88);
-  .subfooter-communication {
-    color: rgb(201, 204, 214);
-    text-align: center;
-    font-size: 16px;
-
-    .fa {
-      font-size: 24px;
-    }
-
-    a {
-      padding: 1ex;
-      text-decoration: none;
-      white-space: nowrap;
-      transition: 400ms all;
-      &:hover {
-        color: white;
-      }
-    }
-
-    .row {
-      padding: .8em 0;
-
-    }
-
-    .footer-links {
-      font-size: smaller;
-    }
-  }
+  display: flex;
+  flex-direction: column;
 }
 
-footer#footer {
-  background: rgb(43, 52, 88);
-
-  .copyright {
-    color: $secondary_gray;
-    font-size: 11px;
-    padding-top: rem-calc(5);
-    padding-bottom: rem-calc(15);
-  }
-
+.app-footer .footer-area {
   a {
     display: inline-block;
     color: $secondary_gray;
@@ -569,6 +534,42 @@ footer#footer {
       color: white;
     }
   }
+}
+
+.app-footer .subfooter-communication {
+  color: rgb(201, 204, 214);
+  text-align: center;
+  font-size: 16px;
+
+  .fa {
+    font-size: 24px;
+  }
+
+  a {
+    padding: 1ex;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: 400ms all;
+    &:hover {
+      color: white;
+    }
+  }
+
+  .row {
+    padding: .8em 0;
+
+  }
+
+  .footer-links {
+    font-size: smaller;
+  }
+}
+
+.app-footer .copyright {
+  color: $secondary_gray;
+  font-size: 11px;
+  padding-top: rem-calc(5);
+  padding-bottom: rem-calc(15);
 }
 
 .cta-banner {

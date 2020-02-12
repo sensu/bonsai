@@ -38,8 +38,11 @@
     </div>
   </div>
 
-  <div class="share-cta standard-typography">
-    <div class="medium-12 columns learn_about_assets block_container">
+</div>
+
+<% content_for :subfooter do %>
+  <div class="learn-about-assets">
+    <div class="medium-12 columns block_container">
       <div class="small-3 columns tree_graphic">
         <%= image_tag 'bonsai-tree.svg', class: 'filter-primary-blue' %>
       </div>
@@ -66,7 +69,4 @@
       </div>
     </div>
   </div>
-</div>
-
-
-
+<% end %>
