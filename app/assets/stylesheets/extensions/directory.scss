@@ -27,7 +27,15 @@
 }
 
 .block_container {
-  padding: 32px 55px !important
+  padding: rem-calc(24 56);
+
+  @media #{$mobile-only} {
+    padding: rem-calc(24 18);
+
+    header {
+      text-align: center;
+    }
+  }
 }
 
 .tree_graphic {

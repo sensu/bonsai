@@ -10,26 +10,13 @@
 
     <div class="medium-12 columns share-cta-container block_container">
       <header>Tags</header>
-      <div class='categories-container'>
+      <div class='tags-container'>
         <ul>
           <% @top_tags.each do |t| %>
             <li><%= link_to t.name.titlecase, extensions_path(q: t.name) %></li>
           <% end %>
         </ul>
       </div>
-
-      <br/>
-
-      <% if @top_collections.present? %>
-        <header>Collections</header>
-        <div class='categories-container'>
-          <ul>
-            <% @top_collections.each do |collection| %>
-              <li><%= link_to collection.title, extensions_collections_path %></li>
-            <% end %>
-          </ul>
-        </div>
-      <% end %>
     </div>
 
     <div class="medium-12 columns share-cta-container block_container">
@@ -46,10 +33,9 @@
       </div>
     </div>
 
-        <div class="small-12 columns share-cta-container block_container view_all">
-          <%= link_to "View All Assets".html_safe, extensions_path, class: 'button secondary radius' %>
-        </div>
-
+    <div class="small-12 columns share-cta-container block_container view_all">
+      <%= link_to "View All Assets".html_safe, extensions_path, class: 'button secondary radius' %>
+    </div>
   </div>
 
   <div class="share-cta standard-typography">
@@ -83,4 +69,4 @@
 </div>
 
 
-          
+

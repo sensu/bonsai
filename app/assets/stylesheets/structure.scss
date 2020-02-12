@@ -622,6 +622,27 @@ footer#footer {
   }
 }
 
+.tags-container {
+  max-width: 75ch;
+  text-align: center;
+  margin: 0 auto;
+
+  ul {
+    list-style: none;
+  }
+  li {
+    display: inline-block;
+    background-color: $primary_blue;
+
+    padding: rem-calc(8);
+    margin: rem-calc(4);
+
+    a {
+      color: $secondary_color;
+    }
+  }
+}
+
 .extensions-features {
   .featured-extension {
     margin-bottom: 16px;
