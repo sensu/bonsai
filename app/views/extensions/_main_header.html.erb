@@ -115,8 +115,10 @@
         </span>
       <% end %>
     </span>
-    ·
-    Published <%= time_ago_in_words(version.updated_at) %> ago
+    <% unless version.nil? %>
+      ·
+      Published <%= time_ago_in_words(version.updated_at) %> ago
+    <% end %>
   </p>
 
 </div>
