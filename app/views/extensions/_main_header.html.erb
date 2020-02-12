@@ -102,7 +102,11 @@
   <% end %>
 
   <p class="description" itemprop="description">
-    v<%= version&.version || "—" %>
+    <% if version.present? %>
+      <%= format_version version.version %>
+    <% else %>
+      —
+    <% end %>
     ·
     <span>
       <% if extension.privacy? %>

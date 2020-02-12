@@ -293,5 +293,16 @@ module ExtensionsHelper
     url.host = request.host
     link_to message, url.to_s, target: '_blank'
   end
+
+  # Format version identifier
+  # @param version [String]
+  def format_version(version)
+    begin
+      semver = Semverse::Version.new(version)
+      "v#{semver.to_s}"
+    rescue
+      version
+    end
+  end
 end
 
