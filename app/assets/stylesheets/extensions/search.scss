@@ -7,13 +7,11 @@
 // Styles for the Extensions search interface
 
 .search_bar {
-  background-color: #202641;
-  background-image: image_url("header_background.png");
+  background-color: rgb(246, 246, 246);
   background-repeat: no-repeat;
-  background-position: right;
   background-size: contain;
   border: none;
-  padding: rem-calc(50 55 21);
+  padding: rem-calc(35 55);
 }
 
 @media #{$mobile-only} {
@@ -269,13 +267,13 @@ input[type="search"].extension_search_textfield {
   cursor: pointer;
   text-align: left;
   margin-top: rem-calc(5);
-  color: white;
+  color: #4f657f;
 
   span {
-    color: white;
+    color: #4f657f;
     font: rem-calc(12) $accent_font;
     &:hover{
-      color: white;
+      color: #859ab3 !important;
     }
   }
 }

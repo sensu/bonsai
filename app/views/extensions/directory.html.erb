@@ -1,61 +1,60 @@
 <%= provide(:title, "#{t('nouns.extension').pluralize.titleize} Directory") %>
 <%= provide(:description, "Browse and search Sensu #{t('nouns.extension').pluralize}. Learn how to use and create #{t('nouns.extension').pluralize} for configuring your infrastructure.") %>
 <%= provide(:cta) do %>
-  <span>Welcome to Bonsai, the Sensu asset index.<br/> Discover and <%= link_to "share", new_extension_path %> assets for all your monitoring needs.</span>
+  <h1 class="directory_title">Bonsai, the Sensu asset hub.</h1>
+  <span>Discover and <%= link_to "share", new_extension_path %> assets for all your monitoring needs.</span>
 <% end %>
 
-<div class="page nobg">
-  <div class="row extensions-features bottom-space standard-typography">
+<div class="page">
+  <div class="extensions-features bottom-space standard-typography">
 
-    <div class="medium-4 columns">
-      <header>Recently updated</header>
-      <%= render "featured", extensions: @recently_updated_extensions %>
-    </div>
-
-    <div class="medium-5 columns">
-      <header>Most downloaded</header>
-      <%= render "featured", extensions: @most_downloaded_extensions %>
-    </div>
-
-    <div class="medium-3 columns">
+    <div class="medium-12 columns share-cta-container block_container">
       <header>Tags</header>
-      <div class='categories-container'>
+      <div class='tags-container'>
         <ul>
           <% @top_tags.each do |t| %>
             <li><%= link_to t.name.titlecase, extensions_path(q: t.name) %></li>
           <% end %>
         </ul>
       </div>
+    </div>
 
-      <br/>
-
-      <% if @top_collections.present? %>
-        <header>Collections</header>
-        <div class='categories-container'>
-          <ul>
-            <% @top_collections.each do |collection| %>
-              <li><%= link_to collection.title, extensions_collections_path %></li>
-            <% end %>
-          </ul>
-        </div>
+    <div class="medium-12 columns share-cta-container block_container">
+      <header>Most downloaded</header>
+      <div class="featured-extension">
+        <%= render "featured", extensions: @most_downloaded_extensions %>
       </div>
-    <% end %>
+    </div>
 
+    <div class="medium-12 columns share-cta-container block_container">
+      <header>Recently updated</header>
+      <div class="featured-extension">
+        <%= render "featured", extensions: @recently_updated_extensions %>
+      </div>
+    </div>
+
+    <div class="small-12 columns share-cta-container block_container view_all">
+      <%= link_to "View All Assets".html_safe, extensions_path, class: 'button secondary radius' %>
+    </div>
   </div>
 
-  <div class="row share-cta standard-typography">
-    <div class="medium-10 medium-offset-1 columns share-cta-container">
-      <div class="share-cta-logo-container">
-        <%= image_tag 'logo-icon-sensu.svg', class: 'logoIcon filter-primary-blue share-cta-logo' %>
-      </div>
-      <div class="small-3 columns">
+</div>
+
+<% content_for :subfooter do %>
+  <div class="learn-about-assets">
+    <div class="medium-12 columns block_container">
+      <div class="small-3 columns tree_graphic">
         <%= image_tag 'bonsai-tree.svg', class: 'filter-primary-blue' %>
       </div>
       <div class="small-9 columns share-cta-header end">
         <h3>Learn about Sensu assets</h3>
-      
+
         <h4>What is an asset?</h4>
         <p>Assets are shareable, reusable packages that make it easy to deploy Sensu plugins. You can use assets to provide the plugins, libraries, and runtimes you need to automate your monitoring workflows. Log in with your GitHub account to <a href="https://bonsai.sensu.io/new" rel="nofollow">share your assets</a> on Bonsai.</p>
+      </div>
+      <div class="small-12 columns">
+
+
         <h4>Tiers</h4>
         <ul>
           <li><a href="https://bonsai.sensu.io/assets?tiers%5B%5D=1" rel="nofollow">Community</a> - Open-source assets shared by the Sensu Community. Collaborate, share, and star your favorites with Bonsai.</li>
@@ -70,7 +69,4 @@
       </div>
     </div>
   </div>
-</div>
-
-
-          
+<% end %>

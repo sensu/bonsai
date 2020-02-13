@@ -36,9 +36,7 @@
         <div class="inner_wrap">
           <div class="logo_and_nav_toggle">
             <%= link_to root_path do %>
-              <%= image_tag 'logo-wordmark-sensu.svg', class: 'logoWordmark' %>
-              <%= image_tag 'logo-icon-sensu.svg', class: 'logoIcon filter-primary-green' %>
-              <h2 class="logoText"><span>Sensu Asset Index</span></h2>
+              <%= image_tag 'sensu-logo-horizontal.png', class: 'logoWordmark' %>
             <% end %>
           </div>
           <%= render partial: 'appheader' %>
@@ -62,7 +60,9 @@
         <%= yield %>
       </div>
 
-      <footer id="subfooter">
+      <footer class="app-footer">
+        <%= yield :subfooter %>
+
         <section class="subfooter-communication">
           <div class='row'>
             <div class="follow" id="follow">
@@ -92,18 +92,16 @@
             </div>
           </div>
         </section>
-      </footer>
-      <footer id="footer">
+
         <section class="footer-area">
           <div class="row text-center">
             <div class="copyright">Made with #monitoringlove by Sensu, Inc. © 2013-2019</div>
           </div>
         </section>
       </footer>
-    </div>
 
     <%= yield :script %>
-    
+
   </body>
 </html>
 

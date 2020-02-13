@@ -21,7 +21,7 @@
   <h1 class="heading">
     <span itemprop="name"><%= extension.owner_name %>/<%= extension.name %></span>
 
-    <small class="version_dropdown">
+    <div class="header-actions">
       <% if extension_versions.count > 0 %>
         <%- if policy(extension).change_tier? %>
           <%= link_to '#', 'data-dropdown' => 'tiers', class: 'button radius tiny dropdown secondary', rel: 'extension_tiers' do %>
@@ -83,25 +83,30 @@
       <% if policy(extension).manage? || policy(extension).sync_repo? %>
         <%= render "extensions/manage_extension", extension: extension, version: version %>
       <% end %>
-    </small>
+    </div>
   </h1>
 
   <% if extension.parent_name.present? && extension.parent_owner_name.present? %>
     <p class="small-12 title">
       <%- parent_extension = extension.parent %>
-      <i class="fa fa-exclamation-triangle"></i>
-      <span>Forked from:</span>
       <% if parent_extension.present? %>
-        <%= link_to "#{extension.parent_owner_name}/#{extension.parent_name}", owner_scoped_extension_url(parent_extension) %>
+        <span><i class="fa fa-code-branch"></i> forked from <%= link_to "#{extension.parent_owner_name}/#{extension.parent_name}", owner_scoped_extension_url(parent_extension) %></span>
       <% else %>
-        <span><%= extension.parent_owner_name %>/<%= extension.parent_name %></span>
-        <p>This asset is forked from an upstream project at <%= link_to extension.parent_html_url, extension.parent_html_url, target: '_blank' %> but does not yet have a Bonsai asset.  Please contact <%= extension.parent_owner_name %> and see if they need help getting assets listed here</p>
+        <span><i class="fa fa-code-branch"></i> forked from <%= link_to extension.parent_html_url, extension.parent_html_url, target: '_blank' %></span>
+        <p class="forked-notice">
+            <i class="fa fa-exclamation-triangle"></i>
+            This asset is forked from an upstream project at <%= link_to extension.parent_html_url, extension.parent_html_url, target: '_blank' %> that does not yet exist as a Bonsai asset.
+        </p>
       <% end %>
     </p>
   <% end %>
 
   <p class="description" itemprop="description">
-    v<%= version&.version || "—" %>
+    <% if version.present? %>
+      <%= format_version version.version %>
+    <% else %>
+      —
+    <% end %>
     ·
     <span>
       <% if extension.privacy? %>

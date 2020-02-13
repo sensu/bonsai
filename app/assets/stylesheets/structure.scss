@@ -11,17 +11,17 @@ html, body {
   font-family: $body-font-family;
 }
 
-@media #{$mobile-only} {
-  html, body, h1, h2, h3, h4, h5, h6, p, li, span, blockquote, a, pre, code { font-size: 88%; }
-}
+// @media #{$mobile-only} {
+//   html, body, h1, h2, h3, h4, h5, h6, p, li, span, blockquote, a, pre, code { font-size: 88%; }
+// }
 
-@media #{$small-only} {
-   html, body, h1, h2, h3, h4, h5, h6, p, li, span, blockquote, a, pre, code { font-size: 95%; }
-}
+// @media #{$small-only} {
+//    html, body, h1, h2, h3, h4, h5, h6, p, li, span, blockquote, a, pre, code { font-size: 95%; }
+// }
 
-@media #{$medium-only} {
-  html, body, h1, h2, h3, h4, h5, h6, p, li, span, blockquote, a, pre, code { font-size: 95%; }
-}
+// @media #{$medium-only} {
+//   html, body, h1, h2, h3, h4, h5, h6, p, li, span, blockquote, a, pre, code { font-size: 95%; }
+// }
 
 body {
   background: white;
@@ -69,6 +69,14 @@ pre {
 
   line-height: rem-calc(24);
   padding: rem-calc(8 20);
+}
+
+h3 {
+  font-size: 1.2rem;
+}
+
+h4 {
+  font-size: 1.10rem;
 }
 
 .full-height {
@@ -510,47 +518,13 @@ ul.off-canvas-list li a {
   border-bottom: 1px solid #132631;
 }
 
-footer#subfooter {
-  .subfooter-communication {
-    color: #bbbbbb;
-    text-align: center;
-    border-top: 1px solid $secondary_gray;
-    font-size: 16px;
-
-    .fa {
-      font-size: 24px;
-    }
-
-    a {
-      padding: 1ex;
-      text-decoration: none;
-      white-space: nowrap;
-      transition: 400ms all;
-      &:hover {
-        color: white;
-      }
-    }
-
-    .row {
-      padding: .8em 0;
-
-    }
-
-    .footer-links {
-      font-size: smaller;
-    }
-  }
+.app-footer {
+  background: rgb(43, 52, 88);
+  display: flex;
+  flex-direction: column;
 }
 
-footer#footer {
-
-  .copyright {
-    color: $secondary_gray;
-    font-size: 11px;
-    padding-top: rem-calc(5);
-    padding-bottom: rem-calc(15);
-  }
-
+.app-footer .footer-area {
   a {
     display: inline-block;
     color: $secondary_gray;
@@ -562,19 +536,49 @@ footer#footer {
   }
 }
 
-.cta-banner {
-  background: #f5f5f5;
+.app-footer .subfooter-communication {
+  color: rgb(201, 204, 214);
   text-align: center;
-  padding: 35px 0;
+  font-size: 16px;
+
+  .fa {
+    font-size: 24px;
+  }
+
+  a {
+    padding: 1ex;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: 400ms all;
+    &:hover {
+      color: white;
+    }
+  }
+
+  .row {
+    padding: .8em 0;
+
+  }
+
+  .footer-links {
+    font-size: smaller;
+  }
+}
+
+.app-footer .copyright {
+  color: $secondary_gray;
+  font-size: 11px;
+  padding-top: rem-calc(5);
+  padding-bottom: rem-calc(15);
+}
+
+.cta-banner {
+  background: rgb(246, 246, 246);
+  text-align: center;
+  padding: 0 0 32px;
   font-size: 20px;
   font-weight: 600;
   line-height: 24px;
-  a {
-    color: $primary_green !important;
-  }
-  a:hover {
-    color: scale-color($primary_green, $lightness: 35%) !important;
-  }
 }
 
 .share-cta-container {
@@ -583,7 +587,6 @@ footer#footer {
 }
 
 .share-cta-logo-container {
-  position: absolute;
   top: -9px;
   width: 100%;
   text-align: center;
@@ -605,9 +608,6 @@ footer#footer {
     font-size: 18px;
     line-height: 20px;
   }
-  a {
-    font-size: 18px !important;
-  }
 }
 
 .categories-container {
@@ -620,21 +620,55 @@ footer#footer {
   }
 }
 
+.tags-container {
+  max-width: 75ch;
+  text-align: center;
+  margin: 0 auto;
+
+  ul {
+    list-style: none;
+  }
+  li {
+    display: inline-block;
+    background-color: $primary_blue;
+
+    padding: rem-calc(8);
+    margin: rem-calc(4);
+
+    a {
+      color: $secondary_color;
+    }
+  }
+}
+
 .extensions-features {
   .featured-extension {
-    margin-bottom: 16px;
-
     header {
       font-size: 20px;
       margin-bottom: 4px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+
       span {
         font-size: 18px;
         color: #8b8d88;
         margin-right: 8px;
       }
     }
+
+    .cell {
+      margin-bottom: 1rem;
+    }
+
+    .tags {
+      height: 1.7em;
+      overflow: hidden;
+    }
+
     p.tags a {
       margin-right: 4px;
+      white-space: nowrap;
     }
 
     .tier-declaration {
@@ -682,12 +716,10 @@ footer#footer {
    line-height x #oflines - 0.4
    the 0.4 offset is to make the cutoff  look nicer */
 .lines-3{
-  max-height: 4.5em;
-  min-height: 3em;
+  height: 4.1em;
 }
 .lines-6{
-  max-height: 7.8em;
-  min-height: 6em;
+  height: 7.4em;
 }
 .truncate {
   overflow: hidden;

@@ -208,8 +208,12 @@
     }
   }
 
-  .version_dropdown {
+  .header-actions {
     float: right;
+
+    @media #{$mobile-only} {
+      display: none;
+    }
   }
 
   #versions li:hover {
@@ -305,7 +309,7 @@
   }
 
   .description {
-    width: 540px;
+    max-width: 75ch;
     font-size: smaller;
   }
 
@@ -405,4 +409,8 @@
 
 .ext-private {
   color: lighten($notice_primary_red, 24%);
+}
+
+.forked-notice {
+  color: grey;
 }

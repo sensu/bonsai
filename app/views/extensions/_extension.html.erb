@@ -27,19 +27,19 @@
         <span><%= extension.tier_name %> tier</span>
       </span>
       <span class="small-2 columns title date-modified end">
-        <span>Updated</span>
-        <span itemprop="dateModified"><%= extension.updated_at.to_s(:longish) %></span>
+        <span>Published</span>
+        <span itemprop="datePublished"><%= (extension.latest_extension_version&.updated_at || extension.updated_at).to_s(:longish) %></span>
       </span>
 
       <% if extension.parent_name.present? && extension.parent_owner_name.present? %>
         <span class="small-12 title">
           <%- parent_extension = extension.parent %>
-          <i class="fa fa-exclamation-triangle"></i> 
-          <span>Forked from:</span>
+          <i class="fa fa-code-branch"></i>
+          <span>forked from</span>
           <% if parent_extension.present? %>
             <%= link_to "#{extension.parent_owner_name}/#{extension.parent_name}", owner_scoped_extension_url(parent_extension) %>
           <% else %>
-            <span><%= link_to extension.parent_html_url, extension.parent_html_url, target: '_blank' %> (it does not yet have a Bonsai asset).</span>
+            <span><%= link_to extension.parent_html_url, extension.parent_html_url, target: '_blank' %>; it does not yet have a Bonsai asset.</span>
           <% end %>
         </span>
 
@@ -71,10 +71,6 @@
   <div class="bottom">
     <div class="bottom-content">
       <ul class="extension_stats">
-        <li>
-          <span itemprop="interactionCount"><%= number_with_delimiter(extension.download_count) %></span>
-          <h5>Total Downloads</h5>
-        </li>
         <span id="<%= extension.lowercase_name %>-follow-button-list">
           <%= render 'extensions/follow_button_list', extension: extension %>
         </span>
