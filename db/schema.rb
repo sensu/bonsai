@@ -10,10 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_13_232729) do
+ActiveRecord::Schema.define(version: 2020_02_13_183814) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pg_stat_statements"
+  enable_extension "citext"
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
 
@@ -357,7 +357,7 @@ ActiveRecord::Schema.define(version: 2020_01_13_232729) do
     t.text "license_text", default: ""
     t.boolean "enabled", default: true, null: false
     t.integer "github_organization_id"
-    t.string "owner_name"
+    t.citext "owner_name"
     t.bigint "tier_id"
     t.bigint "selected_version_id"
     t.bigint "parent_id"
