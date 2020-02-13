@@ -27,8 +27,8 @@
         <span><%= extension.tier_name %> tier</span>
       </span>
       <span class="small-2 columns title date-modified end">
-        <span>Updated</span>
-        <span itemprop="dateModified"><%= extension.updated_at.to_s(:longish) %></span>
+        <span>Published</span>
+        <span itemprop="datePublished"><%= (extension.latest_extension_version&.updated_at || extension.updated_at).to_s(:longish) %></span>
       </span>
 
       <% if extension.parent_name.present? && extension.parent_owner_name.present? %>
