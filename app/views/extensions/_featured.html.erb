@@ -1,5 +1,5 @@
 <% extensions.each do |extension| %>
-  <div class="row featured-extension">
+  <div class="small-12 medium-6 large-4 left columns cell">
     <div class="small-2 columns">
       <%= link_to_gravatar(extension) %>
     </div>
@@ -18,18 +18,13 @@
           <span><%= extension.tier_name %> tier</span>
         </div>
       </header>
-      
+
       <p class='truncate lines-3'><%= extension.description %></p>
       <p class="tags">
         <% extension.tags.each do |tag| %>
-          <%= link_to tag.name, extensions_path(q: tag.name) %>
+          <span class="extension_tag"><%= link_to tag.name, extensions_path(q: tag.name) %></span>
         <% end %>
       </p>
     </div>
   </div>
 <% end %>
-<div class="row">
-  <div class="small-10 small-offset-2 columns">
-    <p><%= link_to "View All&hellip;".html_safe, extensions_path %></p>
-  </div>
-</div>

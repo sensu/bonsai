@@ -4,6 +4,64 @@
 
 // Styles for the extensions directory
 
+.learn-about-assets {
+  display: flex;
+  justify-content: center;
+  background: $sensu-green;
+
+  .block_container {
+    max-width: 85ch;
+  }
+
+  a {
+    color: $clouds;
+    text-decoration: underline;
+  }
+
+  h3, h4, p, li {
+    color: white !important;
+  }
+
+  h4 {
+    font-weight: bold;
+  };
+}
+
+.directory_title {
+  margin: 0;
+}
+
+.view_all {
+  text-align: center;
+  .view_more {
+    background: none;
+    border: 1px solid grey;
+  }
+}
+
+.block_container {
+  padding: rem-calc(24 56);
+
+  @media #{$mobile-only} {
+    padding: rem-calc(24 18);
+  }
+}
+
+.tree_graphic {
+  text-align: center;
+  padding-top: 25px;
+}
+
+.extension_tag {
+  border: 1px solid #4f657f;
+  border-radius: 3px;
+  padding: 3px;
+  margin-right: 3px;
+  a {
+    margin-right: 0 !important;
+  }
+}
+
 .extensions_columns {
   @include block-grid(3);
   margin: rem-calc(55 0);

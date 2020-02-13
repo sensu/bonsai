@@ -83,13 +83,13 @@ class ExtensionsController < ApplicationController
       where.not(owner: nil).
       where("extension_versions.version != 'master'").
       order("extension_versions.created_at DESC").
-      limit(5)
+      limit(4)
     @most_downloaded_extensions = Extension.
       filter_private(current_user).
       includes(:extension_versions).
       where.not(owner: nil).
       ordered_by('most_downloaded').
-      limit(5)
+      limit(6)
 
     @top_tags = Tag.where(
       id: Tagging.select("tag_id, count(*) as count").
