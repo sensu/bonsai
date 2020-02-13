@@ -36,7 +36,7 @@ describe ExtractExtensionVersionWorker do
       { name: "README.md", content: Base64.encode64("Hello world!") }
     end
 
-    expect(versions).to receive(:first_or_create).with(version: "1.0")
+    expect(versions).to receive(:first_or_create).with(tag: "1.0", version: "1.0")
     expect(version).to receive(:update_attributes).with(readme:           "Hello world!",
                                                         readme_extension: "md",
                                                         yml_line_count:   0,
@@ -48,7 +48,7 @@ describe ExtractExtensionVersionWorker do
   it "creates a default README if one is missing" do
     allow(octokit).to receive(:readme).with("cvincent/test", ref: "1.0").and_raise(Octokit::NotFound)
 
-    expect(versions).to receive(:first_or_create).with(version: "1.0")
+    expect(versions).to receive(:first_or_create).with(tag: "1.0", version: "1.0")
     expect(version).to receive(:update_attributes).with(readme:           "There is no README file for this asset.",
                                                         readme_extension: "txt",
                                                         yml_line_count:   0,
