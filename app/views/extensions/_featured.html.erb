@@ -1,9 +1,9 @@
 <% extensions.each do |extension| %>
-  <div class="small-6 columns">
-    <div class="small-1 columns">
+  <div class="small-12 medium-6 large-4 left columns">
+    <div class="small-2 columns">
       <%= link_to_gravatar(extension) %>
     </div>
-    <div class="small-11 columns">
+    <div class="small-10 columns">
       <% if extension.privacy? %>
         <p class="small-12">
           <i class="fa fa-eye-slash"></i>
@@ -28,4 +28,3 @@
     </div>
   </div>
 <% end %>
-
