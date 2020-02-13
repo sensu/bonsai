@@ -9,9 +9,10 @@
 // Global Header
 // Header wrapping element and row
 .globalheader {
+  position: relative;
   background-color: white;
   height: rem-calc(90);
-  padding: rem-calc(0 55);
+  padding: rem-calc(0 $xlarge-gutter);
 
   .inner_wrap {
     @include grid-row();
@@ -21,8 +22,25 @@
 
 @media #{$mobile-only} {
   .globalheader {
-    padding: rem-calc(0 18);
-    position: relative;
+    padding: rem-calc(0 $mobile-gutter);
+  }
+}
+
+@media #{$small-only} {
+  .globalheader {
+    padding: rem-calc(0 $small-gutter);
+  }
+}
+
+@media #{$medium-only} {
+  .globalheader {
+    padding: rem-calc(0 $medium-gutter);
+  }
+}
+
+@media #{$large-only} {
+  .globalheader {
+    padding: rem-calc(0 $large-gutter);
   }
 }
 
@@ -162,15 +180,9 @@
   }
 }
 
-@media #{$mobile-only} {
+@media #{$small-down} {
   .usermenu .username {
     display: none;
-  }
-}
-
-@media #{$small-only} {
-  .usermenu {
-    margin: rem-calc(0 -30 0 0);
   }
 }
 

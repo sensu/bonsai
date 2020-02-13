@@ -33,6 +33,14 @@ $total-columns: 12;
 $max-width: 1400px;
 $button-radius: rem-calc(4);
 
+// Gutters
+$mobile-gutter: 8px;
+$small-gutter: 18px;
+$medium-gutter: 55px;
+$large-gutter: 55px;
+$xlarge-gutter: 0px;
+$xxlarge-gutter: 0px;
+
 // Media Query Breaks
 $mobile-range: (0em, 32em);
 $small-range: (32.063em, 55em);

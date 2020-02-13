@@ -4,9 +4,17 @@
 // @import "compass/css3/inline-block";
 
 .extension_show {
-
   .main-header {
-    margin: rem-calc(18);
+    h1 {
+      margin-bottom: 0;
+    }
+    .heading-container {
+      margin-bottom: 0.875rem;
+    }
+    .subtitle {
+      font-size: smaller;
+      font-weight: normal;
+    }
   }
 
   .deprecation-notice {
@@ -210,6 +218,8 @@
 
   .header-actions {
     float: right;
+    font-size: small;
+    font-weight: $normal;
 
     @media #{$mobile-only} {
       display: none;

@@ -113,7 +113,7 @@ h4 {
   }
 
   &.withspace {
-    padding: rem-calc(55);
+    padding: rem-calc(32);
   }
 
   table {
@@ -139,9 +139,18 @@ h4 {
   }
 }
 
-@media #{$small-down} {
+@media #{$mobile-only} {
   .page.nobg, .page.withspace {
-    padding: rem-calc(20);
+    padding: rem-calc(16 $mobile-gutter);
+  }
+  .full-height {
+    min-height: 0;
+  }
+}
+
+@media #{$small-only} {
+  .page.nobg, .page.withspace {
+    padding: rem-calc(20 $small-gutter);
   }
   .full-height {
     min-height: 0;
@@ -150,59 +159,59 @@ h4 {
 
 @media #{$medium-only} {
   .page.nobg, .page.withspace {
-    padding: rem-calc(55);
+    padding: rem-calc(24 $medium-gutter);
   }
 }
 
 @media #{$large-only} {
   .page.nobg, .page.withspace {
-    padding: rem-calc(55);
+    padding: rem-calc(32 $large-gutter);
   }
 }
 
 @media #{$xlarge-up} {
   .page.withspace {
-    padding: rem-calc(55);
+    padding: rem-calc(32);
   }
 }
 
 @media #{$xlarge-up} {
   .page.nobg {
-    padding: rem-calc(55 0);
+    padding: rem-calc(32 $xlarge-gutter);
   }
 }
 
 .main {
   @include grid-column(8);
-  padding: rem-calc(20);
+  padding: rem-calc(0 20 0 0);
   padding-top: 0 !important;
 }
 
 @media #{$mobile-only} {
   .main {
     @include grid-column($columns: 12);
-    padding: rem-calc(10);
+    padding: rem-calc(0 10 0 0);
   }
 }
 
 @media #{$small-only} {
   .main {
     @include grid-column($columns: 12);
-    padding: rem-calc(10);
+    padding: rem-calc(0 10 0 0);
   }
 }
 
 @media #{$xlarge-up} {
   .main {
     @include grid-column($columns: 8);
-    padding: rem-calc(55);
+    padding: rem-calc(0 55 0 0);
   }
 }
 
 @media #{$redonkulous-up} {
   .main {
     @include grid-column($columns: 8);
-    padding: rem-calc(55);
+    padding: rem-calc(0 55 0 0);
   }
 }
 
@@ -662,12 +671,11 @@ ul.off-canvas-list li a {
     }
 
     .tags {
-      height: 1.7em;
+      height: 1.6em;
       overflow: hidden;
     }
 
     p.tags a {
-      margin-right: 4px;
       white-space: nowrap;
     }
 
