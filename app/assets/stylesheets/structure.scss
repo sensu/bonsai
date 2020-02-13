@@ -643,19 +643,32 @@ ul.off-canvas-list li a {
 
 .extensions-features {
   .featured-extension {
-    margin-bottom: 16px;
-
     header {
       font-size: 20px;
       margin-bottom: 4px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+
       span {
         font-size: 18px;
         color: #8b8d88;
         margin-right: 8px;
       }
     }
+
+    .cell {
+      margin-bottom: 1rem;
+    }
+
+    .tags {
+      height: 1.7em;
+      overflow: hidden;
+    }
+
     p.tags a {
       margin-right: 4px;
+      white-space: nowrap;
     }
 
     .tier-declaration {
@@ -703,12 +716,10 @@ ul.off-canvas-list li a {
    line-height x #oflines - 0.4
    the 0.4 offset is to make the cutoff  look nicer */
 .lines-3{
-  max-height: 4.5em;
-  min-height: 3em;
+  height: 4.1em;
 }
 .lines-6{
-  max-height: 7.8em;
-  min-height: 6em;
+  height: 7.4em;
 }
 .truncate {
   overflow: hidden;
