@@ -9,7 +9,8 @@ class ExtractExtensionVersionWorker < ApplicationWorker
 
     readme_body, readme_ext = fetch_readme
 
-    version = @extension.extension_versions.first_or_create(version: tag)
+    normalized_version = SemverNormalizer.call(extension_version.version)
+    version = @extension.extension_versions.first_or_create(version: normalized_version, tag: tag)
 
     version.update_attributes(
       readme: readme_body,

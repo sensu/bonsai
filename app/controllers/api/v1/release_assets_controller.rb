@@ -11,9 +11,9 @@ class Api::V1::ReleaseAssetsController < Api::V1Controller
   example "GET https://#{ENV['HOST']}/api/v1/assets/sensu/sensu-email-handler/0.2.0/release_asset_builds"
   def index
     extension = Extension.with_owner_and_lowercase_name(owner_name: params[:username], lowercase_name: params[:id])
-    @version = extension.extension_versions.find_by!(version: params[:version])
+    @version = extension.extension_versions.find_by!(version: SemverNormalizer.call(params[:version]))
   end
-  
+
   api! <<~EOD
     Retrieve #{I18n.t('indefinite_articles.extension')} #{I18n.t('nouns.extension')}'s build-specific details, suitable for consumption by the sensu tool.
   EOD
@@ -23,10 +23,10 @@ class Api::V1::ReleaseAssetsController < Api::V1Controller
   param :platform, String, required: true, desc: "target platform"
   param :arch,     String, required: true, desc: "target architecture"
   example "GET https://#{ENV['HOST']}/api/v1/assets/demillir/sensu-asset-playground/0.1.1-20181030/linux/aarch64/release_asset"
-  
+
   def show
     extension = Extension.with_owner_and_lowercase_name(owner_name: params[:username], lowercase_name: params[:id])
-    version = extension.extension_versions.find_by!(version: params[:version])
+    version = extension.extension_versions.find_by!(version: SemverNormalizer.call(params[:version]))
     @release_asset = version.release_assets.find_by(platform: params[:platform], arch: params[:arch])
     raise ActiveRecord::RecordNotFound unless @release_asset
   end

@@ -45,6 +45,8 @@ class ExtensionVersionsController < ApplicationController
     authorize! extension, :add_hosted_extension_version?
 
     @extension_version = extension.extension_versions.build(extension_version_params)
+    @extension_version.tag = @extension_version.version
+    @extension_version.version = SemverNormalizer.call(@extension_version.version)
 
     if @extension_version.save
       ExtensionNotifyWorker.perform_async(@extension_version.id)

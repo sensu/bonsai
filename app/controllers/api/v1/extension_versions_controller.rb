@@ -10,7 +10,7 @@ class Api::V1::ExtensionVersionsController < Api::V1Controller
   #
   def show
     @extension = Extension.with_name(params[:extension]).first!
-    @extension_version = @extension.get_version!(params[:version])
+    @extension_version = @extension.get_version!(SemverNormalizer.call(params[:version]))
   end
 
   #
@@ -20,7 +20,7 @@ class Api::V1::ExtensionVersionsController < Api::V1Controller
   #
   def download
     @extension = Extension.with_name(params[:extension]).first!
-    @extension_version = @extension.get_version!(params[:version])
+    @extension_version = @extension.get_version!(SemverNormalizer.call(params[:version]))
 
     ExtensionVersion.increment_counter(:api_download_count, @extension_version.id)
     Extension.increment_counter(:api_download_count, @extension.id)
