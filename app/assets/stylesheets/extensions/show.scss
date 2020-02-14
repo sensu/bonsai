@@ -424,3 +424,46 @@
 .forked-notice {
   color: grey;
 }
+
+.notice {
+  display: flex;
+  margin-bottom: 1.5em;
+  padding: 0.8em 1.5em;
+  border-radius: 5px;
+  font-size: smaller;
+  font-weight: normal;
+
+  border: 1px solid $notice_primary_blue;
+  background-color: $notice_secondary_blue;
+
+  .fa:first-child {
+    margin-right: 1rem;
+    align-self: center;
+  }
+
+  .content {
+    font-size: inherit;
+    flex-direction: column;
+    margin: 0;
+  }
+
+  &.success {
+    border: 1px solid $notice_primary_green;
+    background-color: $notice_secondary_green;
+  }
+
+  &.info {
+    border: 1px solid $notice_primary_blue;
+    background-color: $notice_secondary_blue;
+  }
+
+  &.warn {
+    border: 1px solid $notice_primary_yellow;
+    background-color: $notice_secondary_yellow;
+  }
+
+  &.critical {
+    border: 1px solid $notice_primary_blue;
+    background-color: $notice_secondary_blue;
+  }
+}

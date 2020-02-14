@@ -1,6 +1,15 @@
 <div class="main-header">
   <%= render 'extensions/compilation_errors', extension: extension, version: version %>
 
+  <% if extension.parent_name.present? && extension.parent_owner_name.present? && extension.parent.nil? %>
+    <div class="notice warn">
+      <i class="fa fa-exclamation-triangle"></i>
+      <p class="content">
+        This asset is forked from an upstream project at <%= link_to extension.parent_html_url, extension.parent_html_url, target: '_blank' %> that does not yet exist as a Bonsai asset.
+      </p>
+    </div>
+  <% end %>
+
   <div id='extension-compilation-status' class='compilation-status-container'>
     <%= hidden_field_tag :no_reload %>
   </div>
@@ -93,10 +102,6 @@
         <p class="subtitle"><i class="fa fa-code-branch"></i> forked from <%= link_to "#{extension.parent_owner_name}/#{extension.parent_name}", owner_scoped_extension_url(parent_extension) %></p>
       <% else %>
         <p class="subtitle"><i class="fa fa-code-branch"></i> forked from <%= link_to extension.parent_html_url, extension.parent_html_url, target: '_blank' %></p>
-        <p class="forked-notice">
-            <i class="fa fa-exclamation-triangle"></i>
-            This asset is forked from an upstream project at <%= link_to extension.parent_html_url, extension.parent_html_url, target: '_blank' %> that does not yet exist as a Bonsai asset.
-        </p>
       <% end %>
     <% end %>
   </div>
