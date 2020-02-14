@@ -10,36 +10,36 @@
 // Header wrapping element and row
 .globalheader {
   position: relative;
-  background-color: white;
   height: rem-calc(90);
-  padding: rem-calc(0 $xlarge-gutter);
+  background-color: white;
 
   .inner_wrap {
     @include grid-row();
     max-width: $max-width;
+    padding: rem-calc(0 $xlarge-gutter);
   }
 }
 
 @media #{$mobile-only} {
-  .globalheader {
+  .globalheader .inner_wrap {
     padding: rem-calc(0 $mobile-gutter);
   }
 }
 
 @media #{$small-only} {
-  .globalheader {
+  .globalheader .inner_wrap {
     padding: rem-calc(0 $small-gutter);
   }
 }
 
 @media #{$medium-only} {
-  .globalheader {
+  .globalheader .inner_wrap {
     padding: rem-calc(0 $medium-gutter);
   }
 }
 
 @media #{$large-only} {
-  .globalheader {
+  .globalheader .inner_wrap {
     padding: rem-calc(0 $large-gutter);
   }
 }
