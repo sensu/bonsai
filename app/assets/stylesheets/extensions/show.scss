@@ -217,12 +217,22 @@
   }
 
   .header-actions {
+    display: flex;
     float: right;
+    align-items: center;
+
+    list-style-type: none;
+
     font-size: small;
     font-weight: $normal;
 
     @media #{$mobile-only} {
       display: none;
+    }
+
+    li {
+      float: left;
+      margin-right: rem-calc(6);
     }
   }
 

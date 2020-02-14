@@ -31,69 +31,75 @@
     <h1 class="heading">
       <span itemprop="name"><%= extension.owner_name %>/<%= extension.name %></span>
 
-      <div class="header-actions">
+      <ul class="header-actions">
         <% if extension_versions.count > 0 %>
-          <%- if policy(extension).change_tier? %>
-            <%= link_to '#', 'data-dropdown' => 'tiers', class: 'button radius tiny dropdown secondary', rel: 'extension_tiers' do %>
-              <i class="fa fa-<%= @extension.try(:tier_icon_name) %>"></i>
-              <span><%= extension.try(:tier_name) %> Tier</span>
+          <li>
+            <%- if policy(extension).change_tier? %>
+              <%= link_to '#', 'data-dropdown' => 'tiers', class: 'button radius tiny dropdown secondary', rel: 'extension_tiers' do %>
+                <i class="fa fa-<%= @extension.try(:tier_icon_name) %>"></i>
+                <span><%= extension.try(:tier_name) %> Tier</span>
+              <% end %>
+              <ul id="tiers" data-dropdown-content class="f-dropdown">
+                <li>
+                  <ul style="list-style-type: none">
+                    <% Tier.rank(:rank).each do |tier| %>
+                      <li>
+                        <%= link_to extension_tier_path(extension, tier, username: extension.owner_name), method: :put, rel: 'extension_tier' do %>
+                          <span><i class="fa fa-<%= tier.icon_name %>"></i> <%= tier.name %></span>
+                        <% end %>
+                      </li>
+                    <% end %>
+                  </ul>
+                </li>
+              </ul>
+            <% else %>
+              <% if (tier_id = extension.try(:tier_id)).present? %>
+                <span class="tier <%= extension.tier_name.underscore.gsub(/\s+/, '-') %>">
+                  <i class="fa fa-<%= extension.try(:tier_icon_name) %>"></i>
+                  <%= link_to extensions_path('tiers[]' => tier_id ), data: {tooltip: true}, title: tier_description(extension.try(:tier_name)) do %>
+                    <span><%= extension.try(:tier_name) %> Tier</span>
+                  <% end %>
+                </span>
+              <% end %>
             <% end %>
-            <ul id="tiers" data-dropdown-content class="f-dropdown">
+          </li>
+          <li>
+            <%= link_to '#', 'data-dropdown' => 'versions', class: 'button radius tiny dropdown secondary', rel: 'extension_versions' do %>
+              <span class="versions_count"><%= pluralize "(#{extension_versions.count})", 'Version' %></span>
+              <span><%= version.try(:version) %></span>
+            <% end %>
+            <ul id="versions" data-dropdown-content class="f-dropdown">
               <li>
-                <ul style="list-style-type: none">
-                  <% Tier.rank(:rank).each do |tier| %>
+                <ul>
+                  <%- if extension.hosted? && policy(extension).add_hosted_extension_version? %>
                     <li>
-                      <%= link_to extension_tier_path(extension, tier, username: extension.owner_name), method: :put, rel: 'extension_tier' do %>
-                        <span><i class="fa fa-<%= tier.icon_name %>"></i> <%= tier.name %></span>
+                      <%= link_to new_extension_version_path(extension, username: extension.owner_name), rel: 'add-version' do %>
+                        <i class="fa fa-cloud-upload"></i>
+                        <span>Add a version</span>
+                      <% end %>
+                    </li>
+                  <%- end %>
+                  <% extension_versions.each do |extension_version| %>
+                    <li>
+                      <%= link_to extension_version_path(extension, extension_version, username: extension.owner_name), rel: 'extension_version' do %>
+                        <span><%= extension_version.version %></span>
+                        <% if extension_version == version %>
+                          <i class="fa fa-check right"></i>
+                        <% end %>
                       <% end %>
                     </li>
                   <% end %>
                 </ul>
               </li>
             </ul>
-          <% else %>
-            <% if (tier_id = extension.try(:tier_id)).present? %>
-              <span class="tier <%= extension.tier_name.underscore.gsub(/\s+/, '-') %>">
-                <i class="fa fa-<%= extension.try(:tier_icon_name) %>"></i>
-                <%= link_to extensions_path('tiers[]' => tier_id ), data: {tooltip: true}, title: tier_description(extension.try(:tier_name)) do %>
-                  <span><%= extension.try(:tier_name) %> Tier</span>
-                <% end %>
-              </span>
-            <% end %>
-          <% end %>
-          <%= link_to '#', 'data-dropdown' => 'versions', class: 'button radius tiny dropdown secondary', rel: 'extension_versions' do %>
-            <span class="versions_count"><%= pluralize "(#{extension_versions.count})", 'Version' %></span>
-            <span><%= version.try(:version) %></span>
-          <% end %>
-          <ul id="versions" data-dropdown-content class="f-dropdown">
-            <li>
-              <ul>
-                <%- if extension.hosted? && policy(extension).add_hosted_extension_version? %>
-                  <li>
-                    <%= link_to new_extension_version_path(extension, username: extension.owner_name), rel: 'add-version' do %>
-                      <i class="fa fa-cloud-upload"></i>
-                      <span>Add a version</span>
-                    <% end %>
-                  </li>
-                <%- end %>
-                <% extension_versions.each do |extension_version| %>
-                  <li>
-                    <%= link_to extension_version_path(extension, extension_version, username: extension.owner_name), rel: 'extension_version' do %>
-                      <span><%= extension_version.version %></span>
-                      <% if extension_version == version %>
-                        <i class="fa fa-check right"></i>
-                      <% end %>
-                    <% end %>
-                  </li>
-                <% end %>
-              </ul>
-            </li>
-          </ul>
+          </li>
         <% end %>
         <% if policy(extension).manage? || policy(extension).sync_repo? %>
-          <%= render "extensions/manage_extension", extension: extension, version: version %>
+          <li>
+            <%= render "extensions/manage_extension", extension: extension, version: version %>
+          </li>
         <% end %>
-      </div>
+      </ul>
     </h1>
 
     <% if extension.parent_name.present? && extension.parent_owner_name.present? %>
