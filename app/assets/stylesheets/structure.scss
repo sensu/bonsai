@@ -643,6 +643,7 @@ ul.off-canvas-list li a {
 
     padding: rem-calc(8);
     margin: rem-calc(4);
+    border-radius: $button-radius;
 
     a {
       color: $secondary_color;
