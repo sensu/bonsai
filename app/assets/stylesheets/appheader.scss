@@ -9,20 +9,38 @@
 // Global Header
 // Header wrapping element and row
 .globalheader {
-  background-color: white;
+  position: relative;
   height: rem-calc(90);
-  padding: rem-calc(0 55);
+  background-color: white;
 
   .inner_wrap {
     @include grid-row();
     max-width: $max-width;
+    padding: rem-calc(0 $xlarge-gutter);
   }
 }
 
 @media #{$mobile-only} {
-  .globalheader {
-    padding: rem-calc(0 18);
-    position: relative;
+  .globalheader .inner_wrap {
+    padding: rem-calc(0 $mobile-gutter);
+  }
+}
+
+@media #{$small-only} {
+  .globalheader .inner_wrap {
+    padding: rem-calc(0 $small-gutter);
+  }
+}
+
+@media #{$medium-only} {
+  .globalheader .inner_wrap {
+    padding: rem-calc(0 $medium-gutter);
+  }
+}
+
+@media #{$large-only} {
+  .globalheader .inner_wrap {
+    padding: rem-calc(0 $large-gutter);
   }
 }
 
@@ -162,15 +180,9 @@
   }
 }
 
-@media #{$mobile-only} {
+@media #{$small-down} {
   .usermenu .username {
     display: none;
-  }
-}
-
-@media #{$small-only} {
-  .usermenu {
-    margin: rem-calc(0 -30 0 0);
   }
 }
 

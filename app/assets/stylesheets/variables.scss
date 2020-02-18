@@ -19,6 +19,8 @@ $notice_primary_yellow: #FFFF33;
 $notice_secondary_yellow: #FFFFE0;
 $notice_primary_green: #00994C;
 $notice_secondary_green: #89c967;
+$notice_primary_blue: #4f657f;
+$notice_secondary_blue: #ACC2E0;
 $body-bg: #ecf0f1;
 $body-font-color: $black;
 $primary-color: $primary_blue;
@@ -31,6 +33,15 @@ $row-width: 100%;
 $column-gutter: rem-calc(30);
 $total-columns: 12;
 $max-width: 1400px;
+$button-radius: rem-calc(4);
+
+// Gutters
+$mobile-gutter: 8px;
+$small-gutter: 18px;
+$medium-gutter: 55px;
+$large-gutter: 55px;
+$xlarge-gutter: 0px;
+$xxlarge-gutter: 0px;
 
 // Media Query Breaks
 $mobile-range: (0em, 32em);
