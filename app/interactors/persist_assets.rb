@@ -11,13 +11,11 @@ class PersistAssets
   	context.fail!(error: "Do not store assets for master version") if version.version == 'master'
   	context.fail!(error: "#{version.version} has no config") if version.config.blank?
   	context.fail!(error: "#{version.version} has no builds in config") if version.config['builds'].blank?
-  	
-  	puts "Copying assets for #{version.version} to S3"
 
     version.config['builds'].each do |build|
 
       if build['asset_url'].blank?
-        puts "**** Error in Source URL: #{build['asset_url']}"
+        context.error = "Error in Source URL: #{build['asset_url']}"
         next
       end
 
@@ -29,7 +27,7 @@ class PersistAssets
         #puts "******** URI #{release_asset.source_asset_url}"
         url = URI(release_asset.source_asset_url)
       rescue URI::Error => error
-        puts "******** URI error: #{release_asset.source_asset_url} - #{error.message}"
+        context.error = "URI error: #{release_asset.source_asset_url} - #{error.message}"
         next
       end
 
@@ -42,9 +40,8 @@ class PersistAssets
         # to update files in case they were changed.
         begin
           context.s3_bucket.object(key).delete
-          puts "Removed file from S3: #{key}"
         rescue Aws::S3::Errors::ServiceError => error 
-          puts "****** S3 error: #{error.code} - #{error.message}"
+          context.error = "S3 error: #{error.code} - #{error.message}"
         end
       end 
 
@@ -54,17 +51,16 @@ class PersistAssets
       rescue OpenURI::HTTPError => error
         status = error.io.status[0]
         message = error.io.status[1]
-        puts "****** file read error: #{status} - #{message}"
+        context.error = "file read error: #{status} - #{message}"
         next
       end
      
       begin
         context.s3_bucket.object(key).put(body: file, acl: 'public-read')
-        puts "File saved to S3: #{key}"
         uri = URI(context.s3_bucket.object(key).public_url)
         last_modified = context.s3_bucket.object(key).last_modified
       rescue Aws::S3::Errors::ServiceError => error 
-        puts "****** S3 error: #{error.code} - #{error.message}"
+        context.error =  "S3 error: #{error.code} - #{error.message}"
         next
       end
 
@@ -74,7 +70,6 @@ class PersistAssets
         # remove the bucket from the path if returned in that format
         # note that this does not change the host
         uri.path.gsub!(/#{ENV['AWS_S3_ASSETS_BUCKET']}\//, '')
-        puts "******** Updating vanity_url: #{uri.to_s}"
       end
       release_asset.update_columns(vanity_url: uri.to_s, last_modified: last_modified)
 

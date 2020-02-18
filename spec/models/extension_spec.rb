@@ -58,7 +58,7 @@ describe Extension do
       versions[4].update(version: 'master')
       version_5 = versions[5].version
       sorted_versions.reload
-      puts sorted_versions.map(&:version) #{|v| v.version.gsub(/V|v|master|\+(.*)|-(.*)/, '')}
+      # puts sorted_versions.map(&:version) #{|v| v.version.gsub(/V|v|master|\+(.*)|-(.*)/, '')}
       expect(sorted_versions.first.version).to eq(version_5)
     end
   end

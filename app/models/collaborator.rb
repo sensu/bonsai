@@ -14,9 +14,35 @@ class Collaborator < ApplicationRecord # Associations
   # --------------------
   attr_accessor :user_ids
 
+  class << self 
+    #
+    # Returns the ineligible users for collaboration for a given resource.
+    #
+    def ineligible_collaborators_for(resource)
+      [resource.collaborator_users, resource.owner].flatten
+    end
+
+    #
+    # Returns the ineligible users for ownership for a given resource.
+    #
+    def ineligible_owners_for(resource)
+      [resource.owner]
+    end
+
+    #
+    # returns records for user
+    #
+    def includes_user(username)
+      user_ids = Account.for_provider.with_username(username).pluck(:user_id)
+      where(user_id: user_ids)
+    end
+
+  end # class << self
+
   def resourceable_with_unscoped
     resourceable_type.constantize.unscoped { resourceable_without_unscoped }
   end
+
   # alias_method_chain :resourceable, :unscoped
 
   #
@@ -31,17 +57,4 @@ class Collaborator < ApplicationRecord # Associations
     end
   end
 
-  #
-  # Returns the ineligible users for collaboration for a given resource.
-  #
-  def self.ineligible_collaborators_for(resource)
-    [resource.collaborator_users, resource.owner].flatten
-  end
-
-  #
-  # Returns the ineligible users for ownership for a given resource.
-  #
-  def self.ineligible_owners_for(resource)
-    [resource.owner]
-  end
 end

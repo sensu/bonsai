@@ -5,39 +5,29 @@
 class CompileExtension
   include Interactor
 
-  # The required context attributes:
   delegate :extension, to: :context
 
   def call
+
+    extension.update_column(:compilation_error, '')
+    
+    CompileExtensionStatusClear.call(extension: extension)
+
     if extension.hosted?
-      compile_hosted_extension(extension)
+      CompileExtensionStatus.call(
+        extension: extension,
+        task: 'Set Up Hosted Extension Compilation',
+        worker: 'SetupCompileHostedExtension',
+        job_id: SetupCompileHostedExtensionWorker.perform_async(extension.id)
+      )
     else
-      CompileExtensionStatusClear.call(extension: extension)
-      
       CompileExtensionStatus.call(
-        extension: extension, 
-        worker: 'ExtractExtensionParentWorker', 
-        job_id: ExtractExtensionParentWorker.perform_async(extension.id)
-      )
-      
-      CompileExtensionStatus.call(
-        extension: extension, 
-        worker: 'SyncExtensionRepoWorker', 
-        job_id: SyncExtensionRepoWorker.perform_async(extension.id) 
+        extension: extension,
+        task: 'Set Up Github Extension Compilation',
+        worker: 'SetupCompileGithubExtension',
+        job_id: SetupCompileGithubExtensionWorker.perform_async(extension.id)
       )
     end
   end
 
-  private
-
-  def redis_pool
-    REDIS_POOL
-  end
-
-  def compile_hosted_extension(extension)
-    extension.extension_versions.each do |version|
-      next unless version.source_file.attached?
-      version.source_file.blob.analyze_later
-    end
-  end
 end

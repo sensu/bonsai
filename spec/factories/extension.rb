@@ -26,5 +26,6 @@ FactoryBot.define do
     before(:create) do |extension, evaluator|
       extension.extension_versions << create_list(:extension_version, evaluator.extension_versions_count, extension: nil)
     end
+
   end
 end

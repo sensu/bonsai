@@ -17,8 +17,10 @@ describe CompileGithubExtensionVersionConfig do
                      } }
   let(:extension)    { create :extension, extension_versions_count: 0, github_url: "https://github.com/owner/#{repo_name}" }
   let(:version)      { create :extension_version, extension: extension, config: config, version: version_name }
-  let(:cmd_runner)   { double("command runner", :cmd => config.to_yaml) }
-  subject(:context)  { CompileGithubExtensionVersionConfig.call(version: version, system_command_runner: cmd_runner) }
+  
+  subject(:context)  { 
+    CompileGithubExtensionVersionConfig.call(extension: extension, version: version) 
+  }
 
   describe ".call" do
     let(:asset_hash1)        { {name: "my_repo-1.2.2-linux-x86_64.tar.gz",
@@ -26,7 +28,7 @@ describe CompileGithubExtensionVersionConfig do
     let(:asset_hash2)        { {name: "my_repo-1.2.2-linux-x86_64.sha512.txt",
                                 browser_download_url: "https://example.com/sha_download"} }
     let(:release_data)       { {tag_name: version.version, assets: [asset_hash1, asset_hash2]} }
-    let(:expected_data_hash) { {"annotations"=>
+    let(:expected_config_hash) { {"annotations"=>
                                   {"io.sensu.bonsai.test"=>"test value"},
                                 "builds" =>
                                   [{"arch"           => "x86_64",
@@ -45,7 +47,8 @@ describe CompileGithubExtensionVersionConfig do
                               } }
 
     before do
-
+      allow_any_instance_of(CmdAtPath).to receive(:cmd).with("find . -maxdepth 1 -name 'bonsai.yml' -o -name 'bonsai.yaml' -o -name '.bonsai.yml' -o -name '.bonsai.yaml'").and_return( "test/path/to/bonsai.yml" )
+      allow_any_instance_of(CmdAtPath).to receive(:cmd).with("cat 'test/path/to/bonsai.yml'").and_return( config.to_json )
       allow_any_instance_of(Octokit::Client).to receive(:releases) { [release_data] }
       allow_any_instance_of(Faraday::Connection).to receive(:get) { Faraday.new }
       allow_any_instance_of(Faraday::Connection).to receive(:success?) { true }
@@ -59,7 +62,7 @@ describe CompileGithubExtensionVersionConfig do
 
     it "complies the configuration" do
       # not sure this is relevant anymore
-      expect(context.data_hash).to eql(expected_data_hash)
+      expect(context.config_hash).to eql(expected_config_hash)
     end
   end
 end

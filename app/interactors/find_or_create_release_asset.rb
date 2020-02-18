@@ -47,8 +47,6 @@ class FindOrCreateReleaseAsset
   end
 
   def update_release_asset(release_asset, version, build)
-    #puts "******************** UPDATE RELEASE ASSET #{build['asset_sha']}"
-    #puts "******************** ASSET URL #{build['asset_url']}"
     release_asset.update(
       viable: build['viable'],
       filter: Array.wrap(build['filter']),
