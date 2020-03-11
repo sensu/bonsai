@@ -10,7 +10,16 @@ class CompileExtension
   def call
 
     extension.update_column(:compilation_error, '')
-    
+
+    # test credentials before going to background job
+    begin
+      extension.octokit.user
+    rescue Octokit::Unauthorized 
+      message = "Octokit Error: Credentials are bad on this asset."
+      extension.update_column(:compilation_error, message)
+      context.fail!(error: message)
+    end  
+
     CompileExtensionStatusClear.call(extension: extension)
 
     if extension.hosted?

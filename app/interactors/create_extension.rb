@@ -11,6 +11,16 @@ class CreateExtension
       candidate.owner = User.host_organization
       candidate.owner_name = ENV['HOST_ORGANIZATION']
     else
+
+      # test credentials before going to background job
+      begin
+        owner.octokit.user
+      rescue Octokit::Unauthorized 
+        message = "Octokit Error: Credentials were denied by Github."
+        flash[:alert] = message
+        context.fail!(error: message)
+      end 
+
       fetch_context = FetchGithubInfo.call(extension: candidate, owner: user)
     	candidate.owner = user
     	candidate.owner_name = fetch_context.owner_name
