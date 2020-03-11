@@ -106,7 +106,8 @@ class CompileGithubExtensionVersionConfig
   def read_sha_file(compiled_sha_filename, asset_filename, github_asset_data_hashes_lut)
 
     sha_download_url = github_download_url(compiled_sha_filename, github_asset_data_hashes_lut)
-    result           = FetchRemoteSha.call(
+
+    result = FetchRemoteSha.call(
       sha_download_url: sha_download_url,
       asset_filename:   asset_filename
     )

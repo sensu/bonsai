@@ -10,12 +10,13 @@ class SyncExtensionRepo
     context.compatible_platforms ||= []
 
   	# clear previous error messages
-  	extension.update_column(:compilation_error, '') if extension.compilation_error.present?
+  	extension.update_column(:compilation_error, '')
 
     begin
       releases = extension.octokit.releases(extension.github_repo)
     rescue Octokit::NotFound
       message = 'Compile Github Extension failed as octokit failed to connect.'
+      extension.update_column(:compilation_error, message)
       context.fail!(error: message)
     end
 
