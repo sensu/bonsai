@@ -94,13 +94,16 @@ class SyncExtensionContentsAtVersions
   end
 
   def set_last_commit(version)
-    commit = command_run.cmd("git log -1").gsub(/^Merge: [^\n]+\n/, "")
+    commit = command_run.cmd("git log -1")
+    # no git log for this release
+    return if commit.blank?
+
+    commit.gsub!(/^Merge: [^\n]+\n/, "")
     sha, author, date = *commit.split("\n")
 
-    unless message = commit.split("\n\n").last
-      # Empty repo; no commits
-      return
-    end
+    message = commit.split("\n\n").last
+    # Empty repo; no commits
+    return if message.blank?
 
     message = message.gsub("\n", " ").strip
     sha = sha.gsub("commit ", "")
