@@ -6,7 +6,7 @@ class CollectExtensionMetadataWorker < ApplicationWorker
     ExtractExtensionBasicMetadata.call(extension: extension)
     ExtractExtensionParent.call(extension: extension)
     ExtractExtensionLicense.call(extension: extension)
-    ExtractExtensionCollaborators.call(extension: xtension)
+    ExtractExtensionCollaborators.call(extension: extension)
     ExtractExtensionStargazers.call(extension: extension)
     SyncExtensionRepo.call(extension: extension, compatible_platforms: compatible_platforms)
   end
