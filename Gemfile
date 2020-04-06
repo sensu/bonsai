@@ -92,6 +92,8 @@ gem 'kaminari'
 
 gem 'airbrake'
 
+gem 'puma_worker_killer'                # periodic restart to refresh memory on Heroku
+
 group :doc do
   gem 'yard', :require => false
 end

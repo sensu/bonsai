@@ -42,3 +42,11 @@ plugin :tmp_restart
 # In development sandboxes, it can be useful to have more than the default 60 seconds to
 # debug an issue in byebug.
 # worker_timeout 60 * 60 * 24
+
+# A rolling restart will kill each of your workers on a rolling basis. This is a simple 
+# way to keep memory down as Ruby web programs generally increase memory usage over time.
+before_fork do
+  require 'puma_worker_killer'
+
+  PumaWorkerKiller.enable_rolling_restart # Default is every 6 hours
+end
