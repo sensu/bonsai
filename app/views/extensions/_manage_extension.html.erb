@@ -213,9 +213,9 @@
         <%= link_to disable_extension_path(extension, username: extension.owner_name),
                     method: 'put',
                     rel: 'delete',
-                    data: {confirm: "Are you sure you want to delete the #{extension.name} #{t('nouns.extension')}?"} do %>
+                    data: {confirm: "Are you sure you want to disable the #{extension.name} #{t('nouns.extension')}?"} do %>
           <i class="fa fa-times"></i>
-          Delete <%= t('nouns.extension') %>
+          Disable <%= t('nouns.extension') %>
         <% end %>
       </li>
     <% else %>
@@ -270,25 +270,27 @@
       </div>
     </div>
 
-    <% if policy(extension).disable? %>
-    <% if extension.enabled? %>
-      <li>
-        <%= link_to disable_extension_path(extension, username: extension.owner_name),
+    <% if false %>
+      <% if policy(extension).disable? %>
+        <% if extension.enabled? %>
+          <li>
+            <%= link_to disable_extension_path(extension, username: extension.owner_name),
                     method: 'put',
                     rel: 'delete',
                     data: {confirm: "Are you sure you want to delete the #{extension.name} #{t('nouns.extension')}?"} do %>
-          <i class="fa fa-times"></i>
-          Delete <%= t('nouns.extension') %>
+              <i class="fa fa-times"></i>
+              Delete <%= t('nouns.extension') %>
+            <% end %>
+          </li>
+        <% else %>
+          <li>
+            <%= link_to enable_extension_path(extension, username: extension.owner_name), method: 'put', rel: 'enable' do %>
+              <i class="fa fa-circle"></i> Enable
+            <% end %>
+          </li>
         <% end %>
-      </li>
-    <% else %>
-      <li>
-        <%= link_to enable_extension_path(extension, username: extension.owner_name), method: 'put', rel: 'enable' do %>
-          <i class="fa fa-circle"></i> Enable
-        <% end %>
-      </li>
+      <% end %>
     <% end %>
-  <% end %>
   <% end %>
 
 </ul>
