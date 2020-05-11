@@ -110,7 +110,6 @@ class CompileHostedExtensionVersionConfig
   end
 
   def read_sha_file(sha_filename, asset_filename, file_finder)
-    logger.error "Entered read_sha_file: #{sha_filename}"
     file = file_finder.find(file_path: sha_filename)
     context.fail!(error: "cannot find the #{sha_filename} SHA file") unless file
 
