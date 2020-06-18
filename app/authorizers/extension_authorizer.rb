@@ -142,7 +142,7 @@ class ExtensionAuthorizer < Authorizer::Base
   private
 
   def signed_in?
-    user.present?
+    user.persisted?
   end
 
   def admin?
