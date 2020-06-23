@@ -117,7 +117,7 @@ class ExtensionAuthorizer < Authorizer::Base
 
   def download_hosted_extension_version_source?
     owner_or_admin?
-  end 
+  end
 
   def change_tier?
     admin?
@@ -134,7 +134,7 @@ class ExtensionAuthorizer < Authorizer::Base
   def edit_extension_config_overrides?
     owner_or_admin?
   end
-  
+
   def report?
     signed_in?
   end
@@ -142,7 +142,7 @@ class ExtensionAuthorizer < Authorizer::Base
   private
 
   def signed_in?
-    user.present?
+    user&.persisted? || false
   end
 
   def admin?

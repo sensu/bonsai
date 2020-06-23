@@ -14,4 +14,21 @@ describe ExtensionAuthorizer do
       it {expect(subject.make_hosted_extension?).to be_falsey}
     end
   end
+
+  describe '#report?' do
+    context 'authenticated user' do
+      let (:user) { build_stubbed :user }
+      it {expect(subject.report?).to be(true) }
+    end
+
+    context 'user present; record not persisted' do
+      let (:user) { User.new }
+      it {expect(subject.report?).to be(false) }
+    end
+
+    context 'no user present' do
+      let (:user) { nil }
+      it {expect(subject.report?).to be(false) }
+    end
+  end
 end
