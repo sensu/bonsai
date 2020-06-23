@@ -6,12 +6,16 @@ services:
       - 5433:5432
     volumes:
       - postgres:/var/lib/postgresql/data
+    env_file:
+      - .env
   redis:
     image: redis
     ports:
       - 6379:6379
     volumes:
       - 'redis:/data'
+    env_file:
+      - .env
   web:
     build: .
     image: bonsai-asset-index:latest
@@ -42,4 +46,4 @@ volumes:
   postgres:
   redis:
   
-  
+       
