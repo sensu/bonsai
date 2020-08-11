@@ -92,9 +92,11 @@ Rails.application.configure do
     config.logger    = ActiveSupport::TaggedLogging.new(logger)
   end
 
+  redis_url = ENV.fetch("REDIS_URL", "redis://127.0.0.1:6379")
+
   # cache store in production.
   config.cache_store = :redis_cache_store, {
-    url: "#{ENV['REDIS_URL']}/0", 
+    url: "#{redis_url}/0",
     network_timeout: 1,
     namespace: "cache",
   }

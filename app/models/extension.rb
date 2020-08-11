@@ -28,7 +28,7 @@ class Extension < ApplicationRecord
   has_many :taggings, as: :taggable, dependent: :destroy
   has_many :tags, through: :taggings
   has_many :forks, class_name: 'Extension', foreign_key: :parent_id
-  has_many :extension_collections, dependent: :destroy 
+  has_many :extension_collections, dependent: :destroy
   has_many :collections, through: :extension_collections
 
   # HACK: +Extension+ objects don't really have a source_file attachment or version attribute.
@@ -158,7 +158,7 @@ class Extension < ApplicationRecord
     message: ': upload file must be a compressed archive type'
   }, if: ->(record) { record.tmp_source_file&.attachment }
 
-  class << self 
+  class << self
 
     def with_owner_and_lowercase_name(owner_name:, lowercase_name:)
       Extension.find_by!(owner_name: owner_name, lowercase_name: lowercase_name)
@@ -200,9 +200,9 @@ class Extension < ApplicationRecord
           REGEXP_REPLACE(
             REGEXP_REPLACE(
               REGEXP_REPLACE(
-                extension_versions.version, 
+                extension_versions.version,
                 E'[-](.*)', ''
-              ), 
+              ),
              E'[\+](.*)', ''
             ),
             E'V|v|master', ''
@@ -340,7 +340,7 @@ class Extension < ApplicationRecord
     if version == 'latest'
       latest_extension_version
     else
-      extension_versions.find_by!(version: version)
+      extension_versions.find_by!(version: SemverNormalizer.call(version))
     end
   end
 
@@ -380,7 +380,8 @@ class Extension < ApplicationRecord
         extension: self,
         description: metadata.description,
         license: metadata.license,
-        version: metadata.version,
+        tag: metadata.version,
+        version: SemverNormalizer.call(metadata.version),
         tarball: tarball,
         readme: readme.contents,
         readme_extension: readme.extension,

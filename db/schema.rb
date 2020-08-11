@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_13_232729) do
+ActiveRecord::Schema.define(version: 2020_02_13_205500) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -328,6 +328,7 @@ ActiveRecord::Schema.define(version: 2020_01_13_232729) do
     t.jsonb "config", default: {}
     t.string "compilation_error"
     t.text "annotations"
+    t.string "tag"
     t.index ["config"], name: "index_extension_versions_on_config", using: :gin
     t.index ["legacy_id"], name: "index_extension_versions_on_legacy_id", unique: true
     t.index ["version", "extension_id"], name: "index_extension_versions_on_version_and_extension_id", unique: true
