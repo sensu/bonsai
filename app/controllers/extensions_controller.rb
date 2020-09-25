@@ -47,7 +47,6 @@ class ExtensionsController < ApplicationController
       @repo_names = Marshal.load(@repo_names)
     else
       FetchAccessibleReposWorker.perform_async(current_user.id)
-      # puts '******* FetchAccessibleReposWorker *********'
     end
 
     @extension = Extension.new
@@ -60,15 +59,23 @@ class ExtensionsController < ApplicationController
   #
   def create
     eparams = params.require(:extension).permit(:name, :description, :github_url, :github_url_short, :tmp_source_file, :tag_tokens, :version, compatible_platforms: [])
-    create_extension = CreateExtension.new(eparams, current_user)
-    @extension = create_extension.process!
 
-    if @extension.errors.none?
-      redirect_to owner_scoped_extension_url(@extension), notice: t("extension.created")
+    candidate = Extension.new(eparams)
+
+    if candidate.valid?
+      create_context = CreateExtension.call(params: eparams, candidate: candidate, user: current_user)
+    
+      if create_context.success?
+        @extension = create_context.extension
+        redirect_to owner_scoped_extension_url(@extension), notice: t("extension.created")
+        return 
+      end
     else
-      @repo_names = current_user.octokit.repos.map { |r| r.to_h.slice(:full_name, :name, :description) } rescue []
-      render :new
+      flash[:alert] = candidate.errors.full_messages.join("; ")
     end
+    @extension = Extension.new
+    @repo_names = current_user.octokit.repos.map { |r| r.to_h.slice(:full_name, :name, :description) } rescue []
+      render :new
   end
 
   #
@@ -169,14 +176,14 @@ class ExtensionsController < ApplicationController
     @extension.update_attributes(extension_edit_params)
 
     key = if extension_edit_params.key?(:up_for_adoption)
-            if extension_edit_params[:up_for_adoption] == 'true'
-              'adoption.up'
-            else
-              'adoption.down'
-            end
-          else
-            'extension.updated'
-          end
+      if extension_edit_params[:up_for_adoption] == 'true'
+        'adoption.up'
+      else
+        'adoption.down'
+      end
+    else
+      'extension.updated'
+    end
 
     redirect_to owner_scoped_extension_url(@extension), notice: t(key, name: @extension.name)
   end
@@ -328,19 +335,33 @@ class ExtensionsController < ApplicationController
     redirect_to owner_scoped_extension_url(@extension), notice: t("extension.reported", extension: @extension.name)
   end
 
+  #
+  # GET /extensions/:extension/sync_repo
+  #
+  # Recompiles the asset
+  #
   def sync_repo
-    extension = Extension.with_owner_and_lowercase_name(owner_name: params[:username], lowercase_name: params[:id])
-    authorize! extension
-    CompileExtension.call(extension: extension)
-    redirect_to owner_scoped_extension_url(@extension), notice: t("extension.syncing_in_progress")
+    @extension = Extension.with_owner_and_lowercase_name(owner_name: params[:username], lowercase_name: params[:id])
+    authorize! @extension
+    compile_context = CompileExtension.call(extension: @extension)
+    if compile_context.success?
+      flash[:notice] = t("extension.syncing_in_progress")
+    else
+      flash[:error] = t("extension.failed_to_compile", extension: @extension.name)
+    end
+    redirect_to owner_scoped_extension_url(@extension)
   end
 
+  #
+  # GET /extensions/:extension/sync_status
+  #
+  # Returns the status of a recompile
+  #
   def sync_status
     @extension = Extension.find_by(id: params[:id])
     redis_pool.with do |redis|
-      @job_ids = JSON.parse( redis.get("compile.extension;#{params[:id]};status") || "{}" )
+      @status = JSON.parse( redis.get("compile.extension;#{params[:id]};status") || "{}" )
     end
-
     respond_to do |format|
       format.js
     end
@@ -379,9 +400,9 @@ class ExtensionsController < ApplicationController
           CollectExtensionMetadataWorker.perform_async(@extension.id, [])
         end
       when "watch"
-        ExtractExtensionStargazersWorker.perform_async(@extension.id)
+        ExtractExtensionStargazers.call(@extension)
       when "member"
-        ExtractExtensionCollaboratorsWorker.perform_async(@extension.id)
+        ExtractExtensionCollaborators.call(@extension)
       else
         Rails.logger.info '*** Github Error: unidentified event type'
     end

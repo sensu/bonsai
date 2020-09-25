@@ -187,6 +187,14 @@ module ExtensionsHelper
     resp
   end
 
+  #
+  # Given extentsion returns compilation errors
+  #
+  # @param extension [Extension] 
+  # @param version [ExtensionVersion] optional
+  #
+  # @return [String] compilation errors
+  #
   def compilation_errors(extension, version=nil)
     errors = []
     if extension.compilation_error.present?
@@ -200,53 +208,32 @@ module ExtensionsHelper
     errors
   end
 
-  def compilation_status(extension, job_ids)
-    job_count = @job_ids.length
-    pending, retrying, complete, failed = 0.0, 0.0, 0.0, 0.0
-    jobs_failed, jobs_retrying = [], []
-
-    @job_ids.each do |job, key|
-
-      status = Sidekiq::Status::status(key)
-
-      case status
-        when :queued, :working
-          pending += 1
-        when :retrying
-          retrying += 1
-          jobs_retrying << job
-        when :complete
-          complete += 1
-          # puts status
-        when :failed, :interrupted
-          failed += 1
-          jobs_failed << job
-        else
-      end
-    end
-
-    percent_complete = ((complete / job_count) * 100).round(2)
-
+  def compilation_status(extension, status)
+    worker_status = Sidekiq::Status::status( status['job_id'] ) 
     html = ''
-    klass = 'compilation-complete'
-    if failed > 0
-      html += content_tag("div", raw("<b>Compilations failed:</b> #{jobs_failed.join(', ')}"), class: 'compilation-notice')
-      klass = 'compilation-failed'
-    end
-    if retrying > 0
-      html += content_tag("div", raw("<b>Retrying Compilations:</b> #{jobs_retrying.join(', ')}"), class: 'compilation-notice')
-       klass = 'compilation-retry'
-    end
-    html += content_tag('div', raw("<b>Compiling Extension % #{percent_complete} Complete</b>"), class: 'compilation-notice')
+    klass = ''
+    case worker_status
+      when :queued, :working
+        html += content_tag('div', raw("<b>Compiling Extension:</b> #{status['task']}"), class: 'compilation-notice')
+        klass = 'compilation-pending'
 
-    if percent_complete == 100
-      redis_pool.with do |redis|
-        redis.del("compile.extension;#{extension.id};status")
-      end
-    end
+      when :retrying
+        html += content_tag("div", raw("<b>Retrying Compilations:</b> #{status['worker']}"), class: 'compilation-notice')
+        klass = 'compilation-retry'
 
+      when :complete
+        redis_pool.with do |redis|
+          redis.del("compile.extension;#{extension.id};status")
+        end
+        klass = 'compilation-complete'
+
+      when :failed, :interrupted
+        html += content_tag("div", raw("<b>Compilations failed:</b> #{status['worker']}"), class: 'compilation-notice')
+        klass = 'compilation-failed'
+
+    end
     content_tag('div', raw(html), class: klass )
-
+  
   end
 
   #

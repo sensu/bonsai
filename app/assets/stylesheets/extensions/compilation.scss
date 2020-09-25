@@ -36,7 +36,7 @@
   top: 0;
   font-size: smaller;
   margin-bottom: 1.5em;
-  .compilation-complete {
+  .compilation-pending {
     border-radius: 5px;
     border: 1px solid $notice_primary_green;
     background-color: $notice_secondary_green;
@@ -51,6 +51,10 @@
     border-radius: 5px;
     border: 1px solid $notice_primary_red;
     background-color: $notice_secondary_red;
+  }
+  .compilation-complete {
+    border: none;
+    background-color: white;
   }
 }
 
