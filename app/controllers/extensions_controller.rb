@@ -5,7 +5,7 @@ class ExtensionsController < ApplicationController
   before_action :store_location_then_authenticate_user!, only: [:follow, :unfollow, :adoption]
   before_action :authenticate_user!, only: [:new, :create]
 
-  skip_before_action :verify_authenticity_token, only: [:webhook]
+  skip_before_action :verify_authenticity_token, only: [:webhook, :build]
 
   #
   # GET /extensions
@@ -388,6 +388,31 @@ class ExtensionsController < ApplicationController
     head :ok
   end
 
+  #
+  # POST /assets/:username/:id/build
+  #
+  # Triggers a release build of the specified asset.
+  # Returns one of the following HTTP status codes:
+  #   2XX - Success
+  #   401 - Invalid or missing X-GitHub-Token header
+  #   403 - GitHub user not authorized for the specified asset
+  #   404 - Unknown GitHub repo for the asset
+  #
+  # Requires an +X-GitHub-Token+ header containing a GitHub personal access token (PAT)
+  # belonging to a user who is a collaborator on the project.
+  # See https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token.
+  # The header must use the +X-GitHub-Token+ key, as in:
+  #   X-GitHub-Token: ${GITHUB_PERSONAL_ACCESS_TOKEN}
+  #
+  def build
+    github_token = request.headers['X-GitHub-Token']
+    status_code_symbol = with_collaborator_authorization(github_token, @extension) do
+      CollectExtensionMetadataWorker.perform_async(@extension.id, [])
+    end
+
+    head status_code_symbol
+  end
+
   def select_default_version
     version = @extension.extension_versions.find_by(id: params[:extension_version_id])
     version_id = version.present? ? version.id : nil
@@ -507,5 +532,38 @@ class ExtensionsController < ApplicationController
       format.js   { render partial: partial_template, locals: { extension: @extension } }
       format.html { render partial: partial_template, locals: { extension: @extension } }
     end
+  end
+
+  # Attempts to authorize the GitHub user who corresponds to the given GitHub token
+  # as having GitHub collaborator permissions for the given +Extension+ object.
+  #
+  # If the authorization succeeds, this method calls the given code block.
+  #
+  # Returns an HTTP status code symbol representing the success or failure of the authorization.
+  #
+  def with_collaborator_authorization(github_token, extension, &block)
+    return :unknown      unless extension
+    return :unauthorized unless github_token.present?
+
+    repo_name = extension.github_repo
+    return :unknown unless repo_name.present?
+
+    github_client = Octokit::Client.new(access_token: github_token)
+    github_login_name = begin
+                          github_client.user.login
+                        rescue Octokit::Unauthorized
+                          return :unauthorized
+                        rescue
+                          nil
+                        end
+    return :not_found unless github_login_name.present?
+
+    # The GitHub user corresponding to the auth token must be a collaborator on the GitHub repo.
+    is_collaborator = github_client.collaborator?(repo_name, github_login_name) rescue false
+    return :forbidden unless is_collaborator
+
+    # If this point is reached, we can call the given code block.
+    block.call
+    return :ok
   end
 end
