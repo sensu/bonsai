@@ -365,7 +365,7 @@ class ExtensionsController < ApplicationController
   end
 
   #
-  # POST /extensions/:id/webhook
+  # POST /assets/:username/:id/webhook
   #
   # Receive updates from GitHub's webhook API about an extension's repo.
   #
