@@ -54,4 +54,10 @@ doc/
 .DS_Store
 ._.DS_Store
 
+# Ignore Netatalk turds
+.AppleDouble
+
+# Allow developers to "bundle install --path=vendor"
+/vendor/ruby/
+
 backup_db

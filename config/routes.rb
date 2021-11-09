@@ -60,6 +60,7 @@ Rails.application.routes.draw do
         delete :deprecate, action: 'undeprecate'
         put :toggle_featured
         get :deprecate_search
+        post :build
         post :webhook
         put :disable
         put :enable
