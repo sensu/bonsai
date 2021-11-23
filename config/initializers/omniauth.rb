@@ -23,14 +23,18 @@ Rails.application.config.middleware.use(OmniAuth::Builder) do
     }
   }
 
-  provider(
-    :github,
-    ENV['GITHUB_CLIENT_ID'],
-    ENV['GITHUB_CLIENT_SECRET'],
-    client_options: client_options,
-    scope: BonsaiAssetIndex::Authentication::AUTH_SCOPE,
-    provider_ignores_state: true
-  ).inspect
+  if Rails.env.development?
+    provider(:developer)
+  else
+    provider(
+      :github,
+      ENV['GITHUB_CLIENT_ID'],
+      ENV['GITHUB_CLIENT_SECRET'],
+      client_options: client_options,
+      scope: BonsaiAssetIndex::Authentication::AUTH_SCOPE,
+      provider_ignores_state: true
+    ).inspect
+  end
 end
 
 # Use the Rails logger

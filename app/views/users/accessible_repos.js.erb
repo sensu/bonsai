@@ -1,4 +1,4 @@
-<% if @repo_names.empty? %>
+<% if !Rails.env.development? && @repo_names.empty? %>
   retryGetExtension();
 <% else %> 
   $("#extensions-selector").html(
