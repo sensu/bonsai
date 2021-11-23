@@ -25,7 +25,7 @@
         <%= f.hidden_field :github_url, id: "extension-url-field" %>
       </fieldset>
 
-      <%- if policy(@extension).make_hosted_extension? %>
+      <%- if !ROLLOUT.active?(:private_repos) && policy(@extension).make_hosted_extension? %>
         <h3><em><strong>-OR-</strong></em></h3>
         <%= render 'extensions/file_upload', {f: f, file_method: :tmp_source_file} %>
       <% end %>
