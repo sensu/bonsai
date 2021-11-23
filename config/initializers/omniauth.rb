@@ -23,6 +23,18 @@ Rails.application.config.middleware.use(OmniAuth::Builder) do
     }
   }
 
+  setup = lambda { |env|
+    scope = begin
+              strategy = env['omniauth.strategy']
+              session  = strategy.session
+              session['github.oauth.scope']
+            rescue
+              nil
+            end
+    scope ||= BonsaiAssetIndex::Authentication::AUTH_SCOPE
+    env['omniauth.strategy'].options[:scope] = scope
+  }
+
   if Rails.env.development?
     provider(:developer)
   else
@@ -31,7 +43,7 @@ Rails.application.config.middleware.use(OmniAuth::Builder) do
       ENV['GITHUB_CLIENT_ID'],
       ENV['GITHUB_CLIENT_SECRET'],
       client_options: client_options,
-      scope: BonsaiAssetIndex::Authentication::AUTH_SCOPE,
+      setup: setup,
       provider_ignores_state: true
     ).inspect
   end
