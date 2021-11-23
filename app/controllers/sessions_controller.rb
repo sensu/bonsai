@@ -10,6 +10,15 @@ class SessionsController < ApplicationController
     redirect_to '/auth/github'
   end
 
+  # This action is only ever used in development sandboxes.
+  def passthru
+    #:nocov:  This has been manually tested in a dev sandbox.
+    user              = User.first     # just choose any user
+    session[:user_id] = user.id
+    redirect_to redirect_path, notice: t('user.signed_in', name: user.name)
+    #:nocov:
+  end
+
   #
   # POST /auth/github/callback
   #

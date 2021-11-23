@@ -167,6 +167,7 @@ Rails.application.routes.draw do
   # when signing in or up with chef account
   # match 'auth/chef_oauth2/callback' => 'sessions#create', as: :auth_session_callback, via: [:get, :post]
   match 'auth/github/callback' => 'sessions#create', as: :auth_session_callback, via: [:get, :post]
+  match 'auth/github' => 'sessions#passthru', via: [:get, :post], constraints: proc { Rails.env.development? }
 
   get 'auth/failure' => 'sessions#failure', as: :auth_failure
   get 'login'   => redirect('/sign-in'), as: nil
