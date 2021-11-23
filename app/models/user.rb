@@ -404,6 +404,10 @@ class User < ApplicationRecord
     end
   end
 
+  def shares_private_repos?
+    ROLLOUT.active?(:private_repos) && auth_scope.to_s == BonsaiAssetIndex::Authentication::AUTH_SCOPE_WITH_PRIV_REPOS
+  end
+
   private
 
   #
