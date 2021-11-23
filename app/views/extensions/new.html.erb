@@ -10,6 +10,7 @@
       <fieldset id="" class="">
         <legend>
           Use one of your
+          <%= current_user&.shares_private_repos? ? 'public or private' : 'public' %>
           GitHub repositories
         </legend>
 
@@ -68,6 +69,9 @@
       Bonsai pulls project details and release information from GitHub to populate an asset page.
       To share an asset on Bonsai,
       the asset should be in a public
+      <%- if ROLLOUT.active?(:private_repos) %>
+        or private
+      <%- end %>
       GitHub repository
       that includes:
     </p>
