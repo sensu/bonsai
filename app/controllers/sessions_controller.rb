@@ -18,7 +18,9 @@ class SessionsController < ApplicationController
   def create
     user = User.find_or_create_from_github_oauth(request.env['omniauth.auth'])
 
-    user.update_attribute(:auth_scope, BonsaiAssetIndex::Authentication::AUTH_SCOPE)
+    omniauth_auth_scope   = request.env.dig('omniauth.auth', 'extra', 'scope') || BonsaiAssetIndex::Authentication::AUTH_SCOPE
+    normalized_auth_scope = normalize_omniauth_scope(omniauth_auth_scope)
+    user.update_attribute(:auth_scope, normalized_auth_scope)
     session[:user_id] = user.id
     redirect_to redirect_path, notice: t('user.signed_in', name: user.name)
   rescue RuntimeError
@@ -42,5 +44,13 @@ class SessionsController < ApplicationController
 
   def redirect_path
     stored_location || root_path
+  end
+
+  # This is a work-around for the fact that GitHub tends to leave off the "push" scope
+  # when it sends us the scope in the +omniauth.auth+ env value.
+  def normalize_omniauth_scope(scope_str)
+    scope_str.dup.tap do |res|
+      res << ',push' unless scope_str.to_s.split(',').include?('push')
+    end
   end
 end
