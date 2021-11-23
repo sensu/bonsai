@@ -1,6 +1,7 @@
 module BonsaiAssetIndex
   module Authentication
     AUTH_SCOPE                 = "public_repo,read:org,user:email,write:repo_hook,push"
+    AUTH_SCOPE_WITH_PRIV_REPOS = "repo,user:email,write:repo_hook,push"
 
     #
     # Include the following methods as helper methods.
@@ -31,7 +32,7 @@ module BonsaiAssetIndex
     # Redirect to the sign in url if there is no current_user
     #
     def authenticate_user!(skip_location_storage: false)
-      if !signed_in? or current_user.auth_scope != AUTH_SCOPE
+      if !signed_in? or (current_user.auth_scope != AUTH_SCOPE and current_user.auth_scope != AUTH_SCOPE_WITH_PRIV_REPOS)
         store_location! unless skip_location_storage
         redirect_to sign_in_url, notice: I18n.t('user.must_be_signed_in')
       end
