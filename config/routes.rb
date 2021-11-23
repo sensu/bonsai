@@ -178,6 +178,7 @@ Rails.application.routes.draw do
   delete 'logout'   => redirect('/sign-out'), as: nil
   delete 'signout'  => redirect('/sign-out'), as: nil
   delete 'sign-out' => 'sessions#destroy', as: :sign_out
+  delete 'sign-out-with-token-drop' => 'sessions#destroy_with_token_drop', as: :sign_out_with_token_drop
 
   # when linking an oauth account
   match 'auth/:provider/callback' => 'accounts#create', as: :auth_callback, via: [:get, :post]

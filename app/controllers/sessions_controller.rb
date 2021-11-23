@@ -53,6 +53,24 @@ class SessionsController < ApplicationController
     redirect_to root_path, notice: t('user.signed_out')
   end
 
+  def destroy_with_token_drop
+    # Revoke GitHub's current OAuth authorization for this app.
+    current_user&.revoke_application_authorization
+
+    # Do everything that the regular +destroy+ action does,
+    # but go directly to the sign-in page.
+    Redis.current.del("user-repos-#{current_user&.id}")
+    reset_session
+    flash[:signout] = true
+    redirect_to sign_in_path, notice: t('user.signed_out')
+
+    # Arrange for the user's next GitHub authorization to include private repo's.
+    # This session cookie value will be picked up in the +OmniAuth::Builder+'s
+    # dynamic setup lambda.
+    # See config/initializers/omniauth.rb.
+    session['github.oauth.scope'] = BonsaiAssetIndex::Authentication::AUTH_SCOPE_WITH_PRIV_REPOS
+  end
+
   private
 
   def redirect_path
