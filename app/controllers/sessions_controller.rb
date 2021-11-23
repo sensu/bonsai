@@ -42,6 +42,10 @@ class SessionsController < ApplicationController
   # Signs out the user
   #
   def destroy
+    # Clear the user's cached list of repositories so that it will re-cache
+    # when the user signs back in.
+    Redis.current.del("user-repos-#{current_user&.id}")
+
     reset_session
 
     flash[:signout] = true
