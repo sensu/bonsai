@@ -57,6 +57,8 @@ class User < ApplicationRecord
 
   accepts_nested_attributes_for :email_preferences, allow_destroy: true
 
+  delegate :revoke_application_authorization, to: :github_account
+
   #
   # Returns an Octokit client configured for this User.
   #
