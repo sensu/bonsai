@@ -29,7 +29,9 @@ class PersistAssets
         next
       end
 
-      mirror_to_s3(release_asset, url)
+      if Rails.configuration.x.s3_mirroring
+        mirror_to_s3(release_asset, url)
+      end
     end # builds.each
 
   end

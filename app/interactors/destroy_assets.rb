@@ -8,7 +8,9 @@ class DestroyAssets
   def call
     context.fail!(error: "It does not store assets for master version") if version.version == 'master'
 
-    version.release_assets.each(&method(:purge_s3_mirror))
+    if Rails.configuration.x.s3_mirroring
+      version.release_assets.each(&method(:purge_s3_mirror))
+    end
   end
 
   private
