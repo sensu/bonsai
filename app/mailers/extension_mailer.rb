@@ -10,6 +10,8 @@ class ExtensionMailer < ApplicationMailer
   # @param user [User] the user to notify
   #
   def follower_notification_email(extension_version, user)
+    return unless Rails.configuration.x.extension_emails
+
     @extension_version = extension_version
     @email_preference = user.email_preference_for('New extension version')
     @to = user.email
@@ -25,6 +27,8 @@ class ExtensionMailer < ApplicationMailer
   # @param user [User] the user to notify
   #
   def extension_deleted_email(extension, user)
+    return unless Rails.configuration.x.extension_emails
+
     @extension = extension
     @email_preference = user.email_preference_for('Extension deleted')
     @to = user.email
@@ -40,6 +44,8 @@ class ExtensionMailer < ApplicationMailer
   # @param user [User] the user to notify
   #
   def extension_disabled_email(extension, user)
+    return unless Rails.configuration.x.extension_emails
+
     @extension = extension
     @email_preference = user.email_preference_for('Extension disabled')
     @to = user.email
@@ -57,6 +63,8 @@ class ExtensionMailer < ApplicationMailer
   # @param user [User] the user to notify
   #
   def extension_deprecated_email(extension, replacement_extension, user)
+    return unless Rails.configuration.x.extension_emails
+
     @extension = extension
     @replacement_extension = replacement_extension
     @email_preference = user.email_preference_for('Extension deprecated')
@@ -79,6 +87,8 @@ class ExtensionMailer < ApplicationMailer
   # @param transfer_request [OwnershipTransferRequest]
   #
   def transfer_ownership_email(transfer_request)
+    return unless Rails.configuration.x.extension_emails
+
     @transfer_request = transfer_request
     @sender = transfer_request.sender.name
     @extension = transfer_request.extension
@@ -99,6 +109,8 @@ class ExtensionMailer < ApplicationMailer
   # @param user_id (Fixnum)
   #
   def notify_moderator_of_new(extension_id, user_id)
+    return unless Rails.configuration.x.extension_emails
+
     @extension = Extension.find(extension_id)
     @moderator = User.find(user_id)
 
@@ -115,6 +127,8 @@ class ExtensionMailer < ApplicationMailer
   # @param user_id (Fixnum)
   #
   def notify_moderator_of_reported(extension_id, user_id, report_description, reported_by_id)
+    return unless Rails.configuration.x.extension_emails
+
     @extension = Extension.find(extension_id)
     @moderator = User.find(user_id)
     @description = report_description

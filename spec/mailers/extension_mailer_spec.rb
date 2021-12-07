@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ExtensionMailer do
+describe ExtensionMailer, if: Rails.configuration.x.extension_emails do
   let(:extension) { create :extension }
   let(:user)      { create :user }
   let(:reporter)  { create :user }

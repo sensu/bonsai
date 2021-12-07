@@ -80,5 +80,7 @@ module BonsaiAssetIndex
 
     require Rails.root.join('lib', 'active_storage_cache_store').to_s
     config.active_storage_cache = ActiveStorageCacheStore.new
+
+    config.x.extension_emails = ActiveRecord::Type::Boolean.new.cast(ENV.fetch('EXTENSION_EMAILS', true))
   end
 end
