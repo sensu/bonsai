@@ -8,30 +8,28 @@ class DestroyAssets
   def call
     context.fail!(error: "It does not store assets for master version") if version.version == 'master'
 
-    version.release_assets.each do |release_asset|
-
-      key = release_asset.destination_pathname
-
-      object_exists = s3_bucket.object(key).exists?
-
-      begin
-        if object_exists
-          s3_bucket.object(key).delete
-          puts "S3 destroyed: #{key}"
-        else
-          puts "Already deleted from S3: #{key}" 
-        end
-        release_asset.destroy
-      rescue Aws::S3::Errors::ServiceError => error 
-        puts "****** S3 error: #{error.code} - #{error.message}"
-        next
-      end
-
-    end # release_assets.each
-
+    version.release_assets.each(&method(:purge_s3_mirror))
   end
 
   private
+
+  def purge_s3_mirror(release_asset)
+    key           = release_asset.destination_pathname
+    object_exists = s3_bucket.object(key).exists?
+
+    begin
+      if object_exists
+        s3_bucket.object(key).delete
+        puts "S3 destroyed: #{key}"
+      else
+        puts "Already deleted from S3: #{key}"
+      end
+      release_asset.destroy
+    rescue Aws::S3::Errors::ServiceError => error
+      puts "****** S3 error: #{error.code} - #{error.message}"
+      return
+    end
+  end
 
   def s3_bucket
     @_s3_bucket ||= begin
