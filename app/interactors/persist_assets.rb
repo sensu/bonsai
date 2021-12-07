@@ -9,9 +9,6 @@ class PersistAssets
   	context.fail!(error: "Do not store assets for master version") if version.version == 'master'
   	context.fail!(error: "#{version.version} has no config") if version.config.blank?
   	context.fail!(error: "#{version.version} has no builds in config") if version.config['builds'].blank?
-  	
-  	puts "Copying assets for #{version.version} to S3"
-    s3_bucket = initialize_s3_bucket(context)
 
     version.config['builds'].each do |build|
 
@@ -79,6 +76,15 @@ class PersistAssets
 
     end # builds.each
 
+  end
+
+  private
+
+  def s3_bucket
+    @_s3_bucket ||= begin
+                      puts "Copying assets for #{version.version} to S3"
+                      initialize_s3_bucket(context)
+                    end
   end
 
 end
