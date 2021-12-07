@@ -4,8 +4,6 @@ class PersistAssets
   include InitializeS3
 
   delegate :version, to: :context
-  
-  before :initialize_s3_bucket
 
   def call
   	context.fail!(error: "Do not store assets for master version") if version.version == 'master'
@@ -13,6 +11,7 @@ class PersistAssets
   	context.fail!(error: "#{version.version} has no builds in config") if version.config['builds'].blank?
   	
   	puts "Copying assets for #{version.version} to S3"
+    s3_bucket = initialize_s3_bucket(context)
 
     version.config['builds'].each do |build|
 
@@ -35,13 +34,13 @@ class PersistAssets
 
       key = release_asset.destination_pathname
 
-      object_exists = context.s3_bucket.object(key).exists?
+      object_exists = s3_bucket.object(key).exists?
 
       if object_exists
         # we need to replace the file each iteration in order
         # to update files in case they were changed.
         begin
-          context.s3_bucket.object(key).delete
+          s3_bucket.object(key).delete
           puts "Removed file from S3: #{key}"
         rescue Aws::S3::Errors::ServiceError => error 
           puts "****** S3 error: #{error.code} - #{error.message}"
@@ -59,10 +58,10 @@ class PersistAssets
       end
      
       begin
-        context.s3_bucket.object(key).put(body: file, acl: 'public-read')
+        s3_bucket.object(key).put(body: file, acl: 'public-read')
         puts "File saved to S3: #{key}"
-        uri = URI(context.s3_bucket.object(key).public_url)
-        last_modified = context.s3_bucket.object(key).last_modified
+        uri = URI(s3_bucket.object(key).public_url)
+        last_modified = s3_bucket.object(key).last_modified
       rescue Aws::S3::Errors::ServiceError => error 
         puts "****** S3 error: #{error.code} - #{error.message}"
         next

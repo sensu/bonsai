@@ -5,17 +5,17 @@ module InitializeS3
 
   private
 
-  def initialize_s3_bucket
+  def initialize_s3_bucket(context)
   	s3 = Aws::S3::Resource.new(
       access_key_id: ENV['AWS_S3_KEY_ID'],
       secret_access_key: ENV['AWS_S3_ACCESS_KEY'],
       region: ENV['AWS_S3_REGION']
     )
 
-    context.s3_bucket = s3.bucket(ENV['AWS_S3_ASSETS_BUCKET'])
+    s3_bucket = s3.bucket(ENV['AWS_S3_ASSETS_BUCKET'])
 
     begin
-    	unless context.s3_bucket.exists?
+      unless s3_bucket.exists?
     		message = "S3 error: #{ENV['AWS_S3_ASSETS_BUCKET']} bucket not found"
       	raise RuntimeError.new(message)
        context.fail!(error: message)
@@ -26,5 +26,6 @@ module InitializeS3
       context.fail!(error: message)
     end
 
+    return s3_bucket
   end # initialize bucket
 end
