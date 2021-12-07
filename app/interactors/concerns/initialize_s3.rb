@@ -18,7 +18,7 @@ module InitializeS3
     	unless context.s3_bucket.exists?
     		message = "S3 error: #{ENV['AWS_S3_ASSETS_BUCKET']} bucket not found"
       	raise RuntimeError.new(message)
-      	message.fail!(error: message)
+       context.fail!(error: message)
       end
     rescue
     	message = "S3 error: network connection to S3 failed"
