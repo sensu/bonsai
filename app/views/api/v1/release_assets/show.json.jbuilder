@@ -10,7 +10,7 @@ end
 
 json.spec do
 	# url for base link to asset on bonsai
-  json.url            @release_asset.vanity_url
+  json.url            @release_asset.asset_url
   json.sha512         @release_asset.source_asset_sha
   json.filters        @release_asset.filter
 end

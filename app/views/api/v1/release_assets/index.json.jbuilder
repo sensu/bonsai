@@ -10,7 +10,7 @@ end
 
 json.spec do
 	json.builds @version.release_assets do |asset|
-	  json.url            asset.vanity_url # url for base link to asset on bonsai
+	  json.url            asset.asset_url # url for base link to asset on bonsai
 	  json.sha512         asset.source_asset_sha
 	  json.filters        asset.filter
 	end
