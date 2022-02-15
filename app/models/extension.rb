@@ -569,6 +569,16 @@ class Extension < ApplicationRecord
     "#{owner_name}/#{name}"
   end
 
+  def github_url_with_auth
+    return github_url unless github_account.oauth_token.present?
+
+    uri          = URI.parse(github_url)
+    uri.user     = 'x-oauth-basic'
+    uri.password = github_account.oauth_token
+
+    uri.to_s
+  end
+
   private
 
   #
