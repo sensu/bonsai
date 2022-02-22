@@ -85,7 +85,7 @@
       <%= form_for extension, url: deprecate_extension_path(extension, username: extension.owner_name), method: :put do |f| %>
         <div class="row collapse">
           <div class="small-9 columns">
-            <%= f.hidden_field :replacement, class: 'extension-deprecate', 'data-url' => deprecate_search_extension_path(extension, username: extension.owner_name) %>
+            <%= f.select :replacement, [], {}, class: 'extension-deprecate', 'data-url' => deprecate_search_extension_path(extension, username: extension.owner_name) %>
           </div>
           <div class="small-3 columns">
             <%= f.submit 'Deprecate', class: 'button radius postfix submit-deprecation', disabled: true %>
