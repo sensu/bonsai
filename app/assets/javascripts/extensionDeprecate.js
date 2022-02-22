@@ -1,6 +1,6 @@
 $(document).ready(function() {
   var settings =  {
-    placeholder: 'Search for an asset',
+    placeholder: 'Search for replacement asset',
     minimumInputLength: 3,
     width: '100%',
     ajax: {
