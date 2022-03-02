@@ -139,6 +139,7 @@ class Extension < ApplicationRecord
   delegate :name,                to: :tier, allow_nil: true, prefix: true
   delegate :icon_name,           to: :tier, allow_nil: true, prefix: true
   delegate :id,                  to: :tier, allow_nil: true, prefix: true
+  delegate :oauth_token,         to: :github_account, allow_nil: true, prefix: true
 
   # Validations
   # --------------------

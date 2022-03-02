@@ -44,6 +44,7 @@ class ExtensionVersion < ApplicationRecord
   delegate :owner_name,     to: :extension, allow_nil: true
   delegate :github_repo,    to: :extension
   delegate :octokit,        to: :extension
+  delegate :github_account_oauth_token, to: :extension, allow_nil: true
 
   ANNOTATION_PREFIX = 'io.sensu.bonsai'
 
