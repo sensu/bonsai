@@ -110,8 +110,9 @@ class CompileGithubExtensionVersionConfig
 
     sha_download_url = github_download_url(compiled_sha_filename, github_asset_data_hashes_lut)
     result           = FetchRemoteSha.call(
-      sha_download_url: sha_download_url,
-      asset_filename:   asset_filename
+      sha_download_url:        sha_download_url,
+      sha_download_auth_token: version.github_account_oauth_token,
+      asset_filename:          asset_filename
     )
 
     result.tap do |sha_result|
