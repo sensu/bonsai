@@ -138,6 +138,6 @@ class CompileGithubExtensionVersionConfig
       return nil
     end
 
-    return asset_data[:browser_download_url]
+    return asset_data[:url]
   end
 end
