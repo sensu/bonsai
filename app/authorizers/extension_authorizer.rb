@@ -103,6 +103,10 @@ class ExtensionAuthorizer < Authorizer::Base
     owner_or_collaborator? || admin?
   end
 
+  def view_asset_errors?
+    owner_or_collaborator? || admin?
+  end
+
   def make_hosted_extension?
     ROLLOUT.active?(:hosted_extensions) && admin?
   end

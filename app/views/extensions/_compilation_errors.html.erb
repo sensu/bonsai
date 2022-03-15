@@ -1,5 +1,5 @@
 <%- errors = compilation_errors(extension, version) %>
-<% if errors.any? %>
+<% if errors.any? && policy(extension).view_asset_errors? %>
   <div class="compilation-errors">
     <details open>
       <summary>This <%= t('nouns.extension') %> has compilation errors</summary>
