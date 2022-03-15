@@ -49,6 +49,25 @@ describe SessionsController do
     end
   end
 
+  describe 'DELETE #destroy_with_token_drop' do
+    it 'resets the session' do
+      delete :destroy_with_token_drop
+      expect(session[:user_id]).to be_blank
+    end
+
+    it 'notifies the user they have signed out' do
+      delete :destroy_with_token_drop
+      expect(flash[:notice]).
+        to eql(I18n.t('user.signed_out'))
+    end
+
+    it 'sets a session value' do
+      expect {
+        delete :destroy_with_token_drop
+      }.to change{session.keys.sort}.by ["flash", "github.oauth.scope"]
+    end
+  end
+
   describe 'GET #failure' do
     before { get :failure }
 

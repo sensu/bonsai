@@ -8,7 +8,11 @@
       <%= render "application/form_errors", record: @extension %>
 
       <fieldset id="" class="">
-        <legend>Use one of your GitHub repositories</legend>
+        <legend>
+          Use one of your
+          <%= current_user&.shares_private_repos? ? 'public or private' : 'public' %>
+          GitHub repositories
+        </legend>
 
         <div id="extensions-selector" class="name-field">
           <%# The contents of this +extensions-selector+ element get replaced almost immediately by
@@ -21,7 +25,7 @@
         <%= f.hidden_field :github_url, id: "extension-url-field" %>
       </fieldset>
 
-      <%- if policy(@extension).make_hosted_extension? %>
+      <%- if !ROLLOUT.active?(:private_repos) && policy(@extension).make_hosted_extension? %>
         <h3><em><strong>-OR-</strong></em></h3>
         <%= render 'extensions/file_upload', {f: f, file_method: :tmp_source_file} %>
       <% end %>
@@ -59,7 +63,18 @@
   <div class="sidebar" data-equalizer-watch>
     <h3>How to share <%= t('nouns.extension').pluralize(2) %> on Bonsai</h3>
 
-    <p>Thank you for sharing your asset with the Sensu Community! Here’s how it works: Bonsai pulls project details and release information from GitHub to populate an asset page. To share an asset on Bonsai, the asset should be in a public GitHub repository that includes:</p>
+    <p>
+      Thank you for sharing your asset with the Sensu Community!
+      Here’s how it works:
+      Bonsai pulls project details and release information from GitHub to populate an asset page.
+      To share an asset on Bonsai,
+      the asset should be in a public
+      <%- if ROLLOUT.active?(:private_repos) %>
+        or private
+      <%- end %>
+      GitHub repository
+      that includes:
+    </p>
     <ul>
       <li><a href="https://help.github.com/articles/creating-releases/">GitHub release</a> tags</li>
       <li>bonsai.yml <a href="https://docs.sensu.io/sensu-go/latest/reference/assets#sharing-an-asset-on-bonsai" rel="nofollow">configuration file</a> with the project description, platforms, asset filenames, and checksums</li>

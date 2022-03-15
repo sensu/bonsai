@@ -22,9 +22,9 @@ describe CompileGithubExtensionVersionConfig do
 
   describe ".call" do
     let(:asset_hash1)        { {name: "my_repo-1.2.2-linux-x86_64.tar.gz",
-                                browser_download_url: "https://example.com/download"} }
+                                url: "https://example.com/download"} }
     let(:asset_hash2)        { {name: "my_repo-1.2.2-linux-x86_64.sha512.txt",
-                                browser_download_url: "https://example.com/sha_download"} }
+                                url: "https://example.com/sha_download"} }
     let(:release_data)       { {tag_name: version.version, assets: [asset_hash1, asset_hash2]} }
     let(:expected_data_hash) { {"annotations"=>
                                   {"io.sensu.bonsai.test"=>"test value"},

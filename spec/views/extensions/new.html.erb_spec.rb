@@ -10,14 +10,15 @@ describe "extensions/new" do
     allow(view).to receive(:policy) do |record|
       Pundit.policy(user, record)
     end
+    allow(view).to(receive(:current_user)).and_return(user)
   end
 
   context "user is an admin" do
     let(:user)      { create :admin }
 
-    it "displays a fieldset for uploading a ZIP file" do
+    it "displays a message while loading extensions" do
       render
-      expect(rendered).to have_selector('legend', text: "Upload a ZIP file")
+      expect(rendered).to have_selector('p', id: "loading-extensions")
     end
   end
 

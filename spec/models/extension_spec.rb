@@ -2,6 +2,10 @@ require 'spec_helper'
 
 describe Extension do
   describe "GitHub URL handling" do
+    let(:extension) { create :extension }
+    let(:account)   { extension.github_account }
+    let(:token)     { account.oauth_token }
+
     before do
       @e = Extension.new(github_url: "www.github.com/cvincent/test")
       @e.valid?
@@ -13,6 +17,31 @@ describe Extension do
 
     it "can return the username/repo formatted repo name from the URL" do
       expect(@e.github_repo).to eq("cvincent/test")
+    end
+
+    context 'with OAuth token' do
+      let(:subject)   { extension.github_url_with_auth }
+
+      before do
+        expect(token).to be_present
+      end
+
+      it 'injects the OAuth token into the URL' do
+        expect(subject).to match /x-oauth-basic:#{token}/
+      end
+    end
+
+    context 'without OAuth token' do
+      let(:subject)     { extension.github_url_with_auth }
+
+      before do
+        account.update_columns(oauth_token: nil)
+        expect(token).to_not be_present
+      end
+
+      it 'injects the OAuth token into the URL' do
+        expect(subject).to_not match /x-oauth-basic/
+      end
     end
   end
 

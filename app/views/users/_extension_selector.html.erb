@@ -1,2 +1,13 @@
+<%= select_tag "extension[github_url_short]",
+               options_for_select(@repo_names.map { |r| r[:full_name] }),
+               include_blank: "Select a Repository",
+               id:            "extension-url-short-field",
+               data:          { repos: @repo_names.to_json } %>
 
-<%= select_tag "extension[github_url_short]", options_for_select( @repo_names.map{ |r| r[:full_name] } ), include_blank: "Select a Repository", id: "extension-url-short-field", data: {repos: @repo_names.to_json} %>
+<%- if ROLLOUT.active?(:private_repos) && !current_user&.shares_private_repos? %>
+  <p class="hint-block">
+    Don't see your private repositories?
+    <%= link_to "Click here", sign_out_with_token_drop_path, method: :delete %>
+    to re-login and permit Sensu to include your private repositories.
+  </p>
+<% end %>

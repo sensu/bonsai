@@ -17,6 +17,10 @@ class Account < ApplicationRecord
   scope :for_provider, ->{ where(provider: ENV['OAUTH_ACCOUNT_PROVIDER']) }
   scope :with_username, ->(username) { where(username: username) }
 
+  def revoke_application_authorization
+    user.octokit.revoke_application_authorization(oauth_token)
+  end
+
   private
 
   #

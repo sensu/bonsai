@@ -167,6 +167,7 @@ Rails.application.routes.draw do
   # when signing in or up with chef account
   # match 'auth/chef_oauth2/callback' => 'sessions#create', as: :auth_session_callback, via: [:get, :post]
   match 'auth/github/callback' => 'sessions#create', as: :auth_session_callback, via: [:get, :post]
+  match 'auth/github' => 'sessions#passthru', via: [:get, :post], constraints: proc { Rails.env.development? }
 
   get 'auth/failure' => 'sessions#failure', as: :auth_failure
   get 'login'   => redirect('/sign-in'), as: nil
@@ -177,6 +178,7 @@ Rails.application.routes.draw do
   delete 'logout'   => redirect('/sign-out'), as: nil
   delete 'signout'  => redirect('/sign-out'), as: nil
   delete 'sign-out' => 'sessions#destroy', as: :sign_out
+  delete 'sign-out-with-token-drop' => 'sessions#destroy_with_token_drop', as: :sign_out_with_token_drop
 
   # when linking an oauth account
   match 'auth/:provider/callback' => 'accounts#create', as: :auth_callback, via: [:get, :post]

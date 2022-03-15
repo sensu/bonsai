@@ -36,4 +36,13 @@ describe Account do
       end
     end
   end
+
+  describe '#revoke_application_authorization' do
+    subject { create :account }
+
+    it 'calls the GitHub API' do
+      expect_any_instance_of(Octokit::Client).to receive(:revoke_application_authorization).with(subject.oauth_token)
+      subject.revoke_application_authorization
+    end
+  end
 end

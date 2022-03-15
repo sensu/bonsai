@@ -110,8 +110,9 @@ class CompileGithubExtensionVersionConfig
 
     sha_download_url = github_download_url(compiled_sha_filename, github_asset_data_hashes_lut)
     result           = FetchRemoteSha.call(
-      sha_download_url: sha_download_url,
-      asset_filename:   asset_filename
+      sha_download_url:        sha_download_url,
+      sha_download_auth_token: version.github_account_oauth_token,
+      asset_filename:          asset_filename
     )
 
     result.tap do |sha_result|
@@ -123,16 +124,20 @@ class CompileGithubExtensionVersionConfig
     # relying on the filename to equal the key in the github hash is failing
     # convert keys to an array of strings
     lut_array = github_asset_data_hashes_lut.keys
+
     # get the index of the filename
     data_index = lut_array.index(filename)
-    # retreive the data based on the index
-    unless data_index.nil?
-      asset_data = github_asset_data_hashes_lut.values[data_index]
-      unless asset_data.nil? || !asset_data.is_a?(Hash)
-        return asset_data[:browser_download_url]
-      end
+    # retrieve the data based on the index
+    if data_index.nil?
+      context.fail!(error: "missing GitHub release asset for #{filename}")
+      return ''
     end
-    context.fail!(error: "missing GitHub release asset for #{filename}")
-    return ''
+
+    asset_data = github_asset_data_hashes_lut.values[data_index]
+    if asset_data.nil? || !asset_data.is_a?(Hash)
+      return nil
+    end
+
+    return asset_data[:url]
   end
 end
