@@ -81,7 +81,7 @@ module BonsaiAssetIndex
     require Rails.root.join('lib', 'active_storage_cache_store').to_s
     config.active_storage_cache = ActiveStorageCacheStore.new
 
-    config.x.extension_emails = ActiveRecord::Type::Boolean.new.cast(ENV.fetch('EXTENSION_EMAILS', true))
-    config.x.s3_mirroring = ActiveRecord::Type::Boolean.new.cast(ENV.fetch('AWS_S3_MIRRORING_ENABLED', true))
+    config.x.extension_emails = ActiveRecord::Type::Boolean.new.cast(ENV.fetch('EXTENSION_EMAILS',         true))
+    config.x.s3_mirroring     = ActiveRecord::Type::Boolean.new.cast(ENV.fetch('AWS_S3_MIRRORING_ENABLED', true))
   end
 end
