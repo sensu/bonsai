@@ -249,7 +249,7 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
   end
 
   def set_commit_count(version)
-    version.commit_count = @run.cmd("git shortlog | grep -E '^[ ]+\\w+' | wc -l").strip.to_i
+    version.commit_count = @run.cmd("git shortlog | grep -E '^[ ]+\\w+' | wc -l").to_s.strip.to_i
     logger.info "COMMIT COUNT: #{version.commit_count}"
   end
 
