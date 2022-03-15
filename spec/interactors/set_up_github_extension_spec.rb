@@ -30,9 +30,11 @@ describe SetUpGithubExtension do
       expect(context).to be_a_success
     end
 
-    it "kicks off a worker to set up the repo's web hook for updates" do
-      expect(SetupExtensionWebHooksWorker).to receive(:perform_async)
-      expect(context).to be_a_success
+    unless ROLLOUT.active?(:no_webhook)
+      it "kicks off a worker to set up the repo's web hook for updates" do
+        expect(SetupExtensionWebHooksWorker).to receive(:perform_async)
+        expect(context).to be_a_success
+      end
     end
 
     it "kicks off a worker to notify operators" do

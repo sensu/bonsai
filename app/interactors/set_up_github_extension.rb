@@ -17,11 +17,13 @@ class SetUpGithubExtension
       worker: 'CollectExtensionMetadataWorker', 
       job_id: CollectExtensionMetadataWorker.perform_async(extension.id, platforms)
     )
-    CompileExtensionStatus.call(
-      extension: extension, 
-      worker: 'SetupExtensionWebHooksWorker', 
-      job_id: SetupExtensionWebHooksWorker.perform_async(extension.id)
-    )
+    unless ROLLOUT.active?(:no_webhook)
+      CompileExtensionStatus.call(
+        extension: extension,
+        worker:    'SetupExtensionWebHooksWorker',
+        job_id:    SetupExtensionWebHooksWorker.perform_async(extension.id)
+      )
+    end
     CompileExtensionStatus.call(
       extension: extension, 
       worker: 'NotifyModeratorsOfNewExtensionWorker', 
