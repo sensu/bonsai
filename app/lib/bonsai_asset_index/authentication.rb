@@ -1,6 +1,6 @@
 module BonsaiAssetIndex
   module Authentication
-    AUTH_SCOPE = "public_repo,user:email,write:repo_hook,push"
+    AUTH_SCOPE                 = "public_repo,read:org,user:email,write:repo_hook,push"
 
     #
     # Include the following methods as helper methods.
