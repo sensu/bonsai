@@ -21,10 +21,11 @@ describe CompileGithubExtensionVersionConfig do
   subject(:context)  { CompileGithubExtensionVersionConfig.call(version: version, system_command_runner: cmd_runner) }
 
   describe ".call" do
+    let(:asset_host)         { "https://example.com" }
     let(:asset_hash1)        { {name: "my_repo-1.2.2-linux-x86_64.tar.gz",
-                                url: "https://example.com/download"} }
+                                url: "#{asset_host}/download"} }
     let(:asset_hash2)        { {name: "my_repo-1.2.2-linux-x86_64.sha512.txt",
-                                url: "https://example.com/sha_download"} }
+                                url: "#{asset_host}/sha_download"} }
     let(:release_data)       { {tag_name: version.version, assets: [asset_hash1, asset_hash2]} }
     let(:expected_data_hash) { {"annotations"=>
                                   {"io.sensu.bonsai.test"=>"test value"},
@@ -37,7 +38,7 @@ describe CompileGithubExtensionVersionConfig do
                                     "sha_filename"   => "\#{repo}-\#{version}-linux-x86_64.sha512.txt",
                                     "asset_filename" => "\#{repo}-\#{version}-linux-x86_64.tar.gz",
                                     "viable"         => true,
-                                    "asset_url"      => "https://example.com/download",
+                                    "asset_url"      => "#{asset_host}/download",
                                     "base_filename"  => "my_repo-1.2.2-linux-x86_64.tar.gz",
                                     "asset_sha"      => "c1ec2f493f0ff9d83914c1ec2f493f0ff9d83914"}],
                                   "description" => "test asset",
