@@ -31,4 +31,47 @@ describe ReleaseAsset do
     end
   end
 
+  describe '#asset_url' do
+    let(:vanity_url)       { nil }
+    let(:source_asset_url) { nil }
+    subject                { build :release_asset, vanity_url: vanity_url, source_asset_url: source_asset_url}
+
+    context 'no vanity url' do
+      context 'no source asset url' do
+        it { expect(subject.asset_url).to be_blank }
+      end
+
+      context 'with source asset url' do
+        let(:source_asset_url) { 'some-url' }
+
+        before do
+          expect(source_asset_url).to be_present
+        end
+
+        it { expect(subject.asset_url).to eq source_asset_url }
+      end
+    end
+
+    context 'with vanity url' do
+      let(:vanity_url) { 'some-vanity-url' }
+
+      before do
+        expect(vanity_url).to be_present
+      end
+
+      context 'no source asset url' do
+        it { expect(subject.asset_url).to eq vanity_url }
+      end
+
+      context 'with source asset url' do
+        let(:source_asset_url) { 'some-url' }
+
+        before do
+          expect(source_asset_url).to be_present
+        end
+
+        it { expect(subject.asset_url).to eq vanity_url }
+      end
+    end
+  end
 end

@@ -23,4 +23,7 @@ class ReleaseAsset < ApplicationRecord
     extension.tags.map(&:name)
   end
 
+  def asset_url
+    vanity_url.presence || source_asset_url
+  end
 end
