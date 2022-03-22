@@ -6,9 +6,10 @@ describe CompileExtension do
 
     context 'with a GitHub-based extension' do
       let(:extension) { create :extension }
+      let(:user)      { create :user }
 
       it 'delegates to the SyncExtensionRepoWorker service class' do
-        expect(SyncExtensionRepoWorker).to receive(:perform_async).with(extension.id)
+        expect(SyncExtensionRepoWorker).to receive(:perform_async).with(extension.id, [], user.id)
         subject
       end
     end
