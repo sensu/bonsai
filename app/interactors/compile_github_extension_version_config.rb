@@ -11,6 +11,7 @@ class CompileGithubExtensionVersionConfig
   # The required context attributes:
   delegate :version,               to: :context
   delegate :system_command_runner, to: :context
+  delegate :current_user,          to: :context
 
   def call
     config_hash = fetch_bonsai_config(system_command_runner)
@@ -21,7 +22,7 @@ class CompileGithubExtensionVersionConfig
       context.fail!(error: "Bonsai configuration has no 'builds' section")
     end
  
-    config_hash['builds'] = compile_builds(version, config_hash['builds'])
+    config_hash['builds'] = compile_builds(version, config_hash['builds'], current_user)
 
     context.data_hash = config_hash
   rescue => error
@@ -54,7 +55,7 @@ class CompileGithubExtensionVersionConfig
     config_hash
   end
 
-  def compile_builds(version, build_configs)
+  def compile_builds(version, build_configs, current_user)
     github_asset_data_hashes     = gather_github_release_asset_data_hashes(version)
 
     github_asset_data_hashes_lut = Array.wrap(github_asset_data_hashes)
@@ -63,7 +64,7 @@ class CompileGithubExtensionVersionConfig
 
     Array.wrap(build_configs).each_with_index.map { |build_config, idx|
       Thread.new do
-        compiled_config = compile_build_hash(build_config, idx + 1, github_asset_data_hashes_lut, version)
+        compiled_config = compile_build_hash(build_config, idx + 1, github_asset_data_hashes_lut, version, current_user)
         build_config.merge compiled_config
       end
     }.map(&:value)
@@ -77,7 +78,7 @@ class CompileGithubExtensionVersionConfig
     Array.wrap(releases_data[:assets])
   end
 
-  def compile_build_hash(build_config, num, github_asset_data_hashes_lut, version)
+  def compile_build_hash(build_config, num, github_asset_data_hashes_lut, version, current_user)
 
     context.fail!(error: "build ##{num} is malformed (perhaps missing indentation)") unless build_config.is_a?(Hash)
 
@@ -96,7 +97,7 @@ class CompileGithubExtensionVersionConfig
     asset_filename    = File.basename(compiled_asset_filename)
     file_download_url = github_download_url(compiled_asset_filename, github_asset_data_hashes_lut)
 
-    sha_result = read_sha_file(compiled_sha_filename, asset_filename, github_asset_data_hashes_lut)
+    sha_result = read_sha_file(compiled_sha_filename, asset_filename, github_asset_data_hashes_lut, current_user)
     
     return {
       'viable'        => file_download_url.present?,
@@ -106,12 +107,12 @@ class CompileGithubExtensionVersionConfig
     }
   end
 
-  def read_sha_file(compiled_sha_filename, asset_filename, github_asset_data_hashes_lut)
+  def read_sha_file(compiled_sha_filename, asset_filename, github_asset_data_hashes_lut, current_user)
 
     sha_download_url = github_download_url(compiled_sha_filename, github_asset_data_hashes_lut)
     result           = FetchRemoteSha.call(
       sha_download_url:        sha_download_url,
-      sha_download_auth_token: version.github_oauth_token,
+      sha_download_auth_token: version.github_oauth_token(current_user),
       asset_filename:          asset_filename
     )
 
