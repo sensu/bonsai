@@ -542,7 +542,7 @@ class Extension < ApplicationRecord
   #
   def octokit
     @octokit ||= Octokit::Client.new(
-      access_token: owner.github_account.oauth_token,
+      access_token: github_account.oauth_token,
       client_id: Rails.configuration.octokit.client_id,
       client_secret: Rails.configuration.octokit.client_secret
     )
