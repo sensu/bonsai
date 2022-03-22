@@ -541,11 +541,7 @@ class Extension < ApplicationRecord
   # @return [Ocotkit::Client]
   #
   def octokit
-    @octokit ||= Octokit::Client.new(
-      access_token: github_oauth_token,
-      client_id: Rails.configuration.octokit.client_id,
-      client_secret: Rails.configuration.octokit.client_secret
-    )
+    @octokit ||= octokit_client(github_oauth_token)
   end
 
   def commit_daily_metric_key
@@ -585,6 +581,14 @@ class Extension < ApplicationRecord
   end
 
   private
+
+  def octokit_client(auth_token)
+    Octokit::Client.new(
+      access_token:  auth_token,
+      client_id:     Rails.configuration.octokit.client_id,
+      client_secret: Rails.configuration.octokit.client_secret
+    )
+  end
 
   #
   # Populates the +lowercase_name+ attribute.
