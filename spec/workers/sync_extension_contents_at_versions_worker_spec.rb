@@ -12,6 +12,7 @@ describe SyncExtensionContentsAtVersionsWorker do
   let(:release_data) { {tag_name: version.version, assets: [asset_hash1, asset_hash2]} }
   let!(:version)     { create :extension_version_with_config }
   let(:extension)    { version.extension }
+  let(:user)         { create :user }
   
   subject            { SyncExtensionContentsAtVersionsWorker.new }
 
@@ -57,7 +58,7 @@ describe SyncExtensionContentsAtVersionsWorker do
       tags = ["0.0.1"]   # is semver-conformant
 
       expect {
-        subject.perform(extension.id, tags)
+        subject.perform(extension.id, tags, [], {}, user.id)
       }.to change{ExtensionVersion.count}.by 1
     end
 
@@ -65,7 +66,7 @@ describe SyncExtensionContentsAtVersionsWorker do
       tags = ["v0.1A20180919"]  # is not semver-conformant
 
       expect {
-        subject.perform(extension.id, tags)
+        subject.perform(extension.id, tags, [], {}, user.id)
       }.not_to change{ExtensionVersion.count}
     end
   end
@@ -77,7 +78,7 @@ describe SyncExtensionContentsAtVersionsWorker do
 
 
     it 'puts the release notes into the release notes field' do
-      subject.perform(extension.id, tags, [], release_infos_by_tag)
+      subject.perform(extension.id, tags, [], release_infos_by_tag, user.id)
       expect(extension.reload.extension_versions.last.release_notes).to eq body
     end
   end
@@ -92,7 +93,7 @@ describe SyncExtensionContentsAtVersionsWorker do
         'suggested_asset_message' => 'Suggested Asset Messaage'
       }
       version.update_column(:config, config_hash)
-      subject.perform(extension.id, tags)
+      subject.perform(extension.id, tags, [], {}, user.id)
       version.reload
       annotations = version.config['annotations']
       expect(annotations.keys).to include('io.sensu.bonsai.suggested_asset_url')
@@ -100,11 +101,11 @@ describe SyncExtensionContentsAtVersionsWorker do
 
     it 'puts annotations in annotations field' do
       config_hash['annotations'] = {
-        suggested_asset_url: '/suggested/asset', 
+        suggested_asset_url: '/suggested/asset',
         suggested_asset_message: 'Suggested Asset Message'
       }
       version.update_column(:config, config_hash)
-      subject.perform(extension.id, tags)
+      subject.perform(extension.id, tags, [], {}, user.id)
       version.reload
       annotations = version.annotations
       expect(annotations.map{|k,v| k.to_s}).to include('io.sensu.bonsai.suggested_asset_url')
@@ -121,7 +122,7 @@ describe SyncExtensionContentsAtVersionsWorker do
         "readme_url"=>"https://raw.githubusercontent.com/sensu/bonsai/master/README.md"
       }]
       version.update_column(:config, config_hash)
-      subject.perform(extension.id, tags)
+      subject.perform(extension.id, tags, [], {}, user.id)
       version.reload 
       expect(version.readme).to include('bonsai.sensu.io')
     end
@@ -131,7 +132,7 @@ describe SyncExtensionContentsAtVersionsWorker do
         "readme_url"=>"https://github.com/sensu/bonsai/blob/master/README.md"
       }]
       version.update_column(:config, config_hash)
-      subject.perform(extension.id, tags)
+      subject.perform(extension.id, tags, [], {}, user.id)
       version.reload 
       expect(version.readme).to include('bonsai.sensu.io')
     end
@@ -141,7 +142,7 @@ describe SyncExtensionContentsAtVersionsWorker do
         "readme_url"=>"https://raw.githubusercontent.com/sensu/bonsai/master/README.md"
       }
       extension.update_column(:config_overrides, config_overrides)
-      subject.perform(extension.id, tags)
+      subject.perform(extension.id, tags, [], {}, user.id)
       version.reload 
       expect(version.readme).to include('bonsai.sensu.io')
     end

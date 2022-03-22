@@ -20,7 +20,7 @@ class SyncExtensionRepoWorker < ApplicationWorker
     CompileExtensionStatus.call(
       extension: @extension, 
       worker: 'SyncExtensionContentsAtVersionsWorker', 
-      job_id: SyncExtensionContentsAtVersionsWorker.perform_async(@extension.id, @tags, compatible_platforms, release_infos_by_tag)
+      job_id: SyncExtensionContentsAtVersionsWorker.perform_async(@extension.id, @tags, compatible_platforms, release_infos_by_tag, current_user_id)
     )
   end
 
