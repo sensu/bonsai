@@ -580,8 +580,8 @@ class Extension < ApplicationRecord
     most_recent_valid_github_token
   end
 
-  def github_url_with_auth
-    auth_token = github_oauth_token
+  def github_url_with_auth(current_user=nil)
+    auth_token = github_oauth_token(current_user)
     return github_url unless auth_token.present?
 
     uri          = URI.parse(github_url)
