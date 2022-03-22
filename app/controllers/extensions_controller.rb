@@ -331,7 +331,7 @@ class ExtensionsController < ApplicationController
   def sync_repo
     extension = Extension.with_owner_and_lowercase_name(owner_name: params[:username], lowercase_name: params[:id])
     authorize! extension
-    CompileExtension.call(extension: extension)
+    CompileExtension.call(extension: extension, current_user: current_user)
     redirect_to owner_scoped_extension_url(@extension), notice: t("extension.syncing_in_progress")
   end
 

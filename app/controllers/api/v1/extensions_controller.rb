@@ -147,7 +147,7 @@ class Api::V1::ExtensionsController < Api::V1Controller
     rescue
       render_not_authorized([t('api.error_messages.unauthorized_recompile_error')])
     else
-      CompileExtension.call(extension: @extension)
+      CompileExtension.call(extension: @extension, current_user: current_user)
       render json: {message: t("extension.syncing_in_progress")}, status: 202
     end
   end

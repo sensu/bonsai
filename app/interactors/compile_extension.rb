@@ -6,7 +6,8 @@ class CompileExtension
   include Interactor
 
   # The required context attributes:
-  delegate :extension, to: :context
+  delegate :extension,    to: :context
+  delegate :current_user, to: :context
 
   def call
     if extension.hosted?
@@ -23,7 +24,7 @@ class CompileExtension
       CompileExtensionStatus.call(
         extension: extension, 
         worker: 'SyncExtensionRepoWorker', 
-        job_id: SyncExtensionRepoWorker.perform_async(extension.id) 
+        job_id: SyncExtensionRepoWorker.perform_async(extension.id, [], current_user&.id)
       )
     end
   end

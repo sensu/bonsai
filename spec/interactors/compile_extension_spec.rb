@@ -2,7 +2,8 @@ require "spec_helper"
 
 describe CompileExtension do
   describe '.call' do
-    subject { CompileExtension.call(extension: extension) }
+    let(:user) { create :user }
+    subject { CompileExtension.call(extension: extension, current_user: user) }
 
     context 'with a GitHub-based extension' do
       let(:extension) { create :extension }
