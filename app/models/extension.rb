@@ -567,7 +567,15 @@ class Extension < ApplicationRecord
   end
 
   def github_oauth_token
-    github_account_oauth_token
+    valid_token = [
+      github_account_oauth_token,
+    ].find { |token| token.present? && is_valid_github_token?(token) }
+
+    if valid_token && valid_token != most_recent_valid_github_token
+      update(most_recent_valid_github_token: valid_token)
+    end
+
+    most_recent_valid_github_token
   end
 
   def github_url_with_auth
@@ -581,6 +589,12 @@ class Extension < ApplicationRecord
   end
 
   private
+
+  def is_valid_github_token?(token)
+    !!octokit_client(token).user
+  rescue
+    false
+  end
 
   def octokit_client(auth_token)
     Octokit::Client.new(
