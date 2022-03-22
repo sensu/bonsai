@@ -542,7 +542,7 @@ class Extension < ApplicationRecord
   #
   def octokit
     @octokit ||= Octokit::Client.new(
-      access_token: github_account.oauth_token,
+      access_token: github_account_oauth_token,
       client_id: Rails.configuration.octokit.client_id,
       client_secret: Rails.configuration.octokit.client_secret
     )
@@ -571,11 +571,11 @@ class Extension < ApplicationRecord
   end
 
   def github_url_with_auth
-    return github_url unless github_account.oauth_token.present?
+    return github_url unless github_account_oauth_token.present?
 
     uri          = URI.parse(github_url)
     uri.user     = 'x-oauth-basic'
-    uri.password = github_account.oauth_token
+    uri.password = github_account_oauth_token
 
     uri.to_s
   end
