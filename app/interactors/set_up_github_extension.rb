@@ -9,13 +9,14 @@ class SetUpGithubExtension
   delegate :extension,            to: :context
   delegate :octokit,              to: :context
   delegate :compatible_platforms, to: :context
+  delegate :current_user,         to: :context
 
   def call
     platforms = compatible_platforms.select { |p| !p.strip.blank? }
     CompileExtensionStatus.call(
       extension: extension, 
       worker: 'CollectExtensionMetadataWorker', 
-      job_id: CollectExtensionMetadataWorker.perform_async(extension.id, platforms)
+      job_id: CollectExtensionMetadataWorker.perform_async(extension.id, platforms, current_user&.id)
     )
     unless ROLLOUT.active?(:no_webhook)
       CompileExtensionStatus.call(
