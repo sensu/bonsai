@@ -574,6 +574,7 @@ class Extension < ApplicationRecord
     ].find { |token| token.present? && is_valid_github_token?(token) }
 
     if valid_token && valid_token != most_recent_valid_github_token
+      puts "***** GitHub auth token change"
       update(most_recent_valid_github_token: valid_token)
     end
 
