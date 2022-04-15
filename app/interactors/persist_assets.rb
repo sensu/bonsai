@@ -2,6 +2,7 @@
 class PersistAssets
   include Interactor
   include InitializeS3
+  include ReadsGithubFiles
 
   delegate :version, to: :context
 
@@ -30,7 +31,7 @@ class PersistAssets
       end
 
       if Rails.configuration.x.s3_mirroring
-        mirror_to_s3(release_asset, url)
+        mirror_to_s3(release_asset, url, version.github_oauth_token)
       end
     end # builds.each
 
@@ -38,7 +39,7 @@ class PersistAssets
 
   private
 
-  def mirror_to_s3(release_asset, url)
+  def mirror_to_s3(release_asset, url, auth_token)
     key           = release_asset.destination_pathname
     object_exists = s3_bucket.object(key).exists?
 
@@ -55,11 +56,9 @@ class PersistAssets
 
     # get file contents
     begin
-      file = url.open
-    rescue OpenURI::HTTPError => error
-      status  = error.io.status[0]
-      message = error.io.status[1]
-      puts "****** file read error: #{status} - #{message}"
+      file = read_github_file(url, auth_token)
+    rescue => error
+      puts "****** file read error: #{error}"
       return
     end
 
