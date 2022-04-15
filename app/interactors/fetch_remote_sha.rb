@@ -4,6 +4,7 @@
 class FetchRemoteSha
   include Interactor
   include ExtractsShas
+  include ReadsGithubFiles
 
   # The required context attributes:
   delegate :asset_filename,          to: :context
@@ -11,26 +12,9 @@ class FetchRemoteSha
   delegate :sha_download_auth_token, to: :context
 
   def call
-    sha_file_content = read_remote_file(sha_download_url, sha_download_auth_token)
+    sha_file_content = read_github_file(sha_download_url, sha_download_auth_token)
     sha              = extract_sha_for_binary(asset_filename, sha_file_content)
 
     context.sha = sha
-  end
-
-  private
-
-  def read_remote_file(url, auth_token)
-    return nil unless url.present?
-
-    faraday = Faraday.new { |f| 
-      f.use FaradayMiddleware::FollowRedirects
-      f.adapter :net_http
-      f.basic_auth('x-oauth-basic', auth_token) if auth_token.present?
-      f.headers['Accept'] = 'application/octet-stream'
-    }
-
-    response = faraday.get(url)
-
-    response.success? ? response.body : nil
   end
 end
