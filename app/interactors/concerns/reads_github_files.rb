@@ -5,6 +5,14 @@ module ReadsGithubFiles
 
   private
 
+  def gather_github_release_asset_data_hashes(version)
+    releases_data = version.octokit
+                           .releases(version.github_repo)
+                           .find { |h| h[:tag_name] == version.version }
+                           .to_h
+    Array.wrap(releases_data[:assets])
+  end
+
   def read_github_file(url, auth_token)
     return nil unless url.present?
 
