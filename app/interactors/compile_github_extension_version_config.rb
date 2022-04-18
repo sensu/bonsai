@@ -21,7 +21,7 @@ class CompileGithubExtensionVersionConfig
     else
       context.fail!(error: "Bonsai configuration has no 'builds' section")
     end
- 
+
     config_hash['builds'] = compile_builds(version, config_hash['builds'], current_user)
 
     context.data_hash = config_hash
@@ -98,7 +98,7 @@ class CompileGithubExtensionVersionConfig
     file_download_url = github_download_url(compiled_asset_filename, github_asset_data_hashes_lut)
 
     sha_result = read_sha_file(compiled_sha_filename, asset_filename, github_asset_data_hashes_lut, current_user)
-    
+
     return {
       'viable'        => file_download_url.present?,
       'asset_url'     => file_download_url,
