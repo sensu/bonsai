@@ -2,6 +2,7 @@
 class PersistAssets
   include Interactor
   include InitializeS3
+  include ReadsGithubFiles
 
   delegate :version, to: :context
 
@@ -9,6 +10,8 @@ class PersistAssets
   	context.fail!(error: "Do not store assets for master version") if version.version == 'master'
   	context.fail!(error: "#{version.version} has no config") if version.config.blank?
   	context.fail!(error: "#{version.version} has no builds in config") if version.config['builds'].blank?
+
+    github_asset_data_hashes = gather_github_release_asset_data_hashes(version)
 
     version.config['builds'].each do |build|
 
@@ -23,14 +26,17 @@ class PersistAssets
 
       begin
         #puts "******** URI #{release_asset.source_asset_url}"
-        url = URI(release_asset.source_asset_url)
+        github_asset_data_hash = github_asset_data_hashes.
+          find { |h| h[:browser_download_url] == build['asset_url'] }.
+          to_h
+        url = URI(github_asset_data_hash[:url])
       rescue URI::Error => error
         puts "******** URI error: #{release_asset.source_asset_url} - #{error.message}"
         next
       end
 
       if Rails.configuration.x.s3_mirroring
-        mirror_to_s3(release_asset, url)
+        mirror_to_s3(release_asset, url, version.github_oauth_token)
       end
     end # builds.each
 
@@ -38,7 +44,7 @@ class PersistAssets
 
   private
 
-  def mirror_to_s3(release_asset, url)
+  def mirror_to_s3(release_asset, url, auth_token)
     key           = release_asset.destination_pathname
     object_exists = s3_bucket.object(key).exists?
 
@@ -55,11 +61,9 @@ class PersistAssets
 
     # get file contents
     begin
-      file = url.open
-    rescue OpenURI::HTTPError => error
-      status  = error.io.status[0]
-      message = error.io.status[1]
-      puts "****** file read error: #{status} - #{message}"
+      file = read_github_file(url, auth_token)
+    rescue => error
+      puts "****** file read error: #{error}"
       return
     end
 

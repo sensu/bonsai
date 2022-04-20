@@ -7,6 +7,7 @@ require 'fetch_remote_sha'
 
 class CompileGithubExtensionVersionConfig
   include Interactor
+  include ReadsGithubFiles
 
   # The required context attributes:
   delegate :version,               to: :context
@@ -21,7 +22,7 @@ class CompileGithubExtensionVersionConfig
     else
       context.fail!(error: "Bonsai configuration has no 'builds' section")
     end
- 
+
     config_hash['builds'] = compile_builds(version, config_hash['builds'], current_user)
 
     context.data_hash = config_hash
@@ -70,14 +71,6 @@ class CompileGithubExtensionVersionConfig
     }.map(&:value)
   end
 
-  def gather_github_release_asset_data_hashes(version)
-    releases_data = version.octokit
-      .releases(version.github_repo)
-      .find { |h| h[:tag_name] == version.version }
-      .to_h
-    Array.wrap(releases_data[:assets])
-  end
-
   def compile_build_hash(build_config, num, github_asset_data_hashes_lut, version, current_user)
 
     context.fail!(error: "build ##{num} is malformed (perhaps missing indentation)") unless build_config.is_a?(Hash)
@@ -95,10 +88,10 @@ class CompileGithubExtensionVersionConfig
     context.fail!(error: "build ##{num} 'asset_filename' value could not be interpolated") unless compiled_asset_filename.present?
 
     asset_filename    = File.basename(compiled_asset_filename)
-    file_download_url = github_download_url(compiled_asset_filename, github_asset_data_hashes_lut)
+    file_download_url = asset_data(compiled_asset_filename, github_asset_data_hashes_lut)[:browser_download_url]
 
     sha_result = read_sha_file(compiled_sha_filename, asset_filename, github_asset_data_hashes_lut, current_user)
-    
+
     return {
       'viable'        => file_download_url.present?,
       'asset_url'     => file_download_url,
@@ -109,7 +102,7 @@ class CompileGithubExtensionVersionConfig
 
   def read_sha_file(compiled_sha_filename, asset_filename, github_asset_data_hashes_lut, current_user)
 
-    sha_download_url = github_download_url(compiled_sha_filename, github_asset_data_hashes_lut)
+    sha_download_url = asset_data(compiled_sha_filename, github_asset_data_hashes_lut)[:url]
     result           = FetchRemoteSha.call(
       sha_download_url:        sha_download_url,
       sha_download_auth_token: version.github_oauth_token(current_user),
@@ -121,7 +114,7 @@ class CompileGithubExtensionVersionConfig
     end
   end
 
-  def github_download_url(filename, github_asset_data_hashes_lut)
+  def asset_data(filename, github_asset_data_hashes_lut)
     # relying on the filename to equal the key in the github hash is failing
     # convert keys to an array of strings
     lut_array = github_asset_data_hashes_lut.keys
@@ -131,14 +124,14 @@ class CompileGithubExtensionVersionConfig
     # retrieve the data based on the index
     if data_index.nil?
       context.fail!(error: "missing GitHub release asset for #{filename}")
-      return ''
+      return {}
     end
 
     asset_data = github_asset_data_hashes_lut.values[data_index]
-    if asset_data.nil? || !asset_data.is_a?(Hash)
-      return nil
+    if !asset_data.is_a?(Hash)
+      return {}
     end
 
-    return asset_data[:url]
+    return asset_data
   end
 end
