@@ -1,6 +1,6 @@
 class CollectExtensionMetadataWorker < ApplicationWorker
 
-  def perform(extension_id, compatible_platforms = [])
+  def perform(extension_id, compatible_platforms = [], current_user_id=nil)
   	extension = Extension.find(extension_id)
     CompileExtensionStatus.call(
       extension: extension,
@@ -30,7 +30,7 @@ class CollectExtensionMetadataWorker < ApplicationWorker
     CompileExtensionStatus.call(
       extension: extension,
       worker: 'SyncExtensionRepoWorker',
-      job_id: SyncExtensionRepoWorker.perform_async(extension.id, compatible_platforms)
+      job_id: SyncExtensionRepoWorker.perform_async(extension.id, compatible_platforms, current_user_id)
     )
   end
 end

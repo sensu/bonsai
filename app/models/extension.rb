@@ -541,11 +541,7 @@ class Extension < ApplicationRecord
   # @return [Ocotkit::Client]
   #
   def octokit
-    @octokit ||= Octokit::Client.new(
-      access_token: owner.github_account.oauth_token,
-      client_id: Rails.configuration.octokit.client_id,
-      client_secret: Rails.configuration.octokit.client_secret
-    )
+    @octokit ||= octokit_client(github_oauth_token)
   end
 
   def commit_daily_metric_key
@@ -570,17 +566,47 @@ class Extension < ApplicationRecord
     "#{owner_name}/#{name}"
   end
 
-  def github_url_with_auth
-    return github_url unless github_account.oauth_token.present?
+  def github_oauth_token(current_user=nil)
+    valid_token = [
+      github_account_oauth_token,
+      most_recent_valid_github_token,
+      current_user&.github_account_oauth_token,
+    ].find { |token| token.present? && is_valid_github_token?(token) }
+
+    if valid_token && valid_token != most_recent_valid_github_token
+      puts "***** GitHub auth token change"
+      update(most_recent_valid_github_token: valid_token)
+    end
+
+    most_recent_valid_github_token
+  end
+
+  def github_url_with_auth(current_user=nil)
+    auth_token = github_oauth_token(current_user)
+    return github_url unless auth_token.present?
 
     uri          = URI.parse(github_url)
     uri.user     = 'x-oauth-basic'
-    uri.password = github_account.oauth_token
+    uri.password = auth_token
 
     uri.to_s
   end
 
   private
+
+  def is_valid_github_token?(token)
+    !!octokit_client(token).user
+  rescue
+    false
+  end
+
+  def octokit_client(auth_token)
+    Octokit::Client.new(
+      access_token:  auth_token,
+      client_id:     Rails.configuration.octokit.client_id,
+      client_secret: Rails.configuration.octokit.client_secret
+    )
+  end
 
   #
   # Populates the +lowercase_name+ attribute.

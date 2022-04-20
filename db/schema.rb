@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_13_232729) do
+ActiveRecord::Schema.define(version: 2022_03_22_201419) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -366,6 +366,7 @@ ActiveRecord::Schema.define(version: 2020_01_13_232729) do
     t.string "compilation_error"
     t.string "parent_html_url"
     t.text "config_overrides"
+    t.string "most_recent_valid_github_token"
     t.index ["enabled"], name: "index_extensions_on_enabled"
     t.index ["github_organization_id"], name: "index_extensions_on_github_organization_id"
     t.index ["name"], name: "index_extensions_on_name"

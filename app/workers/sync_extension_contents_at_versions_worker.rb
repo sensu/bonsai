@@ -1,8 +1,8 @@
 class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
   include MarkdownHelper
 
-  def perform(extension_id, tags, compatible_platforms = [], release_infos_by_tag = {})
-
+  def perform(extension_id, tags, compatible_platforms = [], release_infos_by_tag = {}, current_user_id=nil)
+    current_user = User.find_by(id: current_user_id)
     @extension = Extension.find_by(id: extension_id)
     raise RuntimeError.new("#{I18n.t('nouns.extension')} ID: #{extension_id.inspect} not found.") unless @extension
 
@@ -21,7 +21,7 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
 
       if semver?
         release_info = release_infos_by_tag[@tag].to_h
-        sync_extension_version(release_info)
+        sync_extension_version(release_info, current_user)
         tally_commits if @tag == "master"
       end
     end
@@ -49,7 +49,7 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
 
   private
 
-  def sync_extension_version(release_info)
+  def sync_extension_version(release_info, current_user)
     checkout_correct_tag
     readme_body, readme_ext = fetch_readme
     logger.info "GOT README: #{readme_body}"
@@ -57,7 +57,7 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
     set_compatible_platforms(version)
     set_last_commit(version)
     set_commit_count(version)
-    scan_files(version)
+    scan_files(version, current_user)
     sync_release_info(version, release_info)
     check_for_overrides(version)
     PersistAssets.call(version: version)
@@ -253,10 +253,10 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
     logger.info "COMMIT COUNT: #{version.commit_count}"
   end
 
-  def scan_files(version)
+  def scan_files(version, current_user)
     version.extension_version_content_items.destroy_all
     logger.info("SCANNING FILES")
-    scan_config_yml_file(version)
+    scan_config_yml_file(version, current_user)
     scan_yml_files(version)
     scan_class_dirs(version)
   end
@@ -295,8 +295,12 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
     end
   end
 
-  def scan_config_yml_file(version, system_command_runner=@run)
-    compilation_result = CompileGithubExtensionVersionConfig.call(version: version, system_command_runner: system_command_runner)
+  def scan_config_yml_file(version, current_user, system_command_runner=@run)
+    compilation_result = CompileGithubExtensionVersionConfig.call(
+      current_user:          current_user,
+      version:               version,
+      system_command_runner: system_command_runner
+    )
     if compilation_result.success? && compilation_result.data_hash.present? && compilation_result.data_hash.is_a?(Hash)
       version.update_columns(
         config: compilation_result.data_hash,

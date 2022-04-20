@@ -16,6 +16,7 @@ describe SetUpGithubExtension do
   let(:platforms)   { ["", "p1", "p2"] }
   subject(:context) { SetUpGithubExtension.call(extension:            extension,
                                                 octokit:              octokit,
+                                                current_user:         user,
                                                 compatible_platforms: platforms) }
 
   before do

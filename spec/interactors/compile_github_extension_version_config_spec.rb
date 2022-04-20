@@ -18,7 +18,8 @@ describe CompileGithubExtensionVersionConfig do
   let(:extension)    { create :extension, extension_versions_count: 0, github_url: "https://github.com/owner/#{repo_name}" }
   let(:version)      { create :extension_version, extension: extension, config: config, version: version_name }
   let(:cmd_runner)   { double("command runner", :cmd => config.to_yaml) }
-  subject(:context)  { CompileGithubExtensionVersionConfig.call(version: version, system_command_runner: cmd_runner) }
+  let(:user)         { create :user }
+  subject(:context)  { CompileGithubExtensionVersionConfig.call(current_user: user, version: version, system_command_runner: cmd_runner) }
 
   describe ".call" do
     let(:asset_host)         { "https://example.com" }

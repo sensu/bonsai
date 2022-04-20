@@ -21,7 +21,7 @@ class CreateExtension
 
     if validate(candidate, @octokit, @user)
       candidate.save
-      postprocess(candidate, @octokit, @compatible_platforms, @version_name)
+      postprocess(candidate, @octokit, @compatible_platforms, @version_name, @user)
     elsif !candidate.hosted?
       existing = Extension.unscoped.where(enabled: false, github_url: candidate.github_url).first
       if existing
@@ -36,12 +36,12 @@ class CreateExtension
 
   private
 
-  def postprocess(extension, octokit, compatible_platforms, version_name)
+  def postprocess(extension, octokit, compatible_platforms, version_name, current_user)
     CompileExtensionStatusClear.call(extension: extension)
     if extension.hosted?
       SetUpHostedExtension.call(extension: extension, version_name: version_name)
     else
-      SetUpGithubExtension.call(extension: extension, octokit: octokit, compatible_platforms: compatible_platforms)
+      SetUpGithubExtension.call(extension: extension, octokit: octokit, compatible_platforms: compatible_platforms, current_user: current_user)
     end
   end
 

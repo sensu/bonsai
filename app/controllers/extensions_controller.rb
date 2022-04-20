@@ -331,7 +331,7 @@ class ExtensionsController < ApplicationController
   def sync_repo
     extension = Extension.with_owner_and_lowercase_name(owner_name: params[:username], lowercase_name: params[:id])
     authorize! extension
-    CompileExtension.call(extension: extension)
+    CompileExtension.call(extension: extension, current_user: current_user)
     redirect_to owner_scoped_extension_url(@extension), notice: t("extension.syncing_in_progress")
   end
 
@@ -376,7 +376,7 @@ class ExtensionsController < ApplicationController
     case event_type
       when "release"
         unless payload['release']['draft']
-          CollectExtensionMetadataWorker.perform_async(@extension.id, [])
+          CollectExtensionMetadataWorker.perform_async(@extension.id, [], current_user&.id)
         end
       when "watch"
         ExtractExtensionStargazersWorker.perform_async(@extension.id)
@@ -407,7 +407,7 @@ class ExtensionsController < ApplicationController
   def build
     github_token = request.headers['X-GitHub-Token']
     status_code_symbol = with_collaborator_authorization(github_token, @extension) do
-      CollectExtensionMetadataWorker.perform_async(@extension.id, [])
+      CollectExtensionMetadataWorker.perform_async(@extension.id, [], current_user&.id)
     end
 
     head status_code_symbol

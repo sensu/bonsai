@@ -58,6 +58,7 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :email_preferences, allow_destroy: true
 
   delegate :revoke_application_authorization, to: :github_account
+  delegate :oauth_token,                      to: :github_account, allow_nil: true, prefix: true
 
   #
   # Returns an Octokit client configured for this User.
@@ -66,7 +67,7 @@ class User < ApplicationRecord
   #
   def octokit
     @octokit ||= Octokit::Client.new(
-      access_token: github_account.oauth_token,
+      access_token: github_account_oauth_token,
       client_id: Rails.configuration.octokit.client_id,
       client_secret: Rails.configuration.octokit.client_secret
     )

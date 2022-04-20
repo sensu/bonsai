@@ -5,6 +5,7 @@ describe Extension do
     let(:extension) { create :extension }
     let(:account)   { extension.github_account }
     let(:token)     { account.oauth_token }
+    let(:user)      { create :user }
 
     before do
       @e = Extension.new(github_url: "www.github.com/cvincent/test")
@@ -20,19 +21,21 @@ describe Extension do
     end
 
     context 'with OAuth token' do
-      let(:subject)   { extension.github_url_with_auth }
+      let(:subject)   { extension.github_url_with_auth(user) }
 
       before do
         expect(token).to be_present
       end
 
       it 'injects the OAuth token into the URL' do
+        extension.update(most_recent_valid_github_token: token)
+        extension.reload
         expect(subject).to match /x-oauth-basic:#{token}/
       end
     end
 
     context 'without OAuth token' do
-      let(:subject)     { extension.github_url_with_auth }
+      let(:subject)     { extension.github_url_with_auth(user) }
 
       before do
         account.update_columns(oauth_token: nil)
