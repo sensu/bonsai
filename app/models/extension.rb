@@ -569,8 +569,8 @@ class Extension < ApplicationRecord
   def github_oauth_token(current_user=nil)
     valid_token = [
       github_account_oauth_token,
-      most_recent_valid_github_token,
       current_user&.github_account_oauth_token,
+      most_recent_valid_github_token,
     ].find { |token| token.present? && is_valid_github_token?(token) }
 
     if valid_token && valid_token != most_recent_valid_github_token
