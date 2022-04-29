@@ -384,9 +384,7 @@ class ExtensionsController < ApplicationController
       when "workflow_job"
         if payload['action'] == "completed"
           if payload['workflow_job']['name'].downcase.strip == "bonsai-recompile" 
-            if payload['workflow_job']['workflow']['name'].downcase.strip == "bonsai" 
-              CollectExtensionMetadataWorker.perform_async(@extension.id, [], current_user&.id)
-            end 
+            CollectExtensionMetadataWorker.perform_async(@extension.id, [], current_user&.id)
           end
         end
       when "watch"
