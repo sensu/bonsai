@@ -1,4 +1,6 @@
 class ExceptionsController < ApplicationController
+  skip_before_action :verify_authenticity_token, only: [:show]
+
   # Expose helper methods in the view
   helper_method :exception, :backtrace, :status_code
 
