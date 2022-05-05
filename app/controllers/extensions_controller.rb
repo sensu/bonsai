@@ -378,6 +378,15 @@ class ExtensionsController < ApplicationController
         unless payload['release']['draft']
           CollectExtensionMetadataWorker.perform_async(@extension.id, [], current_user&.id)
         end
+      ##
+      # Trigger recompile on "completed" workflow_job event matching workflow_job.name "bonsai-recompile" and workflow.name "bonsai" 
+      ##
+      when "workflow_job"
+        if payload['action'] == "completed"
+          if payload['workflow_job']['name'].downcase.strip == "bonsai-recompile" 
+            CollectExtensionMetadataWorker.perform_async(@extension.id, [], current_user&.id)
+          end
+        end
       when "watch"
         ExtractExtensionStargazersWorker.perform_async(@extension.id)
       when "member"
