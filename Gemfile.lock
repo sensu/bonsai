@@ -65,8 +65,9 @@ GEM
       rbtree3 (~> 0.6)
     and_feathers (0.0.1)
     and_feathers-gzipped_tarball (1.0.0.pre)
-    apipie-rails (0.5.1)
-      rails (>= 4.1)
+    apipie-rails (1.2.1)
+      actionpack (>= 5.0)
+      activesupport (>= 5.0)
     archive-zip (0.12.0)
       io-like (~> 0.3.0)
     ast (2.4.2)
@@ -504,7 +505,7 @@ DEPENDENCIES
   airbrake
   and_feathers
   and_feathers-gzipped_tarball
-  apipie-rails (= 0.5.1)
+  apipie-rails
   aws-sdk-s3 (~> 1)
   byebug
   capybara (>= 2.15)
