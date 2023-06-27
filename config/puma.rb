@@ -11,9 +11,6 @@ threads threads_count, threads_count
 # reduces the startup time of individual Puma worker processes
 preload_app!
 
-# tell Puma how to start your rack app
-rackup      DefaultRackup
-
 # Specifies the `port` that Puma will listen on to receive requests; default is 3000.
 #
 port        ENV.fetch("PORT") { 3000 }
