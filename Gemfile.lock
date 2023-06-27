@@ -297,7 +297,8 @@ GEM
       premailer (~> 1.7, >= 1.7.9)
     psych (3.3.4)
     public_suffix (5.0.1)
-    puma (3.12.6)
+    puma (6.3.0)
+      nio4r (~> 2.0)
     puma_worker_killer (0.3.1)
       get_process_mem (~> 0.2)
       puma (>= 2.7)
@@ -536,7 +537,7 @@ DEPENDENCIES
   poltergeist
   premailer-rails
   psych (< 4.0)
-  puma (~> 3.11)
+  puma (~> 6.3)
   puma_worker_killer
   pundit
   rails (~> 6.0.2)
