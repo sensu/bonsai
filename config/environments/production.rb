@@ -97,6 +97,7 @@ Rails.application.configure do
     url: "#{ENV['REDIS_URL']}/0", 
     network_timeout: 1,
     namespace: "cache",
+    ssl_params: { verify_mode: OpenSSL::SSL::VERIFY_NONE },
   }
 
   # Do not dump schema after migrations.

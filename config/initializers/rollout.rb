@@ -3,7 +3,7 @@ def Object.const_missing(const)
     require 'redis'
 
     #redis_connect = {}.tap { |h| h[:host] = ENV["REDIS_HOST"] if ENV["REDIS_HOST"] }
-    redis = Redis.new(:url => "#{ENV['REDIS_URL']}/1")
+    redis = Redis.new(:url => "#{ENV['REDIS_URL']}/1", :ssl_params => { :verify_mode => OpenSSL::SSL::VERIFY_NONE })
 
     Object.const_set('ROLLOUT', Rollout.new(redis))
 
