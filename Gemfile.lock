@@ -431,10 +431,10 @@ GEM
       ruby_http_client (~> 3.4)
     shoulda-matchers (5.3.0)
       activesupport (>= 5.2.0)
-    sidekiq (6.5.9)
-      connection_pool (>= 2.2.5, < 3)
+    sidekiq (6.1.2)
+      connection_pool (>= 2.2.2)
       rack (~> 2.0)
-      redis (>= 4.5.0, < 5)
+      redis (>= 4.2.0)
     sidekiq-status (1.1.4)
       chronic_duration
       sidekiq (>= 3.0)
@@ -560,7 +560,7 @@ DEPENDENCIES
   semverse
   sendgrid-ruby
   shoulda-matchers
-  sidekiq (~> 6.0)
+  sidekiq (= 6.1.2)
   sidekiq-status
   simplecov
   sitemap_generator
