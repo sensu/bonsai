@@ -1,10 +1,6 @@
 require 'sidekiq'
 require 'sidekiq-status'
 
-Sidekiq.default_worker_options = {
-  backtrace: true
-}
-
 #redis_queue = {url: "#{ENV['REDIS_URL']}/0", network_timeout: 5}
 
 Sidekiq.configure_server do |config|
