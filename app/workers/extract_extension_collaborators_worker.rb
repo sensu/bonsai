@@ -15,6 +15,7 @@ class ExtractExtensionCollaboratorsWorker < ApplicationWorker
     elsif from_api == :contributors
       self.class.perform_async(extension_id, 1, :collaborators)
     end
+  rescue
   end
 
   private

@@ -184,7 +184,7 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
       end
     else
 
-      readme = readme.encode(Encoding.find('UTF-8'), {invalid: :replace, undef: :replace, replace: ''})
+      readme = readme.encode(Encoding.find('UTF-8'), invalid: :replace, undef: :replace, replace: '')
 
       version.update(
         readme: readme,
