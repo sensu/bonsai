@@ -104,7 +104,7 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
       filename = filename.split("\n").first
       ext = extract_readme_file_extension(filename)
       body = @run.cmd("cat '#{filename}'")
-      body = body.encode(Encoding.find('UTF-8'), {invalid: :replace, undef: :replace, replace: ''})
+      body = body.encode(Encoding.find('UTF-8'), invalid: :replace, undef: :replace, replace: '')
       return body, ext
     else
       return "There is no README file for this #{I18n.t('nouns.extension')}.", "txt"
