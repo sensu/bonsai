@@ -11,8 +11,6 @@ class PersistAssets
   	context.fail!(error: "#{version.version} has no config") if version.config.blank?
   	context.fail!(error: "#{version.version} has no builds in config") if version.config['builds'].blank?
 
-    github_asset_data_hashes = gather_github_release_asset_data_hashes(version)
-
     version.config['builds'].each do |build|
 
       if build['asset_url'].blank?
@@ -26,10 +24,7 @@ class PersistAssets
 
       begin
         #puts "******** URI #{release_asset.source_asset_url}"
-        github_asset_data_hash = github_asset_data_hashes.
-          find { |h| h[:browser_download_url] == build['asset_url'] }.
-          to_h
-        url = URI(github_asset_data_hash[:url])
+        url = URI(release_asset.source_asset_url)
       rescue URI::Error => error
         puts "******** URI error: #{release_asset.source_asset_url} - #{error.message}"
         next
