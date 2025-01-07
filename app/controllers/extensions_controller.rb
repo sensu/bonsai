@@ -557,7 +557,7 @@ class ExtensionsController < ApplicationController
     repo_name = extension.github_repo
     return :unknown unless repo_name.present?
 
-    github_client = Octokit::Client.new(access_token: github_token)
+    github_client = Octokit::Client.new(client_id: ENV["GITHUB_CLIENT_ID"], client_secret: ENV["GITHUB_CLIENT_SECRET"])
     github_login_name = begin
                           github_client.user.login
                         rescue Octokit::Unauthorized
