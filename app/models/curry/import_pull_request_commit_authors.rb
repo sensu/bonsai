@@ -17,7 +17,7 @@ class Curry::ImportPullRequestCommitAuthors
     @pull_request = pull_request
     @repository = @pull_request.repository
     @pull_request_commits = nil
-    @octokit = Octokit::Client.new(client_id: ENV["GITHUB_CLIENT_ID"], client_secret: ENV["GITHUB_CLIENT_SECRET"])
+    @octokit = Octokit::Client.new(access_token: ENV['GITHUB_ACCESS_TOKEN'])
   end
 
   #
