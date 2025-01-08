@@ -19,7 +19,8 @@ module ReadsGithubFiles
     faraday = Faraday.new { |f|
       f.use FaradayMiddleware::FollowRedirects
       f.adapter :net_http
-      f.basic_auth('x-oauth-basic', auth_token) if auth_token.present?
+      f.headers['Authorization'] = "Basic #{ENV["GITHUB_CLIENT_ID"]}:#{ENV["GITHUB_CLIENT_SECRET"]}"
+      #f.basic_auth('x-oauth-basic', auth_token) if auth_token.present?
       f.headers['Accept'] = 'application/octet-stream'
     }
 
