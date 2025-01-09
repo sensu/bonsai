@@ -73,6 +73,8 @@ class CompileGithubExtensionVersionConfig
 
   def compile_build_hash(build_config, num, github_asset_data_hashes_lut, version, current_user)
 
+    puts "inside compile build hash"
+
     context.fail!(error: "build ##{num} is malformed (perhaps missing indentation)") unless build_config.is_a?(Hash)
 
     src_sha_filename = build_config['sha_filename']
@@ -89,10 +91,7 @@ class CompileGithubExtensionVersionConfig
 
     asset_filename    = File.basename(compiled_asset_filename)
     file_download_url = asset_data(compiled_asset_filename, github_asset_data_hashes_lut)[:browser_download_url]
-    puts "Raj file_download_url: #{file_download_url}"
     sha_result = read_sha_file(compiled_sha_filename, asset_filename, github_asset_data_hashes_lut, current_user)
-    
-    #puts "sha_filename: #{sha_result}"
 
     return {
       'viable'        => file_download_url.present?,
@@ -133,6 +132,8 @@ class CompileGithubExtensionVersionConfig
     if !asset_data.is_a?(Hash)
       return {}
     end
+
+    puts "asset data: #{asset_data}"
 
     return asset_data
   end
