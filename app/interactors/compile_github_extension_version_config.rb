@@ -63,6 +63,8 @@ class CompileGithubExtensionVersionConfig
                                      .group_by { |h| h[:name] }
                                      .transform_values(&:first)
 
+    puts "github_asset_data_hashes: #{github_asset_data_hashes_lut}"
+
     Array.wrap(build_configs).each_with_index.map { |build_config, idx|
       Thread.new do
         compiled_config = compile_build_hash(build_config, idx + 1, github_asset_data_hashes_lut, version, current_user)
