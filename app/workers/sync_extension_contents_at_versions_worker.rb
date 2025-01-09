@@ -53,6 +53,7 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
     checkout_correct_tag
     readme_body, readme_ext = fetch_readme
     logger.info "GOT README: #{readme_body}"
+    puts "Got-readme"
     version = ensure_updated_version(readme_body, readme_ext)
     set_compatible_platforms(version)
     set_last_commit(version)
@@ -303,7 +304,6 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
     )
 
     if compilation_result.success? && compilation_result.data_hash.present? && compilation_result.data_hash.is_a?(Hash)
-      puts "data_hash: #{compilation_result.data_hash}"
       version.update_columns(
         config: compilation_result.data_hash,
         compilation_error: nil
