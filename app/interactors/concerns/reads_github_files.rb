@@ -10,6 +10,8 @@ module ReadsGithubFiles
                            .releases(version.github_repo)
                            .find { |h| h[:tag_name] == version.version }
                            .to_h
+    puts "release data: #{releases_data[:assets]}"
+    
     Array.wrap(releases_data[:assets])
   end
 
