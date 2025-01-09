@@ -13,8 +13,6 @@ class PersistAssets
 
     github_asset_data_hashes = gather_github_release_asset_data_hashes(version)
 
-    puts "Versionsss: #{version.config}"
-
     version.config['builds'].each do |build|
 
       if build['asset_url'].blank?

@@ -14,13 +14,12 @@ module ReadsGithubFiles
   end
 
   def read_github_file(url, auth_token)
-    puts "url-sent: #{url}, auth_token-sent: #{auth_token}"
     return nil unless url.present?
 
     faraday = Faraday.new { |f|
       f.use FaradayMiddleware::FollowRedirects
       f.adapter :net_http
-      f.basic_auth('x-oauth-basic', auth_token) if auth_token.present?
+      f.basic_auth(ENV["GITHUB_CLIENT_ID"], ENV["GITHUB_CLIENT_SECRET"])
       f.headers['Accept'] = 'application/octet-stream'
     }
 
