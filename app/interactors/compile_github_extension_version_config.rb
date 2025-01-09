@@ -119,6 +119,8 @@ class CompileGithubExtensionVersionConfig
     # convert keys to an array of strings
     lut_array = github_asset_data_hashes_lut.keys
 
+    puts "Asset array: #{lut_array}"
+
     # get the index of the filename
     data_index = lut_array.index(filename)
     # retrieve the data based on the index
