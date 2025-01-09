@@ -14,6 +14,7 @@ module ReadsGithubFiles
   end
 
   def read_github_file(url, auth_token)
+    puts "url-sent: #{url}, auth_token-sent: #{auth_token}"
     return nil unless url.present?
 
     faraday = Faraday.new { |f|
