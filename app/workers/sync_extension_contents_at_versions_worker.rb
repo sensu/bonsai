@@ -301,6 +301,9 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
       version:               version,
       system_command_runner: system_command_runner
     )
+
+    puts "compilation result: #{compilation_result.inspect}"
+
     if compilation_result.success? && compilation_result.data_hash.present? && compilation_result.data_hash.is_a?(Hash)
       #puts "data_hash: #{compilation_result.data_hash}"
       version.update_columns(
