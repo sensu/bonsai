@@ -304,10 +304,17 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
 
     if compilation_result.success? && compilation_result.data_hash.present? && compilation_result.data_hash.is_a?(Hash)
       ActiveRecord::Base.logger = Logger.new(STDOUT)
-      version.update(
-        config: compilation_result.data_hash,
-        compilation_error: nil
-      )
+
+      if version.update( config: compilation_result.data_hash, compilation_error: nil )
+        puts "version-updated-successfully"
+      else
+        puts "Update failed: #{version.errors.full_messages.join(", ")}"
+      end
+
+      #version.update(
+      # config: compilation_result.data_hash,
+      # compilation_error: nil
+      #)
     elsif compilation_result.error.present?
       version.update_column(:compilation_error, compilation_result.error)
     else
