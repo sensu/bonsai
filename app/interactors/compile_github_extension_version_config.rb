@@ -93,6 +93,8 @@ class CompileGithubExtensionVersionConfig
     file_download_url = asset_data(compiled_asset_filename, github_asset_data_hashes_lut)[:browser_download_url]
     sha_result = read_sha_file(compiled_sha_filename, asset_filename, github_asset_data_hashes_lut, current_user)
 
+    puts "file download url: #{file_download_url}"
+
     return {
       'viable'        => file_download_url.present?,
       'asset_url'     => file_download_url,
@@ -132,8 +134,6 @@ class CompileGithubExtensionVersionConfig
     if !asset_data.is_a?(Hash)
       return {}
     end
-
-    puts "asset data: #{asset_data}"
 
     return asset_data
   end
