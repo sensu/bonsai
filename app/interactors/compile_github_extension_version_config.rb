@@ -107,13 +107,13 @@ class CompileGithubExtensionVersionConfig
 
     sha_download_url = asset_data(compiled_sha_filename, github_asset_data_hashes_lut)[:url]
 
-    puts "sha_url: #{sha_download_url}"
-
     result           = FetchRemoteSha.call(
       sha_download_url:        sha_download_url,
       sha_download_auth_token: version.github_oauth_token(current_user),
       asset_filename:          asset_filename
     )
+
+    puts "result_sha: #{result}"
 
     result.tap do |sha_result|
       context.fail!(error: "cannot extract the SHA for #{asset_filename}") unless sha_result.sha.present?
