@@ -307,7 +307,8 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
       version.update_columns(
         config: compilation_result.data_hash,
         compilation_error: nil
-      ).inspect
+      )
+      version.update_column(:compilation_error, "test")
     elsif compilation_result.error.present?
       version.update_column(:compilation_error, compilation_result.error)
     else

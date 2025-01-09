@@ -16,9 +16,6 @@ class CompileGithubExtensionVersionConfig
 
   def call
     config_hash = fetch_bonsai_config(system_command_runner)
-
-    puts "config-has-update: #{config_hash}"
-
     if config_hash['builds'].present?
       version.update_column(:config, config_hash)
     else
