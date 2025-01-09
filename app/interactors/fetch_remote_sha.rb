@@ -13,7 +13,6 @@ class FetchRemoteSha
 
   def call
     sha_file_content = read_github_file(sha_download_url, sha_download_auth_token)
-    puts "sha_file_content: #{sha_file_content}"
     sha              = extract_sha_for_binary(asset_filename, sha_file_content)
 
     context.sha = sha

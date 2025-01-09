@@ -73,8 +73,6 @@ class CompileGithubExtensionVersionConfig
 
   def compile_build_hash(build_config, num, github_asset_data_hashes_lut, version, current_user)
 
-    puts "inside compile build hash"
-
     context.fail!(error: "build ##{num} is malformed (perhaps missing indentation)") unless build_config.is_a?(Hash)
 
     src_sha_filename = build_config['sha_filename']
@@ -93,8 +91,6 @@ class CompileGithubExtensionVersionConfig
     file_download_url = asset_data(compiled_asset_filename, github_asset_data_hashes_lut)[:browser_download_url]
     sha_result = read_sha_file(compiled_sha_filename, asset_filename, github_asset_data_hashes_lut, current_user)
 
-    puts "file download url: #{file_download_url}"
-
     return {
       'viable'        => file_download_url.present?,
       'asset_url'     => file_download_url,
@@ -112,8 +108,6 @@ class CompileGithubExtensionVersionConfig
       sha_download_auth_token: version.github_oauth_token(current_user),
       asset_filename:          asset_filename
     )
-
-    puts "result_sha: #{result}"
 
     result.tap do |sha_result|
       context.fail!(error: "cannot extract the SHA for #{asset_filename}") unless sha_result.sha.present?
