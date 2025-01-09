@@ -302,14 +302,12 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
       system_command_runner: system_command_runner
     )
 
-    puts "compilation result: #{compilation_result.inspect}"
-
     if compilation_result.success? && compilation_result.data_hash.present? && compilation_result.data_hash.is_a?(Hash)
-      #puts "data_hash: #{compilation_result.data_hash}"
+      puts "data_hash: #{compilation_result.data_hash}"
       version.update_columns(
         config: compilation_result.data_hash,
         compilation_error: nil
-      )
+      ).inspect
     elsif compilation_result.error.present?
       version.update_column(:compilation_error, compilation_result.error)
     else
