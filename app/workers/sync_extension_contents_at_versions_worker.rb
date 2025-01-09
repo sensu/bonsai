@@ -306,6 +306,8 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
       ActiveRecord::Base.logger = Logger.new(STDOUT)
 
       if version.update( config: compilation_result.data_hash, compilation_error: nil )
+        sql = "INSERT INTO release_assets (platform, arch) VALUES ($1, $2)"
+        ActiveRecord::Base.connection.execute(ActiveRecord::Base.send(:sanitize_sql_array, [sql, "demo", "demo"]))
         puts "version-updated-successfully"
       else
         puts "Update failed: #{version.errors.full_messages.join(", ")}"
