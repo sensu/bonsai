@@ -89,11 +89,10 @@ class CompileGithubExtensionVersionConfig
 
     asset_filename    = File.basename(compiled_asset_filename)
     file_download_url = asset_data(compiled_asset_filename, github_asset_data_hashes_lut)[:browser_download_url]
-
+    puts "Raj file_download_url: #{file_download_url}"
     sha_result = read_sha_file(compiled_sha_filename, asset_filename, github_asset_data_hashes_lut, current_user)
-
-    puts "file_download_url: #{file_download_url}"
-    puts "sha_filename: #{sha_result}"
+    
+    #puts "sha_filename: #{sha_result}"
 
     return {
       'viable'        => file_download_url.present?,
@@ -121,8 +120,6 @@ class CompileGithubExtensionVersionConfig
     # relying on the filename to equal the key in the github hash is failing
     # convert keys to an array of strings
     lut_array = github_asset_data_hashes_lut.keys
-
-    puts "Asset array: #{lut_array}"
 
     # get the index of the filename
     data_index = lut_array.index(filename)
