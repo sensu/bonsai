@@ -36,7 +36,7 @@ class PersistAssets
       end
 
       if Rails.configuration.x.s3_mirroring
-        #mirror_to_s3(release_asset, url, version.github_oauth_token)
+        mirror_to_s3(release_asset, url, version.github_oauth_token)
       end
     end # builds.each
 
