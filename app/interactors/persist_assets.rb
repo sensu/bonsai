@@ -48,7 +48,6 @@ class PersistAssets
     key           = release_asset.destination_pathname
 
     object_exists = s3_bucket.object(key)
-    puts "Object-exists: #{key} - #{object_exists}"
     if object_exists
       # we need to replace the file each iteration in order
       # to update files in case they were changed.

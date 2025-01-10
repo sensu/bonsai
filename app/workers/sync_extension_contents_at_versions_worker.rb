@@ -303,7 +303,6 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
     )
 
     if compilation_result.success? && compilation_result.data_hash.present? && compilation_result.data_hash.is_a?(Hash)
-      ActiveRecord::Base.logger = Logger.new(STDOUT)
       version.update(
        config: compilation_result.data_hash,
        compilation_error: nil
