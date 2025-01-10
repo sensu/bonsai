@@ -304,19 +304,10 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
 
     if compilation_result.success? && compilation_result.data_hash.present? && compilation_result.data_hash.is_a?(Hash)
       ActiveRecord::Base.logger = Logger.new(STDOUT)
-
-      if version.update( config: compilation_result.data_hash, compilation_error: nil )
-        sql = "INSERT INTO release_assets (platform, arch) VALUES ($1, $2)"
-        ActiveRecord::Base.connection.execute(ActiveRecord::Base.send(:sanitize_sql_array, [sql, "demo", "demo"]))
-        puts "version-updated-successfully"
-      else
-        puts "Update failed: #{version.errors.full_messages.join(", ")}"
-      end
-
-      #version.update(
-      # config: compilation_result.data_hash,
-      # compilation_error: nil
-      #)
+      version.update(
+       config: compilation_result.data_hash,
+       compilation_error: nil
+      )
     elsif compilation_result.error.present?
       version.update_column(:compilation_error, compilation_result.error)
     else
