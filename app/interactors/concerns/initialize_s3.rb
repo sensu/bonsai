@@ -25,7 +25,7 @@ module InitializeS3
       raise RuntimeError.new(message)
       context.fail!(error: message)
     end
-
+    puts "s3_bucket_name: #{s3_bucket}"
     return s3_bucket
   end # initialize bucket
 end
