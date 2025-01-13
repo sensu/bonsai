@@ -104,7 +104,6 @@ class CompileGithubExtensionVersionConfig
 
     result           = FetchRemoteSha.call(
       sha_download_url:        sha_download_url,
-      sha_download_auth_token: version.github_oauth_token(current_user),
       asset_filename:          asset_filename
     )
 

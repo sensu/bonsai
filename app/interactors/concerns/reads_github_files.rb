@@ -13,7 +13,7 @@ module ReadsGithubFiles
     Array.wrap(releases_data[:assets])
   end
 
-  def read_github_file(url, auth_token)
+  def read_github_file(url)
     return nil unless url.present?
 
     faraday = Faraday.new { |f|

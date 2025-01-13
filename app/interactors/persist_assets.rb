@@ -61,7 +61,7 @@ class PersistAssets
 
     # get file contents
     begin
-      file = read_github_file(url, auth_token)
+      file = read_github_file(url)
     rescue => error
       puts "****** file read error: #{error}"
       return
