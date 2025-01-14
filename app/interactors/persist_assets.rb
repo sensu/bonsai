@@ -46,8 +46,8 @@ class PersistAssets
 
   def mirror_to_s3(release_asset, url, auth_token)
     key           = release_asset.destination_pathname
-    object_exists = s3_bucket.object(key).exists?
 
+    object_exists = s3_bucket.object(key)
     if object_exists
       # we need to replace the file each iteration in order
       # to update files in case they were changed.
@@ -61,7 +61,7 @@ class PersistAssets
 
     # get file contents
     begin
-      file = read_github_file(url, auth_token)
+      file = read_github_file(url)
     rescue => error
       puts "****** file read error: #{error}"
       return
