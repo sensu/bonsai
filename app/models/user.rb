@@ -67,9 +67,7 @@ class User < ApplicationRecord
   #
   def octokit
     @octokit ||= Octokit::Client.new(
-      access_token: github_account_oauth_token,
-      client_id: Rails.configuration.octokit.client_id,
-      client_secret: Rails.configuration.octokit.client_secret
+      access_token: github_account_oauth_token
     )
   end
 
