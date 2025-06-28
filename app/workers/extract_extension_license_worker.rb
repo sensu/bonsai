@@ -1,14 +1,16 @@
 class ExtractExtensionLicenseWorker < ApplicationWorker
 
-  def perform(extension_id)
+  def perform(extension_id, current_user_id = nil)
     @extension = Extension.find(extension_id)
+    current_user = User.find_by(id: current_user_id) if current_user_id.present?
 
-    @repo = octokit.repo(@extension.github_repo, accept: "application/vnd.github.drax-preview+json")
+    client = current_user&.octokit || octokit()
+    @repo = client.repo(@extension.github_repo, accept: "application/vnd.github.drax-preview+json")
 
     if @repo[:license]
 
       begin
-        license = octokit.license(@repo[:license][:key], accept: "application/vnd.github.drax-preview+json")
+        license = client.license(@repo[:license][:key], accept: "application/vnd.github.drax-preview+json")
       rescue Octokit::NotFound
         license = {
           name: @repo[:license][:name],
