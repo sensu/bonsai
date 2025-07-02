@@ -28,13 +28,13 @@ class SyncExtensionContentsAtVersionsWorker < ApplicationWorker
     CompileExtensionStatus.call(
       extension: @extension,
       worker: 'ExtractExtensionCollaboratorsWorker',
-      job_id: ExtractExtensionCollaboratorsWorker.perform_async(@extension.id)
+      job_id: ExtractExtensionCollaboratorsWorker.perform_async(@extension.id, current_user_id)
     )
     # update license in case it has changed
     CompileExtensionStatus.call(
       extension: @extension,
       worker: 'ExtractExtensionLicenseWorker',
-      job_id: ExtractExtensionLicenseWorker.perform_async(@extension.id)
+      job_id: ExtractExtensionLicenseWorker.perform_async(@extension.id, current_user_id)
     )
     perform_next
   end

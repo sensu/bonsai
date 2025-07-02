@@ -1,8 +1,10 @@
 class ExtractExtensionParentWorker < ApplicationWorker
   
-  def perform(extension_id)
+  def perform(extension_id, current_user_id=nil)
+    @current_user = User.find(current_user_id) if current_user_id.present?
     @extension = Extension.find(extension_id)
-    repo = octokit.repo(@extension.github_repo)
+
+    repo = @current_user ? @current_user.octokit.repo(@extension.github_repo) : octokit.repo(@extension.github_repo)
 
     repo_parent = repo[:parent]
     if repo_parent.present?

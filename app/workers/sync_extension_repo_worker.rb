@@ -4,7 +4,9 @@ class SyncExtensionRepoWorker < ApplicationWorker
     @extension = Extension.find_by(id: extension_id)
     current_user = User.find_by(id: current_user_id)
     raise RuntimeError.new("#{I18n.t('nouns.extension')} ID: #{extension_id} not found.") unless @extension
-    releases = @extension.octokit.releases(@extension.github_repo)
+
+    octokit = current_user&.octokit || @extension.octokit
+    releases = octokit.releases(@extension.github_repo)
 
     @extension.with_lock do
       clone_repo(current_user)

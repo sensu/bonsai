@@ -10,17 +10,17 @@ class CollectExtensionMetadataWorker < ApplicationWorker
     CompileExtensionStatus.call(
       extension: extension,
       worker: 'ExtractExtensionParentWorker',
-      job_id: ExtractExtensionParentWorker.perform_async(extension.id)
+      job_id: ExtractExtensionParentWorker.perform_async(extension.id, current_user_id)
     )
     CompileExtensionStatus.call(
       extension: extension,
       worker: 'ExtractExtensionLicenseWorker',
-      job_id: ExtractExtensionLicenseWorker.perform_async(extension.id)
+      job_id: ExtractExtensionLicenseWorker.perform_async(extension.id, current_user_id)
     )
     CompileExtensionStatus.call(
       extension: extension,
       worker: 'ExtractExtensionCollaboratorsWorker',
-      job_id: ExtractExtensionCollaboratorsWorker.perform_async(extension.id)
+      job_id: ExtractExtensionCollaboratorsWorker.perform_async(extension.id, current_user_id)
     )
     CompileExtensionStatus.call(
       extension: extension,

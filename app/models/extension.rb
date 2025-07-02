@@ -602,8 +602,7 @@ class Extension < ApplicationRecord
 
   def octokit_client(auth_token)
     Octokit::Client.new(
-      client_id:     Rails.configuration.octokit.client_id,
-      client_secret: Rails.configuration.octokit.client_secret
+      access_token: auth_token
     )
   end
 

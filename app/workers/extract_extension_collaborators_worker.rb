@@ -1,19 +1,20 @@
 class ExtractExtensionCollaboratorsWorker < ApplicationWorker
   
-  def perform(extension_id, page = 1, from_api = :contributors)
+  def perform(extension_id, current_user_id=nil, page = 1, from_api = :contributors)
     @extension = Extension.find(extension_id)
-
+    @current_user = User.find(current_user_id) if current_user_id.present?
+    client = @current_user&.octokit || octokit()
     if from_api == :contributors
-      @contributors = octokit.contributors(@extension.github_repo, nil, page: page)
+      @contributors = client.contributors(@extension.github_repo, nil, page: page)
     else
-      @contributors = octokit.collaborators(@extension.github_repo, page: page)
+      @contributors = client.collaborators(@extension.github_repo, page: page)
     end
 
     if @contributors.any?
       process_contributors
-      self.class.perform_async(extension_id, page + 1, from_api)
+      self.class.perform_async(extension_id, current_user_id, page + 1, from_api)
     elsif from_api == :contributors
-      self.class.perform_async(extension_id, 1, :collaborators)
+      self.class.perform_async(extension_id, current_user_id, 1, :collaborators)
     end
   rescue
   end
