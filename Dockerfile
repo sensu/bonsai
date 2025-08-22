@@ -1,4 +1,4 @@
-FROM ruby:3.2.2
+FROM ruby:3.3.7
 
 # Install essential Linux packages
 RUN apt-get update -qq --fix-missing
